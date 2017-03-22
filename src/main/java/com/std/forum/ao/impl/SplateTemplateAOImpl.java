@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.forum.ao.ISplateTemplateAO;
+import com.std.forum.bo.IBplateTemplateBO;
 import com.std.forum.bo.ISplateTemplateBO;
 import com.std.forum.bo.base.Paginable;
+import com.std.forum.domain.BplateTemplate;
 import com.std.forum.domain.SplateTemplate;
+import com.std.forum.dto.res.XN610036Res;
 import com.std.forum.exception.BizException;
 
 @Service
@@ -16,6 +19,9 @@ public class SplateTemplateAOImpl implements ISplateTemplateAO {
 
     @Autowired
     private ISplateTemplateBO splateTemplateBO;
+
+    @Autowired
+    private IBplateTemplateBO bplateTemplateBO;
 
     @Override
     public String addSplateTemplate(String name, String parentCode, String pic,
@@ -54,7 +60,14 @@ public class SplateTemplateAOImpl implements ISplateTemplateAO {
     }
 
     @Override
-    public SplateTemplate getSplateTemplate(String code) {
-        return splateTemplateBO.getSplateTemplate(code);
+    public XN610036Res getSplateTemplate(String code) {
+        XN610036Res res = new XN610036Res();
+        SplateTemplate splateTemplate = splateTemplateBO
+            .getSplateTemplate(code);
+        BplateTemplate bplateTemplate = bplateTemplateBO
+            .getBplateTemplate(splateTemplate.getBplateCode());
+        res.setBplateTemplate(bplateTemplate);
+        res.setSplateTemplate(splateTemplate);
+        return res;
     }
 }

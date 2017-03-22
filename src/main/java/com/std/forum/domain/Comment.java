@@ -69,17 +69,17 @@ public class Comment extends ABaseDO {
     // 头像
     private String photo;
 
+    // 帖子
+    private Post post;
+
     // 父级昵称
     private String parentNickname;
-
-    // 评论帖子
-    private Post post;
 
     // 针对评论
     private Comment parentComment;
 
     // 所属站点
-    private String siteCode;
+    private String companyCode;
 
     // 1 评论我的
     private String isCommentMy;
@@ -151,14 +151,6 @@ public class Comment extends ABaseDO {
         this.parentNickname = parentNickname;
     }
 
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
     public Comment getParentComment() {
         return parentComment;
     }
@@ -215,14 +207,6 @@ public class Comment extends ABaseDO {
         this.postCode = postCode;
     }
 
-    public String getSiteCode() {
-        return siteCode;
-    }
-
-    public void setSiteCode(String siteCode) {
-        this.siteCode = siteCode;
-    }
-
     public String getLoginName() {
         return loginName;
     }
@@ -253,5 +237,21 @@ public class Comment extends ABaseDO {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }

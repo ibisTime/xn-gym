@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.SplateTemplate;
+import com.std.forum.dto.res.XN610036Res;
 
 @Component
 public interface ISplateTemplateAO {
@@ -24,6 +25,6 @@ public interface ISplateTemplateAO {
 
     public List<SplateTemplate> querySplateTemplateList(SplateTemplate condition);
 
-    public SplateTemplate getSplateTemplate(String code);
+    public XN610036Res getSplateTemplate(String code);
 
 }

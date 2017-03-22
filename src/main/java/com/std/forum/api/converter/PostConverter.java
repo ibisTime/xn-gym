@@ -2,13 +2,13 @@ package com.std.forum.api.converter;
 
 import com.std.forum.common.DateUtil;
 import com.std.forum.domain.Post;
-import com.std.forum.dto.req.XN610070Req;
-import com.std.forum.dto.req.XN610071Req;
+import com.std.forum.dto.req.XN610130Req;
+import com.std.forum.dto.req.XN610131Req;
 
 public class PostConverter {
 
     // 分页查询帖子
-    public static Post converter(XN610070Req req) {
+    public static Post converter(XN610130Req req) {
         Post result = new Post();
         result.setUserId(req.getUserId());
         result.setTitle(req.getTitle());
@@ -18,7 +18,7 @@ public class PostConverter {
         result.setIsLock(req.getIsLock());
         result.setLocation(req.getLocation());
         result.setPlateCode(req.getPlateCode());
-        result.setSiteCode(req.getSiteCode());
+        result.setCompanyCode(req.getCompanyCode());
         result.setPublishDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         result.setPublishDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
@@ -27,7 +27,7 @@ public class PostConverter {
     }
 
     // 列表查询帖子
-    public static Post converter(XN610071Req req) {
+    public static Post converter(XN610131Req req) {
         Post result = new Post();
         result.setUserId(req.getUserId());
         result.setTitle(req.getTitle());
@@ -37,7 +37,7 @@ public class PostConverter {
         result.setIsLock(req.getIsLock());
         result.setLocation(req.getLocation());
         result.setPlateCode(req.getPlateCode());
-        result.setSiteCode(req.getSiteCode());
+        result.setCompanyCode(req.getCompanyCode());
         result.setPublishDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         result.setPublishDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),

@@ -49,8 +49,8 @@
 			<if test="commer != null and commer != '' ">
 		        AND t.commer = #{commer}
 			</if>
-			<if test="siteCode != null and siteCode != '' ">
-		        AND tpt.site_code = #{siteCode}
+			<if test="companyCode != null and companyCode != '' ">
+		        AND tpt.company_code = #{companyCode}
 			</if>
 			<if test="postCode != null and postCode != '' ">
 		        AND t.post_code = #{postCode}

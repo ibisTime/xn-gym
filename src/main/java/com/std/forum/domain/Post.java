@@ -120,7 +120,7 @@ public class Post extends ABaseDO {
     private List<Comment> commentList;
 
     // 站点
-    private String siteCode;
+    private String companyCode;
 
     // 关键字查询
     private String keyword;
@@ -307,14 +307,6 @@ public class Post extends ABaseDO {
         this.talker = talker;
     }
 
-    public String getSiteCode() {
-        return siteCode;
-    }
-
-    public void setSiteCode(String siteCode) {
-        this.siteCode = siteCode;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -409,5 +401,13 @@ public class Post extends ABaseDO {
 
     public void setSumReward(Integer sumReward) {
         this.sumReward = sumReward;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

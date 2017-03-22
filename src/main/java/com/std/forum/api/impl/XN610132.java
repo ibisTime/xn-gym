@@ -1,35 +1,35 @@
 package com.std.forum.api.impl;
 
-import com.std.forum.ao.ISplateTemplateAO;
+import com.std.forum.ao.IPostAO;
 import com.std.forum.api.AProcessor;
 import com.std.forum.common.JsonUtil;
 import com.std.forum.core.StringValidater;
-import com.std.forum.dto.req.XN610036Req;
+import com.std.forum.dto.req.XN610132Req;
 import com.std.forum.exception.BizException;
 import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
 /**
- * 详情查询小板块模板
- * @author: asus 
- * @since: 2017年3月20日 下午7:23:53 
+ * 获取帖子详情
+ * @author: xieyj 
+ * @since: 2016年9月30日 下午10:24:28 
  * @history:
  */
-public class XN610036 extends AProcessor {
-    private ISplateTemplateAO splateTemplateAO = SpringContextHolder
-        .getBean(ISplateTemplateAO.class);
+public class XN610132 extends AProcessor {
 
-    private XN610036Req req = null;
+    private IPostAO postAO = SpringContextHolder.getBean(IPostAO.class);
+
+    private XN610132Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return splateTemplateAO.getSplateTemplate(req.getCode());
+        return postAO.getPost(req.getCode(), req.getUserId(),
+            req.getCommStatus());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN610036Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN610132Req.class);
         StringValidater.validateBlank(req.getCode());
     }
-
 }
