@@ -2,9 +2,9 @@ package com.std.forum.dto.req;
 
 import java.util.List;
 
-public class XN610045Reqt {
+public class XN610114Req {
 
-    // 帖子/评论编号（必填）
+    // 帖子编号（必填）
     private List<String> codeList;
 
     // 审核结果(必填)
@@ -18,22 +18,6 @@ public class XN610045Reqt {
 
     // 类型(必填)
     private String type;
-
-    public List<String> getCodeList() {
-        return codeList;
-    }
-
-    public void setCodeList(List<String> codeList) {
-        this.codeList = codeList;
-    }
-
-    public String getApproveResult() {
-        return approveResult;
-    }
-
-    public void setApproveResult(String approveResult) {
-        this.approveResult = approveResult;
-    }
 
     public String getApprover() {
         return approver;
@@ -51,11 +35,27 @@ public class XN610045Reqt {
         this.approveNote = approveNote;
     }
 
+    public String getApproveResult() {
+        return approveResult;
+    }
+
+    public void setApproveResult(String approveResult) {
+        this.approveResult = approveResult;
+    }
+
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<String> getCodeList() {
+        return codeList;
+    }
+
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 }

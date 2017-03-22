@@ -6,12 +6,9 @@ package com.std.forum.dto.req;
  * @since: 2016年9月28日 下午1:40:29 
  * @history:
  */
-public class XN610041Reqt {
+public class XN610110Req {
 
-    // 编号（必填）
-    private String code;
-
-    // 标题（选填）
+    // 标题（必填）
     private String title;
 
     // 内容（必填）
@@ -28,14 +25,6 @@ public class XN610041Reqt {
 
     // 是否发布
     private String isPublish;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getTitle() {
         return title;

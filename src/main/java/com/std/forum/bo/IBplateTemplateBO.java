@@ -16,7 +16,7 @@ public interface IBplateTemplateBO extends IPaginableBO<BplateTemplate> {
     public int refreshBplateTemplate(String code, String name, String orderNo,
             String updater);
 
-    public List<BplateTemplate> queryBplateTemplateList(BplateTemplate condition);
+    public List<BplateTemplate> queryBplateTemplateList(String name);
 
     public BplateTemplate getBplateTemplate(String code);
 

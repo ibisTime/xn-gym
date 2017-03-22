@@ -1,20 +1,14 @@
 package com.std.forum.dto.req;
 
-public class XN610050Req {
+import java.util.List;
+
+public class XN610118Req {
 
     // 帖子编号（必填）
-    private String code;
+    private List<String> codeList;
 
     // 版块编号（必填）
     private String plateCode;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getPlateCode() {
         return plateCode;
@@ -22,5 +16,13 @@ public class XN610050Req {
 
     public void setPlateCode(String plateCode) {
         this.plateCode = plateCode;
+    }
+
+    public List<String> getCodeList() {
+        return codeList;
+    }
+
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 }

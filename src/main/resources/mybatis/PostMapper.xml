@@ -23,11 +23,13 @@
 		
 		<result column="plate_code" property="plateCode" />
 		<result column="is_lock" property="isLock" />
-		<result column="valid_datetime_start" property="validDatetimeStart" />
-		<result column="valid_datetime_end" property="validDatetimeEnd" />
+		<result column="sum_comment" property="sumComment" />
+		<result column="sum_like" property="sumLike" />
+		<result column="sum_read" property="sumRead" />
+		
+		<result column="sum_reward" property="sumReward" />
 		<result column="remark" property="remark" />
 		
-		<result column="total_read_times" property="totalReadTimes" />
 		<result column="plate_name" property="plateName" />
 	</resultMap>
 	<sql id="where_condition">
@@ -80,8 +82,8 @@
 			<if test="plateCode != null and plateCode != '' ">
 		        AND t.plate_code = #{plateCode}
 			</if>
-			<if test="siteCode != null and siteCode != '' ">
-		        AND tp.site_code = #{siteCode}
+			<if test="companyCode != null and companyCode != '' ">
+		        AND tp.company_code = #{companyCode}
 			</if>
 			<if test="type != null and type != '' ">
 		        AND tpt.type = #{type}
@@ -115,15 +117,16 @@
 		,t.plate_code
 		
 		,t.is_lock
-		,t.valid_datetime_start
-		,t.valid_datetime_end
+		,t.sun_comment
+		,t.sum_like
+		,t.sum_read
+		,t.sum_reward
 		,t.remark
 		,tp.name as plate_name
-		,(select count(1) from tforum_post_talk tpt where tpt.type = '4' and tpt.post_code = t.code) as total_read_times
 		FROM
 		tforum_post t left join tforum_plate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code 
 		<include refid="where_condition" />
-		ORDER BY t.valid_datetime_start DESC, t.publish_datetime DESC	
+		ORDER BY t.publish_datetime DESC	
 	</select>
 
 	<select id="select_post_count" parameterType="post"
@@ -223,6 +226,34 @@
 		UPDATE tforum_post
 		SET
 		plate_code = #{plateCode}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_sum_reward" parameterType="post">
+		UPDATE tforum_post
+		SET
+		sum_reward = #{sumReward}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_sum_read" parameterType="post">
+		UPDATE tforum_post
+		SET
+		sum_read = #{sumRead}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_sum_like" parameterType="post">
+		UPDATE tforum_post
+		SET
+		sum_like = #{sumLike}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_sum_comment" parameterType="post">
+		UPDATE tforum_post
+		SET
+		sum_comment = #{sumComment}
 		WHERE code = #{code}
 	</update>
 </mapper>

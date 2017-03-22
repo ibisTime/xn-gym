@@ -4,34 +4,33 @@ import com.std.forum.ao.IPostAO;
 import com.std.forum.api.AProcessor;
 import com.std.forum.common.JsonUtil;
 import com.std.forum.core.StringValidater;
-import com.std.forum.dto.req.XN610051Req;
+import com.std.forum.dto.req.XN610117Req;
 import com.std.forum.dto.res.BooleanRes;
 import com.std.forum.exception.BizException;
 import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
 /**
- * 锁帖/取消锁帖
+ * 设置/取消帖子置顶,精华和头条
  * @author: xieyj 
- * @since: 2016年10月23日 下午9:12:51 
+ * @since: 2016年10月13日 下午1:02:45 
  * @history:
  */
-public class XN610051 extends AProcessor {
+public class XN610117 extends AProcessor {
 
     private IPostAO postAO = SpringContextHolder.getBean(IPostAO.class);
 
-    private XN610051Req req = null;
+    private XN610117Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        postAO.lockPost(req.getCode());
+        postAO.setPostLocation(req.getCode(), req.getLocation());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN610051Req.class);
-        StringValidater.validateBlank(req.getCode());
+        req = JsonUtil.json2Bean(inputparams, XN610117Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getLocation());
     }
-
 }

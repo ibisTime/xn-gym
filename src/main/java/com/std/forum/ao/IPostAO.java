@@ -8,7 +8,6 @@
  */
 package com.std.forum.ao;
 
-import java.util.Date;
 import java.util.List;
 
 import com.std.forum.bo.base.Paginable;
@@ -46,12 +45,6 @@ public interface IPostAO {
     public void dropPostList(List<String> codeList, String userId, String type);
 
     /*
-     * 审核帖子/评论
-     */
-    public void approvePost(String code, String approver,
-            String approverResult, String approveNote, String type);
-
-    /*
      * 批量审核帖子/评论
      */
     public void approvePostList(List<String> codeList, String approver,
@@ -60,7 +53,7 @@ public interface IPostAO {
     /*
      * 还原帖子/评论
      */
-    public void returnPost(String code, String type);
+    public void returnPost(List<String> codeList, String type);
 
     /*
      * 阅读帖子
@@ -70,17 +63,17 @@ public interface IPostAO {
     /*
      * 锁帖
      */
-    public void lockPost(String code);
+    public void lockPost(List<String> codeList);
 
     /*
      * 改版
      */
-    public void editPostPlate(String code, String plateCode);
+    public void editPostPlate(List<String> codeList, String plateCode);
 
     /*
      * 设置置顶，精华和头条
      */
-    public void setPostLocation(String code, String location, Date endDatetime);
+    public void setPostLocation(String code, String location);
 
     public Paginable<Post> queryPostPage(int start, int limit, Post condition);
 

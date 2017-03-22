@@ -21,7 +21,7 @@ public interface IBplateTemplateAO {
     public Paginable<BplateTemplate> queryBplateTemplatePage(int start,
             int limit, BplateTemplate condition);
 
-    public List<BplateTemplate> queryBplateTemplateList(BplateTemplate condition);
+    public List<BplateTemplate> queryBplateTemplateList(String name);
 
     public BplateTemplate getBplateTemplate(String code);
 

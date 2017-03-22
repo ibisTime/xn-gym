@@ -9,8 +9,9 @@
 package com.std.forum.ao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,7 @@ import com.std.forum.bo.ILevelRuleBO;
 import com.std.forum.bo.IPostBO;
 import com.std.forum.bo.IPostTalkBO;
 import com.std.forum.bo.IRuleBO;
+import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
@@ -32,6 +34,7 @@ import com.std.forum.domain.Keyword;
 import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
+import com.std.forum.domain.Splate;
 import com.std.forum.dto.res.XN610900Res;
 import com.std.forum.dto.res.XN805901Res;
 import com.std.forum.enums.EBoolean;
@@ -69,6 +72,9 @@ public class PostAOImpl implements IPostAO {
     protected IUserBO userBO;
 
     @Autowired
+    protected ISplateBO splateBO;
+
+    @Autowired
     protected IRuleBO ruleBO;
 
     @Autowired
@@ -82,7 +88,7 @@ public class PostAOImpl implements IPostAO {
     public String publishPost(String title, String content, String pic,
             String plateCode, String publisher, String isPublish) {
         // 判断版块是否存在
-        // plateBO.getPlate(plateCode);
+        splateBO.getSplate(plateCode);
         String code = null;
         if (EBoolean.NO.getCode().equals(isPublish)) {
             code = postBO.savePost(title, content, pic, plateCode, publisher,
@@ -128,7 +134,7 @@ public class PostAOImpl implements IPostAO {
     public String draftPublishPost(String code, String title, String content,
             String pic, String plateCode, String publisher, String isPublish) {
         // 判断版块是否存在
-        // plateBO.getPlate(plateCode);
+        splateBO.getSplate(plateCode);
         if (EBoolean.NO.getCode().equals(isPublish)) {
             postBO.refreshPost(code, title, content, pic, plateCode, publisher,
                 EPostStatus.DRAFT.getCode());
@@ -172,6 +178,7 @@ public class PostAOImpl implements IPostAO {
     @Transactional
     public void dropPost(String code, String userId, String type) {
         Post post = null;
+        Splate splate = null;
         Comment comment = null;
         String publisher = null;
         if (EPostType.PL.getCode().equals(type)) {
@@ -188,23 +195,22 @@ public class PostAOImpl implements IPostAO {
                 postTalkBO.removePostTalk(postTalk.getCode());
             }
         }
-        // plate = plateBO.getPlate(post.getPlateCode());
-        // String companyCode = plate.getSiteCode();
+        splate = splateBO.getSplate(post.getPlateCode());
+        String companyCode = splate.getCompanyCode();
         XN805901Res res = userBO.getRemoteUser(userId, userId);
         if (EUserKind.Operator.getCode().equals(res.getKind())) {
-            // if (!companyCode.equals(res.getCompanyCode())) {
-            // throw new BizException("xn000000", "当前用户不是该帖子的管理员，无法删除");
-            // }
+            if (!companyCode.equals(res.getCompanyCode())) {
+                throw new BizException("xn000000", "当前用户不是该帖子的管理员，无法删除");
+            }
         } else {
-            // List<Plate> plateList = plateBO.getPlateByUserId(userId);
-            // Map<String, Plate> map = new HashMap<String, Plate>();
-            // for (Plate data : plateList) {
-            // map.put(data.getCode(), data);
-            // }
-            // if (null == map.get(plate.getCode()) &&
-            // !userId.equals(publisher)) {
-            // throw new BizException("xn000000", "当前用户不是该版块版主或发布用户，无法删除");
-            // }
+            List<Splate> plateList = splateBO.getPlateByUserId(userId);
+            Map<String, Splate> map = new HashMap<String, Splate>();
+            for (Splate data : plateList) {
+                map.put(data.getCode(), data);
+            }
+            if (null == map.get(splate.getCode()) && !userId.equals(publisher)) {
+                throw new BizException("xn000000", "当前用户不是该版块版主或发布用户，无法删除");
+            }
         }
         if (EPostType.TZ.getCode().equals(type)) {
             postBO.removePost(code);
@@ -234,20 +240,17 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     @Transactional
-    public void setPostLocation(String code, String location, Date endDatetime) {
+    public void setPostLocation(String code, String location) {
         Post post = postBO.getPost(code);
         String postLocation = post.getLocation();
         String isAdd = EBoolean.NO.getCode();
         if (StringUtils.isNotBlank(location) && location.equals(postLocation)) {
             postLocation = null;
         } else {
-            if (null == endDatetime) {
-                throw new BizException("xn000000", "请输入截止有效时间");
-            }
             postLocation = location;
             isAdd = EBoolean.YES.getCode();
         }
-        postBO.refreshPostLocation(code, postLocation, endDatetime);
+        postBO.refreshPostLocation(code, postLocation);
         // 设置精华加积分(前面已判断是否重复加)
         if (EBoolean.YES.getCode().equals(isAdd)
                 && ELocation.JH.getCode().equals(location)) {
@@ -259,8 +262,6 @@ public class PostAOImpl implements IPostAO {
     /** 
      * @see com.std.forum.ao.IPostAO#approvePost(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
-    @Override
-    @Transactional
     public void approvePost(String code, String approver, String approveResult,
             String approveNote, String type) {
         if (EPostType.TZ.getCode().equals(type)) {
@@ -318,23 +319,27 @@ public class PostAOImpl implements IPostAO {
      * @see com.std.forum.ao.IPostAO#lockPost(java.lang.String)
      */
     @Override
-    public void lockPost(String code) {
-        Post post = postBO.getPost(code);
-        if (EBoolean.YES.getCode().equals(post.getIsLock())) {
-            postBO.refreshPostLock(code, EBoolean.NO.getCode());
-        } else {
-            postBO.refreshPostLock(code, EBoolean.YES.getCode());
+    public void lockPost(List<String> codeList) {
+        for (String code : codeList) {
+            Post post = postBO.getPost(code);
+            if (EBoolean.YES.getCode().equals(post.getIsLock())) {
+                postBO.refreshPostLock(code, EBoolean.NO.getCode());
+            } else {
+                postBO.refreshPostLock(code, EBoolean.YES.getCode());
+            }
         }
     }
 
     @Override
-    public void editPostPlate(String code, String plateCode) {
-        postBO.getPost(code);
-        // Plate plate = plateBO.getPlate(plateCode);
-        // if (EBoolean.NO.getCode().equals(plate.getStatus())) {
-        // throw new BizException("xn000000", "该版块状态为未启用");
-        // }
-        postBO.refreshPostPlate(code, plateCode);
+    public void editPostPlate(List<String> codeList, String plateCode) {
+        for (String code : codeList) {
+            postBO.getPost(code);
+            Splate splate = splateBO.getSplate(plateCode);
+            if (EBoolean.NO.getCode().equals(splate.getStatus())) {
+                throw new BizException("xn000000", "该版块状态为未启用");
+            }
+            postBO.refreshPostPlate(code, plateCode);
+        }
     }
 
     @Override
@@ -398,22 +403,6 @@ public class PostAOImpl implements IPostAO {
                 post.setIsSC(EBoolean.YES.getCode());
             }
         }
-        // 获取点赞
-        List<PostTalk> likeList = postTalkBO.queryPostTalkList(code,
-            ETalkType.DZ.getCode(), size);
-        post.setLikeList(likeList);
-        long totalDzCount = postTalkBO.getPostTalkTotalCount(code,
-            ETalkType.DZ.getCode());
-        post.setTotalLikeNum(totalDzCount);
-        // 获取评论
-        List<Comment> commentList = commentBO.queryCommentList(code,
-            commStatus, size);
-        // 排序
-        orderCommentList(commentList);
-        post.setCommentList(commentList);
-        // 计算所有评论数
-        long totalComment = commentBO.getCommentTotalCount(code, commStatus);
-        post.setTotalCommNum(totalComment);
     }
 
     private void searchCycleComment(String parentCode, List<Comment> list,
@@ -513,19 +502,22 @@ public class PostAOImpl implements IPostAO {
     }
 
     @Override
-    public void returnPost(String code, String type) {
-        if (EPostType.TZ.getCode().equals(type)) {
-            Post post = postBO.getPost(code);
-            if (!EPostStatus.APPROVE_NO.getCode().equals(post.getStatus())) {
-                throw new BizException("xn000000", "该帖子不是待回收状态");
+    public void returnPost(List<String> codeList, String type) {
+        for (String code : codeList) {
+            if (EPostType.TZ.getCode().equals(type)) {
+                Post post = postBO.getPost(code);
+                if (!EPostStatus.APPROVE_NO.getCode().equals(post.getStatus())) {
+                    throw new BizException("xn000000", "该帖子不是待回收状态");
+                }
+                postBO.refreshPostReturn(code);
+            } else {
+                Comment comment = commentBO.getComment(code);
+                if (!EPostStatus.APPROVE_NO.getCode().equals(
+                    comment.getStatus())) {
+                    throw new BizException("xn000000", "该评论不是待回收状态");
+                }
+                commentBO.refreshCommentReturn(code);
             }
-            postBO.refreshPostReturn(code);
-        } else {
-            Comment comment = commentBO.getComment(code);
-            if (!EPostStatus.APPROVE_NO.getCode().equals(comment.getStatus())) {
-                throw new BizException("xn000000", "该评论不是待回收状态");
-            }
-            commentBO.refreshCommentReturn(code);
         }
     }
 
@@ -539,9 +531,7 @@ public class PostAOImpl implements IPostAO {
         List<Post> postList = postBO.queryPostList(condition);
         if (CollectionUtils.isNotEmpty(postList)) {
             for (Post post : postList) {
-                if (post.getValidDatetimeEnd().before(new Date())) {
-                    postBO.refreshPostLocation(post.getCode(), null, null);
-                }
+
             }
         }
         System.out

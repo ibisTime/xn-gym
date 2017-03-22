@@ -62,8 +62,8 @@ public class BplateTemplateAOImpl implements IBplateTemplateAO {
     }
 
     @Override
-    public List<BplateTemplate> queryBplateTemplateList(BplateTemplate condition) {
-        return bplateTemplateBO.queryBplateTemplateList(condition);
+    public List<BplateTemplate> queryBplateTemplateList(String name) {
+        return bplateTemplateBO.queryBplateTemplateList(name);
     }
 
     @Override

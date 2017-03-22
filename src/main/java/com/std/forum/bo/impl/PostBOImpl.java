@@ -53,6 +53,10 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setPublisher(publisher);
         data.setStatus(status);
         data.setPublishDatetime(new Date());
+        data.setSumComment(0);
+        data.setSumLike(0);
+        data.setSumRead(0);
+        data.setSumReward(0);
         postDAO.insert(data);
         return code;
     }
@@ -69,6 +73,10 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setStatus(status);
         data.setPublisher(publisher);
         data.setPublishDatetime(new Date());
+        data.setSumComment(0);
+        data.setSumLike(0);
+        data.setSumRead(0);
+        data.setSumReward(0);
         postDAO.update(data);
     }
 
@@ -155,19 +163,12 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
-    public int refreshPostLocation(String code, String location,
-            Date endDatetime) {
+    public int refreshPostLocation(String code, String location) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Post data = new Post();
             data.setCode(code);
             data.setLocation(location);
-            if (null == endDatetime) {
-                data.setValidDatetimeStart(endDatetime);
-            } else {
-                data.setValidDatetimeStart(new Date());
-            }
-            data.setValidDatetimeEnd(endDatetime);
             count = postDAO.updateLocation(data);
         }
         return count;
@@ -212,6 +213,54 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
             data.setStatus(EPostStatus.toReportAPPROVE.getCode());
             data.setRemark(remark);
             count = postDAO.updateStatus(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPostSumComment(String code, Integer sumComment) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Post data = new Post();
+            data.setCode(code);
+            data.setSumComment(sumComment);
+            count = postDAO.updateSumComment(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPostSumLike(String code, Integer sumLike) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Post data = new Post();
+            data.setCode(code);
+            data.setSumLike(sumLike);
+            count = postDAO.updateSumLike(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPostSumRead(String code, Integer sumRead) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Post data = new Post();
+            data.setCode(code);
+            data.setSumRead(sumRead);
+            count = postDAO.updateSumRead(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPostSumReward(String code, Integer sumReward) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Post data = new Post();
+            data.setCode(code);
+            data.setSumReward(sumReward);
+            count = postDAO.updateSumReward(data);
         }
         return count;
     }

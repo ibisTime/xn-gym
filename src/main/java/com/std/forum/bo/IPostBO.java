@@ -8,7 +8,6 @@
  */
 package com.std.forum.bo;
 
-import java.util.Date;
 import java.util.List;
 
 import com.std.forum.bo.base.IPaginableBO;
@@ -37,8 +36,15 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public int refreshPostReturn(String code);
 
-    public int refreshPostLocation(String code, String location,
-            Date endDatetime);
+    public int refreshPostLocation(String code, String location);
+
+    public int refreshPostSumComment(String code, Integer sumComment);
+
+    public int refreshPostSumLike(String code, Integer sumLike);
+
+    public int refreshPostSumRead(String code, Integer sumRead);
+
+    public int refreshPostSumReward(String code, Integer sumReward);
 
     public int refreshPostLock(String code, String isLock);
 

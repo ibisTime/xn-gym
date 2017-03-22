@@ -37,6 +37,9 @@ public class Post extends ABaseDO {
     // 图片
     private String pic;
 
+    // 状态(0 待审核 1 审核通过 2 审核不通过 3 已发布)
+    private String status;
+
     // 发布人
     private String publisher;
 
@@ -52,9 +55,6 @@ public class Post extends ABaseDO {
     // 审核说明
     private String approveNote;
 
-    // 状态(0 待审核 1 审核通过 2 审核不通过 3 已发布)
-    private String status;
-
     // UI位置
     private String location;
 
@@ -67,11 +67,17 @@ public class Post extends ABaseDO {
     // 是否锁帖
     private String isLock;
 
-    // 有效期开始时间
-    private Date validDatetimeStart;
+    // 评论数
+    private Integer sumComment;
 
-    // 有效期结束时间
-    private Date validDatetimeEnd;
+    // 点赞数
+    private Integer sumLike;
+
+    // 阅读数
+    private Integer sumRead;
+
+    // 打赏人数
+    private Integer sumReward;
 
     // 备注
     private String remark;
@@ -106,15 +112,6 @@ public class Post extends ABaseDO {
 
     // 用户类型
     private String type;
-
-    // 该帖子被点赞数
-    private Long totalLikeNum;
-
-    // 该帖子被评论数
-    private Long totalCommNum;
-
-    // 总的阅读次数
-    private Long totalReadTimes;
 
     // 点赞
     private List<PostTalk> likeList;
@@ -270,22 +267,6 @@ public class Post extends ABaseDO {
         this.photo = photo;
     }
 
-    public Long getTotalLikeNum() {
-        return totalLikeNum;
-    }
-
-    public void setTotalLikeNum(Long totalLikeNum) {
-        this.totalLikeNum = totalLikeNum;
-    }
-
-    public Long getTotalCommNum() {
-        return totalCommNum;
-    }
-
-    public void setTotalCommNum(Long totalCommNum) {
-        this.totalCommNum = totalCommNum;
-    }
-
     public List<Comment> getCommentList() {
         return commentList;
     }
@@ -358,14 +339,6 @@ public class Post extends ABaseDO {
         this.orderNo = orderNo;
     }
 
-    public Long getTotalReadTimes() {
-        return totalReadTimes;
-    }
-
-    public void setTotalReadTimes(Long totalReadTimes) {
-        this.totalReadTimes = totalReadTimes;
-    }
-
     public String[] getPicArr() {
         return picArr;
     }
@@ -380,22 +353,6 @@ public class Post extends ABaseDO {
 
     public void setIsLock(String isLock) {
         this.isLock = isLock;
-    }
-
-    public Date getValidDatetimeStart() {
-        return validDatetimeStart;
-    }
-
-    public void setValidDatetimeStart(Date validDatetimeStart) {
-        this.validDatetimeStart = validDatetimeStart;
-    }
-
-    public Date getValidDatetimeEnd() {
-        return validDatetimeEnd;
-    }
-
-    public void setValidDatetimeEnd(Date validDatetimeEnd) {
-        this.validDatetimeEnd = validDatetimeEnd;
     }
 
     public String getRemark() {
@@ -420,5 +377,37 @@ public class Post extends ABaseDO {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public Integer getSumComment() {
+        return sumComment;
+    }
+
+    public void setSumComment(Integer sumComment) {
+        this.sumComment = sumComment;
+    }
+
+    public Integer getSumLike() {
+        return sumLike;
+    }
+
+    public void setSumLike(Integer sumLike) {
+        this.sumLike = sumLike;
+    }
+
+    public Integer getSumRead() {
+        return sumRead;
+    }
+
+    public void setSumRead(Integer sumRead) {
+        this.sumRead = sumRead;
+    }
+
+    public Integer getSumReward() {
+        return sumReward;
+    }
+
+    public void setSumReward(Integer sumReward) {
+        this.sumReward = sumReward;
     }
 }

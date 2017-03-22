@@ -74,7 +74,9 @@ public class BplateTemplateBOImpl extends PaginableBOImpl<BplateTemplate>
     }
 
     @Override
-    public List<BplateTemplate> queryBplateTemplateList(BplateTemplate condition) {
+    public List<BplateTemplate> queryBplateTemplateList(String name) {
+        BplateTemplate condition = new BplateTemplate();
+        condition.setName(name);
         return bplateTemplateDAO.selectList(condition);
     }
 

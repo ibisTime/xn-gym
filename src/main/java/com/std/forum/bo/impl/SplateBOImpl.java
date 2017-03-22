@@ -111,4 +111,11 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
         condition.setBplateCode(parentCode);
         return splateDAO.selectList(condition);
     }
+
+    @Override
+    public List<Splate> getPlateByUserId(String userId) {
+        Splate condition = new Splate();
+        condition.setModerator(userId);
+        return splateDAO.selectList(condition);
+    }
 }

@@ -25,4 +25,6 @@ public interface ISplateBO extends IPaginableBO<Splate> {
 
     public Splate getSplate(String code);
 
+    public List<Splate> getPlateByUserId(String userId);
+
 }

@@ -5,37 +5,36 @@ import org.apache.commons.collections.CollectionUtils;
 import com.std.forum.ao.IPostAO;
 import com.std.forum.api.AProcessor;
 import com.std.forum.common.JsonUtil;
-import com.std.forum.core.StringValidater;
-import com.std.forum.dto.req.XN610048Reqt;
+import com.std.forum.dto.req.XN610119Req;
 import com.std.forum.dto.res.BooleanRes;
 import com.std.forum.exception.BizException;
 import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
 /**
- * 对帖子/评论进行彻底批量删除(预留)
+ * 锁帖/取消锁帖
  * @author: xieyj 
- * @since: 2016年10月23日 下午7:12:45 
+ * @since: 2016年10月23日 下午9:12:51 
  * @history:
  */
-public class XN610048t extends AProcessor {
+public class XN610119 extends AProcessor {
 
     private IPostAO postAO = SpringContextHolder.getBean(IPostAO.class);
 
-    private XN610048Reqt req = null;
+    private XN610119Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        postAO.dropPostList(req.getCodeList(), req.getUserId(), req.getType());
+        postAO.lockPost(req.getCodeList());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN610048Reqt.class);
-        StringValidater.validateBlank(req.getUserId(), req.getType());
+        req = JsonUtil.json2Bean(inputparams, XN610119Req.class);
         if (CollectionUtils.isEmpty(req.getCodeList())) {
-            throw new BizException("xn000000", "编号列表不能为空");
+            throw new BizException("xn0000", "编号不允许为空");
         }
     }
+
 }

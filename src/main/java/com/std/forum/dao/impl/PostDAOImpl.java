@@ -128,4 +128,24 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     public int updateStatus(Post data) {
         return super.update(NAMESPACE.concat("update_post_status"), data);
     }
+
+    @Override
+    public int updateSumReward(Post data) {
+        return super.update(NAMESPACE.concat("update_sum_reward"), data);
+    }
+
+    @Override
+    public int updateSumRead(Post data) {
+        return super.update(NAMESPACE.concat("update_sum_read"), data);
+    }
+
+    @Override
+    public int updateSumLike(Post data) {
+        return super.update(NAMESPACE.concat("update_sum_like"), data);
+    }
+
+    @Override
+    public int updateSumComment(Post data) {
+        return super.update(NAMESPACE.concat("update_sum_comment"), data);
+    }
 }

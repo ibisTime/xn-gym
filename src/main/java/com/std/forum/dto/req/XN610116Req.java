@@ -1,9 +1,11 @@
 package com.std.forum.dto.req;
 
-public class XN610047Reqt {
+import java.util.List;
+
+public class XN610116Req {
 
     // 帖子编号（必填）
-    private String code;
+    private List<String> codeList;
 
     // 用户编号(必填)
     private String userId;
@@ -11,12 +13,12 @@ public class XN610047Reqt {
     // 类型(必填)
     private String type;
 
-    public String getCode() {
-        return code;
+    public List<String> getCodeList() {
+        return codeList;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
     public String getUserId() {

@@ -50,4 +50,24 @@ public interface IPostDAO extends IBaseDAO<Post> {
     public int updatePlate(Post data);
 
     public long selectPostNum(Post condition);
+
+    /**
+     * 打赏数
+     */
+    public int updateSumReward(Post data);
+
+    /**
+     * 阅读数
+     */
+    public int updateSumRead(Post data);
+
+    /**
+     * 点赞数
+     */
+    public int updateSumLike(Post data);
+
+    /**
+     * 评论数
+     */
+    public int updateSumComment(Post data);
 }

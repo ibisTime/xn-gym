@@ -6,16 +6,13 @@ package com.std.forum.dto.req;
  * @since: 2016年10月13日 下午3:28:37 
  * @history:
  */
-public class XN610049Reqt {
+public class XN610117Req {
 
     // 帖子编号（必填）
     private String code;
 
     // UI位置（必填）
     private String location;
-
-    // 有效截止时间
-    private String endDatetime;
 
     public String getCode() {
         return code;
@@ -31,13 +28,5 @@ public class XN610049Reqt {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getEndDatetime() {
-        return endDatetime;
-    }
-
-    public void setEndDatetime(String endDatetime) {
-        this.endDatetime = endDatetime;
     }
 }
