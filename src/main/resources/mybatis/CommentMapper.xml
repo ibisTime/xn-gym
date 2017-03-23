@@ -16,7 +16,6 @@
 		<result column="approve_datetime" property="approveDatetime" />
 		
 		<result column="approve_note" property="approveNote" />
-		<result column="remark" property="remark" />
 		<result column="post_code" property="postCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -74,17 +73,16 @@
 		,t.approve_datetime
 		
 		,t.approve_note
-		,t.remark
 		,t.post_code
 		FROM
-		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_plate tpt on tp.plate_code = tpt.code
+		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
 		<include refid="where_condition" />
 		ORDER BY t.code DESC	
 	</select>
 
 	<select id="select_comment_count" parameterType="comment"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_plate tpt on tp.plate_code = tpt.code
+		SELECT count(1) FROM tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
 		<include refid="where_condition" />
 	</select>
 	
@@ -126,9 +124,6 @@
 		UPDATE tforum_comment
 		SET
 		status = #{status}
-		<if test="remark != null and remark != '' ">
-				,remark = #{remark}
-		</if>
 		WHERE code = #{code}
 	</update>
 	

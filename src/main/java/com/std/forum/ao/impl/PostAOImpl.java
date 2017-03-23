@@ -322,6 +322,7 @@ public class PostAOImpl implements IPostAO {
     public void lockPost(List<String> codeList) {
         for (String code : codeList) {
             Post post = postBO.getPost(code);
+            // 1 锁帖 0 正常帖
             if (EBoolean.YES.getCode().equals(post.getIsLock())) {
                 postBO.refreshPostLock(code, EBoolean.NO.getCode());
             } else {
@@ -522,19 +523,19 @@ public class PostAOImpl implements IPostAO {
     }
 
     // 定时取消帖子的置顶，精华，头条的过时属性
-    @Override
-    public void doChangePostLocation() {
-        System.out
-            .println("*************doChangePostLocation start*************");
-        Post condition = new Post();
-        condition.setLocation(ELocation.ALL.getCode());
-        List<Post> postList = postBO.queryPostList(condition);
-        if (CollectionUtils.isNotEmpty(postList)) {
-            for (Post post : postList) {
-
-            }
-        }
-        System.out
-            .println("*************doChangePostLocation end*************");
-    }
+    // @Override
+    // public void doChangePostLocation() {
+    // System.out
+    // .println("*************doChangePostLocation start*************");
+    // Post condition = new Post();
+    // condition.setLocation(ELocation.ALL.getCode());
+    // List<Post> postList = postBO.queryPostList(condition);
+    // if (CollectionUtils.isNotEmpty(postList)) {
+    // for (Post post : postList) {
+    //
+    // }
+    // }
+    // System.out
+    // .println("*************doChangePostLocation end*************");
+    // }
 }

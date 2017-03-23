@@ -134,7 +134,6 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
             Comment data = new Comment();
             data.setCode(code);
             data.setStatus(EPostStatus.toReportAPPROVE.getCode());
-            data.setRemark(remark);
             count = commentDAO.updateStatus(data);
         }
         return count;

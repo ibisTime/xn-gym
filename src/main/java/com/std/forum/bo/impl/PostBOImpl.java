@@ -53,6 +53,7 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setPublisher(publisher);
         data.setStatus(status);
         data.setPublishDatetime(new Date());
+        data.setIsLock(EBoolean.NO.getCode());
         data.setSumComment(0);
         data.setSumLike(0);
         data.setSumRead(0);

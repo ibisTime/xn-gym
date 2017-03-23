@@ -114,15 +114,13 @@ public class PostTalkAOImpl implements IPostTalkAO {
             String type, StringBuffer reportNote) {
         boolean result = false;
         // 判断该用户是否已举报
-        PostTalk condition = new PostTalk();
-        condition.setPostCode(code);
-        condition.setTalker(reporter);
-        List<PostTalk> reporterList = postTalkBO.queryPostTalkList(condition);
+        List<PostTalk> reporterList = postTalkBO.queryPostTalkSingleList(code,
+            null, reporter);
         if (CollectionUtils.isNotEmpty(reporterList)) {
             throw new BizException("xn000000", "您已举报成功，无需再次举报");
         }
         List<PostTalk> reportList = postTalkBO.queryPostTalkSingleList(code,
-            type);
+            type, null);
         int maxTimes = ruleBO.getJBTimesByUserId(publisher).intValue();
         StringBuffer sb = new StringBuffer();
         if (reportList.size() + 1 >= maxTimes) {

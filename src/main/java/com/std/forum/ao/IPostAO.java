@@ -89,5 +89,5 @@ public interface IPostAO {
 
     public XN610900Res totalPostNum(String userId, String status);
 
-    public void doChangePostLocation();
+    // public void doChangePostLocation();
 }

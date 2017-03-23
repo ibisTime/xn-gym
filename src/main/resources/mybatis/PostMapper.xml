@@ -117,21 +117,21 @@
 		,t.plate_code
 		
 		,t.is_lock
-		,t.sun_comment
+		,t.sum_comment
 		,t.sum_like
 		,t.sum_read
 		,t.sum_reward
 		,t.remark
 		,tp.name as plate_name
 		FROM
-		tforum_post t left join tforum_plate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code 
+		tforum_post t left join tforum_splate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code 
 		<include refid="where_condition" />
 		ORDER BY t.publish_datetime DESC	
 	</select>
 
 	<select id="select_post_count" parameterType="post"
 		resultType="java.lang.Long">
-		SELECT count(*) from (SELECT DISTINCT t.code FROM tforum_post t inner join tforum_plate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code
+		SELECT count(*) from (SELECT DISTINCT t.code FROM tforum_post t inner join tforum_splate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code
 		<include refid="where_condition" />) as post
 	</select>
 	
@@ -152,6 +152,12 @@
 		,plate_code
 		,publisher
 		,publish_datetime
+		,is_lock
+		,sum_comment
+		
+		,sum_like
+		,sum_read
+		,sum_reward
 		)
 		VALUES(
 		#{code}
@@ -163,6 +169,12 @@
 		,#{plateCode}
 		,#{publisher}
 		,#{publishDatetime}
+		,#{isLock}
+		,#{sumComment}
+		
+		,#{sumLike}
+		,#{sumRead}
+		,#{sumReward}
 		)
 	</insert>
 	
@@ -210,8 +222,6 @@
 		UPDATE tforum_post
 		SET
 		location = #{location}
-		,valid_datetime_start = #{validDatetimeStart}
-		,valid_datetime_end = #{validDatetimeEnd}
 		WHERE code = #{code}
 	</update>
 	

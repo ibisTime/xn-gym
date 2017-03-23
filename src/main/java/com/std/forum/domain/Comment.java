@@ -51,9 +51,6 @@ public class Comment extends ABaseDO {
     // 审核说明
     private String approveNote;
 
-    // 备注
-    private String remark;
-
     // 帖子编号
     private String postCode;
 
@@ -189,14 +186,6 @@ public class Comment extends ABaseDO {
 
     public void setApproveNote(String approveNote) {
         this.approveNote = approveNote;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     public String getPostCode() {

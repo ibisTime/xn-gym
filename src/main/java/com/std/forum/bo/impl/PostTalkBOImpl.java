@@ -59,12 +59,14 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
      * @see com.std.forum.bo.IPostTalkBO#queryPostTalkList(com.std.forum.domain.PostTalk)
      */
     @Override
-    public List<PostTalk> queryPostTalkSingleList(String postCode, String type) {
+    public List<PostTalk> queryPostTalkSingleList(String postCode, String type,
+            String talker) {
         List<PostTalk> resultList = null;
-        if (StringUtils.isNotBlank(postCode) && StringUtils.isNotBlank(type)) {
+        if (StringUtils.isNotBlank(postCode)) {
             PostTalk condition = new PostTalk();
             condition.setPostCode(postCode);
             condition.setType(type);
+            condition.setTalker(talker);
             resultList = postTalkDAO.selectList(condition);
         }
         return resultList;

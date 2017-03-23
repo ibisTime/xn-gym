@@ -24,7 +24,8 @@ public interface IPostTalkBO extends IPaginableBO<PostTalk> {
     public int savePostTalk(String postCode, String userId, String type,
             String remark);
 
-    public List<PostTalk> queryPostTalkSingleList(String postCode, String type);
+    public List<PostTalk> queryPostTalkSingleList(String postCode, String type,
+            String talker);
 
     public List<PostTalk> queryPostTalkList(String postCode, String type,
             int limit);
