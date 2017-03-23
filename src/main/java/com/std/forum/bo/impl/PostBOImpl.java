@@ -164,12 +164,13 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
-    public int refreshPostLocation(String code, String location) {
+    public int refreshPostLocation(String code, String location, Integer orderNo) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Post data = new Post();
             data.setCode(code);
             data.setLocation(location);
+            data.setOrderNo(orderNo);
             count = postDAO.updateLocation(data);
         }
         return count;

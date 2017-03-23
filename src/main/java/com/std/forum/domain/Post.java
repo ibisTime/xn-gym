@@ -59,7 +59,7 @@ public class Post extends ABaseDO {
     private String location;
 
     // UI序号
-    private String orderNo;
+    private Integer orderNo;
 
     // 版块编号
     private String plateCode;
@@ -315,7 +315,7 @@ public class Post extends ABaseDO {
         this.location = location;
     }
 
-    public String getOrderNo() {
+    public Integer getOrderNo() {
         return orderNo;
     }
 
@@ -327,7 +327,7 @@ public class Post extends ABaseDO {
         this.keyword = keyword;
     }
 
-    public void setOrderNo(String orderNo) {
+    public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
 

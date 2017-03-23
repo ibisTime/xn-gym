@@ -252,7 +252,7 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     @Transactional
-    public void setPostLocation(String code, String location) {
+    public void setPostLocation(String code, String location, Integer orderNo) {
         Post post = postBO.getPost(code);
         String postLocation = post.getLocation();
         String isAdd = EBoolean.NO.getCode();
@@ -262,7 +262,7 @@ public class PostAOImpl implements IPostAO {
             postLocation = location;
             isAdd = EBoolean.YES.getCode();
         }
-        postBO.refreshPostLocation(code, postLocation);
+        postBO.refreshPostLocation(code, postLocation, orderNo);
         // 设置精华加积分(前面已判断是否重复加)
         if (EBoolean.YES.getCode().equals(isAdd)
                 && ELocation.JH.getCode().equals(location)) {

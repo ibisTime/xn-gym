@@ -222,6 +222,7 @@
 		UPDATE tforum_post
 		SET
 		location = #{location}
+		,order_no = #{orderNo}
 		WHERE code = #{code}
 	</update>
 	

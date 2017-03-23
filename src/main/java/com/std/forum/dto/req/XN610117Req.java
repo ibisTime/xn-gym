@@ -14,6 +14,9 @@ public class XN610117Req {
     // UI位置（必填）
     private String location;
 
+    // ui顺序
+    private String orderNo;
+
     public String getCode() {
         return code;
     }
@@ -28,5 +31,13 @@ public class XN610117Req {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 }
