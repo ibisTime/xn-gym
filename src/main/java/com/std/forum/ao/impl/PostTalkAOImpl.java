@@ -40,37 +40,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
     @Autowired
     protected IRuleBO ruleBO;
 
-    @Override
-    @Transactional
-    public void doPostTalk(String postCode, String userId, String type) {
-        PostTalk postTalk = postTalkBO.getPostTalkByCondition(postCode, userId,
-            type);
-        Post post = postBO.getPost(postCode);
-        if (null != postTalk) {
-            if (ETalkType.DZ.getCode().equals(type)) {
-                postBO.refreshPostSumLike(postCode, post.getSumLike() - 1);
-            }
-            postTalkBO.removePostTalk(postTalk.getCode());
-        } else {
-            if (ETalkType.DZ.getCode().equals(type)) {
-                postBO.refreshPostSumLike(postCode, post.getSumLike() + 1);
-            }
-            postTalkBO.savePostTalk(postCode, userId, type, ETalkType
-                .getTalkTypeMap().get(type).getValue());
-        }
-    }
-
-    @Override
-    @Transactional
-    public void doPostTalk(String postCode, String userId, Long amount) {
-        Post post = postBO.getPost(postCode);
-        postTalkBO.savePostTalk(postCode, userId, ETalkType.DS.getCode(),
-            String.valueOf(amount));
-        postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);
-        userBO.doTransferAdd(userId, post.getPublisher(), amount, "打赏帖子",
-            postCode);
-    }
-
+    // 举报帖子
     @Override
     @Transactional
     public void reportPost(String code, String reporter, String reportNote,
@@ -132,6 +102,37 @@ public class PostTalkAOImpl implements IPostTalkAO {
             result = true;
         }
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void doPostTalk(String postCode, String userId, String type) {
+        PostTalk postTalk = postTalkBO.getPostTalkByCondition(postCode, userId,
+            type);
+        Post post = postBO.getPost(postCode);
+        if (null != postTalk) {
+            if (ETalkType.DZ.getCode().equals(type)) {
+                postBO.refreshPostSumLike(postCode, post.getSumLike() - 1);
+            }
+            postTalkBO.removePostTalk(postTalk.getCode());
+        } else {
+            if (ETalkType.DZ.getCode().equals(type)) {
+                postBO.refreshPostSumLike(postCode, post.getSumLike() + 1);
+            }
+            postTalkBO.savePostTalk(postCode, userId, type, ETalkType
+                .getTalkTypeMap().get(type).getValue());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void doPostTalk(String postCode, String userId, Long amount) {
+        Post post = postBO.getPost(postCode);
+        postTalkBO.savePostTalk(postCode, userId, ETalkType.DS.getCode(),
+            String.valueOf(amount));
+        postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);
+        userBO.doTransferAdd(userId, post.getPublisher(), amount, "打赏帖子",
+            postCode);
     }
 
     /** 

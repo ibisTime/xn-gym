@@ -46,6 +46,12 @@
 	<bean id="menuBO" class="com.std.forum.bo.impl.MenuBOImpl">
 		<property name="paginableDAO" ref="menuDAOImpl" />
 	</bean>
+	<bean id="bannerBO" class="com.std.forum.bo.impl.BannerBOImpl">
+		<property name="paginableDAO" ref="bannerDAOImpl" />
+	</bean>
+	<bean id="subsystemBO" class="com.std.forum.bo.impl.SubsystemBOImpl">
+		<property name="paginableDAO" ref="subsystemDAOImpl" />
+	</bean>
 	<bean id="productBO" class="com.std.forum.bo.impl.ProductBOImpl">
 		<property name="paginableDAO" ref="productDAOImpl" />
 	</bean>

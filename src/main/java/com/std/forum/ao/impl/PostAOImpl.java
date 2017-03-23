@@ -80,6 +80,7 @@ public class PostAOImpl implements IPostAO {
     @Autowired
     protected ILevelRuleBO levelRuleBO;
 
+    // 1.发布帖子
     // 判断是否发帖
     // 1、发帖，内容过滤，等级判断是否审核
     // 2、草稿保存
@@ -129,6 +130,7 @@ public class PostAOImpl implements IPostAO {
         return code;
     }
 
+    // 2.草稿发布帖子
     @Override
     @Transactional
     public String draftPublishPost(String code, String title, String content,
@@ -176,6 +178,14 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     @Transactional
+    public void dropPostList(List<String> codeList, String userId, String type) {
+        for (String code : codeList) {
+            dropPost(code, userId, type);
+        }
+    }
+
+    @Override
+    @Transactional
     public void dropPost(String code, String userId, String type) {
         Post post = null;
         Splate splate = null;
@@ -188,9 +198,8 @@ public class PostAOImpl implements IPostAO {
         } else {
             post = postBO.getPost(code);
             publisher = post.getPublisher();
-            PostTalk condition = new PostTalk();
-            condition.setPostCode(post.getCode());
-            List<PostTalk> talkList = postTalkBO.queryPostTalkList(condition);
+            List<PostTalk> talkList = postTalkBO.queryPostTalkSingleList(
+                post.getCode(), null, null);
             for (PostTalk postTalk : talkList) {
                 postTalkBO.removePostTalk(postTalk.getCode());
             }
@@ -227,14 +236,17 @@ public class PostAOImpl implements IPostAO {
         }
     }
 
-    /** 
-     * @see com.std.forum.ao.IPostAO#dropPostList(java.util.List, java.lang.String, java.lang.String)
-     */
-    @Override
-    @Transactional
-    public void dropPostList(List<String> codeList, String userId, String type) {
-        for (String code : codeList) {
-            dropPost(code, userId, type);
+    private void searchCycleComment(String parentCode, List<Comment> list,
+            String status) {
+        Comment condition = new Comment();
+        condition.setParentCode(parentCode);
+        condition.setStatus(status);
+        List<Comment> nextList = commentBO.queryCommentList(condition);
+        if (CollectionUtils.isNotEmpty(nextList)) {
+            list.addAll(nextList);
+            for (int i = 0; i < nextList.size(); i++) {
+                searchCycleComment(nextList.get(i).getCode(), list, status);
+            }
         }
     }
 
@@ -259,9 +271,15 @@ public class PostAOImpl implements IPostAO {
         }
     }
 
-    /** 
-     * @see com.std.forum.ao.IPostAO#approvePost(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
+    // 批量审核帖子
+    @Override
+    public void approvePostList(List<String> codeList, String approver,
+            String approveResult, String approveNote, String type) {
+        for (String code : codeList) {
+            this.approvePost(code, approver, approveResult, approveNote, type);
+        }
+    }
+
     public void approvePost(String code, String approver, String approveResult,
             String approveNote, String type) {
         if (EPostType.TZ.getCode().equals(type)) {
@@ -307,27 +325,17 @@ public class PostAOImpl implements IPostAO {
         }
     }
 
-    @Override
-    public void approvePostList(List<String> codeList, String approver,
-            String approveResult, String approveNote, String type) {
-        for (String code : codeList) {
-            this.approvePost(code, approver, approveResult, approveNote, type);
-        }
-    }
-
-    /** 
-     * @see com.std.forum.ao.IPostAO#lockPost(java.lang.String)
-     */
+    // 是否锁帖
     @Override
     public void lockPost(List<String> codeList) {
         for (String code : codeList) {
             Post post = postBO.getPost(code);
             // 1 锁帖 0 正常帖
+            boolean flag = false;
             if (EBoolean.YES.getCode().equals(post.getIsLock())) {
-                postBO.refreshPostLock(code, EBoolean.NO.getCode());
-            } else {
-                postBO.refreshPostLock(code, EBoolean.YES.getCode());
+                flag = true;
             }
+            postBO.refreshPostLock(code, flag);
         }
     }
 
@@ -402,20 +410,6 @@ public class PostAOImpl implements IPostAO {
                 userId, ETalkType.SC.getCode());
             if (null != scPostTalk) {
                 post.setIsSC(EBoolean.YES.getCode());
-            }
-        }
-    }
-
-    private void searchCycleComment(String parentCode, List<Comment> list,
-            String status) {
-        Comment condition = new Comment();
-        condition.setParentCode(parentCode);
-        condition.setStatus(status);
-        List<Comment> nextList = commentBO.queryCommentList(condition);
-        if (CollectionUtils.isNotEmpty(nextList)) {
-            list.addAll(nextList);
-            for (int i = 0; i < nextList.size(); i++) {
-                searchCycleComment(nextList.get(i).getCode(), list, status);
             }
         }
     }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.std.forum.ao.ISubsystemAO;
 import com.std.forum.bo.ISubsystemBO;
 import com.std.forum.bo.base.Paginable;
+import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Subsystem;
 import com.std.forum.dto.req.XN610090Req;
 import com.std.forum.dto.req.XN610091Req;
@@ -29,8 +30,10 @@ public class SubsystemAOImpl implements ISubsystemAO {
         if (EBelong.GLOBAL.getCode().equals(subsystem.getBelong())
                 || EBelong.LOCAL.getCode().equals(subsystem.getBelong())) {
             subsystemBO.refreshSubsystem(req.getCode(), req.getName(),
-                req.getUrl(), req.getPic(), req.getLocation(),
-                req.getOrderNo(), req.getCompanyCode(), req.getRemark());
+                req.getUrl(), req.getPic(),
+                StringValidater.toInteger(req.getLocation()),
+                StringValidater.toInteger(req.getOrderNo()),
+                req.getCompanyCode(), req.getRemark());
         } else {
             throw new BizException("xn0000", "地方子系统配置，不可修改");
         }
@@ -41,14 +44,17 @@ public class SubsystemAOImpl implements ISubsystemAO {
         Subsystem subsystem = subsystemBO.getSubsystem(req.getCode());
         if (EBelong.LOCAL.getCode().equals(subsystem.getBelong())) {
             subsystemBO.saveSubsystem(req.getName(), req.getUrl(),
-                req.getPic(), req.getLocation(), req.getOrderNo(),
+                req.getPic(), StringValidater.toInteger(req.getLocation()),
+                StringValidater.toInteger(req.getOrderNo()),
                 req.getCompanyCode(), req.getRemark());
         } else if (EBelong.GLOBAL.getCode().equals(subsystem.getBelong())) {
             throw new BizException("xn0000", "总部子系统，地方不可修改");
         } else {
             subsystemBO.refreshSubsystem(req.getCode(), req.getName(),
-                req.getUrl(), req.getPic(), req.getLocation(),
-                req.getOrderNo(), req.getCompanyCode(), req.getRemark());
+                req.getUrl(), req.getPic(),
+                StringValidater.toInteger(req.getLocation()),
+                StringValidater.toInteger(req.getOrderNo()),
+                req.getCompanyCode(), req.getRemark());
         }
     }
 

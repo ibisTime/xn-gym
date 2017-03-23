@@ -47,6 +47,7 @@ public class CommentAOImpl implements ICommentAO {
     @Autowired
     protected IUserBO userBO;
 
+    // 1.发布评论
     @Override
     @Transactional
     public String doComment(String content, String parentCode, String commer) {

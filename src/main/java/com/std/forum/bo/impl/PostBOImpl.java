@@ -179,12 +179,15 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
      * @see com.std.forum.bo.IPostBO#refreshPostHeadlines(java.lang.String)
      */
     @Override
-    public int refreshPostLock(String code, String isLock) {
+    public int refreshPostLock(String code, boolean flag) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Post data = new Post();
             data.setCode(code);
-            data.setIsLock(isLock);
+            data.setIsLock(EBoolean.NO.getCode());
+            if (flag == true) {
+                data.setIsLock(EBoolean.YES.getCode());
+            }
             count = postDAO.updateLock(data);
         }
         return count;

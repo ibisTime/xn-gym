@@ -46,7 +46,7 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public int refreshPostSumReward(String code, Integer sumReward);
 
-    public int refreshPostLock(String code, String isLock);
+    public int refreshPostLock(String code, boolean flag);
 
     public int refreshPostPlate(String code, String plateCode);
 

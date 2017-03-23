@@ -10,12 +10,12 @@ public interface ISubsystemBO extends IPaginableBO<Subsystem> {
     public boolean isSubsystemExist(String code);
 
     public String saveSubsystem(String name, String url, String pic,
-            String location, String orderNo, String companyCode, String remark);
+            Integer location, Integer orderNo, String companyCode, String remark);
 
     public int removeSubsystem(String code);
 
     public int refreshSubsystem(String code, String name, String url,
-            String pic, String location, String orderNo, String companyCode,
+            String pic, Integer location, Integer orderNo, String companyCode,
             String remark);
 
     public List<Subsystem> querySubsystemList(Subsystem condition);
