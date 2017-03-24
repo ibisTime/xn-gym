@@ -265,4 +265,12 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         return count;
     }
 
+    @Override
+    public Long getMyPostCount(String userId, String status) {
+        Post condition = new Post();
+        condition.setPublisher(userId);
+        condition.setStatus(status);
+        return postDAO.getMyPostCount(condition);
+    }
+
 }

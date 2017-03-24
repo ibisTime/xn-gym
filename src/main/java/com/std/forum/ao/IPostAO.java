@@ -12,7 +12,6 @@ import java.util.List;
 
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Post;
-import com.std.forum.dto.res.XN610900Res;
 
 /** 
  * @author: xieyj 
@@ -88,7 +87,6 @@ public interface IPostAO {
 
     public Post getPostByCommentCode(String commentCode, String userId);
 
-    public XN610900Res totalPostNum(String userId, String status);
+    public Long getMyPostCount(String userId, String status);
 
-    // public void doChangePostLocation();
 }

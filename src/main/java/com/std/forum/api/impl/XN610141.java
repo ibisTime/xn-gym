@@ -14,7 +14,8 @@ import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
 /**
- * 我的帖子收到点赞分页查询
+ * 我收到的赞（分页查询）
+ * 跨库取昵称和头像
  * @author: xieyj 
  * @since: 2016年11月16日 下午2:57:34 
  * @history:

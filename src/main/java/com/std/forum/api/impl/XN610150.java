@@ -23,7 +23,7 @@ public class XN610150 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return postAO.totalPostNum(req.getUserId(), req.getStatus());
+        return postAO.getMyPostCount(req.getUserId(), req.getStatus());
     }
 
     @Override

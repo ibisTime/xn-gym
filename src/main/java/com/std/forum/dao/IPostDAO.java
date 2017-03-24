@@ -70,4 +70,6 @@ public interface IPostDAO extends IBaseDAO<Post> {
      * 评论数
      */
     public int updateSumComment(Post data);
+
+    public Long getMyPostCount(Post condition);
 }

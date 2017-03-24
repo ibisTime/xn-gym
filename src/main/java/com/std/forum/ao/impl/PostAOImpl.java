@@ -34,14 +34,12 @@ import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Splate;
-import com.std.forum.dto.res.XN610900Res;
 import com.std.forum.dto.res.XN805901Res;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EDirection;
 import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPostType;
-import com.std.forum.enums.EPrefixCode;
 import com.std.forum.enums.EReaction;
 import com.std.forum.enums.ERuleType;
 import com.std.forum.enums.ETalkType;
@@ -332,8 +330,7 @@ public class PostAOImpl implements IPostAO {
         List<Post> postList = postPage.getList();
         for (Post post : postList) {
             cutPic(post);
-            getPartInfo(post, condition.getUserId(),
-                EPostStatus.PUBLISHALL.getCode(), 30);
+            getPartInfo(post, condition.getUserId());
         }
         return postPage;
     }
@@ -347,7 +344,7 @@ public class PostAOImpl implements IPostAO {
     public Post getPost(String code, String userId, String commStatus) {
         Post post = postBO.getPost(code);
         cutPic(post);
-        getPartInfo(post, userId, commStatus, 0);
+        getPartInfo(post, userId);
         return post;
     }
 
@@ -369,8 +366,7 @@ public class PostAOImpl implements IPostAO {
      * @create: 2017年3月8日 下午1:46:33 xieyj
      * @history:
      */
-    private void getPartInfo(Post post, String userId, String commStatus,
-            int size) {
+    private void getPartInfo(Post post, String userId) {
         String code = post.getCode();
         // 设置查询点赞记录条件
         post.setIsDZ(EBoolean.NO.getCode());
@@ -410,8 +406,7 @@ public class PostAOImpl implements IPostAO {
         List<Post> postList = postPage.getList();
         for (Post post : postList) {
             cutPic(post);
-            this.getPartInfo(post, condition.getUserId(),
-                EPostStatus.PUBLISHALL.getCode(), 30);
+            this.getPartInfo(post, condition.getUserId());
         }
         return postPage;
     }
@@ -424,8 +419,7 @@ public class PostAOImpl implements IPostAO {
         List<Post> postList = postBO.queryPostList(condition);
         for (Post post : postList) {
             cutPic(post);
-            getPartInfo(post, condition.getUserId(),
-                EPostStatus.PUBLISHALL.getCode(), 30);
+            getPartInfo(post, condition.getUserId());
         }
         return postList;
     }
@@ -443,32 +437,14 @@ public class PostAOImpl implements IPostAO {
     public Post getPostByCommentCode(String commentCode, String userId) {
         Post post = null;
         Comment comment = commentBO.getComment(commentCode);
-        while (true) {
-            String parentCode = comment.getParentCode();
-            if (EPrefixCode.POST.getCode().equals(parentCode.substring(0, 2))) {
-                post = postBO.getPost(parentCode);
-                getPartInfo(post, userId, EPostStatus.PUBLISHALL.getCode(), 0);
-                break;
-            } else {
-                comment = commentBO.getComment(parentCode);
-                commentCode = comment.getCode();
-            }
-        }
+        post = postBO.getPost(comment.getPostCode());
+        getPartInfo(post, userId);
         return post;
     }
 
-    /** 
-     * @see com.std.forum.ao.IPostAO#totalPostNum(java.lang.String)
-     */
     @Override
-    public XN610900Res totalPostNum(String userId, String status) {
-        XN610900Res res = new XN610900Res();
-        Post condition = new Post();
-        condition.setPublisher(userId);
-        condition.setStatus(status);
-        Long totalPostNum = postBO.getTotalCount(condition);
-        res.setTotalPostNum(totalPostNum);
-        return res;
+    public Long getMyPostCount(String userId, String status) {
+        return postBO.getMyPostCount(userId, status);
     }
 
     @Override
