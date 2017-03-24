@@ -34,7 +34,7 @@ import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Splate;
-import com.std.forum.dto.res.XN805901Res;
+import com.std.forum.dto.res.XN001400Res;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EDirection;
 import com.std.forum.enums.ELocation;
@@ -124,7 +124,7 @@ public class PostAOImpl implements IPostAO {
             status = EPostStatus.FILTERED.getCode();
         } else {
             // 判断用户等级，是否审核
-            XN805901Res res = userBO.getRemoteUser(publisher);
+            XN001400Res res = userBO.getRemoteUser(publisher);
             LevelRule levelRule = levelRuleBO.getLevelRule(res.getLevel());
             if (EBoolean.YES.getCode().equals(levelRule.getEffect())) {
                 status = EPostStatus.todoAPPROVE.getCode();
@@ -182,7 +182,7 @@ public class PostAOImpl implements IPostAO {
         }
         splate = splateBO.getSplate(post.getPlateCode());
         String companyCode = splate.getCompanyCode();
-        XN805901Res res = userBO.getRemoteUser(userId);
+        XN001400Res res = userBO.getRemoteUser(userId);
         if (EUserKind.Operator.getCode().equals(res.getKind())) {
             if (!companyCode.equals(res.getCompanyCode())) {
                 throw new BizException("xn000000", "当前用户不是该帖子的管理员，无法删除");

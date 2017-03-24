@@ -1,6 +1,6 @@
 package com.std.forum.dto.res;
 
-public class XN805901Res {
+public class XN001400Res {
     // 用户ID
     private String userId;
 

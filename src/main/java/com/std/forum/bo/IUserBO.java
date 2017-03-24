@@ -10,7 +10,7 @@ package com.std.forum.bo;
 
 import com.std.forum.bo.base.IPaginableBO;
 import com.std.forum.domain.User;
-import com.std.forum.dto.res.XN805901Res;
+import com.std.forum.dto.res.XN001400Res;
 
 /** 
  * @author: xieyj 
@@ -19,7 +19,7 @@ import com.std.forum.dto.res.XN805901Res;
  */
 public interface IUserBO extends IPaginableBO<User> {
 
-    public XN805901Res getRemoteUser(String userId);
+    public XN001400Res getRemoteUser(String userId);
 
     /**
      * 加减积分
