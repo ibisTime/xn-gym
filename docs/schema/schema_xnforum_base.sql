@@ -65,7 +65,7 @@ DROP TABLE IF EXISTS `tforum_splate_template`;
 CREATE TABLE `tforum_splate_template` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
-  `bplate_code` varchar(4) DEFAULT NULL COMMENT '大板块编号',
+  `bplate_code` varchar(32) DEFAULT NULL COMMENT '大板块编号',
   `pic` varchar(255) DEFAULT NULL COMMENT '图片',
   `order_no` int(11) DEFAULT NULL COMMENT '序号',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS `tforum_splate`;
 CREATE TABLE `tforum_splate` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
-  `bplate_code` varchar(4) DEFAULT NULL COMMENT '大板块编号',
+  `bplate_code` varchar(32) DEFAULT NULL COMMENT '大板块编号',
   `pic` varchar(255) DEFAULT NULL COMMENT '图片',
   `order_no` int(11) DEFAULT NULL COMMENT '序号',
   `moderator` varchar(32) DEFAULT NULL COMMENT '版主编号',
