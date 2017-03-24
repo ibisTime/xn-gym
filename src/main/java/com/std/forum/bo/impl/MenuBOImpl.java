@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.std.forum.bo.IMenuBO;
 import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.core.OrderNoGenerater;
+import com.std.forum.core.StringValidater;
 import com.std.forum.dao.IMenuDAO;
 import com.std.forum.domain.Menu;
 import com.std.forum.enums.EPrefixCode;
@@ -33,6 +34,7 @@ public class MenuBOImpl extends PaginableBOImpl<Menu> implements IMenuBO {
     @Override
     public String saveMenu(String name, String pic, String orderNo,
             String belong, String companyCode, String remark) {
+        StringValidater.validateBlank(companyCode);
         Menu data = new Menu();
         String code = OrderNoGenerater.generateME(EPrefixCode.MENU.getCode());
         data.setCode(code);
@@ -68,6 +70,7 @@ public class MenuBOImpl extends PaginableBOImpl<Menu> implements IMenuBO {
             data.setPic(pic);
             data.setOrderNo(orderNo);
             data.setBelong(belong);
+
             data.setRemark(remark);
             count = menuDAO.updateByGlobal(data);
         }

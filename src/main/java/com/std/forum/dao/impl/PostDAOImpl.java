@@ -148,4 +148,10 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     public int updateSumComment(Post data) {
         return super.update(NAMESPACE.concat("update_sum_comment"), data);
     }
+
+    @Override
+    public Long getMyPostCount(Post condition) {
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_getMyPostCount"), condition);
+    }
 }

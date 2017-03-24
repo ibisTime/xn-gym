@@ -139,6 +139,11 @@
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tforum_post where plate_code = #{plateCode}
 	</select>
+	
+	<select id="select_getMyPostCount" parameterType="post"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tforum_post where publisher = #{publisher} and status = #{status}
+	</select>
 
 	<insert id="insert_post" parameterType="post">
 		INSERT INTO

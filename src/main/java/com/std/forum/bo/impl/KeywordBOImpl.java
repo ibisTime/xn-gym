@@ -9,21 +9,19 @@
 package com.std.forum.bo.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.std.forum.bo.IKeywordBO;
 import com.std.forum.bo.base.PaginableBOImpl;
-import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.IKeywordDAO;
 import com.std.forum.domain.Keyword;
-import com.std.forum.enums.EBoolean;
-import com.std.forum.enums.EPrefixCode;
 import com.std.forum.enums.EReaction;
+import com.std.forum.exception.BizException;
 
 /** 
  * @author: xieyj 
@@ -41,15 +39,10 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword> implements
      * @see com.std.forum.bo.IKeywordBO#saveKeyword(com.std.forum.domain.Keyword)
      */
     @Override
-    public String saveKeyword(Keyword data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.KEYWORD.getCode());
-            data.setCode(code);
-            data.setUpdateDatetime(new Date());
+    public void saveKeyword(Keyword data) {
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
             keywordDAO.insert(data);
         }
-        return code;
     }
 
     /** 
@@ -58,8 +51,7 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword> implements
     @Override
     public int refreshKeyword(Keyword data) {
         int count = 0;
-        if (data != null && data.getCode() != null) {
-            data.setUpdateDatetime(new Date());
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
             count = keywordDAO.update(data);
         }
         return count;
@@ -114,38 +106,6 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword> implements
         return count;
     }
 
-    /** 
-     * @see com.std.forum.bo.IKeywordBO#checkContent(java.lang.String)
-     */
-    @Override
-    public List<Keyword> checkContent(String content, String level,
-            EReaction reaction) {
-        List<Keyword> resultList = new ArrayList<Keyword>();
-        if (StringUtils.isNotBlank(content)) {
-            // 针对等级
-            Keyword condition = new Keyword();
-            condition.setLevel(level);
-            condition.setWeightStart(0.5);
-            condition.setReaction(reaction.getCode());
-            List<Keyword> list = keywordDAO.selectList(condition);
-            for (Keyword keyword : list) {
-                if (content.indexOf(keyword.getWord()) >= 0) {
-                    resultList.add(keyword);
-                }
-            }
-            // 针对所有
-            condition.setLevel(EBoolean.NO.getCode()); // level=0 所有
-            condition.setWeightStart(0.5);
-            List<Keyword> allList = keywordDAO.selectList(condition);
-            for (Keyword keyword : allList) {
-                if (content.indexOf(keyword.getWord()) >= 0) {
-                    resultList.add(keyword);
-                }
-            }
-        }
-        return resultList;
-    }
-
     @Override
     public String replaceKeyword(String content, String word) {
         String replacement = "";
@@ -154,5 +114,27 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword> implements
         }
         content = content.replaceAll(word, replacement);
         return content;
+    }
+
+    @Override
+    public EReaction checkContent(String content) {
+        if (StringUtils.isBlank(content)) {
+            throw new BizException("xn000000", "内容不能为空");
+        }
+        List<Keyword> resultList = new ArrayList<Keyword>();
+        // 针对所有
+        Keyword condition = new Keyword();
+        condition.setWeightStart(0.5);
+        List<Keyword> allList = keywordDAO.selectList(condition);
+        for (Keyword keyword : allList) {
+            if (content.indexOf(keyword.getWord()) >= 0) {
+                resultList.add(keyword);
+            }
+        }
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            return EReaction.REFUSE;
+        } else {
+            return EReaction.NORMAL;
+        }
     }
 }

@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum EReaction {
-    NORMAL("0", "正常"), SHIELD("1", "屏蔽"), APPROVE("2", "审核"), REFUSE("3", "拒绝");
+    NORMAL("0", "正常"), REFUSE("1", "进帖子垃圾桶");
     public static Map<String, EReaction> getBooleanResultMap() {
         Map<String, EReaction> map = new HashMap<String, EReaction>();
         for (EReaction status : EReaction.values()) {

@@ -14,7 +14,6 @@ import com.std.forum.domain.Menu;
 import com.std.forum.dto.req.XN610080Req;
 import com.std.forum.dto.req.XN610081Req;
 import com.std.forum.enums.EBelong;
-import com.std.forum.enums.EBoolean;
 import com.std.forum.exception.BizException;
 
 @Service
@@ -63,7 +62,7 @@ public class MenuAOImpl implements IMenuAO {
         List<Menu> resultList = new ArrayList<Menu>();
         // 本地的List
         List<Menu> localList = menuBO.queryMenuList(companyCode);
-        List<Menu> menuList = menuBO.queryMenuList(EBoolean.NO.getCode());
+        List<Menu> menuList = menuBO.queryMenuList("0");
 
         for (Menu menu : menuList) {
             if (CollectionUtils.isNotEmpty(localList)) {

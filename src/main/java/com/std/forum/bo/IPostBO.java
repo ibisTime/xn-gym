@@ -55,4 +55,6 @@ public interface IPostBO extends IPaginableBO<Post> {
     public List<Post> queryPostList(Post condition);
 
     public long getPostNum(Post condition);
+
+    public Long getMyPostCount(String userId, String status);
 }

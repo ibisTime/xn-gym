@@ -19,7 +19,7 @@ public class XN610081Req {
     // 序号（必填）
     private String orderNo;
 
-    // 站点（必填）
+    // 地方编号(第一次修改时必填)
     private String companyCode;
 
     // 备注（选填）
@@ -31,6 +31,14 @@ public class XN610081Req {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getName() {
@@ -55,14 +63,6 @@ public class XN610081Req {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getRemark() {

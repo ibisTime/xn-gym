@@ -23,7 +23,7 @@ public class XN610110Req {
     // 发布人（必填）
     private String publisher;
 
-    // 是否发布
+    // 是否发布（必填）
     private String isPublish;
 
     public String getTitle() {

@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.domain.User;
+import com.std.forum.dto.req.XN001400Req;
 import com.std.forum.dto.req.XN805300Req;
 import com.std.forum.dto.req.XN805301Req;
 import com.std.forum.dto.req.XN805302Req;
-import com.std.forum.dto.req.XN805901Req;
-import com.std.forum.dto.res.XN805901Res;
+import com.std.forum.dto.res.XN001400Res;
 import com.std.forum.exception.BizException;
 import com.std.forum.http.BizConnecter;
 import com.std.forum.http.JsonUtils;
@@ -26,12 +26,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.xnjr.mall.bo.IUserBO#getRemoteUser(java.lang.String)
      */
     @Override
-    public XN805901Res getRemoteUser(String tokenId, String userId) {
-        XN805901Req req = new XN805901Req();
-        req.setTokenId(tokenId);
+    public XN001400Res getRemoteUser(String userId) {
+        XN001400Req req = new XN001400Req();
+        req.setTokenId(userId);
         req.setUserId(userId);
-        XN805901Res res = BizConnecter.getBizData("001400",
-            JsonUtils.object2Json(req), XN805901Res.class);
+        XN001400Res res = BizConnecter.getBizData("001400",
+            JsonUtils.object2Json(req), XN001400Res.class);
         if (res == null) {
             throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
         }
