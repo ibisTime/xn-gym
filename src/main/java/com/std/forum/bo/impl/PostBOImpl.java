@@ -21,6 +21,7 @@ import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.IPostDAO;
 import com.std.forum.domain.Post;
 import com.std.forum.enums.EBoolean;
+import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPrefixCode;
 import com.std.forum.exception.BizException;
@@ -54,7 +55,7 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setStatus(status);
         data.setPublishDatetime(new Date());
         data.setIsLock(EBoolean.NO.getCode());
-        data.setLocation(EBoolean.NO.getCode());
+        data.setLocation(ELocation.ALL.getCode());
         data.setOrderNo(0);
         data.setSumComment(0);
         data.setSumLike(0);
@@ -76,6 +77,8 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setStatus(status);
         data.setPublisher(publisher);
         data.setPublishDatetime(new Date());
+        data.setIsLock(EBoolean.NO.getCode());
+        data.setLocation(ELocation.ALL.getCode());
         data.setSumComment(0);
         data.setSumLike(0);
         data.setSumRead(0);
@@ -83,9 +86,6 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         postDAO.update(data);
     }
 
-    /** 
-     * @see com.std.forum.bo.IPostBO#removePost(java.lang.String)
-     */
     @Override
     public int removePost(String code) {
         int count = 0;
@@ -97,9 +97,6 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         return count;
     }
 
-    /**
-     * @see com.std.forum.bo.IPostBO#refreshPostApprove(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public int refreshPostApprove(String code, String approver,
             String approveResult, String approveNote) {
@@ -107,22 +104,18 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         if (StringUtils.isNotBlank(code)) {
             Post data = new Post();
             data.setCode(code);
-            if (EBoolean.YES.getCode().equals(approveResult)) {
-                data.setStatus(EPostStatus.APPROVE_YES.getCode());
-            } else {
-                data.setStatus(EPostStatus.APPROVE_NO.getCode());
-            }
             data.setApprover(approver);
             data.setApproveDatetime(new Date());
             data.setApproveNote(approveNote);
+            data.setStatus(EPostStatus.APPROVE_NO.getCode());
+            if (EBoolean.YES.getCode().equals(approveResult)) {
+                data.setStatus(EPostStatus.APPROVE_YES.getCode());
+            }
             count = postDAO.updateApprove(data);
         }
         return count;
     }
 
-    /** 
-     * @see com.std.forum.bo.IPostBO#refreshPostReturn(java.lang.String)
-     */
     @Override
     public int refreshPostReturn(String code) {
         int count = 0;

@@ -192,6 +192,13 @@
 		,status = #{status}
 		,publisher = #{publisher}
 		,publish_datetime = #{publishDatetime}
+		,is_lock = #{isLock}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,sum_comment = #{sumComment}
+		,sum_like = #{sumLike}
+		,sum_read = #{sumRead}
+		,sum_reward = #{sumReward}
 		WHERE code = #{code}
 	</update>
 	
