@@ -30,7 +30,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         XN805901Req req = new XN805901Req();
         req.setTokenId(tokenId);
         req.setUserId(userId);
-        XN805901Res res = BizConnecter.getBizData("805901",
+        XN805901Res res = BizConnecter.getBizData("001400",
             JsonUtils.object2Json(req), XN805901Res.class);
         if (res == null) {
             throw new BizException("XN000000", "编号为" + userId + "的用户不存在");

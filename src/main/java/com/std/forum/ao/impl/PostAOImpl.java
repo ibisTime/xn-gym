@@ -260,11 +260,14 @@ public class PostAOImpl implements IPostAO {
             isAdd = EBoolean.YES.getCode();
         }
         postBO.refreshPostLocation(code, postLocation, orderNo);
-        // 设置精华加积分(前面已判断是否重复加)
-        if (EBoolean.YES.getCode().equals(isAdd)
-                && ELocation.JH.getCode().equals(location)) {
-            userBO.doTransfer(post.getPublisher(), EDirection.PLUS.getCode(),
-                ERuleType.JH.getCode(), code);
+        String[] locationArr = location.split(",");
+        for (String JH : locationArr) {
+            // 设置精华加积分(前面已判断是否重复加)
+            if (EBoolean.YES.getCode().equals(isAdd)
+                    && ELocation.JH.getCode().equals(JH)) {
+                userBO.doTransfer(post.getPublisher(),
+                    EDirection.PLUS.getCode(), ERuleType.JH.getCode(), code);
+            }
         }
     }
 
