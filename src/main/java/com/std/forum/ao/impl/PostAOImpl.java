@@ -30,7 +30,6 @@ import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
-import com.std.forum.domain.Keyword;
 import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
@@ -89,43 +88,13 @@ public class PostAOImpl implements IPostAO {
     public String publishPost(String title, String content, String pic,
             String plateCode, String publisher, String isPublish) {
         // 判断版块是否存在
-        splateBO.getSplate(plateCode);
+        Splate splate = splateBO.getSplate(plateCode);
         String code = null;
-        if (EBoolean.NO.getCode().equals(isPublish)) {
-            code = postBO.savePost(title, content, pic, plateCode, publisher,
-                EPostStatus.DRAFT.getCode());
-        } else {
-            String status = null;
-            XN805901Res res = userBO.getRemoteUser(publisher, publisher);
-            String userLevel = res.getLevel();
-            // 对标题和内容进行关键字过滤
-            List<Keyword> keywordTitleList = keywordBO.checkContent(title,
-                userLevel, EReaction.REFUSE);
-            List<Keyword> keywordContentList = keywordBO.checkContent(content,
-                userLevel, EReaction.REFUSE);
-            if (CollectionUtils.isNotEmpty(keywordTitleList)
-                    || CollectionUtils.isNotEmpty(keywordContentList)) {
-                status = EPostStatus.FILTERED.getCode();
-            } else {
-                // 判断用户等级，是否审核
-                LevelRule levelRule = levelRuleBO.getLevelRule(res.getLevel());
-                if (EBoolean.YES.getCode().equals(levelRule.getEffect())) {
-                    status = EPostStatus.todoAPPROVE.getCode();
-                } else {
-                    status = EPostStatus.PUBLISHED.getCode();
-                }
-            }
-            code = postBO.savePost(title, content, pic, plateCode, publisher,
-                status);
-            // 告知前端被过滤了
-            if (EPostStatus.FILTERED.getCode().equals(status)) {
-                code = code + ";filter:true";
-            }
-            // 发帖加积分
-            if (EPostStatus.PUBLISHED.getCode().equals(status)) {
-                userBO.doTransfer(publisher, EDirection.PLUS.getCode(),
-                    ERuleType.FT.getCode(), code);
-            }
+        if (EBoolean.NO.getCode().equals(isPublish)) {// 保存草稿
+            code = postBO.savePost(title, content, pic, splate.getCode(),
+                publisher, EPostStatus.DRAFT.getCode());
+        } else {// 直接发布
+            code = doPublishPost(null, splate, title, content, pic, publisher);
         }
         return code;
     }
@@ -136,44 +105,53 @@ public class PostAOImpl implements IPostAO {
     public String draftPublishPost(String code, String title, String content,
             String pic, String plateCode, String publisher, String isPublish) {
         // 判断版块是否存在
-        splateBO.getSplate(plateCode);
-        if (EBoolean.NO.getCode().equals(isPublish)) {
+        Splate splate = splateBO.getSplate(plateCode);
+        if (EBoolean.NO.getCode().equals(isPublish)) {// 继续草稿
             postBO.refreshPost(code, title, content, pic, plateCode, publisher,
                 EPostStatus.DRAFT.getCode());
         } else {
-            String status = null;
-            XN805901Res res = userBO.getRemoteUser(publisher, publisher);
-            String userLevel = res.getLevel();
-            // 对标题和内容进行关键字过滤
-            List<Keyword> keywordTitleList = keywordBO.checkContent(title,
-                userLevel, EReaction.REFUSE);
-            List<Keyword> keywordContentList = keywordBO.checkContent(content,
-                userLevel, EReaction.REFUSE);
-            if (CollectionUtils.isNotEmpty(keywordTitleList)
-                    || CollectionUtils.isNotEmpty(keywordContentList)) {
-                status = EPostStatus.FILTERED.getCode();
-            } else {
-                // 判断用户等级，是否审核
-                LevelRule levelRule = levelRuleBO.getLevelRule(res.getLevel());
-                if (EBoolean.YES.getCode().equals(levelRule.getEffect())) {
-                    status = EPostStatus.todoAPPROVE.getCode();
-                } else {
-                    status = EPostStatus.PUBLISHED.getCode();
-                }
-            }
-            postBO.refreshPost(code, title, content, pic, plateCode, publisher,
-                status);
-            // 告知前端被过滤了
-            if (EPostStatus.FILTERED.getCode().equals(status)) {
-                code = code + ";filter:true";
-            }
-            // 发帖加积分
-            if (EPostStatus.PUBLISHED.getCode().equals(status)) {
-                userBO.doTransfer(publisher, EDirection.PLUS.getCode(),
-                    ERuleType.FT.getCode(), code);
-            }
+            doPublishPost(code, splate, title, content, pic, publisher);
         }
         return code;
+    }
+
+    private String doPublishPost(String code, Splate splate, String title,
+            String content, String pic, String publisher) {
+        String status = null;
+        // 对标题和内容进行关键字过滤
+        EReaction reaction1 = keywordBO.checkContent(title);
+        EReaction reaction2 = keywordBO.checkContent(content);
+        if (EReaction.REFUSE.getCode().equals(reaction1.getCode())
+                || EReaction.REFUSE.getCode().equals(reaction2.getCode())) {
+            status = EPostStatus.FILTERED.getCode();
+        } else {
+            // 判断用户等级，是否审核
+            XN805901Res res = userBO.getRemoteUser(publisher);
+            LevelRule levelRule = levelRuleBO.getLevelRule(res.getLevel());
+            if (EBoolean.YES.getCode().equals(levelRule.getEffect())) {
+                status = EPostStatus.todoAPPROVE.getCode();
+            } else {
+                status = EPostStatus.PUBLISHED.getCode();
+            }
+        }
+        if (StringUtils.isNotBlank(code)) {
+            postBO.refreshPost(code, title, content, pic, splate.getCode(),
+                publisher, status);
+        } else {
+            code = postBO.savePost(title, content, pic, splate.getCode(),
+                publisher, status);
+        }
+        // 告知前端被过滤了
+        if (EPostStatus.FILTERED.getCode().equals(status)) {
+            code = code + ";filter:true";
+        }
+        // 发帖加积分
+        if (EPostStatus.PUBLISHED.getCode().equals(status)) {
+            userBO.doTransfer(publisher, EDirection.PLUS.getCode(),
+                ERuleType.FT.getCode(), code);
+        }
+        return code;
+
     }
 
     @Override
@@ -206,7 +184,7 @@ public class PostAOImpl implements IPostAO {
         }
         splate = splateBO.getSplate(post.getPlateCode());
         String companyCode = splate.getCompanyCode();
-        XN805901Res res = userBO.getRemoteUser(userId, userId);
+        XN805901Res res = userBO.getRemoteUser(userId);
         if (EUserKind.Operator.getCode().equals(res.getKind())) {
             if (!companyCode.equals(res.getCompanyCode())) {
                 throw new BizException("xn000000", "当前用户不是该帖子的管理员，无法删除");

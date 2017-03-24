@@ -19,7 +19,7 @@ import com.std.forum.dto.res.XN805901Res;
  */
 public interface IUserBO extends IPaginableBO<User> {
 
-    public XN805901Res getRemoteUser(String tokenId, String userId);
+    public XN805901Res getRemoteUser(String userId);
 
     /**
      * 加减积分

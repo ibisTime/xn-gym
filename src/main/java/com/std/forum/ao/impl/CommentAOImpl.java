@@ -2,7 +2,6 @@ package com.std.forum.ao.impl;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,6 @@ import com.std.forum.bo.IRuleBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
-import com.std.forum.domain.Keyword;
 import com.std.forum.domain.Post;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EDirection;
@@ -58,9 +56,8 @@ public class CommentAOImpl implements ICommentAO {
         }
         // 判断非法词汇,无则正常发布
         String status = EPostStatus.PUBLISHED.getCode();
-        List<Keyword> keywordContentList = keywordBO.checkContent(content,
-            EBoolean.NO.getCode(), EReaction.REFUSE);
-        if (!CollectionUtils.sizeIsEmpty(keywordContentList)) {
+        EReaction result = keywordBO.checkContent(content);
+        if (EReaction.REFUSE.getCode().equals(result.getCode())) {
             status = EPostStatus.FILTERED.getCode();
         }
         Post parentPost = getPostByParentCode(parentCode);

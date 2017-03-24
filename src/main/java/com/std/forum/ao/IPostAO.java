@@ -75,6 +75,7 @@ public interface IPostAO {
      */
     public void setPostLocation(String code, String location, Integer orderNo);
 
+    //
     public Paginable<Post> queryPostPage(int start, int limit, Post condition);
 
     public List<Post> queryPostList(Post condition);

@@ -35,16 +35,13 @@ public interface IKeywordBO extends IPaginableBO<Keyword> {
     public List<Keyword> queryKeywordList(Keyword condition);
 
     /**
-     * 检查内容，返回关键词对象列表
+     *  检查内容，返回关键词对象列表
      * @param content
-     * @param level
-     * @param reaction
      * @return 
-     * @create: 2016年10月23日 下午2:42:28 xieyj
+     * @create: 2017年3月24日 下午2:23:11 myb858
      * @history:
      */
-    public List<Keyword> checkContent(String content, String level,
-            EReaction reaction);
+    public EReaction checkContent(String content);
 
     /**
      * 过滤替换关键字

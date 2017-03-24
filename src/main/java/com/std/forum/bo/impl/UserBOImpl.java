@@ -26,9 +26,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.xnjr.mall.bo.IUserBO#getRemoteUser(java.lang.String)
      */
     @Override
-    public XN805901Res getRemoteUser(String tokenId, String userId) {
+    public XN805901Res getRemoteUser(String userId) {
         XN805901Req req = new XN805901Req();
-        req.setTokenId(tokenId);
+        req.setTokenId(userId);
         req.setUserId(userId);
         XN805901Res res = BizConnecter.getBizData("805901",
             JsonUtils.object2Json(req), XN805901Res.class);
