@@ -24,7 +24,7 @@ public interface IKeywordBO extends IPaginableBO<Keyword> {
 
     public Boolean isKeywordExist(String code);
 
-    public String saveKeyword(Keyword data);
+    public void saveKeyword(Keyword data);
 
     public int refreshKeyword(Keyword data);
 

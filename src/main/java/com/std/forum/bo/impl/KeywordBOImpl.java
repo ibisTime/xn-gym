@@ -9,7 +9,6 @@
 package com.std.forum.bo.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,11 +17,9 @@ import org.springframework.stereotype.Component;
 
 import com.std.forum.bo.IKeywordBO;
 import com.std.forum.bo.base.PaginableBOImpl;
-import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.IKeywordDAO;
 import com.std.forum.domain.Keyword;
 import com.std.forum.enums.EBoolean;
-import com.std.forum.enums.EPrefixCode;
 import com.std.forum.enums.EReaction;
 
 /** 
@@ -41,15 +38,10 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword> implements
      * @see com.std.forum.bo.IKeywordBO#saveKeyword(com.std.forum.domain.Keyword)
      */
     @Override
-    public String saveKeyword(Keyword data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.KEYWORD.getCode());
-            data.setCode(code);
-            data.setUpdateDatetime(new Date());
+    public void saveKeyword(Keyword data) {
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
             keywordDAO.insert(data);
         }
-        return code;
     }
 
     /** 
@@ -58,8 +50,7 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword> implements
     @Override
     public int refreshKeyword(Keyword data) {
         int count = 0;
-        if (data != null && data.getCode() != null) {
-            data.setUpdateDatetime(new Date());
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
             count = keywordDAO.update(data);
         }
         return count;

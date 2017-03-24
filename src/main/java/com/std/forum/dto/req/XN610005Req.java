@@ -13,8 +13,14 @@ public class XN610005Req extends APageReq {
     // 关键词(选填)
     private String word;
 
-    // 作用等级
+    // 作用等级(选填)
     private String level;
+
+    // 反应(选填)
+    private String reaction;
+
+    // 更新人(选填)
+    private String updater;
 
     public String getWord() {
         return word;
@@ -31,4 +37,21 @@ public class XN610005Req extends APageReq {
     public void setLevel(String level) {
         this.level = level;
     }
+
+    public String getReaction() {
+        return reaction;
+    }
+
+    public void setReaction(String reaction) {
+        this.reaction = reaction;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
 }

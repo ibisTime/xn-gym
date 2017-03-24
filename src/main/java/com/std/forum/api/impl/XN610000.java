@@ -2,10 +2,8 @@ package com.std.forum.api.impl;
 
 import com.std.forum.ao.IKeywordAO;
 import com.std.forum.api.AProcessor;
-import com.std.forum.api.converter.KeywordConverter;
 import com.std.forum.common.JsonUtil;
 import com.std.forum.core.StringValidater;
-import com.std.forum.domain.Keyword;
 import com.std.forum.dto.req.XN610000Req;
 import com.std.forum.dto.res.PKCodeRes;
 import com.std.forum.exception.BizException;
@@ -27,8 +25,7 @@ public class XN610000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Keyword data = KeywordConverter.converter(req);
-        return new PKCodeRes(keywordAO.addKeyword(data));
+        return new PKCodeRes(keywordAO.addKeyword(req));
     }
 
     @Override

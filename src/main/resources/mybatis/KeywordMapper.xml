@@ -66,6 +66,7 @@
 		,weight
 		,level
 		,reaction
+		
 		,updater
 		,update_datetime
 		,remark
@@ -76,6 +77,7 @@
 		,#{weight}
 		,#{level}
 		,#{reaction}
+		
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
