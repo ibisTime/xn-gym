@@ -206,4 +206,22 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
         return commentDAO.selectTotalCount(condition);
     }
 
+    @Override
+    public List<Comment> queryCommentList(String parentCode, String status) {
+        Comment condition = new Comment();
+        condition.setParentCode(parentCode);
+        condition.setStatus(status);
+        List<Comment> resultList = commentDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            for (Comment comment : resultList) {
+                Comment result = getComment(comment.getParentCode());
+                if (result != null) {
+                    comment.setParentCommer(result.getCommer());
+                    comment.setParentNickname(result.getNickname());
+                }
+            }
+        }
+        return resultList;
+    }
+
 }

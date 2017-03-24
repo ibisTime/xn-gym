@@ -39,6 +39,8 @@ public interface ICommentBO extends IPaginableBO<Comment> {
 
     public List<Comment> queryCommentList(Comment condition);
 
+    public List<Comment> queryCommentList(String parentCode, String status);
+
     public List<Comment> queryCommentList(String postCode, String status,
             int limit);
 

@@ -238,10 +238,7 @@ public class PostAOImpl implements IPostAO {
 
     private void searchCycleComment(String parentCode, List<Comment> list,
             String status) {
-        Comment condition = new Comment();
-        condition.setParentCode(parentCode);
-        condition.setStatus(status);
-        List<Comment> nextList = commentBO.queryCommentList(condition);
+        List<Comment> nextList = commentBO.queryCommentList(parentCode, status);
         if (CollectionUtils.isNotEmpty(nextList)) {
             list.addAll(nextList);
             for (int i = 0; i < nextList.size(); i++) {
