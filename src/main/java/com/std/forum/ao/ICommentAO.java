@@ -28,4 +28,5 @@ public interface ICommentAO {
 
     public Paginable<Comment> queryCommentMyPage(int start, int limit,
             Comment condition);
+
 }

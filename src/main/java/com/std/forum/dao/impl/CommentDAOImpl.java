@@ -105,4 +105,11 @@ public class CommentDAOImpl extends AMybatisTemplate implements ICommentDAO {
     public int deleteCommentByPostCode(Comment data) {
         return super.delete(NAMESPACE.concat("delete_comment_post"), data);
     }
+
+    @Override
+    public List<Comment> selectLimitList(Comment condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
+        return super.selectList(NAMESPACE.concat("select_comment_limit"),
+            condition, Comment.class);
+    }
 }

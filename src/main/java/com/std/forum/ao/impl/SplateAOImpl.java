@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.forum.ao.ISplateAO;
+import com.std.forum.bo.IPostBO;
 import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.base.Paginable;
+import com.std.forum.common.DateUtil;
+import com.std.forum.domain.Post;
 import com.std.forum.domain.Splate;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
+import com.std.forum.dto.res.XN610046Res;
 import com.std.forum.enums.EPlateStatus;
 import com.std.forum.exception.BizException;
 
@@ -19,6 +23,9 @@ public class SplateAOImpl implements ISplateAO {
 
     @Autowired
     private ISplateBO splateBO;
+
+    @Autowired
+    private IPostBO postBO;
 
     @Override
     public String addSplate(XN610040Req req) {
@@ -60,7 +67,17 @@ public class SplateAOImpl implements ISplateAO {
     }
 
     @Override
-    public Splate getSplate(String code) {
-        return splateBO.getSplate(code);
+    public XN610046Res getSplate(String code) {
+        XN610046Res res = new XN610046Res();
+        Splate splate = splateBO.getSplate(code);
+        Long allPostCount = postBO.getPostNum(splate.getCode());
+        Post condition = new Post();
+        condition.setPublishDatetimeStart(DateUtil.getTodayStart());
+        condition.setPublishDatetimeEnd(DateUtil.getTodayEnd());
+        Long todayPostCount = postBO.getPostNum(condition);
+        res.setSplate(splate);
+        res.setAllPostCount(allPostCount);
+        res.setTodayPostCount(todayPostCount);
+        return res;
     }
 }

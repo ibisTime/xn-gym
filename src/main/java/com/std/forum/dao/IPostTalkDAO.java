@@ -8,6 +8,8 @@
  */
 package com.std.forum.dao;
 
+import java.util.List;
+
 import com.std.forum.dao.base.IBaseDAO;
 import com.std.forum.domain.PostTalk;
 
@@ -19,4 +21,6 @@ import com.std.forum.domain.PostTalk;
  */
 public interface IPostTalkDAO extends IBaseDAO<PostTalk> {
     String NAMESPACE = IPostTalkDAO.class.getName().concat(".");
+
+    public List<PostTalk> selectLimitList(PostTalk condition);
 }

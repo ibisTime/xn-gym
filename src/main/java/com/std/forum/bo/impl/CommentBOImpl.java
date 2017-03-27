@@ -8,6 +8,7 @@
  */
 package com.std.forum.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -224,4 +225,26 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
         return resultList;
     }
 
+    @Override
+    public List<Comment> queryCommentLimitList(String postCode) {
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EPostStatus.PUBLISHED.getCode());
+        statusList.add(EPostStatus.PUBLISHALL.getCode());
+        statusList.add(EPostStatus.APPROVE_YES.getCode());
+        statusList.add(EPostStatus.FILTERED.getCode());
+        Comment condition = new Comment();
+        condition.setPostCode(postCode);
+        condition.setStatusList(statusList);
+        List<Comment> resultList = commentDAO.selectLimitList(condition);
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            for (Comment comment : resultList) {
+                Comment result = getComment(comment.getParentCode());
+                if (result != null) {
+                    comment.setParentCommer(result.getCommer());
+                    comment.setParentNickname(result.getNickname());
+                }
+            }
+        }
+        return resultList;
+    }
 }

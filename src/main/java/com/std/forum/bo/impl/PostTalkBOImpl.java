@@ -21,6 +21,7 @@ import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.IPostTalkDAO;
 import com.std.forum.domain.PostTalk;
 import com.std.forum.enums.EPrefixCode;
+import com.std.forum.enums.ETalkType;
 
 /** 
  * @author: xieyj 
@@ -98,6 +99,14 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
     @Override
     public List<PostTalk> queryPostTalkList(PostTalk condition) {
         return postTalkDAO.selectList(condition);
+    }
+
+    @Override
+    public List<PostTalk> queryPostTalkLimitList(String postCode) {
+        PostTalk condition = new PostTalk();
+        condition.setPostCode(postCode);
+        condition.setType(ETalkType.DZ.getCode());
+        return postTalkDAO.selectLimitList(condition);
     }
 
     /** 

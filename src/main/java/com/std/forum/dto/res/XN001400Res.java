@@ -37,6 +37,9 @@ public class XN001400Res {
     // 是否绑定银行卡
     private String bankcardFlag;
 
+    // 昵称
+    private String nickName;
+
     // 公司编号
     private String companyCode;
 
@@ -142,5 +145,13 @@ public class XN001400Res {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

@@ -47,8 +47,8 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     @Override
     public Post select(Post condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return (Post) super.select(NAMESPACE.concat("select_post"), condition,
-            Post.class);
+        return (Post) super.select(NAMESPACE.concat("select_post_details"),
+            condition, Post.class);
     }
 
     /** 
@@ -67,7 +67,7 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     @Override
     public List<Post> selectList(Post condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_post"), condition,
+        return super.selectList(NAMESPACE.concat("select_post1"), condition,
             Post.class);
     }
 

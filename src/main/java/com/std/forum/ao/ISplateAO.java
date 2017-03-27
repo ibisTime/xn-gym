@@ -8,6 +8,7 @@ import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Splate;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
+import com.std.forum.dto.res.XN610046Res;
 
 @Component
 public interface ISplateAO {
@@ -24,6 +25,6 @@ public interface ISplateAO {
 
     public List<Splate> querySplateList(Splate condition);
 
-    public Splate getSplate(String code);
+    public XN610046Res getSplate(String code);
 
 }

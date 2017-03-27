@@ -46,4 +46,6 @@ public interface ICommentBO extends IPaginableBO<Comment> {
 
     public long getCommentTotalCount(String postCode, String status);
 
+    public List<Comment> queryCommentLimitList(String postCode);
+
 }

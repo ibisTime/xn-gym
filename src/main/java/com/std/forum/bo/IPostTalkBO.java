@@ -40,4 +40,6 @@ public interface IPostTalkBO extends IPaginableBO<PostTalk> {
             String type);
 
     public int removePostTalk(String code);
+
+    List<PostTalk> queryPostTalkLimitList(String postCode);
 }

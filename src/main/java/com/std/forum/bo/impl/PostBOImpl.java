@@ -159,6 +159,13 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
+    public long getPostNum(String plateCode) {
+        Post condition = new Post();
+        condition.setPlateCode(plateCode);
+        return postDAO.selectPostNum(condition);
+    }
+
+    @Override
     public int refreshPostLocation(String code, String location, Integer orderNo) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {

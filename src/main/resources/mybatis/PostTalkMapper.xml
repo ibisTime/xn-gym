@@ -55,6 +55,26 @@
 		ORDER BY t.code DESC	
 	</select>
 	
+	<select id="select_postTalk_limit" parameterType="postTalk" resultMap="postTalk_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.post_code
+		,tp.title as post_title
+		,tp.content as post_content
+		
+		,t.talker
+		
+		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.talker) as nickname
+		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.talker) as photo
+		,t.talk_datetime
+		,t.remark
+		FROM
+		tforum_post_talk t inner join tforum_post tp on t.post_code = tp.code
+		<include refid="where_condition" />
+		ORDER BY t.code DESC limit 10
+	</select>
+	
 	<select id="select_postTalk_count" parameterType="postTalk"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tforum_post_talk t inner join tforum_post tp on t.post_code = tp.code

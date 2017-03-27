@@ -144,11 +144,11 @@ public class PostTalkAOImpl implements IPostTalkAO {
         return postTalkBO.getPaginable(start, limit, condition);
     }
 
-    /** 
-     * @see com.std.forum.ao.IPostTalkAO#queryPostTalkList(com.std.forum.domain.Post)
-     */
     @Override
-    public List<PostTalk> queryPostTalkList(PostTalk condition) {
+    public List<PostTalk> queryPostTalkList(String postCode) {
+        PostTalk condition = new PostTalk();
+        condition.setPostCode(postCode);
+        condition.setType(ETalkType.DS.getCode());
         return postTalkBO.queryPostTalkList(condition);
     }
 }

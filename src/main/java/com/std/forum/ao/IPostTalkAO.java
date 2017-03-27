@@ -34,5 +34,5 @@ public interface IPostTalkAO {
     public Paginable<PostTalk> queryPostTalkPage(int start, int limit,
             PostTalk condition);
 
-    public List<PostTalk> queryPostTalkList(PostTalk condition);
+    public List<PostTalk> queryPostTalkList(String postCode);
 }

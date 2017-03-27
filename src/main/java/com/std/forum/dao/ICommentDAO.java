@@ -8,6 +8,8 @@
  */
 package com.std.forum.dao;
 
+import java.util.List;
+
 import com.std.forum.dao.base.IBaseDAO;
 import com.std.forum.domain.Comment;
 
@@ -25,4 +27,6 @@ public interface ICommentDAO extends IBaseDAO<Comment> {
     public int updateStatus(Comment data);
 
     public int deleteCommentByPostCode(Comment data);
+
+    public List<Comment> selectLimitList(Comment condition);
 }

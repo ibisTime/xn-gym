@@ -1,5 +1,5 @@
 /**
- * @Title PostAOImpl.java 
+4 * @Title PostAOImpl.java 
  * @Package com.std.forum.ao.impl 
  * @Description 
  * @author xieyj  
@@ -329,18 +329,47 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     public Paginable<Post> queryPostPage(int start, int limit, Post condition) {
+        condition.setLocation(setLocation(condition.getLocation()));
         Paginable<Post> postPage = postBO.getPaginable(start, limit, condition);
         List<Post> postList = postPage.getList();
         for (Post post : postList) {
             cutPic(post);
             getPartInfo(post, condition.getUserId());
+            List<Comment> commentList = commentBO.queryCommentLimitList(post
+                .getCode());
+            post.setCommentList(commentList);
+            List<PostTalk> postTalkList = postTalkBO
+                .queryPostTalkLimitList(post.getCode());
+            post.setLikeList(postTalkList);
         }
         return postPage;
     }
 
+    private String setLocation(String location) {
+        if (StringUtils.isNotBlank(location)) {
+            String[] desc = location.split(",");
+            for (int i = 0; i < desc.length; i++) {
+                location = desc[i] + "%";
+            }
+        }
+        return location;
+    }
+
     @Override
     public List<Post> queryPostList(Post condition) {
-        return postBO.queryPostList(condition);
+        condition.setLocation(setLocation(condition.getLocation()));
+        List<Post> postList = postBO.queryPostList(condition);
+        for (Post post : postList) {
+            cutPic(post);
+            getPartInfo(post, condition.getUserId());
+            fullUser(post);
+        }
+        return postList;
+    }
+
+    private void fullUser(Post post) {
+        XN001400Res res = userBO.getRemoteUser(post.getPublisher());
+        post.setNickname(res.getNickName());
     }
 
     @Override
@@ -348,6 +377,7 @@ public class PostAOImpl implements IPostAO {
         Post post = postBO.getPost(code);
         cutPic(post);
         getPartInfo(post, userId);
+        fullUser(post);
         return post;
     }
 
@@ -410,6 +440,7 @@ public class PostAOImpl implements IPostAO {
         for (Post post : postList) {
             cutPic(post);
             this.getPartInfo(post, condition.getUserId());
+            this.fullUser(post);
         }
         return postPage;
     }
@@ -423,6 +454,7 @@ public class PostAOImpl implements IPostAO {
         for (Post post : postList) {
             cutPic(post);
             getPartInfo(post, condition.getUserId());
+            fullUser(post);
         }
         return postList;
     }
@@ -442,6 +474,7 @@ public class PostAOImpl implements IPostAO {
         Comment comment = commentBO.getComment(commentCode);
         post = postBO.getPost(comment.getPostCode());
         getPartInfo(post, userId);
+        fullUser(post);
         return post;
     }
 

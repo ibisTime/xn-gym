@@ -39,6 +39,12 @@
 					</if>
 				 </otherwise>
 			</choose>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 			<choose>
 				 <when test='isCommentMy == "1"'>
 				 	AND (EXISTS (select * from tforum_comment tfc where tfc.code = t.parent_code and tfc.commer=#{publisher})
@@ -84,6 +90,29 @@
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
 		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_comment_limit" parameterType="comment" resultMap="comment_DB_Result">
+		SELECT
+		t.code
+		,t.content
+		,t.parent_code
+		,t.status
+		,t.commer
+		
+		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
+		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
+		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name
+		,t.comm_datetime
+		,t.approver
+		,t.approve_datetime
+		
+		,t.approve_note
+		,t.post_code
+		FROM
+		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
+		<include refid="where_condition" />
+		ORDER BY t.code DESC limit 10
 	</select>
 	
 	<insert id="insert_comment" parameterType="comment">

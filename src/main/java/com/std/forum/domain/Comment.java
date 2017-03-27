@@ -9,6 +9,7 @@
 package com.std.forum.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.forum.dao.base.ABaseDO;
 
@@ -83,6 +84,8 @@ public class Comment extends ABaseDO {
 
     // 发布人
     private String publisher;
+
+    private List<String> statusList;
 
     public String getCode() {
         return code;
@@ -242,5 +245,13 @@ public class Comment extends ABaseDO {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 }
