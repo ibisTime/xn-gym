@@ -59,4 +59,9 @@ public interface IPostBO extends IPaginableBO<Post> {
     public long getPostNum(String splateCode);
 
     public Long getMyPostCount(String userId, String status);
+
+    public List<Post> selectSCList(Post condition);
+
+    public List<Post> queryPostSCList(Post condition, int start, int limit);
+
 }

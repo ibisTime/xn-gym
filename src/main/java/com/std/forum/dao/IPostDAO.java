@@ -8,6 +8,8 @@
  */
 package com.std.forum.dao;
 
+import java.util.List;
+
 import com.std.forum.dao.base.IBaseDAO;
 import com.std.forum.domain.Post;
 
@@ -72,4 +74,8 @@ public interface IPostDAO extends IBaseDAO<Post> {
     public int updateSumComment(Post data);
 
     public Long getMyPostCount(Post condition);
+
+    public List<Post> selectSCList(Post condition);
+
+    public List<Post> selectSCList(Post condition, int start, int limit);
 }

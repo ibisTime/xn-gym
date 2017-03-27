@@ -280,4 +280,14 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         return postDAO.getMyPostCount(condition);
     }
 
+    @Override
+    public List<Post> selectSCList(Post condition) {
+        return postDAO.selectSCList(condition);
+    }
+
+    @Override
+    public List<Post> queryPostSCList(Post condition, int start, int limit) {
+        return postDAO.selectSCList(condition, start, limit);
+    }
+
 }

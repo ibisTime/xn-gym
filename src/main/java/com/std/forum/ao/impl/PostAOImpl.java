@@ -28,6 +28,7 @@ import com.std.forum.bo.IPostTalkBO;
 import com.std.forum.bo.IRuleBO;
 import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
+import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.LevelRule;
@@ -53,6 +54,7 @@ import com.std.forum.exception.BizException;
  */
 @Service
 public class PostAOImpl implements IPostAO {
+
     @Autowired
     protected IPostBO postBO;
 
@@ -228,22 +230,27 @@ public class PostAOImpl implements IPostAO {
     public void setPostLocation(String code, String location, Integer orderNo) {
         Post post = postBO.getPost(code);
         String postLocation = post.getLocation();
-        String isAdd = EBoolean.NO.getCode();
-        if (StringUtils.isNotBlank(location) && location.equals(postLocation)) {
-            postLocation = null;
+        if (!post.getLocation().contains(location)) {
+            postLocation = post.getLocation().concat(location);
         } else {
-            postLocation = location;
-            isAdd = EBoolean.YES.getCode();
+            postLocation = post.getLocation().replace(location, "");
         }
         postBO.refreshPostLocation(code, postLocation, orderNo);
         String[] locationArr = location.split(",");
         for (String JH : locationArr) {
             // 设置精华加积分(前面已判断是否重复加)
-            if (EBoolean.YES.getCode().equals(isAdd)
-                    && ELocation.JH.getCode().equals(JH)) {
+            if (ELocation.JH.getCode().equals(JH)) {
                 userBO.doTransfer(post.getPublisher(),
                     EDirection.PLUS.getCode(), ERuleType.JH.getCode(), code);
             }
+        }
+    }
+
+    public static void main(String[] args) {
+        String location = "ABC";
+        char[] locationArr = location.toCharArray();
+        for (char JH : locationArr) {
+            System.out.println(JH);
         }
     }
 
@@ -435,7 +442,14 @@ public class PostAOImpl implements IPostAO {
     @Override
     public Paginable<Post> querySCPostPage(int start, int limit, Post condition) {
         condition.setType(ETalkType.SC.getCode());
-        Paginable<Post> postPage = postBO.getPaginable(start, limit, condition);
+        Paginable<Post> postPage = null;
+        List<Post> list = postBO.selectSCList(condition);
+        postPage = new Page<Post>(start, limit, list.size());
+        List<Post> dataList = postBO.queryPostSCList(condition,
+            postPage.getStart(), postPage.getPageSize());
+        postPage.setList(dataList);
+        // Paginable<Post> postPage = postBO.getPaginable(start, limit,
+        // condition);
         List<Post> postList = postPage.getList();
         for (Post post : postList) {
             cutPic(post);

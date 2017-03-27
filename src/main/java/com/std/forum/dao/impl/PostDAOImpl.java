@@ -41,13 +41,33 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
         return super.delete(NAMESPACE.concat("delete_post"), data);
     }
 
-    /** 
+    /** 详情查
      * @see com.std.forum.dao.base.IBaseDAO#select(java.lang.Object)
      */
     @Override
     public Post select(Post condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return (Post) super.select(NAMESPACE.concat("select_post_details"),
+            condition, Post.class);
+    }
+
+    /** 列表查
+     * @see com.std.forum.dao.base.IBaseDAO#selectList(java.lang.Object)
+     */
+    @Override
+    public List<Post> selectList(Post condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
+        return super.selectList(NAMESPACE.concat("select_post_list"),
+            condition, Post.class);
+    }
+
+    /** 分页查
+     * @see com.std.forum.dao.base.IBaseDAO#selectList(java.lang.Object, int, int)
+     */
+    @Override
+    public List<Post> selectList(Post condition, int start, int count) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
+        return super.selectList(NAMESPACE.concat("select_post"), start, count,
             condition, Post.class);
     }
 
@@ -61,24 +81,25 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
             condition);
     }
 
-    /** 
-     * @see com.std.forum.dao.base.IBaseDAO#selectList(java.lang.Object)
+    /** 查询小版块统计数
+     * @see com.std.forum.dao.IPostDAO#selectPostNum(com.std.forum.domain.Post)
      */
     @Override
-    public List<Post> selectList(Post condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_post1"), condition,
+    public long selectPostNum(Post condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_post1_count"),
+            condition);
+    }
+
+    @Override
+    public List<Post> selectSCList(Post condition) {
+        return super.selectList(NAMESPACE.concat("select_sc_count"), condition,
             Post.class);
     }
 
-    /** 
-     * @see com.std.forum.dao.base.IBaseDAO#selectList(java.lang.Object, int, int)
-     */
     @Override
-    public List<Post> selectList(Post condition, int start, int count) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_post"), start, count,
-            condition, Post.class);
+    public List<Post> selectSCList(Post condition, int start, int limit) {
+        return super.selectList(NAMESPACE.concat("select_post_sc"), start,
+            limit, condition, Post.class);
     }
 
     /** 
@@ -105,12 +126,6 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     @Override
     public int updatePlate(Post data) {
         return super.update(NAMESPACE.concat("update_post_plate"), data);
-    }
-
-    @Override
-    public long selectPostNum(Post condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_post1_count"),
-            condition);
     }
 
     /** 
@@ -154,4 +169,5 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
         return super.selectTotalCount(
             NAMESPACE.concat("select_getMyPostCount"), condition);
     }
+
 }

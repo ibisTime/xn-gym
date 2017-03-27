@@ -17,6 +17,9 @@ public class XN610117Req {
     // ui顺序
     private String orderNo;
 
+    // 类型(1置顶取消 2 精华取消 3 头条取消)
+    private String type;
+
     public String getCode() {
         return code;
     }
@@ -39,5 +42,13 @@ public class XN610117Req {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
