@@ -464,7 +464,7 @@ public class PostAOImpl implements IPostAO {
         Post condition = new Post();
         condition.setType(ETalkType.SC.getCode());
         condition.setTalker(talker);
-        List<Post> postList = postBO.queryPostList(condition);
+        List<Post> postList = postBO.selectSCList(condition);
         for (Post post : postList) {
             cutPic(post);
             getPartInfo(post, condition.getUserId());

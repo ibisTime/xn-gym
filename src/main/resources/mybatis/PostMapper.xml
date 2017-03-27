@@ -234,8 +234,8 @@
 		<!-- SELECT count(*) from (SELECT DISTINCT t.code FROM tforum_post t inner join tforum_splate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code -->
 		<include refid="where_condition" />) as post
 	</select>
-	
-		<select id="select_post_sc" parameterType="post" resultMap="post_DB_Result">
+
+	<select id="select_post_sc" parameterType="post" resultMap="post_DB_Result">
 		SELECT 
 		DISTINCT
 		t.code
@@ -268,6 +268,15 @@
 		tforum_post t left join tforum_splate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code 
 		<include refid="where_condition" />
 		ORDER BY t.publish_datetime DESC	
+	</select>
+	
+	<select id="select_sc_count" parameterType="post"
+		resultType="java.lang.Long">
+		SELECT count(*) from 
+		(SELECT DISTINCT t.code FROM tforum_post t inner join 
+		tforum_splate tp on t.plate_code = tp.code left join
+	 	tforum_post_talk tpt on t.code = tpt.post_code
+		<include refid="where_condition" />) as post
 	</select>
 	
 	<select id="select_post1_count" parameterType="post"

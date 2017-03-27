@@ -187,9 +187,9 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         if (StringUtils.isNotBlank(code)) {
             Post data = new Post();
             data.setCode(code);
-            data.setIsLock(EBoolean.NO.getCode());
+            data.setIsLock(EBoolean.YES.getCode());
             if (flag == true) {
-                data.setIsLock(EBoolean.YES.getCode());
+                data.setIsLock(EBoolean.NO.getCode());
             }
             count = postDAO.updateLock(data);
         }
