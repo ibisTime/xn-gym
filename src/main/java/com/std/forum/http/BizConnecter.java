@@ -59,7 +59,7 @@ public class BizConnecter {
     private static String getPostUrl(String code) {
         String postUrl = POST_URL;
         if (code.startsWith("805") || code.startsWith("806")
-                || code.startsWith("807")) {
+                || code.startsWith("807") || code.startsWith("001")) {
             postUrl = USER_URL;
         }
         System.out.println("访问请求:" + postUrl);

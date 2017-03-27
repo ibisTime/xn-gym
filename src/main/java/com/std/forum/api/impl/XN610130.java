@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.std.forum.ao.IPostAO;
 import com.std.forum.api.AProcessor;
-import com.std.forum.api.converter.PostConverter;
+import com.std.forum.common.DateUtil;
 import com.std.forum.common.JsonUtil;
 import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Post;
@@ -28,7 +28,20 @@ public class XN610130 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Post condition = PostConverter.converter(req);
+        Post condition = new Post();
+        condition.setUserId(req.getUserId());
+        condition.setTitle(req.getTitle());
+        condition.setKeyword(req.getKeyword());
+        condition.setPublisher(req.getPublisher());
+        condition.setStatus(req.getStatus());
+        condition.setIsLock(req.getIsLock());
+        condition.setLocation(req.getLocation());
+        condition.setPlateCode(req.getPlateCode());
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setPublishDatetimeStart(DateUtil.strToDate(
+            req.getDateStart(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setPublishDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
+            DateUtil.DATA_TIME_PATTERN_1));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IPostAO.DEFAULT_ORDER_COLUMN;

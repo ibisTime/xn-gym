@@ -2,7 +2,7 @@ package com.std.forum.api.impl;
 
 import com.std.forum.ao.IPostAO;
 import com.std.forum.api.AProcessor;
-import com.std.forum.api.converter.PostConverter;
+import com.std.forum.common.DateUtil;
 import com.std.forum.common.JsonUtil;
 import com.std.forum.domain.Post;
 import com.std.forum.dto.req.XN610131Req;
@@ -24,7 +24,20 @@ public class XN610131 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Post condition = PostConverter.converter(req);
+        Post condition = new Post();
+        condition.setUserId(req.getUserId());
+        condition.setTitle(req.getTitle());
+        condition.setKeyword(req.getKeyword());
+        condition.setPublisher(req.getPublisher());
+        condition.setStatus(req.getStatus());
+        condition.setIsLock(req.getIsLock());
+        condition.setLocation(req.getLocation());
+        condition.setPlateCode(req.getPlateCode());
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setPublishDatetimeStart(DateUtil.strToDate(
+            req.getDateStart(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setPublishDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
+            DateUtil.DATA_TIME_PATTERN_1));
         return postAO.queryPostList(condition);
     }
 
