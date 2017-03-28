@@ -17,6 +17,7 @@
 		<typeAlias alias="post" type="com.std.forum.domain.Post" />
 		<typeAlias alias="postTalk" type="com.std.forum.domain.PostTalk" />
 		<typeAlias alias="comment" type="com.std.forum.domain.Comment" />
+		<typeAlias alias="video" type="com.std.forum.domain.Video" />
 		
 		<typeAlias alias="product" type="com.std.forum.domain.Product" />
 		<typeAlias alias="prodOrder" type="com.std.forum.domain.ProdOrder" />

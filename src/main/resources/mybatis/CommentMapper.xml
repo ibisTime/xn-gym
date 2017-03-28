@@ -63,6 +63,7 @@
 		</trim>
 	</sql>
 	
+	<!-- 分页查我发出与我收到的评论 -->
 	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">
 		SELECT
 		t.code
@@ -85,7 +86,8 @@
 		<include refid="where_condition" />
 		ORDER BY t.code DESC	
 	</select>
-
+	
+	<!-- 分页查数量 -->
 	<select id="select_comment_count" parameterType="comment"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code

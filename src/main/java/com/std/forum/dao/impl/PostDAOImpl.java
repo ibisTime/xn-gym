@@ -92,7 +92,7 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
 
     @Override
     public List<Post> selectSCList(Post condition) {
-        return super.selectList(NAMESPACE.concat("select_sc_count"), condition,
+        return super.selectList(NAMESPACE.concat("select_post_sc"), condition,
             Post.class);
     }
 
