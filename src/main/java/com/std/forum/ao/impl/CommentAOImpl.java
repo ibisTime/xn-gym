@@ -13,6 +13,7 @@ import com.std.forum.bo.ILevelRuleBO;
 import com.std.forum.bo.IPostBO;
 import com.std.forum.bo.IRuleBO;
 import com.std.forum.bo.IUserBO;
+import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.Post;
@@ -115,6 +116,24 @@ public class CommentAOImpl implements ICommentAO {
         return page;
     }
 
+    @Override
+    public Paginable<Comment> queryMyCommentPage(int start, int limit,
+            Comment condition) {
+        Paginable<Comment> page = null;
+        List<Comment> List = commentBO.selectMyList(condition);
+        page = new Page<Comment>(start, limit, List.size());
+        List<Comment> dataList = commentBO.queryMyCommentList(condition,
+            page.getStart(), page.getPageSize());
+        page.setList(dataList);
+        // Paginable<Comment> page = commentBO.getPaginable(start, limit,
+        // condition);
+        List<Comment> list = page.getList();
+        for (Comment comment : list) {
+            getParentComment(comment);
+        }
+        return page;
+    }
+
     private void getParentComment(Comment comment) {
         String parentCode = comment.getParentCode();
         if (EPrefixCode.POST.getCode().equals(parentCode.substring(0, 2))) {
@@ -130,9 +149,6 @@ public class CommentAOImpl implements ICommentAO {
         }
     }
 
-    /** 
-     * @see com.std.forum.ao.ICommentAO#queryCommentMyPage(int, int, com.std.forum.domain.Comment)
-     */
     @Override
     public Paginable<Comment> queryCommentMyPage(int start, int limit,
             Comment condition) {

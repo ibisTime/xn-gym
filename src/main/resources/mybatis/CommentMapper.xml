@@ -63,7 +63,7 @@
 		</trim>
 	</sql>
 	
-	<!-- 分页查我发出与我收到的评论 -->
+	<!-- 分页查  -->
 	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">
 		SELECT
 		t.code
@@ -94,6 +94,7 @@
 		<include refid="where_condition" />
 	</select>
 	
+	<!-- 列表查询（限制10条展示） -->
 	<select id="select_comment_limit" parameterType="comment" resultMap="comment_DB_Result">
 		SELECT
 		t.code
@@ -115,6 +116,54 @@
 		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
 		<include refid="where_condition" />
 		ORDER BY t.code DESC limit 10
+	</select>
+	
+	<!-- 查询我的评论 -->
+	<select id="select_MyComment" parameterType="comment" resultMap="comment_DB_Result">
+		SELECT
+		t.code
+		,t.content
+		,t.parent_code
+		,t.status
+		,t.commer
+		
+		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
+		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
+		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name
+		,t.comm_datetime
+		,t.approver
+		,t.approve_datetime
+		
+		,t.approve_note
+		,t.post_code
+		FROM
+		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
+		<include refid="where_condition" />
+		ORDER BY t.code DESC	
+	</select>
+	
+	<!-- 查询评论我的 -->
+	<select id="select_CommentMy" parameterType="comment" resultMap="comment_DB_Result">
+		SELECT
+		t.code
+		,t.content
+		,t.parent_code
+		,t.status
+		,t.commer
+		
+		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
+		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
+		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name
+		,t.comm_datetime
+		,t.approver
+		,t.approve_datetime
+		
+		,t.approve_note
+		,t.post_code
+		FROM
+		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
+		<include refid="where_condition" />
+		ORDER BY t.code DESC	
 	</select>
 	
 	<insert id="insert_comment" parameterType="comment">

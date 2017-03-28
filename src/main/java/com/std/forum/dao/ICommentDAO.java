@@ -29,4 +29,9 @@ public interface ICommentDAO extends IBaseDAO<Comment> {
     public int deleteCommentByPostCode(Comment data);
 
     public List<Comment> selectLimitList(Comment condition);
+
+    public List<Comment> selectMyList(Comment condition);
+
+    public List<Comment> queryMyCommentList(Comment condition, int start,
+            int limit);
 }
