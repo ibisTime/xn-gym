@@ -7,15 +7,13 @@ import com.std.forum.domain.Video;
 
 public interface IVideoBO extends IPaginableBO<Video> {
 
-    public boolean isVideoExist(String code);
-
-    public String saveVideo(String name, Integer orderNo, String updater,
-            String remark, String companyCode);
+    public String saveVideo(String name, String url, Integer orderNo,
+            String updater, String remark, String companyCode);
 
     public int removeVideo(String code);
 
-    public int refreshVideo(Video video, String name, Integer orderNo,
-            String updater, String remark);
+    public int refreshVideo(Video video, String name, String url,
+            Integer orderNo, String updater, String remark);
 
     public List<Video> queryVideoList(Video condition);
 

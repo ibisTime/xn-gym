@@ -13,6 +13,9 @@ public class XN610052Req {
     // 名称（必填）
     private String name;
 
+    // url
+    private String url;
+
     // 序号（必填）
     private String orderNo;
 
@@ -60,5 +63,13 @@ public class XN610052Req {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -23,24 +23,15 @@ public class VideoBOImpl extends PaginableBOImpl<Video> implements IVideoBO {
     private IVideoDAO videoDAO;
 
     @Override
-    public boolean isVideoExist(String code) {
-        Video condition = new Video();
-        condition.setCode(code);
-        if (videoDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public String saveVideo(String name, Integer orderNo, String updater,
-            String remark, String companyCode) {
+    public String saveVideo(String name, String url, Integer orderNo,
+            String updater, String remark, String companyCode) {
         Video data = new Video();
         String code = OrderNoGenerater.generateME(EPrefixCode.VIDEO.getCode());
         data.setCode(code);
         data.setName(name);
+        data.setUrl(url);
         data.setOrderNo(orderNo);
-        data.setStatus("");
+        data.setStatus(EVideoStatus.TODO.getCode());
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
@@ -61,13 +52,14 @@ public class VideoBOImpl extends PaginableBOImpl<Video> implements IVideoBO {
     }
 
     @Override
-    public int refreshVideo(Video video, String name, Integer orderNo,
-            String updater, String remark) {
+    public int refreshVideo(Video video, String name, String url,
+            Integer orderNo, String updater, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(video.getCode())) {
             Video data = new Video();
             data.setCode(video.getCode());
             data.setName(name);
+            data.setUrl(url);
             data.setOrderNo(orderNo);
             data.setStatus(video.getStatus());
             data.setUpdater(updater);

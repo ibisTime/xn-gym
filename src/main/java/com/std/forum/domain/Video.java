@@ -20,6 +20,9 @@ public class Video extends ABaseDO {
     // 名称
     private String name;
 
+    // url
+    private String url;
+
     // 顺序
     private Integer orderNo;
 
@@ -37,6 +40,10 @@ public class Video extends ABaseDO {
 
     // 站点编号
     private String companyCode;
+
+    // ------------------DB----------------
+    // 公司名称
+    private String companyName;
 
     public void setCode(String code) {
         this.code = code;
@@ -100,6 +107,22 @@ public class Video extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
 }

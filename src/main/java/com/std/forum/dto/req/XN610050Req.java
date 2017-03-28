@@ -10,6 +10,9 @@ public class XN610050Req {
     // 名称（必填）
     private String name;
 
+    // url(必填)
+    private String url;
+
     // 序号（必填）
     private String orderNo;
 
@@ -60,5 +63,13 @@ public class XN610050Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -23,7 +23,7 @@ public class XN610052 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        videoAO.editVideo(req.getCode(), req.getName(),
+        videoAO.editVideo(req.getCode(), req.getName(), req.getUrl(),
             StringValidater.toInteger(req.getOrderNo()), req.getUpdater(),
             req.getRemark());
         return new BooleanRes(true);
@@ -33,7 +33,7 @@ public class XN610052 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN610052Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getUpdater());
+            req.getUrl(), req.getUpdater());
         StringValidater.validateNumber(req.getOrderNo());
     }
 }
