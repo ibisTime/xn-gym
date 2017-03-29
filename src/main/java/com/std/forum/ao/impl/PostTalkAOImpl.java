@@ -142,7 +142,13 @@ public class PostTalkAOImpl implements IPostTalkAO {
     @Override
     public Paginable<PostTalk> queryPostTalkPage(int start, int limit,
             PostTalk condition) {
-        return postTalkBO.getPaginable(start, limit, condition);
+        Paginable<PostTalk> page = postTalkBO.getPaginable(start, limit,
+            condition);
+        List<PostTalk> list = page.getList();
+        for (PostTalk postTalk : list) {
+            this.fullUser(postTalk);
+        }
+        return page;
     }
 
     @Override
