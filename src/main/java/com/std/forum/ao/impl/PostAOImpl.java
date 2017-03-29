@@ -35,7 +35,7 @@ import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Splate;
-import com.std.forum.dto.res.XN001400Res;
+import com.std.forum.domain.User;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EDirection;
 import com.std.forum.enums.ELocation;
@@ -44,7 +44,6 @@ import com.std.forum.enums.EPostType;
 import com.std.forum.enums.EReaction;
 import com.std.forum.enums.ERuleType;
 import com.std.forum.enums.ETalkType;
-import com.std.forum.enums.EUserKind;
 import com.std.forum.exception.BizException;
 
 /** 
@@ -126,8 +125,8 @@ public class PostAOImpl implements IPostAO {
             status = EPostStatus.FILTERED.getCode();
         } else {
             // 判断用户等级，是否审核
-            XN001400Res res = userBO.getRemoteUser(publisher);
-            LevelRule levelRule = levelRuleBO.getLevelRule(res.getLevel());
+            User user = userBO.getRemoteUser(publisher);
+            LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
             if (EBoolean.YES.getCode().equals(levelRule.getEffect())) {
                 status = EPostStatus.todoAPPROVE.getCode();
             } else {
@@ -184,21 +183,21 @@ public class PostAOImpl implements IPostAO {
         }
         splate = splateBO.getSplate(post.getPlateCode());
         String companyCode = splate.getCompanyCode();
-        XN001400Res res = userBO.getRemoteUser(userId);
-        if (EUserKind.Operator.getCode().equals(res.getKind())) {
-            if (!companyCode.equals(res.getCompanyCode())) {
-                throw new BizException("xn000000", "当前用户不是该帖子的管理员，无法删除");
-            }
-        } else {
-            List<Splate> plateList = splateBO.getPlateByUserId(userId);
-            Map<String, Splate> map = new HashMap<String, Splate>();
-            for (Splate data : plateList) {
-                map.put(data.getCode(), data);
-            }
-            if (null == map.get(splate.getCode()) && !userId.equals(publisher)) {
-                throw new BizException("xn000000", "当前用户不是该版块版主或发布用户，无法删除");
-            }
+        User res = userBO.getRemoteUser(userId);
+        // if (EUserKind.Operator.getCode().equals(res.getKind())) {
+        // if (!companyCode.equals(res.getCompanyCode())) {
+        // throw new BizException("xn000000", "当前用户不是该帖子的管理员，无法删除");
+        // }
+        // } else {
+        List<Splate> plateList = splateBO.getPlateByUserId(userId);
+        Map<String, Splate> map = new HashMap<String, Splate>();
+        for (Splate data : plateList) {
+            map.put(data.getCode(), data);
         }
+        if (null == map.get(splate.getCode()) && !userId.equals(publisher)) {
+            throw new BizException("xn000000", "当前用户不是该版块版主或发布用户，无法删除");
+        }
+        // }
         if (EPostType.TZ.getCode().equals(type)) {
             postBO.removePost(code);
             // 删除帖子相关的评论
@@ -243,14 +242,6 @@ public class PostAOImpl implements IPostAO {
                 userBO.doTransfer(post.getPublisher(),
                     EDirection.PLUS.getCode(), ERuleType.JH.getCode(), code);
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        String location = "ABC";
-        char[] locationArr = location.toCharArray();
-        for (char JH : locationArr) {
-            System.out.println(JH);
         }
     }
 
@@ -386,21 +377,23 @@ public class PostAOImpl implements IPostAO {
     }
 
     private void fullUser(Comment comment) {
-        XN001400Res res = userBO.getRemoteUser(comment.getCommer());
-        comment.setNickname(res.getNickName());
-        comment.setPhoto(res.getPhoto());
+        User user = userBO.getRemoteUser(comment.getCommer());
+        comment.setNickname(user.getNickname());
+        comment.setPhoto(user.getPhoto());
+        comment.setLoginName(user.getLoginName());
     }
 
     private void fullUser(PostTalk postTalk) {
-        XN001400Res res = userBO.getRemoteUser(postTalk.getTalker());
-        postTalk.setNickname(res.getNickName());
-        postTalk.setPhoto(res.getPhoto());
+        User user = userBO.getRemoteUser(postTalk.getTalker());
+        postTalk.setNickname(user.getNickname());
+        postTalk.setPhoto(user.getPhoto());
     }
 
     private void fullUser(Post post) {
-        XN001400Res res = userBO.getRemoteUser(post.getPublisher());
-        post.setNickname(res.getNickName());
-        post.setPhoto(res.getPhoto());
+        User user = userBO.getRemoteUser(post.getPublisher());
+        post.setNickname(user.getNickname());
+        post.setPhoto(user.getPhoto());
+        post.setLoginName(user.getLoginName());
     }
 
     @Override

@@ -21,12 +21,8 @@ import com.std.forum.http.JsonUtils;
  */
 @Component
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
-
-    /** 
-     * @see com.xnjr.mall.bo.IUserBO#getRemoteUser(java.lang.String)
-     */
     @Override
-    public XN001400Res getRemoteUser(String userId) {
+    public User getRemoteUser(String userId) {
         XN001400Req req = new XN001400Req();
         req.setTokenId(userId);
         req.setUserId(userId);
@@ -35,8 +31,24 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (res == null) {
             throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
         }
-        return res;
+        User user = new User();
+        user.setUserId(res.getUserId());
+        user.setLoginName(res.getLoginName());
+        user.setNickname(res.getNickname());
+        user.setPhoto(res.getPhoto());
+        user.setMobile(res.getMobile());
+        user.setIdentityFlag(res.getIdentityFlag());
+        user.setUserReferee(res.getUserReferee());
+        return user;
     }
+
+    /*
+     * @Override public XN001400Res getRemoteUser(String userId) { XN001400Req
+     * req = new XN001400Req(); req.setTokenId(userId); req.setUserId(userId);
+     * XN001400Res res = BizConnecter.getBizData("001400",
+     * JsonUtils.object2Json(req), XN001400Res.class); if (res == null) { throw
+     * new BizException("XN000000", "编号为" + userId + "的用户不存在"); } return res; }
+     */
 
     /** 
      * @see com.std.forum.bo.IUserBO#doTransfer(java.lang.String, java.lang.String, java.lang.Long, java.lang.String, java.lang.String)

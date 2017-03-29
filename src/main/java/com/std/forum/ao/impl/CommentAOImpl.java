@@ -17,7 +17,7 @@ import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.Post;
-import com.std.forum.dto.res.XN001400Res;
+import com.std.forum.domain.User;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EDirection;
 import com.std.forum.enums.EPostStatus;
@@ -139,10 +139,10 @@ public class CommentAOImpl implements ICommentAO {
     }
 
     private void fullUser(Comment comment) {
-        XN001400Res res = userBO.getRemoteUser(comment.getCommer());
-        comment.setNickname(res.getNickName());
-        comment.setLoginName(res.getLoginName());
-        comment.setPhoto(res.getPhoto());
+        User user = userBO.getRemoteUser(comment.getCommer());
+        comment.setNickname(user.getNickname());
+        comment.setLoginName(user.getLoginName());
+        comment.setPhoto(user.getPhoto());
     }
 
     private void getParentComment(Comment comment) {

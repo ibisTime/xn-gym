@@ -38,7 +38,10 @@ public class XN001400Res {
     private String bankcardFlag;
 
     // 昵称
-    private String nickName;
+    private String nickname;
+
+    // 手機號
+    private String mobile;
 
     // 公司编号
     private String companyCode;
@@ -147,11 +150,19 @@ public class XN001400Res {
         this.companyCode = companyCode;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }
