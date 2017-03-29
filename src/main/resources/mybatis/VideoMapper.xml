@@ -101,7 +101,7 @@
 	<update id="update_video_up" parameterType="video">
 		UPDATE tforum_video
 		SET
-		,order_no = #{orderNo}
+		order_no = #{orderNo}
 		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
@@ -112,7 +112,7 @@
 	<update id="update_video_down" parameterType="video">
 		UPDATE tforum_video
 		SET
-		,status = #{status}
+		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

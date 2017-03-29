@@ -27,6 +27,12 @@
 			<if test="name != null and name != '' ">
 				AND t.name like "%"#{name}"%"
 			</if>
+			<if test="companyCodeList != null and companyCodeList != '' ">
+				AND t.company_code in 
+                <foreach item="item" index="index" collection="companyCodeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
 	<select id="select_subsystem" parameterType="subsystem" resultMap="subsystem_DB_Result">
@@ -90,7 +96,6 @@
 		,pic = #{pic}
 		,location = #{location}
 		,order_no = #{orderNo}
-		,belong = #{belong}
 		,company_code = #{companyCode}
 		,remark = #{remark}
 		WHERE code = #{code}

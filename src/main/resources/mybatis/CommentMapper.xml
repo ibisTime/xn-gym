@@ -9,6 +9,7 @@
 		<result column="status" property="status" />
 		<result column="commer" property="commer" />
 		
+		<result column="photo" property="photo" />
 		<result column="nickname" property="nickname" />
 		<result column="login_name" property="loginName" />
 		<result column="comm_datetime" property="commDatetime" />
@@ -72,9 +73,9 @@
 		,t.status
 		,t.commer
 		
-		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
+		<!-- ,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
 		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
-		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name
+		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name -->
 		,t.comm_datetime
 		,t.approver
 		,t.approve_datetime
@@ -103,9 +104,9 @@
 		,t.status
 		,t.commer
 		
-		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
+		<!-- ,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
 		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
-		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name
+		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name -->
 		,t.comm_datetime
 		,t.approver
 		,t.approve_datetime
@@ -127,9 +128,9 @@
 		,t.status
 		,t.commer
 		
-		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
+		<!-- ,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
 		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
-		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name
+		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name -->
 		,t.comm_datetime
 		,t.approver
 		,t.approve_datetime
@@ -151,9 +152,9 @@
 		,t.status
 		,t.commer
 		
-		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
+		<!-- ,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
 		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
-		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name
+		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name -->
 		,t.comm_datetime
 		,t.approver
 		,t.approve_datetime

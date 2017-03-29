@@ -290,4 +290,16 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         return postDAO.selectSCList(condition, start, limit);
     }
 
+    @Override
+    public long getPostLocation(String location) {
+        if (StringUtils.isNotBlank(location)) {
+            String[] desc = location.split(",");
+            for (int i = 0; i < desc.length; i++) {
+                location = desc[i] + "%";
+            }
+        }
+        Post condition = new Post();
+        condition.setLocation(location);
+        return postDAO.selectPostNum(condition);
+    }
 }

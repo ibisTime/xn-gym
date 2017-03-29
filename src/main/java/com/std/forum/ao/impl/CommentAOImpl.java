@@ -17,6 +17,7 @@ import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.Post;
+import com.std.forum.dto.res.XN001400Res;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EDirection;
 import com.std.forum.enums.EPostStatus;
@@ -96,6 +97,7 @@ public class CommentAOImpl implements ICommentAO {
     public Comment getComment(String code) {
         Comment comment = commentBO.getComment(code);
         getParentComment(comment);
+        this.fullUser(comment);
         return comment;
     }
 
@@ -112,6 +114,7 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = page.getList();
         for (Comment comment : list) {
             getParentComment(comment);
+            this.fullUser(comment);
         }
         return page;
     }
@@ -130,8 +133,16 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = page.getList();
         for (Comment comment : list) {
             getParentComment(comment);
+            this.fullUser(comment);
         }
         return page;
+    }
+
+    private void fullUser(Comment comment) {
+        XN001400Res res = userBO.getRemoteUser(comment.getCommer());
+        comment.setNickname(res.getNickName());
+        comment.setLoginName(res.getLoginName());
+        comment.setPhoto(res.getPhoto());
     }
 
     private void getParentComment(Comment comment) {
@@ -142,6 +153,7 @@ public class CommentAOImpl implements ICommentAO {
         } else {
             Comment data = commentBO.getComment(parentCode);
             comment.setParentComment(data);
+            this.fullUser(comment);
         }
         if (null == comment.getPost()) {
             Post post = postBO.getPost(comment.getPostCode());
@@ -159,6 +171,7 @@ public class CommentAOImpl implements ICommentAO {
             // 获取帖子
             Post post = postBO.getPost(comment.getPostCode());
             comment.setPost(post);
+            this.fullUser(comment);
             // 获取上级评论
             if (!comment.getParentCode().equals(comment.getPostCode())) {
                 Comment parentComment = commentBO.getComment(comment

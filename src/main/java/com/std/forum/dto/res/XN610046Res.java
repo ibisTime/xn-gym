@@ -11,9 +11,17 @@ import com.std.forum.domain.Splate;
 public class XN610046Res {
     private Splate splate;
 
+    // 所有帖子数
     private Long allPostCount;
 
+    // 今日发帖数
     private Long todayPostCount;
+
+    // 置顶
+    private Long top;
+
+    // 精华
+    private Long essence;
 
     public Splate getSplate() {
         return splate;
@@ -37,5 +45,21 @@ public class XN610046Res {
 
     public void setTodayPostCount(Long todayPostCount) {
         this.todayPostCount = todayPostCount;
+    }
+
+    public Long getTop() {
+        return top;
+    }
+
+    public void setTop(Long top) {
+        this.top = top;
+    }
+
+    public Long getEssence() {
+        return essence;
+    }
+
+    public void setEssence(Long essence) {
+        this.essence = essence;
     }
 }

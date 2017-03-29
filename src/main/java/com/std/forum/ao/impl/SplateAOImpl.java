@@ -15,6 +15,7 @@ import com.std.forum.domain.Splate;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
 import com.std.forum.dto.res.XN610046Res;
+import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPlateStatus;
 import com.std.forum.exception.BizException;
 
@@ -75,9 +76,13 @@ public class SplateAOImpl implements ISplateAO {
         condition.setPublishDatetimeStart(DateUtil.getTodayStart());
         condition.setPublishDatetimeEnd(DateUtil.getTodayEnd());
         Long todayPostCount = postBO.getPostNum(condition);
+        Long top = postBO.getPostLocation(ELocation.JH.getCode());
+        Long essence = postBO.getPostLocation(ELocation.ZD.getCode());
         res.setSplate(splate);
         res.setAllPostCount(allPostCount);
         res.setTodayPostCount(todayPostCount);
+        res.setTop(top);
+        res.setEssence(essence);
         return res;
     }
 }

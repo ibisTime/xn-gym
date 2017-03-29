@@ -342,14 +342,24 @@ public class PostAOImpl implements IPostAO {
         for (Post post : postList) {
             cutPic(post);
             getPartInfo(post, condition.getUserId());
-            List<Comment> commentList = commentBO.queryCommentLimitList(post
-                .getCode());
-            post.setCommentList(commentList);
-            List<PostTalk> postTalkList = postTalkBO
-                .queryPostTalkLimitList(post.getCode());
-            post.setLikeList(postTalkList);
+            this.fullPost(post);
         }
         return postPage;
+    }
+
+    private void fullPost(Post post) {
+        List<Comment> commentList = commentBO.queryCommentLimitList(post
+            .getCode());
+        for (Comment comment : commentList) {
+            this.fullUser(comment);
+        }
+        post.setCommentList(commentList);
+        List<PostTalk> postTalkList = postTalkBO.queryPostTalkLimitList(post
+            .getCode());
+        for (PostTalk postTalk : postTalkList) {
+            this.fullUser(postTalk);
+        }
+        post.setLikeList(postTalkList);
     }
 
     private String setLocation(String location) {
@@ -367,24 +377,39 @@ public class PostAOImpl implements IPostAO {
         condition.setLocation(setLocation(condition.getLocation()));
         List<Post> postList = postBO.queryPostList(condition);
         for (Post post : postList) {
-            cutPic(post);
-            getPartInfo(post, condition.getUserId());
-            fullUser(post);
+            this.cutPic(post);
+            this.getPartInfo(post, condition.getUserId());
+            this.fullUser(post);
+            this.fullPost(post);
         }
         return postList;
+    }
+
+    private void fullUser(Comment comment) {
+        XN001400Res res = userBO.getRemoteUser(comment.getCommer());
+        comment.setNickname(res.getNickName());
+        comment.setPhoto(res.getPhoto());
+    }
+
+    private void fullUser(PostTalk postTalk) {
+        XN001400Res res = userBO.getRemoteUser(postTalk.getTalker());
+        postTalk.setNickname(res.getNickName());
+        postTalk.setPhoto(res.getPhoto());
     }
 
     private void fullUser(Post post) {
         XN001400Res res = userBO.getRemoteUser(post.getPublisher());
         post.setNickname(res.getNickName());
+        post.setPhoto(res.getPhoto());
     }
 
     @Override
     public Post getPost(String code, String userId, String commStatus) {
         Post post = postBO.getPost(code);
-        cutPic(post);
-        getPartInfo(post, userId);
-        fullUser(post);
+        this.cutPic(post);
+        this.getPartInfo(post, userId);
+        this.fullUser(post);
+        this.fullPost(post);
         return post;
     }
 
@@ -455,6 +480,7 @@ public class PostAOImpl implements IPostAO {
             cutPic(post);
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);
+            this.fullPost(post);
         }
         return postPage;
     }
@@ -466,9 +492,10 @@ public class PostAOImpl implements IPostAO {
         condition.setTalker(talker);
         List<Post> postList = postBO.selectSCList(condition);
         for (Post post : postList) {
-            cutPic(post);
-            getPartInfo(post, condition.getUserId());
-            fullUser(post);
+            this.cutPic(post);
+            this.getPartInfo(post, condition.getUserId());
+            this.fullUser(post);
+            this.fullPost(post);
         }
         return postList;
     }

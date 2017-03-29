@@ -1,5 +1,7 @@
 package com.std.forum.domain;
 
+import java.util.List;
+
 import com.std.forum.dao.base.ABaseDO;
 
 /**
@@ -38,6 +40,9 @@ public class Subsystem extends ABaseDO {
 
     // 备注
     private String remark;
+
+    // **************db***************
+    private List<String> companyCodeList;
 
     public void setCode(String code) {
         this.code = code;
@@ -109,6 +114,14 @@ public class Subsystem extends ABaseDO {
 
     public String getRemark() {
         return remark;
+    }
+
+    public List<String> getCompanyCodeList() {
+        return companyCodeList;
+    }
+
+    public void setCompanyCodeList(List<String> companyCodeList) {
+        this.companyCodeList = companyCodeList;
     }
 
 }

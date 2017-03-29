@@ -92,12 +92,14 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
 
     @Override
     public List<Post> selectSCList(Post condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_post_sc"), condition,
             Post.class);
     }
 
     @Override
     public List<Post> selectSCList(Post condition, int start, int limit) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_post_sc"), start,
             limit, condition, Post.class);
     }

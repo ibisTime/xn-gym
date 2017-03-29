@@ -291,9 +291,11 @@
 		<include refid="where_condition" />
 	</select>
 	
+	<!-- 统计我发帖的数量 -->
 	<select id="select_getMyPostCount" parameterType="post"
 		resultType="java.lang.Long">
-		 where publisher = #{publisher} and status = #{status}
+		 SELECT count(1) FROM tforum_post t
+		 <include refid="where_condition" />
 	</select>
 
 	<insert id="insert_post" parameterType="post">
