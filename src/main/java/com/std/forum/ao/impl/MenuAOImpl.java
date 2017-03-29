@@ -54,6 +54,10 @@ public class MenuAOImpl implements IMenuAO {
 
     @Override
     public Paginable<Menu> queryMenuPage(int start, int limit, Menu condition) {
+        List<String> companyCodeList = new ArrayList<String>();
+        companyCodeList.add(condition.getCompanyCode());
+        companyCodeList.add("0");
+        condition.setCompanyCodeList(companyCodeList);
         return menuBO.getPaginable(start, limit, condition);
     }
 

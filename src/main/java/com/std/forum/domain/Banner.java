@@ -1,5 +1,7 @@
 package com.std.forum.domain;
 
+import java.util.List;
+
 import com.std.forum.dao.base.ABaseDO;
 
 /**
@@ -10,105 +12,116 @@ import com.std.forum.dao.base.ABaseDO;
 */
 public class Banner extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 编号
+    private String code;
 
-	// 名称
-	private String name;
+    // 名称
+    private String name;
 
-	// URL
-	private String url;
+    // URL
+    private String url;
 
-	// 图片
-	private String pic;
+    // 图片
+    private String pic;
 
-	// UI位置(1 首页)
-	private String location;
+    // UI位置(1 首页)
+    private String location;
 
-	// UI序号
-	private String orderNo;
+    // UI序号
+    private String orderNo;
 
-	// 属于（1 总 2 可配 3 父级编号）
-	private String belong;
+    // 属于（1 总 2 可配 3 父级编号）
+    private String belong;
 
-	// 地方编号
-	private String companyCode;
+    // 地方编号
+    private String companyCode;
 
-	// 备注
-	private String remark;
+    // 备注
+    private String remark;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    // ***********db**************
+    private List<String> companyCodeList;
 
-	public String getCode() {
-		return code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public void setPic(String pic) {
-		this.pic = pic;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public String getPic() {
-		return pic;
-	}
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+    public String getPic() {
+        return pic;
+    }
 
-	public String getLocation() {
-		return location;
-	}
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
-	}
+    public String getLocation() {
+        return location;
+    }
 
-	public String getOrderNo() {
-		return orderNo;
-	}
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
-	public void setBelong(String belong) {
-		this.belong = belong;
-	}
+    public String getOrderNo() {
+        return orderNo;
+    }
 
-	public String getBelong() {
-		return belong;
-	}
+    public void setBelong(String belong) {
+        this.belong = belong;
+    }
 
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
-	}
+    public String getBelong() {
+        return belong;
+    }
 
-	public String getCompanyCode() {
-		return companyCode;
-	}
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public String getCompanyCode() {
+        return companyCode;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public List<String> getCompanyCodeList() {
+        return companyCodeList;
+    }
+
+    public void setCompanyCodeList(List<String> companyCodeList) {
+        this.companyCodeList = companyCodeList;
+    }
 
 }

@@ -27,6 +27,12 @@
 			<if test="belong != null and belong != '' ">
 				AND t.belong = #{belong}
 			</if>
+			<if test="companyCodeList != null and companyCodeList != '' ">
+				AND t.company_code in 
+                <foreach item="item" index="index" collection="companyCodeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
 	<select id="select_banner" parameterType="banner" resultMap="banner_DB_Result">

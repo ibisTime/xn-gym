@@ -57,6 +57,10 @@ public class BannerAOImpl implements IBannerAO {
     @Override
     public Paginable<Banner> queryBannerPage(int start, int limit,
             Banner condition) {
+        List<String> companyCodeList = new ArrayList<String>();
+        companyCodeList.add(condition.getCompanyCode());
+        companyCodeList.add("0");
+        condition.setCompanyCodeList(companyCodeList);
         return bannerBO.getPaginable(start, limit, condition);
     }
 
