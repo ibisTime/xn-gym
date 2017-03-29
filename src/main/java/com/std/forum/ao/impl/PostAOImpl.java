@@ -396,6 +396,11 @@ public class PostAOImpl implements IPostAO {
         post.setLoginName(user.getLoginName());
     }
 
+    private void fullSplate(Post post) {
+        Splate splate = splateBO.getSplate(post.getPlateCode());
+        post.setPlateName(splate.getName());
+    }
+
     @Override
     public Post getPost(String code, String userId, String commStatus) {
         Post post = postBO.getPost(code);
@@ -485,6 +490,7 @@ public class PostAOImpl implements IPostAO {
         condition.setTalker(talker);
         List<Post> postList = postBO.selectSCList(condition);
         for (Post post : postList) {
+            this.fullSplate(post);
             this.cutPic(post);
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);

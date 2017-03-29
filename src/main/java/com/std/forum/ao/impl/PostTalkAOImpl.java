@@ -17,6 +17,7 @@ import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
+import com.std.forum.domain.User;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPostType;
 import com.std.forum.enums.ETalkType;
@@ -149,6 +150,16 @@ public class PostTalkAOImpl implements IPostTalkAO {
         PostTalk condition = new PostTalk();
         condition.setPostCode(postCode);
         condition.setType(ETalkType.DS.getCode());
-        return postTalkBO.queryPostTalkList(condition);
+        List<PostTalk> list = postTalkBO.queryPostTalkList(condition);
+        for (PostTalk postTalk : list) {
+            this.fullUser(postTalk);
+        }
+        return list;
+    }
+
+    private void fullUser(PostTalk postTalk) {
+        User user = userBO.getRemoteUser(postTalk.getTalker());
+        postTalk.setNickname(user.getNickname());
+        postTalk.setPhoto(user.getPhoto());
     }
 }
