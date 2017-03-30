@@ -7,12 +7,12 @@ import com.std.forum.domain.Video;
 
 public interface IVideoBO extends IPaginableBO<Video> {
 
-    public String saveVideo(String name, String url, Integer orderNo,
-            String updater, String remark, String companyCode);
+    public String saveVideo(String name, String pic, String url,
+            Integer orderNo, String updater, String remark, String companyCode);
 
     public int removeVideo(String code);
 
-    public int refreshVideo(Video video, String name, String url,
+    public int refreshVideo(Video video, String name, String pic, String url,
             Integer orderNo, String updater, String remark);
 
     public List<Video> queryVideoList(Video condition);

@@ -13,6 +13,9 @@ public class XN610052Req {
     // 名称（必填）
     private String name;
 
+    // 图片
+    private String pic;
+
     // url
     private String url;
 
@@ -71,5 +74,13 @@ public class XN610052Req {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 }

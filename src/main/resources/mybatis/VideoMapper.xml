@@ -5,6 +5,7 @@
 	<resultMap id="video_DB_Result" type="video">
 		<result column="code" property="code" />
 		<result column="name" property="name" />
+		<result column="pic" property="pic" />
 		<result column="url" property="url" />
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
@@ -36,6 +37,7 @@
 		SELECT
 		t.code
 		,t.name
+		,t.pic
 		,t.url
 		,t.order_no
 		,t.status
@@ -64,6 +66,7 @@
 		tforum_video(
 		code
 		,name
+		,pic
 		,url
 		,order_no
 		,status
@@ -75,6 +78,7 @@
 		VALUES(
 		#{code}
 		,#{name}
+		,#{pic}
 		,#{url}
 		,#{orderNo}
 		,#{status}
@@ -89,6 +93,7 @@
 		UPDATE tforum_video
 		SET
 		name = #{name}
+		,pic = #{pic}
 		,url = #{url}
 		,order_no = #{orderNo}
 		,status = #{status}

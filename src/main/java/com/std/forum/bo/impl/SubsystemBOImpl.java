@@ -43,6 +43,7 @@ public class SubsystemBOImpl extends PaginableBOImpl<Subsystem> implements
         data.setPic(pic);
         data.setLocation(location);
         data.setOrderNo(orderNo);
+        data.setBelong("3");
         data.setCompanyCode(companyCode);
         data.setRemark(remark);
         subsystemDAO.insert(data);

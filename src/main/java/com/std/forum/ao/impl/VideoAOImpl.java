@@ -25,20 +25,20 @@ public class VideoAOImpl implements IVideoAO {
     private ICompanyBO companyBO;
 
     @Override
-    public String addVideo(String name, String url, Integer orderNo,
-            String updater, String remark, String companyCode) {
-        return videoBO.saveVideo(name, url, orderNo, updater, remark,
+    public String addVideo(String name, String pic, String url,
+            Integer orderNo, String updater, String remark, String companyCode) {
+        return videoBO.saveVideo(name, pic, url, orderNo, updater, remark,
             companyCode);
     }
 
     @Override
-    public void editVideo(String code, String name, String url,
+    public void editVideo(String code, String name, String pic, String url,
             Integer orderNo, String updater, String remark) {
         Video video = videoBO.getVideo(code);
         if (EVideoStatus.DOING.getCode().equals(video.getStatus())) {
             throw new BizException("xn0000", "正在上架的视频,不能修改");
         }
-        videoBO.refreshVideo(video, name, url, orderNo, updater, remark);
+        videoBO.refreshVideo(video, pic, name, url, orderNo, updater, remark);
     }
 
     @Override

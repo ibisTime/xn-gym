@@ -11,12 +11,12 @@ import com.std.forum.domain.Video;
 public interface IVideoAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addVideo(String name, String url, Integer orderNo,
-            String updater, String remark, String companyCode);
+    public String addVideo(String name, String pic, String url,
+            Integer orderNo, String updater, String remark, String companyCode);
 
     public int dropVideo(String code);
 
-    public void editVideo(String code, String name, String url,
+    public void editVideo(String code, String name, String pic, String url,
             Integer orderNo, String updater, String remark);
 
     public void upVideo(String code, Integer orderNo, String updater,

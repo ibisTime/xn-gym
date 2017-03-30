@@ -22,7 +22,7 @@ public class XN610050 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return videoAO.addVideo(req.getName(), req.getUrl(),
+        return videoAO.addVideo(req.getName(), req.getPic(), req.getUrl(),
             StringValidater.toInteger(req.getOrderNo()), req.getUpdater(),
             req.getRemark(), req.getCompanyCode());
     }
@@ -30,8 +30,8 @@ public class XN610050 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN610050Req.class);
-        StringValidater.validateBlank(req.getName(), req.getUrl(),
-            req.getUpdater(), req.getCompanyCode());
+        StringValidater.validateBlank(req.getName(), req.getPic(),
+            req.getUrl(), req.getUpdater(), req.getCompanyCode());
         StringValidater.validateNumber(req.getOrderNo());
     }
 }
