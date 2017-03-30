@@ -14,12 +14,12 @@ import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
 /**
- * 分页查询帖子(front)
+ * 分页查询帖子(oss)
  * @author: xieyj 
  * @since: 2016年9月27日 下午7:49:54 
  * @history:
  */
-public class XN610130 extends AProcessor {
+public class XN610200 extends AProcessor {
 
     private IPostAO postAO = SpringContextHolder.getBean(IPostAO.class);
 
@@ -48,7 +48,7 @@ public class XN610130 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return postAO.queryPostPage(start, limit, condition);
+        return postAO.queryOSSPostPage(start, limit, condition);
     }
 
     @Override

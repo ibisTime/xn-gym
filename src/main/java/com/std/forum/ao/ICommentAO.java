@@ -34,4 +34,9 @@ public interface ICommentAO {
 
     public Paginable<Comment> queryTDCommentPage(int start, int limit,
             Comment condition, String userId);
+
+    public Paginable<Comment> queryOSSCommentPage(int start, int limit,
+            Comment condition);
+
+    public Comment getOSSComment(String code);
 }

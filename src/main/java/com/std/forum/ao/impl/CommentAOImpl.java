@@ -102,6 +102,13 @@ public class CommentAOImpl implements ICommentAO {
     }
 
     @Override
+    public Comment getOSSComment(String code) {
+        Comment comment = commentBO.getComment(code);
+        this.fullUser(comment);
+        return comment;
+    }
+
+    @Override
     public List<Comment> queryCommentList(Comment condition) {
         return commentBO.queryCommentList(condition);
     }
@@ -196,6 +203,18 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = page.getList();
         for (Comment comment : list) {
             getParentComment(comment);
+            this.fullUser(comment);
+        }
+        return page;
+    }
+
+    @Override
+    public Paginable<Comment> queryOSSCommentPage(int start, int limit,
+            Comment condition) {
+        Paginable<Comment> page = commentBO.getPaginable(start, limit,
+            condition);
+        List<Comment> list = page.getList();
+        for (Comment comment : list) {
             this.fullUser(comment);
         }
         return page;

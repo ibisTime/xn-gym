@@ -24,9 +24,16 @@
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
-			<if test="belong != null and belong != '' ">
-				AND t.belong = #{belong}
-			</if>
+			<choose>
+			     <when test='belong == "NO_1"'>
+				 	AND t.belong not in ('1')
+				 </when>
+				 <otherwise>
+					<if test="belong != null and belong != '' ">
+						AND t.belong = #{belong}
+					</if>
+				</otherwise>
+			</choose>
 			<if test="companyCodeList != null and companyCodeList != '' ">
 				AND t.company_code in 
                 <foreach item="item" index="index" collection="companyCodeList" open="(" separator="," close=")">

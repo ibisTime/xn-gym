@@ -63,6 +63,7 @@ public class SubsystemAOImpl implements ISubsystemAO {
             Subsystem condition) {
         List<String> companyCodeList = new ArrayList<String>();
         if (!condition.getCompanyCode().equals(EBoolean.NO.getCode())) {
+            condition.setBelong("NO_1");
             companyCodeList.add(condition.getCompanyCode());
             companyCodeList.add("0");
             condition.setCompanyCodeList(companyCodeList);

@@ -414,6 +414,14 @@ public class PostAOImpl implements IPostAO {
         return post;
     }
 
+    @Override
+    public Post getPost(String code) {
+        Post post = postBO.getPost(code);
+        this.cutPic(post);
+        this.fullUser(post);
+        return post;
+    }
+
     private void cutPic(Post post) {
         String pic = post.getPic();
         if (StringUtils.isNotBlank(pic)) {
@@ -565,6 +573,18 @@ public class PostAOImpl implements IPostAO {
             this.fullPost(post);
         }
         return page;
+    }
+
+    @Override
+    public Paginable<Post> queryOSSPostPage(int start, int limit, Post condition) {
+        condition.setLocation(setLocation(condition.getLocation()));
+        Paginable<Post> postPage = postBO.getPaginable(start, limit, condition);
+        List<Post> postList = postPage.getList();
+        for (Post post : postList) {
+            cutPic(post);
+            this.fullUser(post);
+        }
+        return postPage;
     }
 
 }

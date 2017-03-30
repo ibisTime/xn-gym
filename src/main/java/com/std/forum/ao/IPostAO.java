@@ -92,4 +92,8 @@ public interface IPostAO {
     public Paginable<Post> queryTDPostPage(int start, int limit,
             Post condition, String userId);
 
+    public Post getPost(String code);
+
+    public Paginable<Post> queryOSSPostPage(int start, int limit, Post condition);
+
 }
