@@ -66,4 +66,8 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public List<Post> queryPostSCList(Post condition, int start, int limit);
 
+    public List<Post> selectTDList(Post condition);
+
+    public List<Post> queryTDPostList(Post condition, int start, int limit);
+
 }

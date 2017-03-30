@@ -9,13 +9,9 @@
 		<result column="status" property="status" />
 		<result column="commer" property="commer" />
 		
-		<result column="photo" property="photo" />
-		<result column="nickname" property="nickname" />
-		<result column="login_name" property="loginName" />
 		<result column="comm_datetime" property="commDatetime" />
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
-		
 		<result column="approve_note" property="approveNote" />
 		<result column="post_code" property="postCode" />
 	</resultMap>
@@ -163,6 +159,26 @@
 		,t.post_code
 		FROM
 		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
+		<include refid="where_condition" />
+		ORDER BY t.code DESC	
+	</select>
+	
+	<!-- 查询提到我的 -->
+	<select id="select_TDComment" parameterType="comment" resultMap="comment_DB_Result">
+		SELECT
+		t.code
+		,t.content
+		,t.parent_code
+		,t.status
+		,t.commer
+		
+		,t.comm_datetime
+		,t.approver
+		,t.approve_datetime
+		,t.approve_note
+		,t.post_code
+		FROM
+		tforum_comment t
 		<include refid="where_condition" />
 		ORDER BY t.code DESC	
 	</select>

@@ -34,4 +34,9 @@ public interface ICommentDAO extends IBaseDAO<Comment> {
 
     public List<Comment> queryMyCommentList(Comment condition, int start,
             int limit);
+
+    public List<Comment> selectTDList(Comment condition);
+
+    public List<Comment> queryTDCommentList(Comment condition, int start,
+            int limit);
 }

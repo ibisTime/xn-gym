@@ -325,6 +325,7 @@ public class PostAOImpl implements IPostAO {
         }
     }
 
+    // 分页查
     @Override
     public Paginable<Post> queryPostPage(int start, int limit, Post condition) {
         condition.setLocation(setLocation(condition.getLocation()));
@@ -334,8 +335,23 @@ public class PostAOImpl implements IPostAO {
             cutPic(post);
             getPartInfo(post, condition.getUserId());
             this.fullPost(post);
+            this.fullUser(post);
         }
         return postPage;
+    }
+
+    // 列表查
+    @Override
+    public List<Post> queryPostList(Post condition) {
+        condition.setLocation(setLocation(condition.getLocation()));
+        List<Post> postList = postBO.queryPostList(condition);
+        for (Post post : postList) {
+            this.cutPic(post);
+            this.getPartInfo(post, condition.getUserId());
+            this.fullUser(post);
+            this.fullPost(post);
+        }
+        return postList;
     }
 
     private void fullPost(Post post) {
@@ -361,19 +377,6 @@ public class PostAOImpl implements IPostAO {
             }
         }
         return location;
-    }
-
-    @Override
-    public List<Post> queryPostList(Post condition) {
-        condition.setLocation(setLocation(condition.getLocation()));
-        List<Post> postList = postBO.queryPostList(condition);
-        for (Post post : postList) {
-            this.cutPic(post);
-            this.getPartInfo(post, condition.getUserId());
-            this.fullUser(post);
-            this.fullPost(post);
-        }
-        return postList;
     }
 
     private void fullUser(Comment comment) {
@@ -543,20 +546,25 @@ public class PostAOImpl implements IPostAO {
         }
     }
 
-    // 定时取消帖子的置顶，精华，头条的过时属性
-    // @Override
-    // public void doChangePostLocation() {
-    // System.out
-    // .println("*************doChangePostLocation start*************");
-    // Post condition = new Post();
-    // condition.setLocation(ELocation.ALL.getCode());
-    // List<Post> postList = postBO.queryPostList(condition);
-    // if (CollectionUtils.isNotEmpty(postList)) {
-    // for (Post post : postList) {
-    //
-    // }
-    // }
-    // System.out
-    // .println("*************doChangePostLocation end*************");
-    // }
+    @Override
+    public Paginable<Post> queryTDPostPage(int start, int limit,
+            Post condition, String userId) {
+        Paginable<Post> page = null;
+        User user = userBO.getRemoteUser(userId);
+        condition.setKeyword("@" + user.getNickname());
+        List<Post> List = postBO.selectTDList(condition);
+        page = new Page<Post>(start, limit, List.size());
+        List<Post> dataList = postBO.queryTDPostList(condition,
+            page.getStart(), page.getPageSize());
+        page.setList(dataList);
+        List<Post> list = page.getList();
+        for (Post post : list) {
+            cutPic(post);
+            this.getPartInfo(post, condition.getUserId());
+            this.fullUser(post);
+            this.fullPost(post);
+        }
+        return page;
+    }
+
 }

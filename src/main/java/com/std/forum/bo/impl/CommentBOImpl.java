@@ -258,4 +258,15 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
             int limit) {
         return commentDAO.queryMyCommentList(condition, start, limit);
     }
+
+    @Override
+    public List<Comment> selectTDList(Comment condition) {
+        return commentDAO.selectTDList(condition);
+    }
+
+    @Override
+    public List<Comment> queryTDCommentList(Comment condition, int start,
+            int limit) {
+        return commentDAO.queryTDCommentList(condition, start, limit);
+    }
 }

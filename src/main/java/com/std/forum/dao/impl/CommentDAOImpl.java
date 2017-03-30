@@ -127,4 +127,17 @@ public class CommentDAOImpl extends AMybatisTemplate implements ICommentDAO {
         return super.selectList(NAMESPACE.concat("select_MyComment"), start,
             limit, condition, Comment.class);
     }
+
+    @Override
+    public List<Comment> selectTDList(Comment condition) {
+        return super.selectList(NAMESPACE.concat("select_TDComment"),
+            condition, Comment.class);
+    }
+
+    @Override
+    public List<Comment> queryTDCommentList(Comment condition, int start,
+            int limit) {
+        return super.selectList(NAMESPACE.concat("select_TDComment"), start,
+            limit, condition, Comment.class);
+    }
 }

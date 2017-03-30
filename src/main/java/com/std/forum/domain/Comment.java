@@ -254,4 +254,5 @@ public class Comment extends ABaseDO {
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
     }
+
 }

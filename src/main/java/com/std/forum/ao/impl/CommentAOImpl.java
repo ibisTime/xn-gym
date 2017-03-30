@@ -152,8 +152,8 @@ public class CommentAOImpl implements ICommentAO {
             comment.setPost(post);
         } else {
             Comment data = commentBO.getComment(parentCode);
+            this.fullUser(data);
             comment.setParentComment(data);
-            this.fullUser(comment);
         }
         if (null == comment.getPost()) {
             Post post = postBO.getPost(comment.getPostCode());
@@ -178,6 +178,25 @@ public class CommentAOImpl implements ICommentAO {
                     .getParentCode());
                 comment.setParentComment(parentComment);
             }
+        }
+        return page;
+    }
+
+    @Override
+    public Paginable<Comment> queryTDCommentPage(int start, int limit,
+            Comment condition, String userId) {
+        Paginable<Comment> page = null;
+        User user = userBO.getRemoteUser(userId);
+        condition.setContent("@" + user.getNickname());
+        List<Comment> List = commentBO.selectTDList(condition);
+        page = new Page<Comment>(start, limit, List.size());
+        List<Comment> dataList = commentBO.queryTDCommentList(condition,
+            page.getStart(), page.getPageSize());
+        page.setList(dataList);
+        List<Comment> list = page.getList();
+        for (Comment comment : list) {
+            getParentComment(comment);
+            this.fullUser(comment);
         }
         return page;
     }

@@ -38,9 +38,6 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     @Autowired
     private IPostDAO postDAO;
 
-    /**
-     * @see com.std.forum.bo.IPostBO#savePost(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public String savePost(String title, String content, String pic,
             String plateCode, String publisher, String status) {
@@ -301,5 +298,15 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         Post condition = new Post();
         condition.setLocation(location);
         return postDAO.selectPostNum(condition);
+    }
+
+    @Override
+    public List<Post> selectTDList(Post condition) {
+        return postDAO.selectTDList(condition);
+    }
+
+    @Override
+    public List<Post> queryTDPostList(Post condition, int start, int limit) {
+        return postDAO.queryTDPostList(condition, start, limit);
     }
 }

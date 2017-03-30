@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.std.forum.common.PropertiesUtil;
 import com.std.forum.dao.IPostDAO;
 import com.std.forum.dao.base.support.AMybatisTemplate;
 import com.std.forum.domain.Post;
@@ -25,17 +24,11 @@ import com.std.forum.domain.Post;
 @Repository("postDAOImpl")
 public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
 
-    /** 
-     * @see com.std.forum.dao.base.IBaseDAO#insert(java.lang.Object)
-     */
     @Override
     public int insert(Post data) {
         return super.insert(NAMESPACE.concat("insert_post"), data);
     }
 
-    /** 
-     * @see com.std.forum.dao.base.IBaseDAO#delete(java.lang.Object)
-     */
     @Override
     public int delete(Post data) {
         return super.delete(NAMESPACE.concat("delete_post"), data);
@@ -46,7 +39,6 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
      */
     @Override
     public Post select(Post condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return (Post) super.select(NAMESPACE.concat("select_post_details"),
             condition, Post.class);
     }
@@ -56,7 +48,6 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
      */
     @Override
     public List<Post> selectList(Post condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_post_list"),
             condition, Post.class);
     }
@@ -66,7 +57,6 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
      */
     @Override
     public List<Post> selectList(Post condition, int start, int count) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_post"), start, count,
             condition, Post.class);
     }
@@ -76,7 +66,6 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
      */
     @Override
     public Long selectTotalCount(Post condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(NAMESPACE.concat("select_post_count"),
             condition);
     }
@@ -90,29 +79,25 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
             condition);
     }
 
+    // 列表查询收藏
     @Override
     public List<Post> selectSCList(Post condition) {
         return super.selectList(NAMESPACE.concat("select_post_sc"), condition,
             Post.class);
     }
 
+    // 分页查询收藏
     @Override
     public List<Post> selectSCList(Post condition, int start, int limit) {
         return super.selectList(NAMESPACE.concat("select_post_sc"), start,
             limit, condition, Post.class);
     }
 
-    /** 
-     * @see com.std.forum.dao.IPostDAO#updateApprove(com.std.forum.domain.Post)
-     */
     @Override
     public int updateApprove(Post data) {
         return super.update(NAMESPACE.concat("update_post_approve"), data);
     }
 
-    /** 
-     * @see com.std.forum.dao.IPostDAO#updateAttr(com.std.forum.domain.Post)
-     */
     @Override
     public int updateLocation(Post data) {
         return super.update(NAMESPACE.concat("update_post_location"), data);
@@ -136,9 +121,6 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
         return super.update(NAMESPACE.concat("update_post"), data);
     }
 
-    /** 
-     * @see com.std.forum.dao.IPostDAO#updateStatus(com.std.forum.domain.Post)
-     */
     @Override
     public int updateStatus(Post data) {
         return super.update(NAMESPACE.concat("update_post_status"), data);
@@ -168,6 +150,20 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     public Long getMyPostCount(Post condition) {
         return super.selectTotalCount(
             NAMESPACE.concat("select_getMyPostCount"), condition);
+    }
+
+    // 提到我的列表查
+    @Override
+    public List<Post> selectTDList(Post condition) {
+        return super.selectList(NAMESPACE.concat("select_post_td"), condition,
+            Post.class);
+    }
+
+    // 提到我的分页查
+    @Override
+    public List<Post> queryTDPostList(Post condition, int start, int limit) {
+        return super.selectList(NAMESPACE.concat("select_post_td"), start,
+            limit, condition, Post.class);
     }
 
 }

@@ -89,4 +89,7 @@ public interface IPostAO {
 
     public Long getMyPostCount(String userId, String status);
 
+    public Paginable<Post> queryTDPostPage(int start, int limit,
+            Post condition, String userId);
+
 }
