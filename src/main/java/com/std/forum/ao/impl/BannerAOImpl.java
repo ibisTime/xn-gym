@@ -58,9 +58,14 @@ public class BannerAOImpl implements IBannerAO {
     public Paginable<Banner> queryBannerPage(int start, int limit,
             Banner condition) {
         List<String> companyCodeList = new ArrayList<String>();
-        companyCodeList.add(condition.getCompanyCode());
-        companyCodeList.add("0");
-        condition.setCompanyCodeList(companyCodeList);
+        if (!condition.getCompanyCode().equals(EBoolean.NO.getCode())) {
+            companyCodeList.add(condition.getCompanyCode());
+            companyCodeList.add("0");
+            condition.setCompanyCodeList(companyCodeList);
+            condition.setCompanyCode("");
+        } else {
+            condition.setCompanyCode("");
+        }
         return bannerBO.getPaginable(start, limit, condition);
     }
 

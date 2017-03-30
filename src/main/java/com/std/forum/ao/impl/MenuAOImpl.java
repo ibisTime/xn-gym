@@ -14,6 +14,7 @@ import com.std.forum.domain.Menu;
 import com.std.forum.dto.req.XN610080Req;
 import com.std.forum.dto.req.XN610081Req;
 import com.std.forum.enums.EBelong;
+import com.std.forum.enums.EBoolean;
 import com.std.forum.exception.BizException;
 
 @Service
@@ -55,9 +56,14 @@ public class MenuAOImpl implements IMenuAO {
     @Override
     public Paginable<Menu> queryMenuPage(int start, int limit, Menu condition) {
         List<String> companyCodeList = new ArrayList<String>();
-        companyCodeList.add(condition.getCompanyCode());
-        companyCodeList.add("0");
-        condition.setCompanyCodeList(companyCodeList);
+        if (!condition.getCompanyCode().equals(EBoolean.NO.getCode())) {
+            companyCodeList.add(condition.getCompanyCode());
+            companyCodeList.add("0");
+            condition.setCompanyCodeList(companyCodeList);
+            condition.setCompanyCode("");
+        } else {
+            condition.setCompanyCode("");
+        }
         return menuBO.getPaginable(start, limit, condition);
     }
 

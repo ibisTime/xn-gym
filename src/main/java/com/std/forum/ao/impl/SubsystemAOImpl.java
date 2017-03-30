@@ -15,6 +15,7 @@ import com.std.forum.domain.Subsystem;
 import com.std.forum.dto.req.XN610090Req;
 import com.std.forum.dto.req.XN610091Req;
 import com.std.forum.enums.EBelong;
+import com.std.forum.enums.EBoolean;
 import com.std.forum.exception.BizException;
 
 @Service
@@ -61,9 +62,14 @@ public class SubsystemAOImpl implements ISubsystemAO {
     public Paginable<Subsystem> querySubsystemPage(int start, int limit,
             Subsystem condition) {
         List<String> companyCodeList = new ArrayList<String>();
-        companyCodeList.add(condition.getCompanyCode());
-        companyCodeList.add("0");
-        condition.setCompanyCodeList(companyCodeList);
+        if (!condition.getCompanyCode().equals(EBoolean.NO.getCode())) {
+            companyCodeList.add(condition.getCompanyCode());
+            companyCodeList.add("0");
+            condition.setCompanyCodeList(companyCodeList);
+            condition.setCompanyCode("");
+        } else {
+            condition.setCompanyCode("");
+        }
         return subsystemBO.getPaginable(start, limit, condition);
     }
 
