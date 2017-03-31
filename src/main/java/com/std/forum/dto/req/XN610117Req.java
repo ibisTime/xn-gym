@@ -20,6 +20,9 @@ public class XN610117Req {
     // 类型(1置顶取消 2 精华取消 3 头条取消)
     private String type;
 
+    // 操作人
+    private String updater;
+
     public String getCode() {
         return code;
     }
@@ -50,5 +53,13 @@ public class XN610117Req {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 }

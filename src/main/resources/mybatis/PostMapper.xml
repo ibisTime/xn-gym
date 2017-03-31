@@ -374,6 +374,8 @@
 		SET
 		location = #{location}
 		,order_no = #{orderNo}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
 		WHERE code = #{code}
 	</update>
 	

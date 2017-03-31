@@ -103,4 +103,10 @@ public class SplateTemplateBOImpl extends PaginableBOImpl<SplateTemplate>
         condition.setBplateCode(parentCode);
         return splateTemplateDAO.selectList(condition);
     }
+
+    @Override
+    public List<SplateTemplate> querySplateTemplateList() {
+        SplateTemplate condition = new SplateTemplate();
+        return splateTemplateDAO.selectList(condition);
+    }
 }

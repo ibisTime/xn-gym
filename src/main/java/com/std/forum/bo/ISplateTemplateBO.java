@@ -21,6 +21,8 @@ public interface ISplateTemplateBO extends IPaginableBO<SplateTemplate> {
 
     public List<SplateTemplate> querySplateTemplateList(String parentCode);
 
+    public List<SplateTemplate> querySplateTemplateList();
+
     public SplateTemplate getSplateTemplate(String code);
 
 }

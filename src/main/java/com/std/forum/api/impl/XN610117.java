@@ -25,7 +25,7 @@ public class XN610117 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         postAO.setPostLocation(req.getCode(), req.getLocation(),
-            StringValidater.toInteger(req.getOrderNo()));
+            StringValidater.toInteger(req.getOrderNo()), req.getUpdater());
         return new BooleanRes(true);
     }
 
@@ -33,6 +33,6 @@ public class XN610117 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN610117Req.class);
         StringValidater.validateBlank(req.getCode(), req.getLocation(),
-            req.getOrderNo());
+            req.getUpdater());
     }
 }

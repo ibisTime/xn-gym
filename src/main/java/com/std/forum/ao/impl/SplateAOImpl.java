@@ -6,12 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.forum.ao.ISplateAO;
+import com.std.forum.bo.IBplateBO;
+import com.std.forum.bo.IBplateTemplateBO;
 import com.std.forum.bo.IPostBO;
 import com.std.forum.bo.ISplateBO;
+import com.std.forum.bo.ISplateTemplateBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.common.DateUtil;
+import com.std.forum.domain.BplateTemplate;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.Splate;
+import com.std.forum.domain.SplateTemplate;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
 import com.std.forum.dto.res.XN610046Res;
@@ -24,6 +29,15 @@ public class SplateAOImpl implements ISplateAO {
 
     @Autowired
     private ISplateBO splateBO;
+
+    @Autowired
+    private IBplateBO bplateBO;
+
+    @Autowired
+    private ISplateTemplateBO splateTemplateBO;
+
+    @Autowired
+    private IBplateTemplateBO bplateTemplateBO;
 
     @Autowired
     private IPostBO postBO;
@@ -84,5 +98,25 @@ public class SplateAOImpl implements ISplateAO {
         res.setTop(top);
         res.setEssence(essence);
         return res;
+    }
+
+    @Override
+    public void copySplate(String companyCode) {
+        List<SplateTemplate> splateTemplateList = splateTemplateBO
+            .querySplateTemplateList();
+        List<BplateTemplate> bplateTemplateList = bplateTemplateBO
+            .queryBplateTemplateList();
+        for (BplateTemplate bplateTemplate : bplateTemplateList) {
+            bplateBO.saveBplate(bplateTemplate.getName(),
+                EPlateStatus.ENABLE.getCode(), bplateTemplate.getOrderNo(),
+                companyCode, bplateTemplate.getUpdater());
+        }
+        for (SplateTemplate splateTemplate : splateTemplateList) {
+            splateBO.saveSplate(splateTemplate.getName(),
+                splateTemplate.getBplateCode(), splateTemplate.getPic(),
+                splateTemplate.getOrderNo(), null, companyCode,
+                EPlateStatus.ENABLE.getCode(), splateTemplate.getUpdater(),
+                splateTemplate.getRemark());
+        }
     }
 }

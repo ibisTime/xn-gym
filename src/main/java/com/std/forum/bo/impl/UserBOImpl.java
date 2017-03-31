@@ -40,6 +40,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdentityFlag(res.getIdentityFlag());
         user.setUserReferee(res.getUserReferee());
         user.setLevel(res.getLevel());
+        user.setKind(res.getKind());
         return user;
     }
 

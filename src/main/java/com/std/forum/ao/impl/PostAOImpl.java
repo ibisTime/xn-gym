@@ -194,23 +194,26 @@ public class PostAOImpl implements IPostAO {
         for (Splate data : plateList) {
             map.put(data.getCode(), data);
         }
-        if (null == map.get(splate.getCode()) && !userId.equals(publisher)) {
+        if (userId.equals(publisher) || res.getKind().equals("01")
+                || userId.equals(splate.getModerator())) {
+            if (EPostType.TZ.getCode().equals(type)) {
+                postBO.removePost(code);
+                // 删除帖子相关的评论
+                commentBO.removeCommentByPost(code);
+            } else if (EPostType.PL.getCode().equals(type)) {
+                commentBO.removeComment(code);
+                // 删除下级，下下级评论
+                List<Comment> commentList = new ArrayList<Comment>();
+                searchCycleComment(code, commentList, null);
+                for (Comment data : commentList) {
+                    commentBO.removeComment(data.getCode());
+                }
+            }
+        } else {
             throw new BizException("xn000000", "当前用户不是该版块版主或发布用户，无法删除");
         }
         // }
-        if (EPostType.TZ.getCode().equals(type)) {
-            postBO.removePost(code);
-            // 删除帖子相关的评论
-            commentBO.removeCommentByPost(code);
-        } else if (EPostType.PL.getCode().equals(type)) {
-            commentBO.removeComment(code);
-            // 删除下级，下下级评论
-            List<Comment> commentList = new ArrayList<Comment>();
-            searchCycleComment(code, commentList, null);
-            for (Comment data : commentList) {
-                commentBO.removeComment(data.getCode());
-            }
-        }
+
     }
 
     private void searchCycleComment(String parentCode, List<Comment> list,
@@ -226,7 +229,8 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     @Transactional
-    public void setPostLocation(String code, String location, Integer orderNo) {
+    public void setPostLocation(String code, String location, Integer orderNo,
+            String updater) {
         Post post = postBO.getPost(code);
         // String postLocation = post.getLocation();
         // if (!post.getLocation().contains(location)) {
@@ -234,7 +238,7 @@ public class PostAOImpl implements IPostAO {
         // } else {
         // postLocation = post.getLocation().replace(location, "");
         // }
-        postBO.refreshPostLocation(code, location, orderNo);
+        postBO.refreshPostLocation(code, location, orderNo, updater);
         String[] locationArr = location.split(",");
         for (String JH : locationArr) {
             // 设置精华加积分(前面已判断是否重复加)

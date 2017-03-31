@@ -3,7 +3,6 @@ package com.std.forum.ao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +48,6 @@ public class VideoAOImpl implements IVideoAO {
         Video video = videoBO.getVideo(code);
         if (EVideoStatus.DOING.getCode().equals(video.getStatus())) {
             throw new BizException("xn0000", "该视频已上架");
-        }
-        List<Video> videoList = videoBO.queryVideoList(orderNo,
-            video.getCompanyCode());
-        if (CollectionUtils.isNotEmpty(videoList)) {
-            throw new BizException("xn0000", "顺序重复,请重新输入");
         }
         videoBO.upVideo(code, orderNo, updater, remark);
     }

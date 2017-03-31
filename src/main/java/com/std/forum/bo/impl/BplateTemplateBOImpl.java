@@ -81,6 +81,12 @@ public class BplateTemplateBOImpl extends PaginableBOImpl<BplateTemplate>
     }
 
     @Override
+    public List<BplateTemplate> queryBplateTemplateList() {
+        BplateTemplate condition = new BplateTemplate();
+        return bplateTemplateDAO.selectList(condition);
+    }
+
+    @Override
     public BplateTemplate getBplateTemplate(String code) {
         BplateTemplate data = null;
         if (StringUtils.isNotBlank(code)) {
@@ -93,4 +99,5 @@ public class BplateTemplateBOImpl extends PaginableBOImpl<BplateTemplate>
         }
         return data;
     }
+
 }

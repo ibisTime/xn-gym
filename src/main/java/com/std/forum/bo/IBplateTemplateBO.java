@@ -18,6 +18,8 @@ public interface IBplateTemplateBO extends IPaginableBO<BplateTemplate> {
 
     public List<BplateTemplate> queryBplateTemplateList(String name);
 
+    public List<BplateTemplate> queryBplateTemplateList();
+
     public BplateTemplate getBplateTemplate(String code);
 
 }

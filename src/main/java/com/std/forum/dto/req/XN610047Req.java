@@ -25,6 +25,9 @@ public class XN610047Req extends APageReq {
     // 站点编号
     private String companyCode;
 
+    // 版主
+    private String userId;
+
     public String getName() {
         return name;
     }
@@ -55,5 +58,13 @@ public class XN610047Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

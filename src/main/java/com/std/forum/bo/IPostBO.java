@@ -36,7 +36,8 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public int refreshPostReturn(String code);
 
-    public int refreshPostLocation(String code, String location, Integer orderNo);
+    public int refreshPostLocation(String code, String location,
+            Integer orderNo, String updater);
 
     public int refreshPostSumComment(String code, Integer sumComment);
 

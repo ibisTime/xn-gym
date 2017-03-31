@@ -72,7 +72,8 @@ public interface IPostAO {
     /*
      * 设置置顶，精华和头条
      */
-    public void setPostLocation(String code, String location, Integer orderNo);
+    public void setPostLocation(String code, String location, Integer orderNo,
+            String updater);
 
     //
     public Paginable<Post> queryPostPage(int start, int limit, Post condition);
