@@ -228,13 +228,13 @@ public class PostAOImpl implements IPostAO {
     @Transactional
     public void setPostLocation(String code, String location, Integer orderNo) {
         Post post = postBO.getPost(code);
-        String postLocation = post.getLocation();
-        if (!post.getLocation().contains(location)) {
-            postLocation = post.getLocation().concat(location);
-        } else {
-            postLocation = post.getLocation().replace(location, "");
-        }
-        postBO.refreshPostLocation(code, postLocation, orderNo);
+        // String postLocation = post.getLocation();
+        // if (!post.getLocation().contains(location)) {
+        // postLocation = post.getLocation().concat(location);
+        // } else {
+        // postLocation = post.getLocation().replace(location, "");
+        // }
+        postBO.refreshPostLocation(code, location, orderNo);
         String[] locationArr = location.split(",");
         for (String JH : locationArr) {
             // 设置精华加积分(前面已判断是否重复加)

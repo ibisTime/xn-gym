@@ -22,6 +22,9 @@ public class XN610045Req extends APageReq {
     // 状态
     private String status;
 
+    // 版主编号
+    private String moderator;
+
     // 站点编号
     private String companyCode;
 
@@ -55,5 +58,13 @@ public class XN610045Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getModerator() {
+        return moderator;
+    }
+
+    public void setModerator(String moderator) {
+        this.moderator = moderator;
     }
 }

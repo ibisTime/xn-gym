@@ -1,6 +1,7 @@
 package com.std.forum.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.forum.dao.base.ABaseDO;
 
@@ -47,6 +48,9 @@ public class Video extends ABaseDO {
     // ------------------DB----------------
     // 公司名称
     private String companyName;
+
+    // 站点编号
+    private List<String> companyCodeList;
 
     public void setCode(String code) {
         this.code = code;
@@ -134,6 +138,14 @@ public class Video extends ABaseDO {
 
     public void setPic(String pic) {
         this.pic = pic;
+    }
+
+    public List<String> getCompanyCodeList() {
+        return companyCodeList;
+    }
+
+    public void setCompanyCodeList(List<String> companyCodeList) {
+        this.companyCodeList = companyCodeList;
     }
 
 }

@@ -19,7 +19,7 @@ public interface IVideoBO extends IPaginableBO<Video> {
 
     public Video getVideo(String code);
 
-    public List<Video> queryVideoList(Integer orderNo);
+    public List<Video> queryVideoList(Integer orderNo, String companyCode);
 
     public void upVideo(String code, Integer orderNo, String updater,
             String remark);

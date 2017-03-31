@@ -23,6 +23,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="bplateCode != null and bplateCode != '' ">
+				AND t.bplate_code = #{bplateCode}
+			</if>
 			<if test="moderator != null and moderator != '' ">
 				AND t.moderator = #{moderator}
 			</if>

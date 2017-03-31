@@ -33,7 +33,8 @@ public class SubsystemBOImpl extends PaginableBOImpl<Subsystem> implements
 
     @Override
     public String saveSubsystem(String name, String url, String pic,
-            Integer location, Integer orderNo, String companyCode, String remark) {
+            Integer location, Integer orderNo, String belong,
+            String companyCode, String remark) {
         Subsystem data = new Subsystem();
         String code = OrderNoGenerater.generateME(EPrefixCode.SUBSYSTEM
             .getCode());
@@ -43,7 +44,7 @@ public class SubsystemBOImpl extends PaginableBOImpl<Subsystem> implements
         data.setPic(pic);
         data.setLocation(location);
         data.setOrderNo(orderNo);
-        data.setBelong("3");
+        data.setBelong(belong);
         data.setCompanyCode(companyCode);
         data.setRemark(remark);
         subsystemDAO.insert(data);

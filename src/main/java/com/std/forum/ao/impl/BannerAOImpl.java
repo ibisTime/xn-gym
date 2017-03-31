@@ -50,7 +50,7 @@ public class BannerAOImpl implements IBannerAO {
             throw new BizException("xn0000", "总部banner，地方不可修改");
         } else {
             bannerBO.refreshBannerByLocal(code, name, url, pic, location,
-                orderNo, belong, companyCode, remark);
+                orderNo, banner.getBelong(), companyCode, remark);
         }
     }
 

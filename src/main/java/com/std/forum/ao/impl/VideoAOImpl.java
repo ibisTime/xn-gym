@@ -1,5 +1,6 @@
 package com.std.forum.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -12,6 +13,7 @@ import com.std.forum.bo.IVideoBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Video;
 import com.std.forum.dto.res.XN001450Res;
+import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EVideoStatus;
 import com.std.forum.exception.BizException;
 
@@ -48,7 +50,8 @@ public class VideoAOImpl implements IVideoAO {
         if (EVideoStatus.DOING.getCode().equals(video.getStatus())) {
             throw new BizException("xn0000", "该视频已上架");
         }
-        List<Video> videoList = videoBO.queryVideoList(orderNo);
+        List<Video> videoList = videoBO.queryVideoList(orderNo,
+            video.getCompanyCode());
         if (CollectionUtils.isNotEmpty(videoList)) {
             throw new BizException("xn0000", "顺序重复,请重新输入");
         }
@@ -76,6 +79,15 @@ public class VideoAOImpl implements IVideoAO {
 
     @Override
     public Paginable<Video> queryVideoPage(int start, int limit, Video condition) {
+        List<String> companyCodeList = new ArrayList<String>();
+        if (!condition.getCompanyCode().equals(EBoolean.NO.getCode())) {
+            companyCodeList.add(condition.getCompanyCode());
+            companyCodeList.add("0");
+            condition.setCompanyCodeList(companyCodeList);
+            condition.setCompanyCode("");
+        } else {
+            condition.setCompanyCode("");
+        }
         Paginable<Video> page = videoBO.getPaginable(start, limit, condition);
         List<Video> videoList = page.getList();
         for (Video video : videoList) {

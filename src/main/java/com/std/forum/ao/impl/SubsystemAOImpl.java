@@ -46,7 +46,7 @@ public class SubsystemAOImpl implements ISubsystemAO {
             subsystemBO.saveSubsystem(req.getName(), req.getUrl(),
                 req.getPic(), StringValidater.toInteger(req.getLocation()),
                 StringValidater.toInteger(req.getOrderNo()),
-                req.getCompanyCode(), req.getRemark());
+                subsystem.getCode(), req.getCompanyCode(), req.getRemark());
         } else if (EBelong.GLOBAL.getCode().equals(subsystem.getBelong())) {
             throw new BizException("xn0000", "总部子系统，地方不可修改");
         } else {

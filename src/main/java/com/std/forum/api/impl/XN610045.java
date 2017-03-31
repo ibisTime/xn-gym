@@ -30,6 +30,7 @@ public class XN610045 extends AProcessor {
         condition.setBplateCode(req.getParentCode());
         condition.setStatus(req.getStatus());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setModerator(req.getModerator());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISplateAO.DEFAULT_ORDER_COLUMN;

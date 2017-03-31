@@ -102,9 +102,10 @@ public class VideoBOImpl extends PaginableBOImpl<Video> implements IVideoBO {
     }
 
     @Override
-    public List<Video> queryVideoList(Integer orderNo) {
+    public List<Video> queryVideoList(Integer orderNo, String companyCode) {
         Video condition = new Video();
         condition.setOrderNo(orderNo);
+        condition.setCompanyCode(companyCode);
         return videoDAO.selectList(condition);
     }
 
