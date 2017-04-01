@@ -24,6 +24,8 @@ public class BizConnecter {
 
     public static final String USER_URL = PropertiesUtil.Config.USER_URL;
 
+    public static final String ACCOUNT_URL = PropertiesUtil.Config.ACCOUNT_URL;
+
     public static final String POST_URL = "...";
 
     public static <T> T getBizData(String code, String json, Class<T> clazz) {
@@ -61,6 +63,8 @@ public class BizConnecter {
         if (code.startsWith("805") || code.startsWith("806")
                 || code.startsWith("807") || code.startsWith("001")) {
             postUrl = USER_URL;
+        } else if (code.startsWith("002")) {
+            postUrl = ACCOUNT_URL;
         }
         System.out.println("访问请求:" + postUrl);
         return postUrl;

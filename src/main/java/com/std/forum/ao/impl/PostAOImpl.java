@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.forum.ao.IPostAO;
+import com.std.forum.bo.IAccountBO;
 import com.std.forum.bo.ICommentBO;
 import com.std.forum.bo.IKeywordBO;
 import com.std.forum.bo.ILevelRuleBO;
@@ -30,18 +31,22 @@ import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
+import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
+import com.std.forum.domain.Rule;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.User;
+import com.std.forum.enums.EBizType;
 import com.std.forum.enums.EBoolean;
-import com.std.forum.enums.EDirection;
+import com.std.forum.enums.EChannelType;
 import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPostType;
 import com.std.forum.enums.EReaction;
+import com.std.forum.enums.ERuleKind;
 import com.std.forum.enums.ERuleType;
 import com.std.forum.enums.ETalkType;
 import com.std.forum.exception.BizException;
@@ -77,6 +82,9 @@ public class PostAOImpl implements IPostAO {
 
     @Autowired
     protected ILevelRuleBO levelRuleBO;
+
+    @Autowired
+    protected IAccountBO accountBO;
 
     // 1.发布帖子
     // 判断是否发帖
@@ -120,13 +128,14 @@ public class PostAOImpl implements IPostAO {
         // 对标题和内容进行关键字过滤
         EReaction reaction1 = keywordBO.checkContent(title);
         EReaction reaction2 = keywordBO.checkContent(content);
+        // 判断用户等级，是否审核
+        User user = userBO.getRemoteUser(publisher);
+        LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
         if (EReaction.REFUSE.getCode().equals(reaction1.getCode())
                 || EReaction.REFUSE.getCode().equals(reaction2.getCode())) {
             status = EPostStatus.FILTERED.getCode();
         } else {
-            // 判断用户等级，是否审核
-            User user = userBO.getRemoteUser(publisher);
-            LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
+
             if (EBoolean.YES.getCode().equals(levelRule.getEffect())) {
                 status = EPostStatus.todoAPPROVE.getCode();
             } else {
@@ -145,9 +154,12 @@ public class PostAOImpl implements IPostAO {
             code = code + ";filter:true";
         }
         // 发帖加积分
+        Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.FT,
+            user.getLevel());
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
-            userBO.doTransfer(publisher, EDirection.PLUS.getCode(),
-                ERuleType.FT.getCode(), code);
+            accountBO.doTransferAmountRemote("SYS_ACCOUNT", publisher,
+                EChannelType.JF, StringValidater.toLong(rule.getValue()),
+                EBizType.AJ_SR, "发帖送积分", "发帖送积分");
         }
         return code;
 
@@ -240,11 +252,16 @@ public class PostAOImpl implements IPostAO {
         // }
         postBO.refreshPostLocation(code, location, orderNo, updater);
         String[] locationArr = location.split(",");
+        User user = userBO.getRemoteUser(post.getPublisher());
         for (String JH : locationArr) {
             // 设置精华加积分(前面已判断是否重复加)
             if (ELocation.JH.getCode().equals(JH)) {
-                userBO.doTransfer(post.getPublisher(),
-                    EDirection.PLUS.getCode(), ERuleType.JH.getCode(), code);
+                Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF,
+                    ERuleType.FT, user.getLevel());
+                accountBO.doTransferAmountRemote("SYS_ACCOUNT",
+                    post.getPublisher(), EChannelType.JF,
+                    StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                    "发帖送积分", "发帖送积分");
             }
         }
     }
@@ -262,6 +279,9 @@ public class PostAOImpl implements IPostAO {
             String approveNote, String type) {
         if (EPostType.TZ.getCode().equals(type)) {
             Post post = postBO.getPost(code);
+            User user = userBO.getRemoteUser(post.getPublisher());
+            Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.FT,
+                user.getLevel());
             if (EBoolean.YES.getCode().equals(approveResult)
                     && !EPostStatus.todoAPPROVE.getCode().equals(
                         post.getStatus())
@@ -274,18 +294,26 @@ public class PostAOImpl implements IPostAO {
             // 审核通过加积分
             if (EPostStatus.todoAPPROVE.getCode().equals(post.getStatus())
                     && EBoolean.YES.getCode().equals(approveResult)) {
-                userBO.doTransfer(post.getPublisher(),
-                    EDirection.PLUS.getCode(), ERuleType.FT.getCode(), code);
+
+                accountBO.doTransferAmountRemote("SYS_ACCOUNT",
+                    post.getPublisher(), EChannelType.JF,
+                    StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                    "审核通过送积分", "审核通过送积分");
             }
             // 被举报，确认存在问题，扣积分
             if (EPostStatus.toReportAPPROVE.getCode().equals(post.getStatus())
                     && EBoolean.NO.getCode().equals(approveResult)) {
-                userBO.doTransfer(post.getPublisher(),
-                    EDirection.MINUS.getCode(), ERuleType.TZWG.getCode(), code);
+                accountBO.doTransferAmountRemote(post.getPublisher(),
+                    "SYS_ACCOUNT", EChannelType.JF,
+                    StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                    "确认存在问题，扣积分", "确认存在问题，扣积分");
             }
         } else if (EPostType.PL.getCode().equals(type)) {
             type = ETalkType.PLJB.getCode();
             Comment comment = commentBO.getComment(code);
+            User user = userBO.getRemoteUser(comment.getCommer());
+            Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.FT,
+                user.getLevel());
             if (!EPostStatus.todoAPPROVE.getCode().equals(comment.getStatus())
                     && !EPostStatus.toReportAPPROVE.getCode().equals(
                         comment.getStatus())) {
@@ -297,8 +325,10 @@ public class PostAOImpl implements IPostAO {
             if (EPostStatus.toReportAPPROVE.getCode().equals(
                 comment.getStatus())
                     && EBoolean.NO.getCode().equals(approveResult)) {
-                userBO.doTransfer(comment.getCommer(),
-                    EDirection.MINUS.getCode(), ERuleType.PLWG.getCode(), code);
+                accountBO.doTransferAmountRemote(comment.getCommer(),
+                    "SYS_ACCOUNT", EChannelType.JF,
+                    StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                    "确认存在问题，扣积分", "确认存在问题，扣积分");
             }
         }
     }
