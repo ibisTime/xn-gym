@@ -35,7 +35,7 @@ public class XN610114 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN610114Req.class);
         StringValidater.validateBlank(req.getApproveResult(),
-            req.getApprover(), req.getApproveNote(), req.getType());
+            req.getApprover(), req.getType());
         if (CollectionUtils.isEmpty(req.getCodeList())) {
             throw new BizException("xn0000", "编号不能为空");
         }

@@ -103,7 +103,7 @@
 		WHERE code = #{code}
 	</update>
 	
-		<update id="update_product_quantity" parameterType="product">
+	<update id="update_product_quantity" parameterType="product">
 		UPDATE tforum_product
 		SET
 		quantity = quantity - ${quantity}

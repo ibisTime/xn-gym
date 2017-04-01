@@ -11,7 +11,7 @@ import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
 /**
- * 新增小板块
+ * 复制板块模板
  * @author: asus 
  * @since: 2017年3月20日 下午7:45:19 
  * @history:

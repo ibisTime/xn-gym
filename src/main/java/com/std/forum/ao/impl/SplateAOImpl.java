@@ -13,6 +13,7 @@ import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.ISplateTemplateBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.common.DateUtil;
+import com.std.forum.domain.Bplate;
 import com.std.forum.domain.BplateTemplate;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.Splate;
@@ -112,11 +113,22 @@ public class SplateAOImpl implements ISplateAO {
                 companyCode, bplateTemplate.getUpdater());
         }
         for (SplateTemplate splateTemplate : splateTemplateList) {
-            splateBO.saveSplate(splateTemplate.getName(),
-                splateTemplate.getBplateCode(), splateTemplate.getPic(),
-                splateTemplate.getOrderNo(), null, companyCode,
-                EPlateStatus.ENABLE.getCode(), splateTemplate.getUpdater(),
-                splateTemplate.getRemark());
+            BplateTemplate bplateTemplate = bplateTemplateBO
+                .getBplateTemplate(splateTemplate.getBplateCode());
+            Bplate condition = new Bplate();
+            condition.setCompanyCode(companyCode);
+            List<Bplate> bplateList = bplateBO.queryBplateList(condition);
+            for (Bplate bplate : bplateList) {
+                if (bplateTemplate.getOrderNo().equals(bplate.getOrderNo())) {
+                    splateBO
+                        .saveSplate(splateTemplate.getName(), bplate.getCode(),
+                            splateTemplate.getPic(),
+                            splateTemplate.getOrderNo(), null, companyCode,
+                            EPlateStatus.ENABLE.getCode(),
+                            splateTemplate.getUpdater(),
+                            splateTemplate.getRemark());
+                }
+            }
         }
     }
 }
