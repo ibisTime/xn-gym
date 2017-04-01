@@ -58,4 +58,13 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public void doTransfer(String userId, String direction, String ruleType,
             String refNo);
+
+    /**
+     * 更新用户等级
+     * @param userId
+     * @param level 
+     * @create: 2017年4月1日 下午5:07:28 asus
+     * @history:
+     */
+    public void upgradeLevel(String userId, String level);
 }

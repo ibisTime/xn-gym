@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.domain.User;
+import com.std.forum.dto.req.XN001302Req;
 import com.std.forum.dto.req.XN001400Req;
 import com.std.forum.dto.req.XN805300Req;
 import com.std.forum.dto.req.XN805301Req;
@@ -93,6 +94,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         req.setRuleType(ruleType);
         req.setRefNo(refNo);
         BizConnecter.getBizData("805302", JsonUtils.object2Json(req),
+            Object.class);
+    }
+
+    @Override
+    public void upgradeLevel(String userId, String level) {
+        XN001302Req req = new XN001302Req();
+        req.setUserId(userId);
+        req.setLevel(level);
+        BizConnecter.getBizData("001302", JsonUtils.object2Json(req),
             Object.class);
     }
 }

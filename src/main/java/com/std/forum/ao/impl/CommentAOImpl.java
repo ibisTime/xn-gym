@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.forum.ao.ICommentAO;
+import com.std.forum.bo.IAccountBO;
 import com.std.forum.bo.ICommentBO;
 import com.std.forum.bo.IKeywordBO;
 import com.std.forum.bo.ILevelRuleBO;
@@ -15,14 +16,19 @@ import com.std.forum.bo.IRuleBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
+import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Comment;
+import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
+import com.std.forum.domain.Rule;
 import com.std.forum.domain.User;
+import com.std.forum.enums.EBizType;
 import com.std.forum.enums.EBoolean;
-import com.std.forum.enums.EDirection;
+import com.std.forum.enums.EChannelType;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPrefixCode;
 import com.std.forum.enums.EReaction;
+import com.std.forum.enums.ERuleKind;
 import com.std.forum.enums.ERuleType;
 import com.std.forum.exception.BizException;
 
@@ -47,11 +53,17 @@ public class CommentAOImpl implements ICommentAO {
     @Autowired
     protected IUserBO userBO;
 
+    @Autowired
+    protected IAccountBO accountBO;
+
     // 1.发布评论
     @Override
     @Transactional
     public String doComment(String content, String parentCode, String commer) {
         // 判断是否锁帖
+        User user = userBO.getRemoteUser(commer);
+        Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.FT,
+            user.getLevel());
         Post post = getPostByParentCode(parentCode);
         if (EBoolean.YES.getCode().equals(post.getIsLock())) {
             throw new BizException("xn000000", "该帖已被锁定，无法评论");
@@ -70,8 +82,15 @@ public class CommentAOImpl implements ICommentAO {
             parentPost.getSumComment() + 1);
         // 评论送钱
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
-            userBO.doTransfer(commer, EDirection.PLUS.getCode(),
-                ERuleType.PL.getCode(), code);
+            accountBO.doTransferAmountRemote("SYS_ACCOUNT", commer,
+                EChannelType.JF, StringValidater.toLong(rule.getValue()),
+                EBizType.AJ_SR, "发布评论，送积分", "发布评论，送积分");
+            Long amount = accountBO.getAccountByUserId(commer, EChannelType.JF);
+            LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
+            if (amount > levelRule.getAmountMin()) {
+                userBO.upgradeLevel(commer, Integer.toString(StringValidater
+                    .toInteger(user.getLevel()) + 1));
+            }
         } else {
             code = code + ";filter:true";
         }

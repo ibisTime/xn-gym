@@ -28,4 +28,13 @@ public interface IAccountBO extends IPaginableBO<Account> {
             EChannelType channelType, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote);
 
+    /**
+     * 获取用户账户
+     * @param userId
+     * @param type
+     * @return 
+     * @create: 2017年4月1日 下午4:46:46 asus
+     * @history:
+     */
+    public Long getAccountByUserId(String userId, EChannelType type);
 }
