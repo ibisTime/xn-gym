@@ -14,7 +14,7 @@ import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
 /**
- * 地方修改子系统配置
+ * 分页查询子系统配置
  * @author: asus 
  * @since: 2017年3月21日 下午5:56:01 
  * @history:

@@ -51,8 +51,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         Long amount = 0L;
         XN001303Req req = new XN001303Req();
         req.setUserId(userId);
-        req.setType(type.getCode());
-        String jsonStr = BizConnecter.getBizData("002000",
+        req.setCurrency(type.getCode());
+        String jsonStr = BizConnecter.getBizData("002050",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
         List<XN001303Res> list = gson.fromJson(jsonStr,

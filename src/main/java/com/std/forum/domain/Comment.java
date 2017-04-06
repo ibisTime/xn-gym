@@ -87,6 +87,8 @@ public class Comment extends ABaseDO {
 
     private List<String> statusList;
 
+    private List<String> postCodeList;
+
     public String getCode() {
         return code;
     }
@@ -253,6 +255,14 @@ public class Comment extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public List<String> getPostCodeList() {
+        return postCodeList;
+    }
+
+    public void setPostCodeList(List<String> postCodeList) {
+        this.postCodeList = postCodeList;
     }
 
 }

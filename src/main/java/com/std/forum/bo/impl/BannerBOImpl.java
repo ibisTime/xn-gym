@@ -61,9 +61,22 @@ public class BannerBOImpl extends PaginableBOImpl<Banner> implements IBannerBO {
     }
 
     @Override
+    public List<Banner> queryBannerList(Banner condition) {
+        return bannerDAO.selectList(condition);
+    }
+
+    @Override
     public List<Banner> queryBannerList(String companyCode) {
         Banner condition = new Banner();
         condition.setCompanyCode(companyCode);
+        return bannerDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Banner> queryBannerList(String companyCode, String orderNo) {
+        Banner condition = new Banner();
+        condition.setCompanyCode(companyCode);
+        condition.setOrderNo(orderNo);
         return bannerDAO.selectList(condition);
     }
 
@@ -113,4 +126,10 @@ public class BannerBOImpl extends PaginableBOImpl<Banner> implements IBannerBO {
         data.setRemark(remark);
         bannerDAO.updateByLocal(data);
     }
+
+    @Override
+    public List<Banner> queryBannerList(Banner condition, int start, int limit) {
+        return bannerDAO.selectList(condition, start, limit);
+    }
+
 }

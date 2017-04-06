@@ -9,6 +9,7 @@
 package com.std.forum.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.forum.dao.base.ABaseDO;
 
@@ -64,6 +65,8 @@ public class PostTalk extends ABaseDO {
 
     // 头像
     private String photo;
+
+    private List<String> postCodeList;
 
     public String getPublisher() {
         return publisher;
@@ -167,5 +170,13 @@ public class PostTalk extends ABaseDO {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public List<String> getPostCodeList() {
+        return postCodeList;
+    }
+
+    public void setPostCodeList(List<String> postCodeList) {
+        this.postCodeList = postCodeList;
     }
 }

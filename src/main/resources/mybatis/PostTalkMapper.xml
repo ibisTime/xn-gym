@@ -32,25 +32,16 @@
 			<if test="publisher != null and publisher != '' ">
 		        AND tp.publisher = #{publisher}
 			</if>
+			<if test="postCodeList != null and postCodeList != '' ">
+				AND t.post_code in 
+                <foreach item="item" index="index" collection="postCodeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
 	
 	<select id="select_postTalk" parameterType="postTalk" resultMap="postTalk_DB_Result">
-		<!-- SELECT
-		t.code
-		,t.type
-		,t.post_code
-		,tp.title as post_title
-		,tp.content as post_content
-		
-		,t.talker
-		
-		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.talker) as nickname
-		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.talker) as photo
-		,t.talk_datetime
-		,t.remark
-		FROM
-		tforum_post_talk t inner join tforum_post tp on t.post_code = tp.code -->
 		SELECT
 		t.code
 		,t.type
@@ -67,22 +58,7 @@
 		ORDER BY t.code DESC	
 	</select>
 	
-	<select id="select_postTalk_limit" parameterType="postTalk" resultMap="postTalk_DB_Result">
-	<!-- SELECT
-		t.code
-		,t.type
-		,t.post_code
-		,tp.title as post_title
-		,tp.content as post_content
-		
-		,t.talker
-		
-		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.talker) as nickname
-		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.talker) as photo
-		,t.talk_datetime
-		,t.remark
-		FROM
-		tforum_post_talk t inner join tforum_post tp on t.post_code = tp.code -->
+	<select id="select_postTalk_limit" parameterType="Map" resultMap="postTalk_DB_Result">
 		SELECT
 		t.code
 		,t.type

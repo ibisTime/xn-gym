@@ -23,8 +23,14 @@ public interface IBannerBO extends IPaginableBO<Banner> {
 
     public int removeBanner(String code);
 
+    public List<Banner> queryBannerList(Banner condition);
+
     public List<Banner> queryBannerList(String companyCode);
 
+    public List<Banner> queryBannerList(String companyCode, String orderNo);
+
     public Banner getBanner(String code);
+
+    public List<Banner> queryBannerList(Banner condition, int start, int limit);
 
 }

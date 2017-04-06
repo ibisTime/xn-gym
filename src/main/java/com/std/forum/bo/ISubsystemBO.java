@@ -23,6 +23,12 @@ public interface ISubsystemBO extends IPaginableBO<Subsystem> {
 
     public List<Subsystem> querySubsystemList(String companyCode);
 
+    public List<Subsystem> querySubsystemList(String companyCode,
+            Integer orderNo);
+
+    public List<Subsystem> querySubsystemList(Subsystem condition, int start,
+            int limit);
+
     public Subsystem getSubsystem(String code);
 
 }

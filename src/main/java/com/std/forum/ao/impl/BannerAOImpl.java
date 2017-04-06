@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.std.forum.ao.IBannerAO;
 import com.std.forum.bo.IBannerBO;
+import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Banner;
 import com.std.forum.enums.EBelong;
@@ -29,6 +30,11 @@ public class BannerAOImpl implements IBannerAO {
             throw new BizException("xn0000", "属于不允许自定义");
         }
         Banner banner = bannerBO.getBanner(code);
+        List<Banner> bannerList = bannerBO.queryBannerList(
+            EBoolean.NO.getCode(), orderNo);
+        if (CollectionUtils.isNotEmpty(bannerList)) {
+            throw new BizException("xn0000", "顺序不能重复");
+        }
         if (EBelong.GLOBAL.getCode().equals(banner.getBelong())
                 || EBelong.LOCAL.getCode().equals(banner.getBelong())) {
             bannerBO.refreshBannerByGlobal(code, name, url, pic, location,
@@ -43,6 +49,11 @@ public class BannerAOImpl implements IBannerAO {
             String pic, String location, String orderNo, String belong,
             String companyCode, String remark) {
         Banner banner = bannerBO.getBanner(code);
+        List<Banner> bannerList = bannerBO
+            .queryBannerList(companyCode, orderNo);
+        if (CollectionUtils.isNotEmpty(bannerList)) {
+            throw new BizException("xn0000", "顺序不能重复");
+        }
         if (EBelong.LOCAL.getCode().equals(banner.getBelong())) {
             bannerBO.saveBanner(name, url, pic, location, orderNo, code,
                 companyCode, remark);
@@ -57,6 +68,7 @@ public class BannerAOImpl implements IBannerAO {
     @Override
     public Paginable<Banner> queryBannerPage(int start, int limit,
             Banner condition) {
+        Paginable<Banner> page = null;
         List<String> companyCodeList = new ArrayList<String>();
         if (!condition.getCompanyCode().equals(EBoolean.NO.getCode())) {
             condition.setBelong("NO_1");
@@ -64,10 +76,34 @@ public class BannerAOImpl implements IBannerAO {
             companyCodeList.add("0");
             condition.setCompanyCodeList(companyCodeList);
             condition.setCompanyCode("");
+            List<Banner> list = bannerBO.queryBannerList(condition);
+            List<Banner> bannerList = new ArrayList<Banner>();
+            bannerList.addAll(list);
+            for (Banner banner : bannerList) {
+                for (Banner ban : list) {
+                    if (banner.getBelong().equals(ban.getCode())) {
+                        list.remove(ban);
+                        break;
+                    }
+                }
+            }
+            page = new Page<Banner>(start, limit, list.size());
+            List<Banner> dataList = queryBanner(list, page.getStart(),
+                page.getPageSize());
+            // bannerBO.queryBannerList(condition,page.getStart(),
+            // page.getPageSize());
+            page.setList(dataList);
         } else {
             condition.setCompanyCode("");
+            page = bannerBO.getPaginable(start, limit, condition);
         }
-        return bannerBO.getPaginable(start, limit, condition);
+        return page;
+    }
+
+    private List<Banner> queryBanner(List<Banner> list, int start, int limit) {
+        list.indexOf(start);
+        list.lastIndexOf(limit);
+        return list;
     }
 
     @Override
@@ -96,7 +132,7 @@ public class BannerAOImpl implements IBannerAO {
         }
         for (Banner banner : bannerList) {
             for (Banner global : globalList) {
-                if (banner.getCode().equals(global.getCode())) {
+                if (banner.getBelong().equals(global.getCode())) {
                     globalList.remove(global);
                     break;
                 }

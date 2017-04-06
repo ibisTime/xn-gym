@@ -42,6 +42,12 @@
 	            	#{item}
                 </foreach> 
 			</if>
+			<if test="postCodeList != null and postCodeList != '' ">
+				AND t.post_code in 
+                <foreach item="item" index="index" collection="postCodeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 			<choose>
 				 <when test='isCommentMy == "1"'>
 				 	AND (EXISTS (select * from tforum_comment tfc where tfc.code = t.parent_code and tfc.commer=#{publisher})
@@ -100,13 +106,9 @@
 		,t.status
 		,t.commer
 		
-		<!-- ,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
-		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
-		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name -->
 		,t.comm_datetime
 		,t.approver
 		,t.approve_datetime
-		
 		,t.approve_note
 		,t.post_code
 		FROM
@@ -124,13 +126,9 @@
 		,t.status
 		,t.commer
 		
-		<!-- ,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
-		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
-		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name -->
 		,t.comm_datetime
 		,t.approver
 		,t.approve_datetime
-		
 		,t.approve_note
 		,t.post_code
 		FROM
@@ -148,13 +146,9 @@
 		,t.status
 		,t.commer
 		
-		<!-- ,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.commer) as nickname
-		,(select photo from ${userDB}.tstd_user_ext tue where tue.user_id=t.commer) as photo
-		,(select login_name from ${userDB}.tstd_user tu where tu.user_id=t.commer) as login_name -->
 		,t.comm_datetime
 		,t.approver
 		,t.approve_datetime
-		
 		,t.approve_note
 		,t.post_code
 		FROM

@@ -5,7 +5,7 @@ public class XN001303Req {
     private String userId;
 
     // 币种类型（必填）
-    private String type;
+    private String currency;
 
     public String getUserId() {
         return userId;
@@ -15,12 +15,12 @@ public class XN001303Req {
         this.userId = userId;
     }
 
-    public String getType() {
-        return type;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
 }

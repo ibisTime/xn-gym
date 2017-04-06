@@ -39,6 +39,7 @@ import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Rule;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.User;
+import com.std.forum.dto.res.XN805115Res;
 import com.std.forum.enums.EBizType;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EChannelType;
@@ -48,6 +49,7 @@ import com.std.forum.enums.EPostType;
 import com.std.forum.enums.EReaction;
 import com.std.forum.enums.ERuleKind;
 import com.std.forum.enums.ERuleType;
+import com.std.forum.enums.ESysAccount;
 import com.std.forum.enums.ETalkType;
 import com.std.forum.exception.BizException;
 
@@ -157,17 +159,27 @@ public class PostAOImpl implements IPostAO {
         Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.FT,
             user.getLevel());
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
-            accountBO.doTransferAmountRemote("SYS_ACCOUNT", publisher,
-                EChannelType.JF, StringValidater.toLong(rule.getValue()),
-                EBizType.AJ_SR, "发帖送积分", "发帖送积分");
+            accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
+                publisher, EChannelType.JF,
+                StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                "发帖送积分", "发帖送积分");
             Long amount = accountBO.getAccountByUserId(publisher,
                 EChannelType.JF);
-            if (amount > levelRule.getAmountMax()) {
-                userBO.upgradeLevel(publisher, user.getLevel() + 1);
+            List<XN805115Res> LevelRuleList = queryLevelRuleList();
+            for (XN805115Res res : LevelRuleList) {
+                if (amount > res.getAmountMin() && amount < res.getAmountMax()) {
+                    userBO.upgradeLevel(publisher,
+                        Integer.toString(StringValidater.toInteger(user
+                            .getLevel()) + 1));
+                }
             }
         }
         return code;
 
+    }
+
+    private List<XN805115Res> queryLevelRuleList() {
+        return levelRuleBO.queryLevelRuleList();
     }
 
     @Override
@@ -263,17 +275,20 @@ public class PostAOImpl implements IPostAO {
             if (ELocation.JH.getCode().equals(JH)) {
                 Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF,
                     ERuleType.FT, user.getLevel());
-                accountBO.doTransferAmountRemote("SYS_ACCOUNT",
-                    post.getPublisher(), EChannelType.JF,
-                    StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
-                    "发帖送积分", "发帖送积分");
+                accountBO.doTransferAmountRemote(
+                    ESysAccount.SYS_ACCOUNT.getCode(), post.getPublisher(),
+                    EChannelType.JF, StringValidater.toLong(rule.getValue()),
+                    EBizType.AJ_SR, "发帖送积分", "发帖送积分");
                 Long amount = accountBO.getAccountByUserId(post.getPublisher(),
                     EChannelType.JF);
-                LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
-                if (amount > levelRule.getAmountMax()) {
-                    userBO.upgradeLevel(post.getPublisher(),
-                        Integer.toString(StringValidater.toInteger(user
-                            .getLevel()) + 1));
+                List<XN805115Res> LevelRuleList = queryLevelRuleList();
+                for (XN805115Res res : LevelRuleList) {
+                    if (amount > res.getAmountMin()
+                            && amount < res.getAmountMax()) {
+                        userBO.upgradeLevel(post.getPublisher(),
+                            Integer.toString(StringValidater.toInteger(user
+                                .getLevel()) + 1));
+                    }
                 }
             }
         }
@@ -314,17 +329,21 @@ public class PostAOImpl implements IPostAO {
                     "帖子审核通过送积分", "帖子审核通过送积分");
                 Long amount = accountBO.getAccountByUserId(post.getPublisher(),
                     EChannelType.JF);
-                LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
-                if (amount > levelRule.getAmountMax()) {
-                    userBO.upgradeLevel(post.getPublisher(),
-                        user.getLevel() + 1);
+                List<XN805115Res> LevelRuleList = queryLevelRuleList();
+                for (XN805115Res res : LevelRuleList) {
+                    if (amount > res.getAmountMin()
+                            && amount < res.getAmountMax()) {
+                        userBO.upgradeLevel(post.getPublisher(),
+                            Integer.toString(StringValidater.toInteger(user
+                                .getLevel()) + 1));
+                    }
                 }
                 // 被举报，确认存在问题，扣积分
                 if (EPostStatus.toReportAPPROVE.getCode().equals(
                     post.getStatus())
                         && EBoolean.NO.getCode().equals(approveResult)) {
                     accountBO.doTransferAmountRemote(post.getPublisher(),
-                        "SYS_ACCOUNT", EChannelType.JF,
+                        ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
                         StringValidater.toLong(rule.getValue()),
                         EBizType.AJ_SR, "帖子确认存在问题，扣积分", "帖子确认存在问题，扣积分");
                 }
@@ -347,17 +366,19 @@ public class PostAOImpl implements IPostAO {
                     comment.getStatus())
                         && EBoolean.NO.getCode().equals(approveResult)) {
                     accountBO.doTransferAmountRemote(comment.getCommer(),
-                        "SYS_ACCOUNT", EChannelType.JF,
+                        ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
                         StringValidater.toLong(rule1.getValue()),
                         EBizType.AJ_SR, "确认存在问题，扣积分", "确认存在问题，扣积分");
                     Long amount = accountBO.getAccountByUserId(
                         comment.getCommer(), EChannelType.JF);
-                    LevelRule levelRule = levelRuleBO.getLevelRule(user1
-                        .getLevel());
-                    if (amount > levelRule.getAmountMin()) {
-                        userBO.upgradeLevel(comment.getCommer(),
-                            Integer.toString(StringValidater.toInteger(user
-                                .getLevel()) - 1));
+                    List<XN805115Res> LevelRuleList = queryLevelRuleList();
+                    for (XN805115Res res : LevelRuleList) {
+                        if (amount > res.getAmountMin()
+                                && amount < res.getAmountMax()) {
+                            userBO.upgradeLevel(comment.getCommer(), Integer
+                                .toString(StringValidater.toInteger(user
+                                    .getLevel()) - 1));
+                        }
                     }
                 }
             }
@@ -396,13 +417,23 @@ public class PostAOImpl implements IPostAO {
         condition.setLocation(setLocation(condition.getLocation()));
         Paginable<Post> postPage = postBO.getPaginable(start, limit, condition);
         List<Post> postList = postPage.getList();
+        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             cutPic(post);
             getPartInfo(post, condition.getUserId());
-            this.fullPost(post);
             this.fullUser(post);
+            postCodeList.add(post.getCode());
         }
+        this.fullPost(postCodeList, postList);
         return postPage;
+    }
+
+    public static Map<String, Comment> getBizTypeMap(List<Comment> commentList) {
+        Map<String, Comment> map = new HashMap<String, Comment>();
+        for (Comment code : commentList) {
+            map.put(code.getCode(), code);
+        }
+        return map;
     }
 
     // 列表查
@@ -410,28 +441,41 @@ public class PostAOImpl implements IPostAO {
     public List<Post> queryPostList(Post condition) {
         condition.setLocation(setLocation(condition.getLocation()));
         List<Post> postList = postBO.queryPostList(condition);
+        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             this.cutPic(post);
             this.getPartInfo(post, condition.getUserId());
+            postCodeList.add(post.getCode());
             this.fullUser(post);
-            this.fullPost(post);
         }
+        this.fullPost(postCodeList, postList);
         return postList;
     }
 
-    private void fullPost(Post post) {
-        List<Comment> commentList = commentBO.queryCommentLimitList(post
-            .getCode());
-        for (Comment comment : commentList) {
-            this.fullUser(comment);
+    private void fullPost(List<String> postCodeList, List<Post> postList) {
+
+        List<Comment> iCommentList = new ArrayList<Comment>();
+        List<PostTalk> iPostTalkList = new ArrayList<PostTalk>();
+        for (Post post : postList) {
+            List<Comment> commentList = commentBO.queryCommentLimitList(post
+                .getCode());
+            List<PostTalk> postTalkList = postTalkBO
+                .queryPostTalkLimitList(post.getCode());
+            for (Comment comment : commentList) {
+                this.fullUser(comment);
+                if (post.getCode().equals(comment.getPostCode())) {
+                    iCommentList.add(comment);
+                }
+            }
+            post.setCommentList(iCommentList);
+            for (PostTalk postTalk : postTalkList) {
+                this.fullUser(postTalk);
+                if (post.getCode().equals(postTalk.getPostCode())) {
+                    iPostTalkList.add(postTalk);
+                }
+            }
+            post.setLikeList(iPostTalkList);
         }
-        post.setCommentList(commentList);
-        List<PostTalk> postTalkList = postTalkBO.queryPostTalkLimitList(post
-            .getCode());
-        for (PostTalk postTalk : postTalkList) {
-            this.fullUser(postTalk);
-        }
-        post.setLikeList(postTalkList);
     }
 
     private String setLocation(String location) {
@@ -475,8 +519,25 @@ public class PostAOImpl implements IPostAO {
         this.cutPic(post);
         this.getPartInfo(post, userId);
         this.fullUser(post);
-        this.fullPost(post);
+        this.fullGetPost(post);
         return post;
+    }
+
+    private void fullGetPost(Post post) {
+        Comment condition = new Comment();
+        condition.setParentCode(post.getCode());
+        List<Comment> commentList = commentBO.queryCommentList(condition);
+        for (Comment comment : commentList) {
+            this.fullUser(comment);
+        }
+        post.setCommentList(commentList);
+        PostTalk iPostTalk = new PostTalk();
+        condition.setParentCode(post.getCode());
+        List<PostTalk> postTalkList = postTalkBO.queryPostTalkList(iPostTalk);
+        for (PostTalk postTalk : postTalkList) {
+            this.fullUser(postTalk);
+        }
+        post.setLikeList(postTalkList);
     }
 
     @Override
@@ -550,12 +611,14 @@ public class PostAOImpl implements IPostAO {
         // Paginable<Post> postPage = postBO.getPaginable(start, limit,
         // condition);
         List<Post> postList = postPage.getList();
+        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             cutPic(post);
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);
-            this.fullPost(post);
+            postCodeList.add(post.getCode());
         }
+        this.fullPost(postCodeList, postList);
         return postPage;
     }
 
@@ -565,13 +628,15 @@ public class PostAOImpl implements IPostAO {
         condition.setType(ETalkType.SC.getCode());
         condition.setTalker(talker);
         List<Post> postList = postBO.selectSCList(condition);
+        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             this.fullSplate(post);
             this.cutPic(post);
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);
-            this.fullPost(post);
+            postCodeList.add(post.getCode());
         }
+        this.fullPost(postCodeList, postList);
         return postList;
     }
 
@@ -631,12 +696,14 @@ public class PostAOImpl implements IPostAO {
             page.getStart(), page.getPageSize());
         page.setList(dataList);
         List<Post> list = page.getList();
+        List<String> postCodeList = new ArrayList<String>();
         for (Post post : list) {
             cutPic(post);
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);
-            this.fullPost(post);
+            postCodeList.add(post.getCode());
         }
+        this.fullPost(postCodeList, list);
         return page;
     }
 

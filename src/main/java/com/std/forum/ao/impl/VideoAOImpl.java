@@ -39,7 +39,7 @@ public class VideoAOImpl implements IVideoAO {
         if (EVideoStatus.DOING.getCode().equals(video.getStatus())) {
             throw new BizException("xn0000", "正在上架的视频,不能修改");
         }
-        videoBO.refreshVideo(video, pic, name, url, orderNo, updater, remark);
+        videoBO.refreshVideo(video, name, pic, url, orderNo, updater, remark);
     }
 
     @Override

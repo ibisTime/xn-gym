@@ -88,10 +88,10 @@
 			</if>
 		</trim>
 	</sql>
-	
+
 	<!-- 分页查（我的帖子） -->
-	<select id="select_post" parameterType="post" resultMap="post_DB_Result">
-		SELECT 
+	<select id="select_post" parameterType="Map" resultMap="post_DB_Result">  
+    SELECT 
 		DISTINCT
 		t.code
 		,t.title
@@ -119,8 +119,41 @@
 		FROM
 		tforum_post t left join tforum_splate tp on t.plate_code = tp.code<!--  left join tforum_post_talk tpt on t.code = tpt.post_code --> 
 		<include refid="where_condition" />
+		ORDER BY t.publish_datetime DESC	 
+	</select>  
+	
+	<!-- 分页查（我的帖子） -->
+	<!-- <select id="select_post" parameterType="post" resultMap="post_DB_Result">
+		SELECT 
+		DISTINCT
+		t.code
+		,t.title
+		,t.content
+		,t.pic
+		,t.publisher
+		
+		,t.publish_datetime
+		,t.approver
+		,t.approve_datetime
+		,t.approve_note
+		,t.status
+		
+		,t.location
+		,t.order_no
+		,t.plate_code
+		,t.is_lock
+		,t.sum_comment
+		
+		,t.sum_like
+		,t.sum_read
+		,t.sum_reward
+		,t.remark
+		,tp.name as plate_name
+		FROM
+		tforum_post t left join tforum_splate tp on t.plate_code = tp.code left join tforum_post_talk tpt on t.code = tpt.post_code 
+		<include refid="where_condition" />
 		ORDER BY t.publish_datetime DESC	
-	</select>
+	</select>-->
 	
 	<!-- 列表查 -->
 	<select id="select_post_list" parameterType="post" resultMap="post_DB_Result">

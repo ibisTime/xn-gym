@@ -18,10 +18,10 @@ import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Comment;
-import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.Rule;
 import com.std.forum.domain.User;
+import com.std.forum.dto.res.XN805115Res;
 import com.std.forum.enums.EBizType;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EChannelType;
@@ -30,6 +30,7 @@ import com.std.forum.enums.EPrefixCode;
 import com.std.forum.enums.EReaction;
 import com.std.forum.enums.ERuleKind;
 import com.std.forum.enums.ERuleType;
+import com.std.forum.enums.ESysAccount;
 import com.std.forum.exception.BizException;
 
 @Service
@@ -82,14 +83,18 @@ public class CommentAOImpl implements ICommentAO {
             parentPost.getSumComment() + 1);
         // 评论送钱
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
-            accountBO.doTransferAmountRemote("SYS_ACCOUNT", commer,
-                EChannelType.JF, StringValidater.toLong(rule.getValue()),
-                EBizType.AJ_SR, "发布评论，送积分", "发布评论，送积分");
+            accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
+                commer, EChannelType.JF,
+                StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                "发布评论，送积分", "发布评论，送积分");
             Long amount = accountBO.getAccountByUserId(commer, EChannelType.JF);
-            LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
-            if (amount > levelRule.getAmountMin()) {
-                userBO.upgradeLevel(commer, Integer.toString(StringValidater
-                    .toInteger(user.getLevel()) + 1));
+            List<XN805115Res> LevelRuleList = levelRuleBO.queryLevelRuleList();
+            for (XN805115Res res : LevelRuleList) {
+                if (amount > res.getAmountMin() && amount < res.getAmountMax()) {
+                    userBO.upgradeLevel(commer,
+                        Integer.toString(StringValidater.toInteger(user
+                            .getLevel()) + 1));
+                }
             }
         } else {
             code = code + ";filter:true";

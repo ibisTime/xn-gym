@@ -94,6 +94,11 @@ public class MenuBOImpl extends PaginableBOImpl<Menu> implements IMenuBO {
     }
 
     @Override
+    public List<Menu> queryMenuList(Menu condition, int start, int limit) {
+        return menuDAO.selectList(condition, start, limit);
+    }
+
+    @Override
     public List<Menu> queryMenuList(Menu condition) {
         return menuDAO.selectList(condition);
     }
@@ -109,6 +114,14 @@ public class MenuBOImpl extends PaginableBOImpl<Menu> implements IMenuBO {
     public List<Menu> queryBelongMenuList(String belong) {
         Menu condition = new Menu();
         condition.setBelong(belong);
+        return menuDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Menu> queryMenuList(String companyCode, String orderNo) {
+        Menu condition = new Menu();
+        condition.setCompanyCode(companyCode);
+        condition.setOrderNo(orderNo);
         return menuDAO.selectList(condition);
     }
 

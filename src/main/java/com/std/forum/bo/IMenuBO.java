@@ -24,7 +24,11 @@ public interface IMenuBO extends IPaginableBO<Menu> {
 
     public List<Menu> queryMenuList(String companyCode);
 
+    public List<Menu> queryMenuList(String companyCode, String orderNo);
+
     public List<Menu> queryBelongMenuList(String belong);
+
+    public List<Menu> queryMenuList(Menu condition, int start, int limit);
 
     public Menu getMenu(String code);
 

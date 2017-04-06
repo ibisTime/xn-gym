@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.std.forum.ao.IMenuAO;
 import com.std.forum.bo.IMenuBO;
+import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Menu;
 import com.std.forum.dto.req.XN610080Req;
@@ -29,6 +30,11 @@ public class MenuAOImpl implements IMenuAO {
             throw new BizException("xn0000", "属于不允许自定义");
         }
         Menu menu = menuBO.getMenu(req.getCode());
+        List<Menu> menuList = menuBO.queryMenuList(EBoolean.NO.getCode(),
+            req.getOrderNo());
+        if (CollectionUtils.isNotEmpty(menuList)) {
+            throw new BizException("xn0000", "顺序不能重复");
+        }
         if (EBelong.GLOBAL.getCode().equals(menu.getBelong())
                 || EBelong.LOCAL.getCode().equals(menu.getBelong())) {
             menuBO.refreshMenuByGlobal(req.getCode(), req.getName(),
@@ -42,6 +48,11 @@ public class MenuAOImpl implements IMenuAO {
     @Override
     public void editMenuByLocal(XN610081Req req) {
         Menu menu = menuBO.getMenu(req.getCode());
+        List<Menu> menuList = menuBO.queryMenuList(req.getCompanyCode(),
+            req.getOrderNo());
+        if (CollectionUtils.isNotEmpty(menuList)) {
+            throw new BizException("xn0000", "顺序不能重复");
+        }
         if (EBelong.LOCAL.getCode().equals(menu.getBelong())) {
             menuBO.saveMenu(req.getName(), req.getPic(), req.getOrderNo(),
                 req.getCode(), req.getCompanyCode(), req.getRemark());
@@ -55,6 +66,7 @@ public class MenuAOImpl implements IMenuAO {
 
     @Override
     public Paginable<Menu> queryMenuPage(int start, int limit, Menu condition) {
+        Paginable<Menu> page = null;
         List<String> companyCodeList = new ArrayList<String>();
         if (!condition.getCompanyCode().equals(EBoolean.NO.getCode())) {
             condition.setBelong("NO_1");
@@ -62,10 +74,34 @@ public class MenuAOImpl implements IMenuAO {
             companyCodeList.add("0");
             condition.setCompanyCodeList(companyCodeList);
             condition.setCompanyCode("");
+            // 查询所有
+            List<Menu> list = menuBO.queryMenuList(condition);
+            // 赋值参考
+            List<Menu> menuList = new ArrayList<Menu>();
+            menuList.addAll(menuList);
+            // 移除重复
+            for (Menu menu : menuList) {
+                for (Menu men : list) {
+                    if (menu.getCode().equals(men.getBelong())) {
+                        list.remove(men);
+                    }
+                }
+            }
+            page = new Page<Menu>(start, limit, list.size());
+            List<Menu> dataList = queryMenu(list, page.getStart(),
+                page.getPageSize());
+            page.setList(dataList);
         } else {
             condition.setCompanyCode("");
+            page = menuBO.getPaginable(start, limit, condition);
         }
-        return menuBO.getPaginable(start, limit, condition);
+        return page;
+    }
+
+    private List<Menu> queryMenu(List<Menu> list, int start, int limit) {
+        list.indexOf(start);
+        list.lastIndexOf(limit);
+        return list;
     }
 
     @Override
@@ -95,7 +131,7 @@ public class MenuAOImpl implements IMenuAO {
         }
         for (Menu result : resultList) {
             for (Menu menu : menuList) {
-                if (result.getCode().equals(menu.getCode())) {
+                if (result.getBelong().equals(menu.getCode())) {
                     menuList.remove(menu);
                     break;
                 }
