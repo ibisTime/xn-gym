@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.forum.ao.IPostTalkAO;
+import com.std.forum.bo.IAccountBO;
 import com.std.forum.bo.ICommentBO;
 import com.std.forum.bo.IPostBO;
 import com.std.forum.bo.IPostTalkBO;
@@ -18,6 +19,8 @@ import com.std.forum.domain.Comment;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.User;
+import com.std.forum.enums.EBizType;
+import com.std.forum.enums.EChannelType;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPostType;
 import com.std.forum.enums.ETalkType;
@@ -40,6 +43,9 @@ public class PostTalkAOImpl implements IPostTalkAO {
 
     @Autowired
     protected IRuleBO ruleBO;
+
+    @Autowired
+    protected IAccountBO accountBO;
 
     // 举报帖子
     @Override
@@ -132,8 +138,8 @@ public class PostTalkAOImpl implements IPostTalkAO {
         postTalkBO.savePostTalk(postCode, userId, ETalkType.DS.getCode(),
             String.valueOf(amount));
         postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);
-        userBO.doTransferAdd(userId, post.getPublisher(), amount, "打赏帖子",
-            postCode);
+        accountBO.doTransferAmountRemote(userId, post.getPublisher(),
+            EChannelType.JF, amount, EBizType.AJ_SR, "发帖送积分", "发帖送积分");
     }
 
     /** 
