@@ -11,6 +11,7 @@ import com.std.forum.bo.IBplateTemplateBO;
 import com.std.forum.bo.IPostBO;
 import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.ISplateTemplateBO;
+import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.common.DateUtil;
 import com.std.forum.domain.Bplate;
@@ -18,6 +19,7 @@ import com.std.forum.domain.BplateTemplate;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.SplateTemplate;
+import com.std.forum.domain.User;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
 import com.std.forum.dto.res.XN610046Res;
@@ -39,6 +41,9 @@ public class SplateAOImpl implements ISplateAO {
 
     @Autowired
     private IBplateTemplateBO bplateTemplateBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Autowired
     private IPostBO postBO;
@@ -74,12 +79,25 @@ public class SplateAOImpl implements ISplateAO {
     @Override
     public Paginable<Splate> querySplatePage(int start, int limit,
             Splate condition) {
-        return splateBO.getPaginable(start, limit, condition);
+        Paginable<Splate> page = splateBO.getPaginable(start, limit, condition);
+        List<Splate> splateList = page.getList();
+        for (Splate splate : splateList) {
+            User user = userBO.getRemoteUser(splate.getModerator());
+            splate.setNickname(user.getNickname());
+            splate.setMobile(user.getMobile());
+        }
+        return page;
     }
 
     @Override
     public List<Splate> querySplateList(Splate condition) {
-        return splateBO.querySplateList(condition);
+        List<Splate> splateList = splateBO.querySplateList(condition);
+        for (Splate splate : splateList) {
+            User user = userBO.getRemoteUser(splate.getModerator());
+            splate.setNickname(user.getNickname());
+            splate.setMobile(user.getMobile());
+        }
+        return splateList;
     }
 
     @Override

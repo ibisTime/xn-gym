@@ -47,6 +47,13 @@ public class Splate extends ABaseDO {
     // 备注
     private String remark;
 
+    // *****************DB****************
+    // 昵称
+    private String nickname;
+
+    // 手机号
+    private String mobile;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -133,6 +140,22 @@ public class Splate extends ABaseDO {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }
