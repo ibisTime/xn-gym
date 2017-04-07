@@ -30,10 +30,12 @@ public class MenuAOImpl implements IMenuAO {
             throw new BizException("xn0000", "属于不允许自定义");
         }
         Menu menu = menuBO.getMenu(req.getCode());
-        List<Menu> menuList = menuBO.queryMenuList(EBoolean.NO.getCode(),
-            req.getOrderNo());
-        if (CollectionUtils.isNotEmpty(menuList)) {
-            throw new BizException("xn0000", "顺序不能重复");
+        if (!menu.getOrderNo().equals(req.getOrderNo())) {
+            List<Menu> menuList = menuBO.queryMenuList(EBoolean.NO.getCode(),
+                req.getOrderNo());
+            if (CollectionUtils.isNotEmpty(menuList)) {
+                throw new BizException("xn0000", "顺序不能重复");
+            }
         }
         if (EBelong.GLOBAL.getCode().equals(menu.getBelong())
                 || EBelong.LOCAL.getCode().equals(menu.getBelong())) {
@@ -48,10 +50,12 @@ public class MenuAOImpl implements IMenuAO {
     @Override
     public void editMenuByLocal(XN610081Req req) {
         Menu menu = menuBO.getMenu(req.getCode());
-        List<Menu> menuList = menuBO.queryMenuList(req.getCompanyCode(),
-            req.getOrderNo());
-        if (CollectionUtils.isNotEmpty(menuList)) {
-            throw new BizException("xn0000", "顺序不能重复");
+        if (!menu.getOrderNo().equals(req.getOrderNo())) {
+            List<Menu> menuList = menuBO.queryMenuList(req.getCompanyCode(),
+                req.getOrderNo());
+            if (CollectionUtils.isNotEmpty(menuList)) {
+                throw new BizException("xn0000", "顺序不能重复");
+            }
         }
         if (EBelong.LOCAL.getCode().equals(menu.getBelong())) {
             menuBO.saveMenu(req.getName(), req.getPic(), req.getOrderNo(),

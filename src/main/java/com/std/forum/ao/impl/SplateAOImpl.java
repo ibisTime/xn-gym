@@ -88,6 +88,7 @@ public class SplateAOImpl implements ISplateAO {
         Splate splate = splateBO.getSplate(code);
         Long allPostCount = postBO.getPostNum(splate.getCode());
         Post condition = new Post();
+        condition.setPlateCode(code);
         condition.setPublishDatetimeStart(DateUtil.getTodayStart());
         condition.setPublishDatetimeEnd(DateUtil.getTodayEnd());
         Long todayPostCount = postBO.getPostNum(condition);

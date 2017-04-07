@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ESysAccount {
-    SYS_ACCOUNT("SYS_ACCOUNT", "系统账号");
+    SYS_ACCOUNT("SYS_USER_CSW", "系统账号");
 
     public static Map<String, ESysAccount> getChannelTypeResultMap() {
         Map<String, ESysAccount> map = new HashMap<String, ESysAccount>();

@@ -417,14 +417,12 @@ public class PostAOImpl implements IPostAO {
         condition.setLocation(setLocation(condition.getLocation()));
         Paginable<Post> postPage = postBO.getPaginable(start, limit, condition);
         List<Post> postList = postPage.getList();
-        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             cutPic(post);
             getPartInfo(post, condition.getUserId());
             this.fullUser(post);
-            postCodeList.add(post.getCode());
+            this.fullPost(post);
         }
-        this.fullPost(postCodeList, postList);
         return postPage;
     }
 
@@ -441,41 +439,28 @@ public class PostAOImpl implements IPostAO {
     public List<Post> queryPostList(Post condition) {
         condition.setLocation(setLocation(condition.getLocation()));
         List<Post> postList = postBO.queryPostList(condition);
-        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             this.cutPic(post);
             this.getPartInfo(post, condition.getUserId());
-            postCodeList.add(post.getCode());
+            this.fullPost(post);
             this.fullUser(post);
         }
-        this.fullPost(postCodeList, postList);
         return postList;
     }
 
-    private void fullPost(List<String> postCodeList, List<Post> postList) {
-
-        List<Comment> iCommentList = new ArrayList<Comment>();
-        List<PostTalk> iPostTalkList = new ArrayList<PostTalk>();
-        for (Post post : postList) {
-            List<Comment> commentList = commentBO.queryCommentLimitList(post
-                .getCode());
-            List<PostTalk> postTalkList = postTalkBO
-                .queryPostTalkLimitList(post.getCode());
-            for (Comment comment : commentList) {
-                this.fullUser(comment);
-                if (post.getCode().equals(comment.getPostCode())) {
-                    iCommentList.add(comment);
-                }
-            }
-            post.setCommentList(iCommentList);
-            for (PostTalk postTalk : postTalkList) {
-                this.fullUser(postTalk);
-                if (post.getCode().equals(postTalk.getPostCode())) {
-                    iPostTalkList.add(postTalk);
-                }
-            }
-            post.setLikeList(iPostTalkList);
+    private void fullPost(Post post) {
+        List<Comment> commentList = commentBO.queryCommentLimitList(post
+            .getCode());
+        List<PostTalk> postTalkList = postTalkBO.queryPostTalkLimitList(post
+            .getCode());
+        for (Comment comment : commentList) {
+            this.fullUser(comment);
         }
+        post.setCommentList(commentList);
+        for (PostTalk postTalk : postTalkList) {
+            this.fullUser(postTalk);
+        }
+        post.setLikeList(postTalkList);
     }
 
     private String setLocation(String location) {
@@ -611,14 +596,12 @@ public class PostAOImpl implements IPostAO {
         // Paginable<Post> postPage = postBO.getPaginable(start, limit,
         // condition);
         List<Post> postList = postPage.getList();
-        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             cutPic(post);
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);
-            postCodeList.add(post.getCode());
+            this.fullPost(post);
         }
-        this.fullPost(postCodeList, postList);
         return postPage;
     }
 
@@ -628,15 +611,13 @@ public class PostAOImpl implements IPostAO {
         condition.setType(ETalkType.SC.getCode());
         condition.setTalker(talker);
         List<Post> postList = postBO.selectSCList(condition);
-        List<String> postCodeList = new ArrayList<String>();
         for (Post post : postList) {
             this.fullSplate(post);
             this.cutPic(post);
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);
-            postCodeList.add(post.getCode());
+            this.fullPost(post);
         }
-        this.fullPost(postCodeList, postList);
         return postList;
     }
 
@@ -702,8 +683,8 @@ public class PostAOImpl implements IPostAO {
             this.getPartInfo(post, condition.getUserId());
             this.fullUser(post);
             postCodeList.add(post.getCode());
+            this.fullPost(post);
         }
-        this.fullPost(postCodeList, list);
         return page;
     }
 

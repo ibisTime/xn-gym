@@ -28,10 +28,14 @@ public class SubsystemAOImpl implements ISubsystemAO {
     @Override
     public void editSubsystemByGlobal(XN610090Req req) {
         Subsystem subsystem = subsystemBO.getSubsystem(req.getCode());
-        List<Subsystem> subsystemList = subsystemBO.querySubsystemList(
-            EBoolean.NO.getCode(), StringValidater.toInteger(req.getOrderNo()));
-        if (CollectionUtils.isNotEmpty(subsystemList)) {
-            throw new BizException("xn0000", "顺序不能重复");
+        if (subsystem.getOrderNo() != StringValidater.toInteger(req
+            .getOrderNo())) {
+            List<Subsystem> subsystemList = subsystemBO.querySubsystemList(
+                EBoolean.NO.getCode(),
+                StringValidater.toInteger(req.getOrderNo()));
+            if (CollectionUtils.isNotEmpty(subsystemList)) {
+                throw new BizException("xn0000", "顺序不能重复");
+            }
         }
         if (EBelong.GLOBAL.getCode().equals(subsystem.getBelong())
                 || EBelong.LOCAL.getCode().equals(subsystem.getBelong())) {
@@ -48,10 +52,14 @@ public class SubsystemAOImpl implements ISubsystemAO {
     @Override
     public void editSubsystemByLocal(XN610091Req req) {
         Subsystem subsystem = subsystemBO.getSubsystem(req.getCode());
-        List<Subsystem> subsystemList = subsystemBO.querySubsystemList(
-            req.getCompanyCode(), StringValidater.toInteger(req.getOrderNo()));
-        if (CollectionUtils.isNotEmpty(subsystemList)) {
-            throw new BizException("xn0000", "顺序不能重复");
+        if (subsystem.getOrderNo() != StringValidater.toInteger(req
+            .getOrderNo())) {
+            List<Subsystem> subsystemList = subsystemBO.querySubsystemList(
+                req.getCompanyCode(),
+                StringValidater.toInteger(req.getOrderNo()));
+            if (CollectionUtils.isNotEmpty(subsystemList)) {
+                throw new BizException("xn0000", "顺序不能重复");
+            }
         }
         if (EBelong.LOCAL.getCode().equals(subsystem.getBelong())) {
             subsystemBO.saveSubsystem(req.getName(), req.getUrl(),

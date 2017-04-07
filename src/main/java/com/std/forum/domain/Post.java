@@ -119,6 +119,8 @@ public class Post extends ABaseDO {
     // 评论
     private List<Comment> commentList;
 
+    private Comment comment;
+
     // 站点
     private String companyCode;
 
@@ -409,5 +411,13 @@ public class Post extends ABaseDO {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 }

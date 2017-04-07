@@ -30,10 +30,12 @@ public class BannerAOImpl implements IBannerAO {
             throw new BizException("xn0000", "属于不允许自定义");
         }
         Banner banner = bannerBO.getBanner(code);
-        List<Banner> bannerList = bannerBO.queryBannerList(
-            EBoolean.NO.getCode(), orderNo);
-        if (CollectionUtils.isNotEmpty(bannerList)) {
-            throw new BizException("xn0000", "顺序不能重复");
+        if (!banner.getOrderNo().equals(orderNo)) {
+            List<Banner> bannerList = bannerBO.queryBannerList(
+                EBoolean.NO.getCode(), orderNo);
+            if (CollectionUtils.isNotEmpty(bannerList)) {
+                throw new BizException("xn0000", "顺序不能重复");
+            }
         }
         if (EBelong.GLOBAL.getCode().equals(banner.getBelong())
                 || EBelong.LOCAL.getCode().equals(banner.getBelong())) {
@@ -49,10 +51,12 @@ public class BannerAOImpl implements IBannerAO {
             String pic, String location, String orderNo, String belong,
             String companyCode, String remark) {
         Banner banner = bannerBO.getBanner(code);
-        List<Banner> bannerList = bannerBO
-            .queryBannerList(companyCode, orderNo);
-        if (CollectionUtils.isNotEmpty(bannerList)) {
-            throw new BizException("xn0000", "顺序不能重复");
+        if (!banner.getOrderNo().equals(orderNo)) {
+            List<Banner> bannerList = bannerBO.queryBannerList(companyCode,
+                orderNo);
+            if (CollectionUtils.isNotEmpty(bannerList)) {
+                throw new BizException("xn0000", "顺序不能重复");
+            }
         }
         if (EBelong.LOCAL.getCode().equals(banner.getBelong())) {
             bannerBO.saveBanner(name, url, pic, location, orderNo, code,
