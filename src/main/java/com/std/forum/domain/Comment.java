@@ -89,6 +89,9 @@ public class Comment extends ABaseDO {
 
     private List<String> postCodeList;
 
+    // 针对版块
+    private String splateName;
+
     public String getCode() {
         return code;
     }
@@ -263,6 +266,14 @@ public class Comment extends ABaseDO {
 
     public void setPostCodeList(List<String> postCodeList) {
         this.postCodeList = postCodeList;
+    }
+
+    public String getSplateName() {
+        return splateName;
+    }
+
+    public void setSplateName(String splateName) {
+        this.splateName = splateName;
     }
 
 }

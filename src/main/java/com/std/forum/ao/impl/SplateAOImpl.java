@@ -1,7 +1,10 @@
 package com.std.forum.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +12,7 @@ import com.std.forum.ao.ISplateAO;
 import com.std.forum.bo.IBplateBO;
 import com.std.forum.bo.IBplateTemplateBO;
 import com.std.forum.bo.IPostBO;
+import com.std.forum.bo.IPostTalkBO;
 import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.ISplateTemplateBO;
 import com.std.forum.bo.IUserBO;
@@ -17,6 +21,7 @@ import com.std.forum.common.DateUtil;
 import com.std.forum.domain.Bplate;
 import com.std.forum.domain.BplateTemplate;
 import com.std.forum.domain.Post;
+import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.SplateTemplate;
 import com.std.forum.domain.User;
@@ -25,6 +30,8 @@ import com.std.forum.dto.req.XN610042Req;
 import com.std.forum.dto.res.XN610046Res;
 import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPlateStatus;
+import com.std.forum.enums.EPostStatus;
+import com.std.forum.enums.ETalkType;
 import com.std.forum.exception.BizException;
 
 @Service
@@ -47,6 +54,9 @@ public class SplateAOImpl implements ISplateAO {
 
     @Autowired
     private IPostBO postBO;
+
+    @Autowired
+    private IPostTalkBO postTalkBO;
 
     @Override
     public String addSplate(XN610040Req req) {
@@ -81,32 +91,56 @@ public class SplateAOImpl implements ISplateAO {
             Splate condition) {
         Paginable<Splate> page = splateBO.getPaginable(start, limit, condition);
         List<Splate> splateList = page.getList();
-        for (Splate splate : splateList) {
-            User user = userBO.getRemoteUser(splate.getModerator());
-            splate.setNickname(user.getNickname());
-            splate.setMobile(user.getMobile());
-        }
+        this.fullUser(splateList);
         return page;
     }
 
     @Override
     public List<Splate> querySplateList(Splate condition) {
         List<Splate> splateList = splateBO.querySplateList(condition);
-        for (Splate splate : splateList) {
-            User user = userBO.getRemoteUser(splate.getModerator());
-            splate.setNickname(user.getNickname());
-            splate.setMobile(user.getMobile());
-        }
+        this.fullUser(splateList);
         return splateList;
+    }
+
+    public void fullUser(List<Splate> splateList) {
+        Integer allCommentNum = 0;
+        Integer allLikeNum = 0;
+        for (Splate splate : splateList) {
+            if (StringUtils.isNotBlank(splate.getModerator())) {
+                User user = userBO.getRemoteUser(splate.getModerator());
+                splate.setNickname(user.getNickname());
+                splate.setMobile(user.getMobile());
+            }
+            Post pCondition = new Post();
+            pCondition.setPlateCode(splate.getCode());
+            pCondition.setStatus(EPostStatus.PUBLISHALL.getCode());
+            List<Post> postList = postBO.queryPostList(pCondition);
+            for (Post post : postList) {
+                allCommentNum = allCommentNum + post.getSumComment();
+                List<PostTalk> postTalkList = postTalkBO
+                    .queryPostTalkSingleList(post.getCode(),
+                        ETalkType.DZ.getCode(), null);
+                if (CollectionUtils.isNotEmpty(postTalkList)) {
+                    allLikeNum = allLikeNum + postTalkList.size();
+                }
+            }
+            splate.setAllCommentNum(allCommentNum);
+            splate.setAllLikeNum(allLikeNum);
+        }
     }
 
     @Override
     public XN610046Res getSplate(String code) {
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EPostStatus.PUBLISHALL.getCode());
+        statusList.add(EPostStatus.APPROVE_YES.getCode());
         XN610046Res res = new XN610046Res();
         Splate splate = splateBO.getSplate(code);
-        Long allPostCount = postBO.getPostNum(splate.getCode());
+        Long allPostCount = postBO.getPostNum(splate.getCode(),
+            EPostStatus.PUBLISHALL.getCode());
         Post condition = new Post();
         condition.setPlateCode(code);
+        condition.setStatus(EPostStatus.PUBLISHALL.getCode());
         condition.setPublishDatetimeStart(DateUtil.getTodayStart());
         condition.setPublishDatetimeEnd(DateUtil.getTodayEnd());
         Long todayPostCount = postBO.getPostNum(condition);

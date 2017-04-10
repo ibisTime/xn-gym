@@ -133,6 +133,9 @@ public class Post extends ABaseDO {
     // 版块名称
     private String plateName;
 
+    // 举报次数
+    private Integer reportNum;
+
     public String getCode() {
         return code;
     }
@@ -419,5 +422,13 @@ public class Post extends ABaseDO {
 
     public void setComment(Comment comment) {
         this.comment = comment;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
     }
 }

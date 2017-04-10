@@ -57,7 +57,7 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public long getPostNum(Post condition);
 
-    public long getPostNum(String splateCode);
+    public long getPostNum(String splateCode, String status);
 
     public long getPostLocation(String location);
 
@@ -70,5 +70,7 @@ public interface IPostBO extends IPaginableBO<Post> {
     public List<Post> selectTDList(Post condition);
 
     public List<Post> queryTDPostList(Post condition, int start, int limit);
+
+    public List<Post> queryPostList(String splateCode);
 
 }

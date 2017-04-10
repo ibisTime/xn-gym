@@ -54,6 +54,12 @@ public class Splate extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 评论数
+    private Integer allCommentNum;
+
+    // 点赞数
+    private Integer allLikeNum;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -156,6 +162,22 @@ public class Splate extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Integer getAllCommentNum() {
+        return allCommentNum;
+    }
+
+    public void setAllCommentNum(Integer allCommentNum) {
+        this.allCommentNum = allCommentNum;
+    }
+
+    public Integer getAllLikeNum() {
+        return allLikeNum;
+    }
+
+    public void setAllLikeNum(Integer allLikeNum) {
+        this.allLikeNum = allLikeNum;
     }
 
 }

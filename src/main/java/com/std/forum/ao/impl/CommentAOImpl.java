@@ -13,6 +13,7 @@ import com.std.forum.bo.IKeywordBO;
 import com.std.forum.bo.ILevelRuleBO;
 import com.std.forum.bo.IPostBO;
 import com.std.forum.bo.IRuleBO;
+import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
@@ -20,6 +21,7 @@ import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.Rule;
+import com.std.forum.domain.Splate;
 import com.std.forum.domain.User;
 import com.std.forum.dto.res.XN805115Res;
 import com.std.forum.enums.EBizType;
@@ -55,6 +57,9 @@ public class CommentAOImpl implements ICommentAO {
     protected IUserBO userBO;
 
     @Autowired
+    protected ISplateBO splateBO;
+
+    @Autowired
     protected IAccountBO accountBO;
 
     // 1.发布评论
@@ -63,7 +68,7 @@ public class CommentAOImpl implements ICommentAO {
     public String doComment(String content, String parentCode, String commer) {
         // 判断是否锁帖
         User user = userBO.getRemoteUser(commer);
-        Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.FT,
+        Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.PL,
             user.getLevel());
         Post post = getPostByParentCode(parentCode);
         if (EBoolean.YES.getCode().equals(post.getIsLock())) {
@@ -78,11 +83,11 @@ public class CommentAOImpl implements ICommentAO {
         Post parentPost = getPostByParentCode(parentCode);
         String code = commentBO.saveComment(content, parentCode, status,
             commer, parentPost.getCode());
-        // 增加一次评论数
-        postBO.refreshPostSumComment(parentPost.getCode(),
-            parentPost.getSumComment() + 1);
         // 评论送钱
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
+            // 增加一次评论数
+            postBO.refreshPostSumComment(parentPost.getCode(),
+                parentPost.getSumComment() + 1);
             accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
                 commer, EChannelType.JF,
                 StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
@@ -90,10 +95,10 @@ public class CommentAOImpl implements ICommentAO {
             Long amount = accountBO.getAccountByUserId(commer, EChannelType.JF);
             List<XN805115Res> LevelRuleList = levelRuleBO.queryLevelRuleList();
             for (XN805115Res res : LevelRuleList) {
-                if (amount > res.getAmountMin() && amount < res.getAmountMax()) {
-                    userBO.upgradeLevel(commer,
-                        Integer.toString(StringValidater.toInteger(user
-                            .getLevel()) + 1));
+                if (amount >= res.getAmountMin()
+                        && amount <= res.getAmountMax()) {
+                    userBO.upgradeLevel(commer, res.getCode());
+                    break;
                 }
             }
         } else {
@@ -181,6 +186,8 @@ public class CommentAOImpl implements ICommentAO {
         if (EPrefixCode.POST.getCode().equals(parentCode.substring(0, 2))) {
             Post post = postBO.getPost(parentCode);
             comment.setPost(post);
+            Splate splate = splateBO.getSplate(post.getPlateCode());
+            comment.setSplateName(splate.getName());
         } else {
             Comment data = commentBO.getComment(parentCode);
             this.fullUser(data);
@@ -201,6 +208,8 @@ public class CommentAOImpl implements ICommentAO {
         for (Comment comment : list) {
             // 获取帖子
             Post post = postBO.getPost(comment.getPostCode());
+            Splate splate = splateBO.getSplate(post.getPlateCode());
+            comment.setSplateName(splate.getName());
             comment.setPost(post);
             this.fullUser(comment);
             // 获取上级评论

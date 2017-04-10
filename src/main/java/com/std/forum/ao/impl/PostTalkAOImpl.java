@@ -20,6 +20,7 @@ import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.User;
 import com.std.forum.enums.EBizType;
+import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EChannelType;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPostType;
@@ -117,6 +118,9 @@ public class PostTalkAOImpl implements IPostTalkAO {
         PostTalk postTalk = postTalkBO.getPostTalkByCondition(postCode, userId,
             type);
         Post post = postBO.getPost(postCode);
+        if (EBoolean.YES.getCode().equals(post.getIsLock())) {
+            throw new BizException("xn0000", "帖子已被锁定，不可进行操作");
+        }
         if (null != postTalk) {
             if (ETalkType.DZ.getCode().equals(type)) {
                 postBO.refreshPostSumLike(postCode, post.getSumLike() - 1);
@@ -135,11 +139,14 @@ public class PostTalkAOImpl implements IPostTalkAO {
     @Transactional
     public void doPostTalk(String postCode, String userId, Long amount) {
         Post post = postBO.getPost(postCode);
+        if (userId.equals(post.getPublisher())) {
+            throw new BizException("xn0000", "用户为发帖人，不能打赏自己");
+        }
         postTalkBO.savePostTalk(postCode, userId, ETalkType.DS.getCode(),
             String.valueOf(amount));
         postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);
         accountBO.doTransferAmountRemote(userId, post.getPublisher(),
-            EChannelType.JF, amount, EBizType.AJ_SR, "发帖送积分", "发帖送积分");
+            EChannelType.JF, amount, EBizType.AJ_SR, "打赏帖子", "打赏帖子");
     }
 
     /** 

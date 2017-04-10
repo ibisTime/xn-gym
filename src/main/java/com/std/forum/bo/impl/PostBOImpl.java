@@ -156,9 +156,10 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
-    public long getPostNum(String plateCode) {
+    public long getPostNum(String plateCode, String status) {
         Post condition = new Post();
         condition.setPlateCode(plateCode);
+        condition.setStatus(status);
         return postDAO.selectPostNum(condition);
     }
 
@@ -311,5 +312,12 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     @Override
     public List<Post> queryTDPostList(Post condition, int start, int limit) {
         return postDAO.queryTDPostList(condition, start, limit);
+    }
+
+    @Override
+    public List<Post> queryPostList(String splateCode) {
+        Post condition = new Post();
+        condition.setPlateCode(splateCode);
+        return postDAO.selectList(condition);
     }
 }
