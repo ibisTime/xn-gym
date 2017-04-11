@@ -102,9 +102,9 @@ public class SplateAOImpl implements ISplateAO {
     }
 
     public void fullUser(List<Splate> splateList) {
-        Integer allCommentNum = 0;
-        Integer allLikeNum = 0;
         for (Splate splate : splateList) {
+            Integer allCommentNum = 0;
+            Integer allLikeNum = 0;
             if (StringUtils.isNotBlank(splate.getModerator())) {
                 User user = userBO.getRemoteUser(splate.getModerator());
                 splate.setNickname(user.getNickname());

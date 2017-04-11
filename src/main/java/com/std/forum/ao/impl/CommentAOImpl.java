@@ -257,6 +257,7 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = page.getList();
         for (Comment comment : list) {
             this.fullUser(comment);
+            getParentComment(comment);
         }
         return page;
     }
