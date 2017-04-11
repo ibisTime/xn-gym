@@ -1,6 +1,5 @@
 package com.std.forum.ao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -131,9 +130,6 @@ public class SplateAOImpl implements ISplateAO {
 
     @Override
     public XN610046Res getSplate(String code) {
-        List<String> statusList = new ArrayList<String>();
-        statusList.add(EPostStatus.PUBLISHALL.getCode());
-        statusList.add(EPostStatus.APPROVE_YES.getCode());
         XN610046Res res = new XN610046Res();
         Splate splate = splateBO.getSplate(code);
         Long allPostCount = postBO.getPostNum(splate.getCode(),
@@ -144,8 +140,10 @@ public class SplateAOImpl implements ISplateAO {
         condition.setPublishDatetimeStart(DateUtil.getTodayStart());
         condition.setPublishDatetimeEnd(DateUtil.getTodayEnd());
         Long todayPostCount = postBO.getPostNum(condition);
-        Long top = postBO.getPostLocation(ELocation.JH.getCode());
-        Long essence = postBO.getPostLocation(ELocation.ZD.getCode());
+        Long top = postBO.getPostLocation(ELocation.JH.getCode(),
+            splate.getCompanyCode());
+        Long essence = postBO.getPostLocation(ELocation.ZD.getCode(),
+            splate.getCompanyCode());
         res.setSplate(splate);
         res.setAllPostCount(allPostCount);
         res.setTodayPostCount(todayPostCount);

@@ -59,7 +59,7 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public long getPostNum(String splateCode, String status);
 
-    public long getPostLocation(String location);
+    public long getPostLocation(String location, String companyCode);
 
     public Long getMyPostCount(String userId, String status);
 

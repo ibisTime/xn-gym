@@ -705,6 +705,7 @@ public class PostAOImpl implements IPostAO {
             this.fullUser(post);
             postCodeList.add(post.getCode());
             this.fullPost(post);
+            this.fullSplate(post);
         }
         return page;
     }

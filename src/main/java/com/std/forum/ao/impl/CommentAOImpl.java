@@ -185,6 +185,7 @@ public class CommentAOImpl implements ICommentAO {
         String parentCode = comment.getParentCode();
         if (EPrefixCode.POST.getCode().equals(parentCode.substring(0, 2))) {
             Post post = postBO.getPost(parentCode);
+            this.fullUser(post);
             comment.setPost(post);
             Splate splate = splateBO.getSplate(post.getPlateCode());
             comment.setSplateName(splate.getName());
@@ -197,6 +198,13 @@ public class CommentAOImpl implements ICommentAO {
             Post post = postBO.getPost(comment.getPostCode());
             comment.setPost(post);
         }
+    }
+
+    private void fullUser(Post post) {
+        User user = userBO.getRemoteUser(post.getPublisher());
+        post.setNickname(user.getNickname());
+        post.setPhoto(user.getPhoto());
+        post.setLoginName(user.getLoginName());
     }
 
     @Override

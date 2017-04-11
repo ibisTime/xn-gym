@@ -292,7 +292,7 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
-    public long getPostLocation(String location) {
+    public long getPostLocation(String location, String companyCode) {
         if (StringUtils.isNotBlank(location)) {
             String[] desc = location.split(",");
             for (int i = 0; i < desc.length; i++) {
@@ -301,6 +301,7 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         }
         Post condition = new Post();
         condition.setLocation(location);
+        condition.setCompanyCode(companyCode);
         return postDAO.selectPostNum(condition);
     }
 
