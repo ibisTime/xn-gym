@@ -550,6 +550,7 @@ public class PostAOImpl implements IPostAO {
         List<PostTalk> postTalkList = postTalkBO.queryPostTalkSingleList(
             post.getCode(), ETalkType.TZJB.getCode(), null);
         post.setReportNum(postTalkList.size());
+        post.setLikeList(postTalkList);
         return post;
     }
 
