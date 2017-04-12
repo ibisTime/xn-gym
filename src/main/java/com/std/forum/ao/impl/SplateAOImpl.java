@@ -82,6 +82,10 @@ public class SplateAOImpl implements ISplateAO {
         if (EPlateStatus.ENABLE.getCode().equals(splate.getStatus())) {
             throw new BizException("xn0000", "小板块正在被使用，不可以删除");
         }
+        List<Post> postList = postBO.queryPostList(code);
+        if (CollectionUtils.isNotEmpty(postList)) {
+            throw new BizException("xn0000", "小板块已被使用，不可以删除");
+        }
         return splateBO.removeSplate(code);
     }
 

@@ -146,7 +146,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
             String.valueOf(amount));
         postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);
         accountBO.doTransferAmountRemote(userId, post.getPublisher(),
-            EChannelType.JF, amount, EBizType.AJ_SR, "打赏帖子", "打赏帖子");
+            EChannelType.JF, amount, EBizType.AJ_DATZ, "打赏帖子", "打赏帖子");
     }
 
     /** 

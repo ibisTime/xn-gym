@@ -161,7 +161,7 @@ public class PostAOImpl implements IPostAO {
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
             accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
                 publisher, EChannelType.JF,
-                StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                StringValidater.toLong(rule.getValue()), EBizType.AJ_TZFB,
                 "发帖送积分", "发帖送积分");
             Long amount = accountBO.getAccountByUserId(publisher,
                 EChannelType.JF);
@@ -267,29 +267,53 @@ public class PostAOImpl implements IPostAO {
         // } else {
         // postLocation = post.getLocation().replace(location, "");
         // }
-        postBO.refreshPostLocation(code, location, orderNo, updater);
-        String[] locationArr = location.split(",");
+        String[] locationArr = { "A", "B", "C", "D" };
+        String newLocation = "";
+        for (String locationStr : locationArr) {
+            if (location.contains(locationStr)) {
+                newLocation += locationStr + ",";
+            }
+        }
+        newLocation = newLocation.substring(0, newLocation.length() - 1);
+        postBO.refreshPostLocation(code, newLocation, orderNo, updater);
+        String[] locationArrary = location.split(",");
         User user = userBO.getRemoteUser(post.getPublisher());
-        Long amount = accountBO.getAccountByUserId(post.getPublisher(),
-            EChannelType.JF);
         Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.JH,
             user.getLevel());
+        String[] oldLocation = post.getLocation().split(",");
+        Map<String, String> map = new HashMap<String, String>();
+        for (int i = 0; i < oldLocation.length; i++) {
+            map.put(oldLocation[i], oldLocation[i]);
+        }
         String bizNote = null;
-        for (String JH : locationArr) {
-            // 设置精华加积分(前面已判断是否重复加)
-            if (ELocation.JH.getCode().equals(JH)) {
+        for (String JH : locationArrary) {
+            if (JH.equals(ELocation.ALL.getCode())) {
+                return;
+            }
+            // 设置精华加积分(如何判断前面是否重复加)
+            if (ELocation.JH.getCode().equals(JH) && !map.containsKey(JH)) {
                 bizNote = "精华帖送积分";
+                accountBO.doTransferAmountRemote(
+                    ESysAccount.SYS_ACCOUNT.getCode(), post.getPublisher(),
+                    EChannelType.JF, StringValidater.toLong(rule.getValue()),
+                    EBizType.AJ_JHT, bizNote, bizNote);
             }
-            if (ELocation.ZD.getCode().equals(JH)) {
+            if (ELocation.ZD.getCode().equals(JH) && !map.containsKey(JH)) {
                 bizNote = "置顶送积分";
+                accountBO.doTransferAmountRemote(
+                    ESysAccount.SYS_ACCOUNT.getCode(), post.getPublisher(),
+                    EChannelType.JF, StringValidater.toLong(rule.getValue()),
+                    EBizType.AJ_ZDT, bizNote, bizNote);
             }
-            if (ELocation.TT.getCode().equals(JH)) {
+            if (ELocation.TT.getCode().equals(JH) && !map.containsKey(JH)) {
                 bizNote = "头条送积分";
+                accountBO.doTransferAmountRemote(
+                    ESysAccount.SYS_ACCOUNT.getCode(), post.getPublisher(),
+                    EChannelType.JF, StringValidater.toLong(rule.getValue()),
+                    EBizType.AJ_TTT, bizNote, bizNote);
             }
-            accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
-                post.getPublisher(), EChannelType.JF,
-                StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
-                bizNote, bizNote);
+            Long amount = accountBO.getAccountByUserId(post.getPublisher(),
+                EChannelType.JF);
             List<XN805115Res> LevelRuleList = queryLevelRuleList();
             for (XN805115Res res : LevelRuleList) {
                 if (amount >= res.getAmountMin()
@@ -334,7 +358,7 @@ public class PostAOImpl implements IPostAO {
 
                 accountBO.doTransferAmountRemote("SYS_ACCOUNT",
                     post.getPublisher(), EChannelType.JF,
-                    StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                    StringValidater.toLong(rule.getValue()), EBizType.AJ_TZFB,
                     "帖子审核通过送积分", "帖子审核通过送积分");
                 Long amount = accountBO.getAccountByUserId(post.getPublisher(),
                     EChannelType.JF);
@@ -353,35 +377,35 @@ public class PostAOImpl implements IPostAO {
                     accountBO.doTransferAmountRemote(post.getPublisher(),
                         ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
                         StringValidater.toLong(rule1.getValue()),
-                        EBizType.AJ_ZC, "帖子确认存在问题，扣积分", "帖子确认存在问题，扣积分");
+                        EBizType.AJ_TZWG, "帖子确认存在问题，扣积分", "帖子确认存在问题，扣积分");
                 }
-            } else if (EPostType.PL.getCode().equals(type)) {
-                type = ETalkType.PLJB.getCode();
-                Comment comment = commentBO.getComment(code);
-                User user1 = userBO.getRemoteUser(comment.getCommer());
-                Rule rule2 = ruleBO.getRuleByCondition(ERuleKind.JF,
-                    ERuleType.PLWG, user1.getLevel());
-                if (!EPostStatus.todoAPPROVE.getCode().equals(
-                    comment.getStatus())
-                        && !EPostStatus.toReportAPPROVE.getCode().equals(
-                            comment.getStatus())) {
-                    throw new BizException("xn000000", "评论状态不是待审核状态");
-                }
-                commentBO.refreshCommentApprove(code, approveResult, approver,
-                    approveNote);
-                Post parentPost = postBO.getPost(comment.getPostCode());
-                // 被举报，确认存在问题，扣积分
-                if (EPostStatus.toReportAPPROVE.getCode().equals(
-                    comment.getStatus())
-                        && EBoolean.NO.getCode().equals(approveResult)) {
-                    accountBO.doTransferAmountRemote(comment.getCommer(),
-                        ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
-                        StringValidater.toLong(rule2.getValue()),
-                        EBizType.AJ_ZC, "确认存在问题，扣积分", "确认存在问题，扣积分");
-                    // 确认存在问题，减一次评论数
-                    postBO.refreshPostSumComment(parentPost.getCode(),
-                        parentPost.getSumComment() - 1);
-                }
+            }
+        } else if (EPostType.PL.getCode().equals(type)) {
+            type = ETalkType.PLJB.getCode();
+            Comment comment = commentBO.getComment(code);
+            User user1 = userBO.getRemoteUser(comment.getCommer());
+            Rule rule2 = ruleBO.getRuleByCondition(ERuleKind.JF,
+                ERuleType.PLWG, user1.getLevel());
+            if (!EPostStatus.todoAPPROVE.getCode().equals(comment.getStatus())
+                    && !EPostStatus.toReportAPPROVE.getCode().equals(
+                        comment.getStatus())) {
+                throw new BizException("xn000000", "评论状态不是待审核状态");
+            }
+            commentBO.refreshCommentApprove(code, approveResult, approver,
+                approveNote);
+            Post parentPost = postBO.getPost(comment.getPostCode());
+            // 被举报，确认存在问题，扣积分
+            if (EPostStatus.toReportAPPROVE.getCode().equals(
+                comment.getStatus())
+                    && EBoolean.NO.getCode().equals(approveResult)) {
+                accountBO.doTransferAmountRemote(comment.getCommer(),
+                    ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
+                    StringValidater.toLong(rule2.getValue()), EBizType.AJ_PLWG,
+                    "确认存在问题，扣积分", "确认存在问题，扣积分");
+                // 确认存在问题，减一次评论数
+                postBO.refreshPostSumComment(parentPost.getCode(),
+                    parentPost.getSumComment() - 1);
+
             }
         }
     }
@@ -422,7 +446,6 @@ public class PostAOImpl implements IPostAO {
         // 1、postCode 设置成list,查所有评论，所有点赞
         for (Post post : postList) {
             cutPic(post);
-            // getPartInfo(post, condition.getUserId());
             this.fullUser(post);
             this.fullPost(post);
             this.fullIsDZ(post, condition.getUserId());
@@ -456,7 +479,6 @@ public class PostAOImpl implements IPostAO {
         List<Post> postList = postBO.queryPostList(condition);
         for (Post post : postList) {
             this.cutPic(post);
-            this.getPartInfo(post, condition.getUserId());
             this.fullPost(post);
             this.fullUser(post);
             this.fullIsDZ(post, condition.getUserId());

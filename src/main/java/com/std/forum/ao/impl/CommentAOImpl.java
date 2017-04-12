@@ -90,7 +90,7 @@ public class CommentAOImpl implements ICommentAO {
                 parentPost.getSumComment() + 1);
             accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
                 commer, EChannelType.JF,
-                StringValidater.toLong(rule.getValue()), EBizType.AJ_SR,
+                StringValidater.toLong(rule.getValue()), EBizType.AJ_PLFB,
                 "发布评论，送积分", "发布评论，送积分");
             Long amount = accountBO.getAccountByUserId(commer, EChannelType.JF);
             List<XN805115Res> LevelRuleList = levelRuleBO.queryLevelRuleList();
