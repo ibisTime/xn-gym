@@ -370,15 +370,14 @@ public class PostAOImpl implements IPostAO {
                         break;
                     }
                 }
-                // 被举报，确认存在问题，扣积分
-                if (EPostStatus.toReportAPPROVE.getCode().equals(
-                    post.getStatus())
-                        && EBoolean.NO.getCode().equals(approveResult)) {
-                    accountBO.doTransferAmountRemote(post.getPublisher(),
-                        ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
-                        StringValidater.toLong(rule1.getValue()),
-                        EBizType.AJ_TZWG, "帖子确认存在问题，扣积分", "帖子确认存在问题，扣积分");
-                }
+            }
+            // 被举报，确认存在问题，扣积分
+            if (EPostStatus.toReportAPPROVE.getCode().equals(post.getStatus())
+                    && EBoolean.NO.getCode().equals(approveResult)) {
+                accountBO.doTransferAmountRemote(post.getPublisher(),
+                    ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
+                    StringValidater.toLong(rule1.getValue()), EBizType.AJ_TZWG,
+                    "帖子确认存在问题，扣积分", "帖子确认存在问题，扣积分");
             }
         } else if (EPostType.PL.getCode().equals(type)) {
             type = ETalkType.PLJB.getCode();
@@ -386,14 +385,34 @@ public class PostAOImpl implements IPostAO {
             User user1 = userBO.getRemoteUser(comment.getCommer());
             Rule rule2 = ruleBO.getRuleByCondition(ERuleKind.JF,
                 ERuleType.PLWG, user1.getLevel());
+            Post parentPost = postBO.getPost(comment.getPostCode());
             if (!EPostStatus.todoAPPROVE.getCode().equals(comment.getStatus())
                     && !EPostStatus.toReportAPPROVE.getCode().equals(
                         comment.getStatus())) {
                 throw new BizException("xn000000", "评论状态不是待审核状态");
             }
+            if (EPostStatus.todoAPPROVE.getCode().equals(comment.getStatus())
+                    && EBoolean.YES.getCode().equals(approveResult)) {
+                accountBO.doTransferAmountRemote(comment.getCommer(),
+                    ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
+                    StringValidater.toLong(rule2.getValue()), EBizType.AJ_PLFB,
+                    "评论加积分", "评论加积分");
+                postBO.refreshPostSumComment(parentPost.getCode(),
+                    parentPost.getSumComment() + 1);
+                Long amount = accountBO.getAccountByUserId(comment.getCommer(),
+                    EChannelType.JF);
+                List<XN805115Res> LevelRuleList = queryLevelRuleList();
+                for (XN805115Res res : LevelRuleList) {
+                    if (amount >= res.getAmountMin()
+                            && amount <= res.getAmountMax()) {
+                        userBO.upgradeLevel(comment.getCommer(), res.getCode());
+                        break;
+                    }
+                }
+            }
             commentBO.refreshCommentApprove(code, approveResult, approver,
                 approveNote);
-            Post parentPost = postBO.getPost(comment.getPostCode());
+
             // 被举报，确认存在问题，扣积分
             if (EPostStatus.toReportAPPROVE.getCode().equals(
                 comment.getStatus())
