@@ -58,6 +58,21 @@
 		ORDER BY t.code DESC	
 	</select>
 	
+	<select id="select_postTalk_com" parameterType="postTalk" resultMap="postTalk_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.post_code
+		
+		,t.talker
+		,t.talk_datetime
+		,t.remark
+		FROM
+		tforum_post_talk t
+		<include refid="where_condition" />
+		ORDER BY t.code DESC	
+	</select>
+	
 	<select id="select_postTalk_limit" parameterType="Map" resultMap="postTalk_DB_Result">
 		SELECT
 		t.code

@@ -72,6 +72,12 @@ public class PostTalkDAOImpl extends AMybatisTemplate implements IPostTalkDAO {
     }
 
     @Override
+    public List<PostTalk> selectComList(PostTalk condition) {
+        return super.selectList(NAMESPACE.concat("select_postTalk_com"),
+            condition, PostTalk.class);
+    }
+
+    @Override
     public List<PostTalk> selectLimitList(PostTalk condition) {
         return super.selectList(NAMESPACE.concat("select_postTalk_limit"),
             condition, PostTalk.class);

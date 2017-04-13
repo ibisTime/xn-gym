@@ -34,6 +34,8 @@ public interface IPostTalkBO extends IPaginableBO<PostTalk> {
 
     public List<PostTalk> queryPostTalkList(PostTalk condition);
 
+    public List<PostTalk> queryPostTalkList(String postCode, String type);
+
     public PostTalk getPostTalk(String code);
 
     public PostTalk getPostTalkByCondition(String postCode, String userId,

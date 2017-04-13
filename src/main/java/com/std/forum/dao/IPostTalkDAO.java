@@ -23,4 +23,6 @@ public interface IPostTalkDAO extends IBaseDAO<PostTalk> {
     String NAMESPACE = IPostTalkDAO.class.getName().concat(".");
 
     public List<PostTalk> selectLimitList(PostTalk condition);
+
+    public List<PostTalk> selectComList(PostTalk condition);
 }

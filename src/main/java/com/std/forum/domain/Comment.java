@@ -92,6 +92,12 @@ public class Comment extends ABaseDO {
     // 针对版块
     private String splateName;
 
+    // 举报内容
+    private List<PostTalk> postTalkList;
+
+    // 举报次数
+    private Integer reportNum;
+
     public String getCode() {
         return code;
     }
@@ -274,6 +280,22 @@ public class Comment extends ABaseDO {
 
     public void setSplateName(String splateName) {
         this.splateName = splateName;
+    }
+
+    public List<PostTalk> getPostTalkList() {
+        return postTalkList;
+    }
+
+    public void setPostTalkList(List<PostTalk> postTalkList) {
+        this.postTalkList = postTalkList;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
     }
 
 }

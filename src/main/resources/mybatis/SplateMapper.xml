@@ -32,6 +32,9 @@
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
+			<if test="name != null and name != '' ">
+				AND t.name = #{name}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_splate" parameterType="splate" resultMap="splate_DB_Result">

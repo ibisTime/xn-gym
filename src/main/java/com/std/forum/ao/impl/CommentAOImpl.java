@@ -12,6 +12,7 @@ import com.std.forum.bo.ICommentBO;
 import com.std.forum.bo.IKeywordBO;
 import com.std.forum.bo.ILevelRuleBO;
 import com.std.forum.bo.IPostBO;
+import com.std.forum.bo.IPostTalkBO;
 import com.std.forum.bo.IRuleBO;
 import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
@@ -20,6 +21,7 @@ import com.std.forum.bo.base.Paginable;
 import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.Post;
+import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Rule;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.User;
@@ -33,6 +35,7 @@ import com.std.forum.enums.EReaction;
 import com.std.forum.enums.ERuleKind;
 import com.std.forum.enums.ERuleType;
 import com.std.forum.enums.ESysAccount;
+import com.std.forum.enums.ETalkType;
 import com.std.forum.exception.BizException;
 
 @Service
@@ -61,6 +64,9 @@ public class CommentAOImpl implements ICommentAO {
 
     @Autowired
     protected IAccountBO accountBO;
+
+    @Autowired
+    protected IPostTalkBO postTalkBO;
 
     // 1.发布评论
     @Override
@@ -134,6 +140,17 @@ public class CommentAOImpl implements ICommentAO {
     public Comment getOSSComment(String code) {
         Comment comment = commentBO.getComment(code);
         this.fullUser(comment);
+        List<PostTalk> postTalkList = postTalkBO.queryPostTalkList(code,
+            ETalkType.PLJB.getCode());
+        Post post = postBO.getPost(comment.getPostCode());
+        for (PostTalk postTalk : postTalkList) {
+            User user = userBO.getRemoteUser(postTalk.getTalker());
+            postTalk.setNickname(user.getNickname());
+            postTalk.setPhoto(user.getPhoto());
+        }
+        comment.setPost(post);
+        comment.setReportNum(postTalkList.size());
+        comment.setPostTalkList(postTalkList);
         return comment;
     }
 

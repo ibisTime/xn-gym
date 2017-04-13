@@ -20,6 +20,9 @@
 			     <when test='belong == "NO_1"'>
 				 	AND t.belong not in ('1')
 				 </when>
+				 <when test='belong == "3"'>
+				 	AND t.belong not in ('1','2')
+				 </when>
 				 <otherwise>
 					<if test="belong != null and belong != '' ">
 						AND t.belong = #{belong}

@@ -420,7 +420,7 @@ public class PostAOImpl implements IPostAO {
                 accountBO.doTransferAmountRemote(comment.getCommer(),
                     ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
                     StringValidater.toLong(rule2.getValue()), EBizType.AJ_PLWG,
-                    "确认存在问题，扣积分", "确认存在问题，扣积分");
+                    "确认评论违规，扣积分", "确认评论违规，扣积分");
                 // 确认存在问题，减一次评论数
                 postBO.refreshPostSumComment(parentPost.getCode(),
                     parentPost.getSumComment() - 1);
@@ -590,6 +590,11 @@ public class PostAOImpl implements IPostAO {
         this.fullUser(post);
         List<PostTalk> postTalkList = postTalkBO.queryPostTalkSingleList(
             post.getCode(), ETalkType.TZJB.getCode(), null);
+        for (PostTalk postTalk : postTalkList) {
+            User user = userBO.getRemoteUser(postTalk.getTalker());
+            postTalk.setNickname(user.getNickname());
+            postTalk.setPhoto(user.getPhoto());
+        }
         post.setReportNum(postTalkList.size());
         post.setLikeList(postTalkList);
         return post;

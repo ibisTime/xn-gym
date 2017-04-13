@@ -166,4 +166,12 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
         }
         return totalCount;
     }
+
+    @Override
+    public List<PostTalk> queryPostTalkList(String postCode, String type) {
+        PostTalk condition = new PostTalk();
+        condition.setPostCode(postCode);
+        condition.setType(type);
+        return postTalkDAO.selectComList(condition);
+    }
 }

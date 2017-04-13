@@ -62,7 +62,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             throw new BizException("xn000000", "账户不存在");
         }
         XN001303Res res = list.get(0);
-        amount = StringValidater.toLong(res.getAmount());
+        amount = StringValidater.toLong(res.getAddAmount());
         return amount;
     }
 }
