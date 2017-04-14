@@ -162,7 +162,7 @@ public class PostAOImpl implements IPostAO {
             accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
                 publisher, EChannelType.JF,
                 StringValidater.toLong(rule.getValue()), EBizType.AJ_TZFB,
-                "发帖送积分", "发帖送积分");
+                "发帖送赏金", "发帖送赏金");
             Long amount = accountBO.getAccountByUserId(publisher,
                 EChannelType.JF);
             List<XN805115Res> LevelRuleList = queryLevelRuleList();
@@ -292,21 +292,21 @@ public class PostAOImpl implements IPostAO {
             }
             // 设置精华加积分(如何判断前面是否重复加)
             if (ELocation.JH.getCode().equals(JH) && !map.containsKey(JH)) {
-                bizNote = "精华帖送积分";
+                bizNote = "精华帖送赏金";
                 accountBO.doTransferAmountRemote(
                     ESysAccount.SYS_ACCOUNT.getCode(), post.getPublisher(),
                     EChannelType.JF, StringValidater.toLong(rule.getValue()),
                     EBizType.AJ_JHT, bizNote, bizNote);
             }
             if (ELocation.ZD.getCode().equals(JH) && !map.containsKey(JH)) {
-                bizNote = "置顶送积分";
+                bizNote = "置顶送赏金";
                 accountBO.doTransferAmountRemote(
                     ESysAccount.SYS_ACCOUNT.getCode(), post.getPublisher(),
                     EChannelType.JF, StringValidater.toLong(rule.getValue()),
                     EBizType.AJ_ZDT, bizNote, bizNote);
             }
             if (ELocation.TT.getCode().equals(JH) && !map.containsKey(JH)) {
-                bizNote = "头条送积分";
+                bizNote = "头条送赏金";
                 accountBO.doTransferAmountRemote(
                     ESysAccount.SYS_ACCOUNT.getCode(), post.getPublisher(),
                     EChannelType.JF, StringValidater.toLong(rule.getValue()),
@@ -359,7 +359,7 @@ public class PostAOImpl implements IPostAO {
                 accountBO.doTransferAmountRemote("SYS_ACCOUNT",
                     post.getPublisher(), EChannelType.JF,
                     StringValidater.toLong(rule.getValue()), EBizType.AJ_TZFB,
-                    "帖子审核通过送积分", "帖子审核通过送积分");
+                    "帖子审核通过送赏金", "帖子审核通过送赏金");
                 Long amount = accountBO.getAccountByUserId(post.getPublisher(),
                     EChannelType.JF);
                 List<XN805115Res> LevelRuleList = queryLevelRuleList();
@@ -377,7 +377,7 @@ public class PostAOImpl implements IPostAO {
                 accountBO.doTransferAmountRemote(post.getPublisher(),
                     ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
                     StringValidater.toLong(rule1.getValue()), EBizType.AJ_TZWG,
-                    "帖子确认存在问题，扣积分", "帖子确认存在问题，扣积分");
+                    "帖子确认存在问题，扣赏金", "帖子确认存在问题，扣赏金");
             }
         } else if (EPostType.PL.getCode().equals(type)) {
             type = ETalkType.PLJB.getCode();
@@ -396,7 +396,7 @@ public class PostAOImpl implements IPostAO {
                 accountBO.doTransferAmountRemote(comment.getCommer(),
                     ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
                     StringValidater.toLong(rule2.getValue()), EBizType.AJ_PLFB,
-                    "评论加积分", "评论加积分");
+                    "评论送赏金", "评论送赏金");
                 postBO.refreshPostSumComment(parentPost.getCode(),
                     parentPost.getSumComment() + 1);
                 Long amount = accountBO.getAccountByUserId(comment.getCommer(),
@@ -420,7 +420,7 @@ public class PostAOImpl implements IPostAO {
                 accountBO.doTransferAmountRemote(comment.getCommer(),
                     ESysAccount.SYS_ACCOUNT.getCode(), EChannelType.JF,
                     StringValidater.toLong(rule2.getValue()), EBizType.AJ_PLWG,
-                    "确认评论违规，扣积分", "确认评论违规，扣积分");
+                    "确认评论违规，扣赏金", "确认评论违规，扣赏金");
                 // 确认存在问题，减一次评论数
                 postBO.refreshPostSumComment(parentPost.getCode(),
                     parentPost.getSumComment() - 1);
@@ -562,7 +562,7 @@ public class PostAOImpl implements IPostAO {
         this.cutPic(post);
         this.getPartInfo(post, userId);
         this.fullUser(post);
-        this.fullGetPost(post);
+        // this.fullGetPost(post);
         return post;
     }
 

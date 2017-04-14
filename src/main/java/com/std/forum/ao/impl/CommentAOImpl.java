@@ -97,7 +97,7 @@ public class CommentAOImpl implements ICommentAO {
             accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
                 commer, EChannelType.JF,
                 StringValidater.toLong(rule.getValue()), EBizType.AJ_PLFB,
-                "发布评论，送积分", "发布评论，送积分");
+                "发布评论，送赏金", "发布评论，送赏金");
             Long amount = accountBO.getAccountByUserId(commer, EChannelType.JF);
             List<XN805115Res> LevelRuleList = levelRuleBO.queryLevelRuleList();
             for (XN805115Res res : LevelRuleList) {

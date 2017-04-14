@@ -10,11 +10,21 @@ public class XN610141Req extends APageReq {
     // 用户编号（必填）
     private String userId;
 
+    private String postCode;
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
     }
 }

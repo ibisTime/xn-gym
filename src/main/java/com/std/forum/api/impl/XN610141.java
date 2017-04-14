@@ -30,6 +30,7 @@ public class XN610141 extends AProcessor {
     public Object doBusiness() throws BizException {
         PostTalk condition = new PostTalk();
         condition.setPublisher(req.getUserId());
+        condition.setPostCode(req.getPostCode());
         condition.setType(ETalkType.DZ.getCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
