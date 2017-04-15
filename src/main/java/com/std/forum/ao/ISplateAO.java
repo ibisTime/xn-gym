@@ -23,6 +23,8 @@ public interface ISplateAO {
     public Paginable<Splate> querySplatePage(int start, int limit,
             Splate condition);
 
+    public List<Splate> querySmallSplateList(Splate condition);
+
     public List<Splate> querySplateList(Splate condition);
 
     public XN610046Res getSplate(String code);

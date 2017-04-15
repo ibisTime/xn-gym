@@ -148,11 +148,17 @@ public class SplateAOImpl implements ISplateAO {
             splate.getCompanyCode());
         Long essence = postBO.getPostLocation(ELocation.ZD.getCode(),
             splate.getCompanyCode());
+        if (StringUtils.isNotBlank(splate.getModerator())) {
+            User user = userBO.getRemoteUser(splate.getModerator());
+            splate.setNickname(user.getNickname());
+            splate.setMobile(user.getMobile());
+        }
         res.setSplate(splate);
         res.setAllPostCount(allPostCount);
         res.setTodayPostCount(todayPostCount);
         res.setTop(top);
         res.setEssence(essence);
+
         return res;
     }
 
@@ -185,5 +191,10 @@ public class SplateAOImpl implements ISplateAO {
                 }
             }
         }
+    }
+
+    @Override
+    public List<Splate> querySmallSplateList(Splate condition) {
+        return splateBO.querySplateList(condition);
     }
 }
