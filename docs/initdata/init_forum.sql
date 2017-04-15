@@ -1,45 +1,44 @@
 
-INSERT  INTO `tforum_banner`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('11','banner1','http://baidu.com','timg (2)_1490253230370.jpg','1',2,'2','0','banner1'),
-INSERT  INTO `tforum_banner`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('12','banner3','page:board,code:SPK201704970242389278','timg (2)_1490753689753.jpg','1',1,'1','0','2'),
-INSERT  INTO `tforum_banner`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('13','banner2','http://www.baidu.com','xiwu_1490955713634.jpg','1',2,'1','0',''),
-INSERT  INTO `tforum_banner`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('14','banner4','http://www.baidu.com','xiwu_1490955713634.jpg','2',1,'2','0',''),
-INSERT  INTO `tforum_banner`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('15','banner5','http://www.baidu.com','timg (2)_1490753689753.jpg','2',1,'2','0','2'),
-INSERT  INTO `tforum_banner`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('16','banner6','http://www.baidu.com','xiwu_1490955713634.jpg','2',3,'2','0','3'),
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('11','banner1','page:mall','timg (2)_1490253230370.jpg','1','1','1','0','ÊÄªÈÉ®');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('12','banner3','{\"page\":\"board\",\"code\":\"SPK201704971129101389\"}','timg (2)_1490753689753.jpg','1','2','1','0','2');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('13','banner2','page:mall','xiwu_1490955713634.jpg','1','3','1','0','');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('14','banner4','page:mall','xiwu_1490955713634.jpg','2','4','2','0','');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('15','banner5','page:signin','timg (2)_1490753689753.jpg','2','5','2','0','');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('16','banner6444','page:mall','xiwu_1490955713634.jpg','2','6','2','0','');
 
-
-INSERT  INTO `tforum_bplate_template`(`code`,`name`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('BPKM201704961113242662','≥« –…˙ªÓ',1,'admin',now(),NULL),
-INSERT  INTO `tforum_bplate_template`(`code`,`name`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('BPKM201704961113377378','±„√Ò÷––ƒ',2,'admin',now(),NULL),
-INSERT  INTO `tforum_bplate_template`(`code`,`name`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('BPKM201704961113377379','Õ¨≥«ªÓ∂Ø',3,'admin',now(),NULL);
-
-
-INSERT  INTO `tforum_menu`(`code`,`name`,`pic`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('001','Õ∑Ãı','1_1490954623693.png',1,'1','0','0'),
-INSERT  INTO `tforum_menu`(`code`,`name`,`pic`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('002',' ”∆µ','3_1490954646085.png',4,'2','0','0'),
-INSERT  INTO `tforum_menu`(`code`,`name`,`pic`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('003','Œ“µƒ','4_1490954655837.png',5,'1','0','0'),
-INSERT  INTO `tforum_menu`(`code`,`name`,`pic`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('004','”–¡œ','2_1490954635800.png',2,'1','0','0'),
-INSERT  INTO `tforum_menu`(`code`,`name`,`pic`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('005','–°√€','QQÕº∆¨20170331180207_1490954751850.png',3,'1','0','0');
+insert into `tforum_bplate_template` (`code`, `name`, `order_no`, `updater`, `update_datetime`, `remark`) values('BPKM201703800524452438','ÂüéÂ∏ÇÁîüÊ¥ª','3','admin',now(),NULL);
+insert into `tforum_bplate_template` (`code`, `name`, `order_no`, `updater`, `update_datetime`, `remark`) values('BPKM201703801054246980','‰æøÊ∞ë‰∏≠ÂøÉ','1','admin',now(),NULL);
+insert into `tforum_bplate_template` (`code`, `name`, `order_no`, `updater`, `update_datetime`, `remark`) values('BPKM201703810946124970','ÂêåÂüéÊ¥ªÂä®','0','admin',now(),NULL);
 
 
 
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM201703810438242328','≥µ”—','BPKM201704961113242662','cheyou_1491534688137.jpg',3,'admin',now(),NULL),
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM201703810515125830','ªÓ∂Ø','BPKM201704961113377379','ªÓ∂Ø_1491534865823.gif',8,'admin',now(),NULL),
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM201703830149279519','’–∆∏','BPKM201704961113377378','timg (2)_1490334707554.jpg',5,'admin',now(),NULL),
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM201703830518371018','≥‘ªı','BPKM201704961113242662','≥‘ªı_1491534670048.jpg',2,'admin',now(),NULL),
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM201703860141073952','«È∏–','BPKM201704961113242662','1_1491534651547.jpg',1,'admin',now(),NULL),
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM201704971109247700','«Û÷˙','BPKM201704961113242662','«Û÷˙_1491534742486.jpg',4,'admin',now(),NULL),
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM201704971110178147','≥ˆ◊‚','BPKM201704961113377378','≥ˆ◊‚_1491534796020.jpg',6,'admin',now(),NULL),
-INSERT  INTO `tforum_splate_template`(`code`,`name`,`bplate_code`,`pic`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('SPKM20170497111042965','∂˛ ÷','BPKM201704961113377378','∂˛ ÷_1491534820687.jpg',7,'admin',now(),NULL);
+insert into `tforum_menu` (`code`, `name`, `pic`, `order_no`, `belong`, `company_code`, `remark`) values('DH2016100000000000001','Â§¥Êù°','http://114.55.179.135:8901/CSW20161031/toutiao.png','1','1','0',NULL);
+insert into `tforum_menu` (`code`, `name`, `pic`, `order_no`, `belong`, `company_code`, `remark`) values('DH2016100000000000002','ÊúâÊñô','http://114.55.179.135:8901/CSW20161031/youliao.png','2','1','0',NULL);
+insert into `tforum_menu` (`code`, `name`, `pic`, `order_no`, `belong`, `company_code`, `remark`) values('DH2016100000000000003','Â∞èËúú','http://114.55.179.135:8901/CSW20161031/xiaomifeng.png','3','1','0',NULL);
+insert into `tforum_menu` (`code`, `name`, `pic`, `order_no`, `belong`, `company_code`, `remark`) values('DH2016100000000000004','ËßÜÈ¢ë','http://114.55.179.135:8901/CSW20161031/shiping.png','4','2','0',NULL);
+insert into `tforum_menu` (`code`, `name`, `pic`, `order_no`, `belong`, `company_code`, `remark`) values('DH2016100000000000005','ÊàëÁöÑ','http://114.55.179.135:8901/CSW20161031/wode.png','5','1','0',NULL);
 
 
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('001','ª˝∑÷…Ã≥«','page:mall,code:BMK201703801055504688','ª˝∑÷…Ã≥«@2x_1491489957010.png','0',33,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('002','√ø»’«©µΩ','page:signin,code:BMK201703801055504688','√ø»’«©µΩ@2x_1491489931663.png','0',32,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('003','Õ¨≥«ªÓ∂Ø','page:board,code:SPK201704970242385455','Õ¨≥«ªÓ∂Ø@2x_1491547842925.png','0',31,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('004','’–∆∏','https://www.baidu.com','’–∆∏@2x_1491487714601.png','1',7,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('005','≥ˆ◊‚','https://www.baidu.com','≥ˆ◊‚@2x_1491487680946.png','1',6,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('006','∂˛ ÷','https://www.baidu.com','∂˛ ÷@2x_1491480926636.png','1',14,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('007','«Û÷˙','https://www.baidu.com','«Û÷˙@2x_1491480890446.png','1',5,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('008','±„√Ò','https://www.baidu.com','±„√Ò@2x_1491487586018.png','1',4,'1','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('009','≥µ”—','https://www.baidu.com','≥µ”—@2x_1491535628718.png','1',2,'2','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('010','«È∏–','https://www.baidu.com','«È∏–@2x_1491490478552.png','1',17,'2','0',''),
-INSERT  INTO `tforum_subsystem`(`code`,`name`,`url`,`pic`,`location`,`order_no`,`belong`,`company_code`,`remark`) VALUES ('011','≥‘ªı','https://www.baidu.com','≥‘ªı@2x_1491480794768.png','1',1,'2','0','');
+
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM201703810438242328','ËΩ¶Âèã','BPKM201703800524452438','cheyou_1491534688137.jpg','3','admin',now(),NULL);
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM201703810515125830','Ê¥ªÂä®','BPKM201703810946124970','Ê¥ªÂä®_1491534865823.gif','8','admin',now(),NULL);
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM201703830149279519','ÊãõËÅò','BPKM201703801054246980','timg (2)_1490334707554.jpg','5','admin',now(),NULL);
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM201703830518371018','ÂêÉË¥ß','BPKM201703800524452438','ÂêÉË¥ß_1491534670048.jpg','2','admin',now(),NULL);
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM201703860141073952','ÊÉÖÊÑü','BPKM201703800524452438','1_1491534651547.jpg','1','admin',now(),NULL);
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM201704971109247700','Ê±ÇÂä©','BPKM201703800524452438','Ê±ÇÂä©_1491534742486.jpg','4','admin',now(),NULL);
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM201704971110178147','Âá∫Áßü','BPKM201703801054246980','Âá∫Áßü_1491534796020.jpg','6','admin',now(),NULL);
+insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `order_no`, `updater`, `update_datetime`, `remark`) values('SPKM20170497111042965','‰∫åÊâã','BPKM201703801054246980','‰∫åÊâã_1491534820687.jpg','7','admin',now(),NULL);
 
 
+
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('001','ËµèÈáëÂïÜÂüé','page:mall,code:BMK201703801055504688','ÁßØÂàÜÂïÜÂüé@2x_1491545328778.png','0','1','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('002','ÊØèÊó•Á≠æÂà∞','page:signin','ÊØèÊó•Á≠æÂà∞@2x_1491545296209.png','0','2','1','0','Êñ∞Áâà');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('003','ÂêåÂüéÊ¥ªÂä®','https://www.baidu.com','Ê¥ªÂä®_1491544975045.gif','0','3','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('004','ÊãõËÅò','page:board,code:SPK201704971129101389','ÊãõËÅò@2x_1491546052192.png','1','1','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('005','Âá∫Áßü','{\"page\":\"board\",\"code\":\"SPK20170497112910220\"}','Âá∫Áßü@2x_1491546023873.png','1','3','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('006','‰∫åÊâã(testÔºâ','page:board,code:SPK201704971129108042','‰∫åÊâã@2x_1491545997625.png','1','4','1','0','Â∑≤Êîπ22');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('007','Ê±ÇÂä©','page:board,code:SPK201704971129106897','Ê±ÇÂä©@2x_1491545897419.png','1','2','1','0','9090');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('008','‰æøÊ∞ë','{\"page\":\"board\",\"code\":\"SPK2017041000757488881\"}','‰æøÊ∞ë@2x_1491545946070.png','1','5','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('009','ËΩ¶Âèã','page:signin','ËΩ¶Âèã@2x_1491534771647.png','1','6','2','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('010','ÊÉÖÊÑü','page:board,code:SPK2017041010935214472','ÊÉÖÊÑü@2x_1491545376565.png','1','9','2','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('011','ÂêÉË¥ß','page:board,code:SPK201704971129105187','ÂêÉË¥ß@2x_1491545352380.png','1','8','2','0','haode');
