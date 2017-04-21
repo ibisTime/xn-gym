@@ -13,6 +13,9 @@ public class XN610107Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
+    // ui位置
+    private String location;
+
     // 站点编号
     private String companyCode;
 
@@ -22,5 +25,13 @@ public class XN610107Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

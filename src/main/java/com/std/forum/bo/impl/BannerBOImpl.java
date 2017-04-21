@@ -66,8 +66,10 @@ public class BannerBOImpl extends PaginableBOImpl<Banner> implements IBannerBO {
     }
 
     @Override
-    public List<Banner> queryBannerList(String companyCode) {
+    public List<Banner> queryBannerLocationList(String companyCode,
+            String location) {
         Banner condition = new Banner();
+        condition.setLocation(location);
         condition.setCompanyCode(companyCode);
         return bannerDAO.selectList(condition);
     }

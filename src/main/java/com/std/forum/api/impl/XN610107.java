@@ -22,12 +22,13 @@ public class XN610107 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return bannerAO.queryBannerList(req.getCompanyCode());
+        return bannerAO
+            .queryBannerList(req.getCompanyCode(), req.getLocation());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN610107Req.class);
-        StringValidater.validateBlank(req.getCompanyCode());
+        StringValidater.validateBlank(req.getCompanyCode(), req.getLocation());
     }
 }

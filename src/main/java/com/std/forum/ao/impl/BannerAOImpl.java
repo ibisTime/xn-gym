@@ -111,11 +111,12 @@ public class BannerAOImpl implements IBannerAO {
     }
 
     @Override
-    public List<Banner> queryBannerList(String companyCode) {
+    public List<Banner> queryBannerList(String companyCode, String location) {
         List<Banner> bannerList = new ArrayList<Banner>();
-        List<Banner> localList = bannerBO.queryBannerList(companyCode);
-        List<Banner> globalList = bannerBO.queryBannerList(EBoolean.NO
-            .getCode());
+        List<Banner> localList = bannerBO.queryBannerLocationList(companyCode,
+            location);
+        List<Banner> globalList = bannerBO.queryBannerLocationList(
+            EBoolean.NO.getCode(), location);
         for (Banner global : globalList) {
             if (CollectionUtils.isNotEmpty(localList)) {
                 for (Banner local : localList) {

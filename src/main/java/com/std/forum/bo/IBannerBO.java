@@ -25,7 +25,8 @@ public interface IBannerBO extends IPaginableBO<Banner> {
 
     public List<Banner> queryBannerList(Banner condition);
 
-    public List<Banner> queryBannerList(String companyCode);
+    public List<Banner> queryBannerLocationList(String companyCode,
+            String location);
 
     public List<Banner> queryBannerList(String companyCode, String orderNo);
 

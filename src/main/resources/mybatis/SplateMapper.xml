@@ -123,7 +123,7 @@
 	<update id="update_default" parameterType="splate">
 		UPDATE tforum_splate
 		SET
-		is_datault = #{isDatault}
+		is_default = #{isDefault}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}

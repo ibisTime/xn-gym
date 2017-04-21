@@ -220,10 +220,11 @@ public class SplateAOImpl implements ISplateAO {
 
         Splate splate = splateBO.getSplate(code);
         Integer isDefault = StringValidater.toInteger(EBoolean.YES.getCode());
-        if (EBoolean.YES.getCode().equals(splate.getIsDefault())) {
+        if (StringValidater.toInteger(EBoolean.YES.getCode()).equals(
+            splate.getIsDefault())) {
             isDefault = StringValidater.toInteger(EBoolean.NO.getCode());
         }
-        if (EBoolean.YES.getCode().equals(isDefault)) {
+        if (StringValidater.toInteger(EBoolean.YES.getCode()).equals(isDefault)) {
             List<Splate> splateList = splateBO.queryIsDefaultSplateList(
                 StringValidater.toInteger(EBoolean.YES.getCode()),
                 splate.getCompanyCode());

@@ -24,6 +24,9 @@
 			<if test="orderNo != null and orderNo != '' ">
 				AND t.order_no = #{orderNo}
 			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
