@@ -321,4 +321,5 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         condition.setPlateCode(splateCode);
         return postDAO.selectList(condition);
     }
+
 }

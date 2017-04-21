@@ -25,6 +25,9 @@ public class XN610042Req {
     // 版主编号
     private String userId;
 
+    // 是否默认
+    private String isDefault;
+
     // 站点编号
     private String companyCode;
 
@@ -116,4 +119,13 @@ public class XN610042Req {
     public String getCompanyCode() {
         return companyCode;
     }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
+
 }

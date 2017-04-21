@@ -82,12 +82,13 @@ public class MenuAOImpl implements IMenuAO {
             List<Menu> list = menuBO.queryMenuList(condition);
             // 赋值参考
             List<Menu> menuList = new ArrayList<Menu>();
-            menuList.addAll(menuList);
+            menuList.addAll(list);
             // 移除重复
             for (Menu menu : menuList) {
                 for (Menu men : list) {
                     if (menu.getCode().equals(men.getBelong())) {
                         list.remove(men);
+                        break;
                     }
                 }
             }

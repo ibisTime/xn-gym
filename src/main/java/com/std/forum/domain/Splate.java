@@ -29,6 +29,9 @@ public class Splate extends ABaseDO {
     // 序号
     private String orderNo;
 
+    // 是否默认
+    private Integer isDefault;
+
     // 版主编号
     private String moderator;
 
@@ -178,6 +181,14 @@ public class Splate extends ABaseDO {
 
     public void setAllLikeNum(Integer allLikeNum) {
         this.allLikeNum = allLikeNum;
+    }
+
+    public Integer getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Integer isDefault) {
+        this.isDefault = isDefault;
     }
 
 }

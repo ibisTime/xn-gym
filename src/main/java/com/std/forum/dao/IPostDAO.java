@@ -82,4 +82,5 @@ public interface IPostDAO extends IBaseDAO<Post> {
     public List<Post> selectTDList(Post condition);
 
     public List<Post> queryTDPostList(Post condition, int start, int limit);
+
 }

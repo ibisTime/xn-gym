@@ -505,7 +505,8 @@ insert into `tstd_cpassword` (`code`, `type`, `account`, `password`, `remark`, `
 insert into `tstd_cpassword` (`code`, `type`, `account`, `password`, `remark`, `company_code`, `system_code`) values('csw003','2','bucket','ywc-csw','','CD-CCSW000008','CD-CCSW000008');
 insert into `tstd_cpassword` (`code`, `type`, `account`, `password`, `remark`, `company_code`, `system_code`) values('csw004','3','ACCESS_KEY','wxef7fda595f81f6d6','','CD-CCSW000008','CD-CCSW000008');
 insert into `tstd_cpassword` (`code`, `type`, `account`, `password`, `remark`, `company_code`, `system_code`) values('csw005','3','SECRET_KEY','057815f636178d3a81c3b065f395a209','','CD-CCSW000008','CD-CCSW000008');
-
+insert into `tstd_cpassword` (`code`, `type`, `account`, `password`, `remark`, `company_code`, `system_code`) values('scw006','4','ACCESS_KEY','wxa4e24d97c901823a','','CD-CCSW000008','CD-CCSW000008');
+insert into `tstd_cpassword` (`code`, `type`, `account`, `password`, `remark`, `company_code`, `system_code`) values('scw007','4','SECRET_KEY','639fa78e6b922182426bdc2cf5f9d58e','','CD-CCSW000008','CD-CCSW000008');
 
 insert into `tstd_rule` (`code`, `kind`, `type`, `level`, `value`, `updater`, `update_datetime`, `remark`, `system_code`) values('1001','1','A','0','5000','admin',now(),'注册','CD-CCSW000008');
 insert into `tstd_rule` (`code`, `kind`, `type`, `level`, `value`, `updater`, `update_datetime`, `remark`, `system_code`) values('1002','1','B','0','1000','admin',now(),'每日签到','CD-CCSW000008');

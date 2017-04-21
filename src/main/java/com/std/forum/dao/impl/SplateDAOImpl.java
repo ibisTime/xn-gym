@@ -50,4 +50,9 @@ public class SplateDAOImpl extends AMybatisTemplate implements ISplateDAO {
         return super.update(NAMESPACE.concat("update_splate"), data);
     }
 
+    @Override
+    public int defaultSplate(Splate data) {
+        return super.update(NAMESPACE.concat("update_default"), data);
+    }
+
 }

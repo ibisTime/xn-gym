@@ -17,6 +17,7 @@ import com.std.forum.bo.ISplateTemplateBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.common.DateUtil;
+import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Bplate;
 import com.std.forum.domain.BplateTemplate;
 import com.std.forum.domain.Post;
@@ -27,6 +28,7 @@ import com.std.forum.domain.User;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
 import com.std.forum.dto.res.XN610046Res;
+import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPlateStatus;
 import com.std.forum.enums.EPostStatus;
@@ -59,8 +61,10 @@ public class SplateAOImpl implements ISplateAO {
 
     @Override
     public String addSplate(XN610040Req req) {
+        this.checkIsDefault(req.getIsDefault(), req.getCompanyCode());
         return splateBO.saveSplate(req.getName(), req.getParentCode(),
             req.getPic(), req.getOrderNo(), req.getUserId(),
+            StringValidater.toInteger(req.getIsDefault()),
             req.getCompanyCode(), req.getStatus(), req.getUpdater(),
             req.getRemark());
     }
@@ -70,10 +74,22 @@ public class SplateAOImpl implements ISplateAO {
         if (!splateBO.isSplateExist(req.getCode())) {
             throw new BizException("xn0000", "小模板编号不存在");
         }
+        this.checkIsDefault(req.getIsDefault(), req.getCompanyCode());
         return splateBO.refreshSplate(req.getCode(), req.getName(),
             req.getParentCode(), req.getPic(), req.getOrderNo(),
-            req.getUserId(), req.getCompanyCode(), req.getStatus(),
-            req.getUpdater(), req.getRemark());
+            req.getUserId(), StringValidater.toInteger(req.getIsDefault()),
+            req.getCompanyCode(), req.getStatus(), req.getUpdater(),
+            req.getRemark());
+    }
+
+    private void checkIsDefault(String isDefault, String companyCode) {
+        if (EBoolean.YES.getCode().equals(isDefault)) {
+            List<Splate> splateList = splateBO.queryIsDefaultSplateList(
+                StringValidater.toInteger(EBoolean.YES.getCode()), companyCode);
+            if (CollectionUtils.isNotEmpty(splateList)) {
+                throw new BizException("xn0000", "该城市已有默认板块,请先取消在设置");
+            }
+        }
     }
 
     @Override
@@ -184,8 +200,9 @@ public class SplateAOImpl implements ISplateAO {
                     splateBO
                         .saveSplate(splateTemplate.getName(), bplate.getCode(),
                             splateTemplate.getPic(),
-                            splateTemplate.getOrderNo(), null, companyCode,
-                            EPlateStatus.ENABLE.getCode(),
+                            splateTemplate.getOrderNo(), null,
+                            StringValidater.toInteger(EBoolean.NO.getCode()),
+                            companyCode, EPlateStatus.ENABLE.getCode(),
                             splateTemplate.getUpdater(),
                             splateTemplate.getRemark());
                 }
@@ -196,5 +213,24 @@ public class SplateAOImpl implements ISplateAO {
     @Override
     public List<Splate> querySmallSplateList(Splate condition) {
         return splateBO.querySplateList(condition);
+    }
+
+    @Override
+    public void defaultSplate(String code, String updater) {
+
+        Splate splate = splateBO.getSplate(code);
+        Integer isDefault = StringValidater.toInteger(EBoolean.YES.getCode());
+        if (EBoolean.YES.getCode().equals(splate.getIsDefault())) {
+            isDefault = StringValidater.toInteger(EBoolean.NO.getCode());
+        }
+        if (EBoolean.YES.getCode().equals(isDefault)) {
+            List<Splate> splateList = splateBO.queryIsDefaultSplateList(
+                StringValidater.toInteger(EBoolean.YES.getCode()),
+                splate.getCompanyCode());
+            if (CollectionUtils.isNotEmpty(splateList)) {
+                throw new BizException("xn0000", "该城市已有默认板块,请先取消在设置");
+            }
+        }
+        splateBO.defaultSplate(splate, isDefault, updater);
     }
 }

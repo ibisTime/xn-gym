@@ -9,6 +9,7 @@
 		<result column="pic" property="pic" />
 		<result column="order_no" property="orderNo" />
 		<result column="moderator" property="moderator" />
+		<result column="is_default" property="isDefault" />
 		<result column="company_code" property="companyCode" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
@@ -35,6 +36,9 @@
 			<if test="name != null and name != '' ">
 				AND t.name = #{name}
 			</if>
+			<if test="isDefault != null and isDefault != '' ">
+				AND t.is_default = #{isDefault}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_splate" parameterType="splate" resultMap="splate_DB_Result">
@@ -45,6 +49,7 @@
 		,t.pic
 		,t.order_no
 		,t.moderator
+		,t.is_default
 		,t.company_code
 		,t.status
 		,t.updater
@@ -75,6 +80,7 @@
 		,pic
 		,order_no
 		,moderator
+		,is_default
 		,company_code
 		,status
 		,updater
@@ -88,6 +94,7 @@
 		,#{pic}
 		,#{orderNo}
 		,#{moderator}
+		,#{isDefault}
 		,#{companyCode}
 		,#{status}
 		,#{updater}
@@ -104,11 +111,21 @@
 		,pic = #{pic}
 		,order_no = #{orderNo}
 		,moderator = #{moderator}
+		,is_default = #{isDefault}
 		,company_code = #{companyCode}
 		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_default" parameterType="splate">
+		UPDATE tforum_splate
+		SET
+		is_datault = #{isDatault}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}
 	</update>
 

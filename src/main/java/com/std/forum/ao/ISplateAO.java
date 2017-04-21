@@ -30,4 +30,6 @@ public interface ISplateAO {
     public XN610046Res getSplate(String code);
 
     public void copySplate(String companyCode);
+
+    public void defaultSplate(String code, String updater);
 }

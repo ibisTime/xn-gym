@@ -118,8 +118,9 @@
 		FROM
 		tforum_post t left join tforum_splate tp on t.plate_code = tp.code
 		<include refid="where_condition" />
-		ORDER BY t.location,t.publish_datetime desc
+		ORDER BY t.publish_datetime desc
 	</select>  
+	
 	
 	<!-- 分页查（我的帖子） -->
 	<!-- <select id="select_post" parameterType="post" resultMap="post_DB_Result">

@@ -33,8 +33,8 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
 
     @Override
     public String saveSplate(String name, String parentCode, String pic,
-            String orderNo, String userId, String companyCode, String status,
-            String updater, String remark) {
+            String orderNo, String userId, Integer isDetault,
+            String companyCode, String status, String updater, String remark) {
         Splate data = new Splate();
         String code = OrderNoGenerater.generateME(EPrefixCode.SPLATE.getCode());
         data.setCode(code);
@@ -43,6 +43,7 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
         data.setPic(pic);
         data.setOrderNo(orderNo);
         data.setModerator(userId);
+        data.setIsDefault(isDetault);
         data.setCompanyCode(companyCode);
         data.setStatus(status);
         data.setUpdater(updater);
@@ -65,8 +66,8 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
 
     @Override
     public int refreshSplate(String code, String name, String parentCode,
-            String pic, String orderNo, String userId, String companyCode,
-            String status, String updater, String remark) {
+            String pic, String orderNo, String userId, Integer isDefault,
+            String companyCode, String status, String updater, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Splate data = new Splate();
@@ -76,6 +77,7 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
             data.setPic(pic);
             data.setOrderNo(orderNo);
             data.setModerator(userId);
+            data.setIsDefault(isDefault);
             data.setCompanyCode(companyCode);
             data.setStatus(status);
             data.setUpdater(updater);
@@ -116,6 +118,23 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
     public List<Splate> getPlateByUserId(String userId) {
         Splate condition = new Splate();
         condition.setModerator(userId);
+        return splateDAO.selectList(condition);
+    }
+
+    @Override
+    public void defaultSplate(Splate splate, Integer isDetault, String updater) {
+        splate.setIsDefault(isDetault);
+        splate.setUpdater(updater);
+        splate.setUpdateDatetime(new Date());
+        splateDAO.defaultSplate(splate);
+    }
+
+    @Override
+    public List<Splate> queryIsDefaultSplateList(Integer isDefault,
+            String companyCode) {
+        Splate condition = new Splate();
+        condition.setIsDefault(isDefault);
+        condition.setCompanyCode(companyCode);
         return splateDAO.selectList(condition);
     }
 }

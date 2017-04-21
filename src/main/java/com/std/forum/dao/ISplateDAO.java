@@ -8,4 +8,6 @@ public interface ISplateDAO extends IBaseDAO<Splate> {
     String NAMESPACE = ISplateDAO.class.getName().concat(".");
 
     public int update(Splate data);
+
+    public int defaultSplate(Splate data);
 }

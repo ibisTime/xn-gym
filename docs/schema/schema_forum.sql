@@ -113,6 +113,7 @@ CREATE TABLE `tforum_splate` (
   `pic` varchar(255) DEFAULT NULL COMMENT '图片',
   `order_no` int(11) DEFAULT NULL COMMENT '序号',
   `moderator` varchar(32) DEFAULT NULL COMMENT '版主编号',
+  `is_default` varchar(32) DEFAULT NULL COMMENT '是否默认',
   `company_code` varchar(32) DEFAULT NULL COMMENT '站点编号',
   `status` varchar(4) DEFAULT NULL COMMENT '状态(1 可见 0 不可见)',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',

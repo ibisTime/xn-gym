@@ -10,14 +10,14 @@ public interface ISplateBO extends IPaginableBO<Splate> {
     public boolean isSplateExist(String code);
 
     public String saveSplate(String name, String parentCode, String pic,
-            String orderNo, String userId, String companyCode, String status,
-            String updater, String remark);
+            String orderNo, String userId, Integer isDetault,
+            String companyCode, String status, String updater, String remark);
 
     public int removeSplate(String code);
 
     public int refreshSplate(String code, String name, String parentCode,
-            String pic, String orderNo, String userId, String companyCode,
-            String status, String updater, String remark);
+            String pic, String orderNo, String userId, Integer isDefault,
+            String companyCode, String status, String updater, String remark);
 
     public List<Splate> querySplateList(Splate condition);
 
@@ -26,5 +26,10 @@ public interface ISplateBO extends IPaginableBO<Splate> {
     public Splate getSplate(String code);
 
     public List<Splate> getPlateByUserId(String userId);
+
+    public void defaultSplate(Splate splate, Integer isDetault, String updater);
+
+    public List<Splate> queryIsDefaultSplateList(Integer code,
+            String companyCode);
 
 }
