@@ -29,6 +29,7 @@ public class XN610105 extends AProcessor {
         Banner condition = new Banner();
         condition.setName(req.getName());
         condition.setBelong(req.getBelong());
+        condition.setLocation(req.getLocation());
         condition.setCompanyCode(req.getCompanyCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isEmpty(orderColumn)) {

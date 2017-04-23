@@ -19,6 +19,9 @@ public class XN610105Req extends APageReq {
     // 属于
     private String belong;
 
+    // ui位置
+    private String location;
+
     // 公司编号
     private String companyCode;
 
@@ -44,5 +47,13 @@ public class XN610105Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

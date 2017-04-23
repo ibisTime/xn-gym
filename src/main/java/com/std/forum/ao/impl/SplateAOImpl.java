@@ -217,7 +217,6 @@ public class SplateAOImpl implements ISplateAO {
 
     @Override
     public void defaultSplate(String code, String updater) {
-
         Splate splate = splateBO.getSplate(code);
         Integer isDefault = StringValidater.toInteger(EBoolean.YES.getCode());
         if (StringValidater.toInteger(EBoolean.YES.getCode()).equals(

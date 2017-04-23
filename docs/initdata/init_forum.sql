@@ -5,6 +5,10 @@ insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no
 insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('14','banner4','page:mall','xiwu_1490955713634.jpg','2','4','2','0','');
 insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('15','banner5','page:signin','timg (2)_1490753689753.jpg','2','5','2','0','');
 insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('16','banner6444','page:mall','xiwu_1490955713634.jpg','2','6','2','0','');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('17','adv1','page:mall','timg_1492758758079.jpg','0','9','1','0','');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('18','adv2','page:mall',NULL,'0','2','2','0',NULL);
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('19','adv3','page:mall',NULL,'0','3','2','0',NULL);
+
 
 insert into `tforum_bplate_template` (`code`, `name`, `order_no`, `updater`, `update_datetime`, `remark`) values('BPKM201703800524452438','城市生活','3','admin',now(),NULL);
 insert into `tforum_bplate_template` (`code`, `name`, `order_no`, `updater`, `update_datetime`, `remark`) values('BPKM201703801054246980','便民中心','1','admin',now(),NULL);
