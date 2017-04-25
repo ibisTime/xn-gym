@@ -1,6 +1,6 @@
 
 insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('11','banner1','page:mall','timg (2)_1490253230370.jpg','1','1','1','0','总部');
-insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('12','banner3','{\"page\":\"board\",\"code\":\"SPK201704971129101389\"}','timg (2)_1490753689753.jpg','1','2','1','0','2');
+insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('12','banner3','https://www.baidu.com','timg (2)_1490753689753.jpg','1','2','1','0','2');
 insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('13','banner2','page:mall','xiwu_1490955713634.jpg','1','3','1','0','');
 insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('14','banner4','page:mall','xiwu_1490955713634.jpg','2','4','2','0','');
 insert into `tforum_banner` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('15','banner5','page:signin','timg (2)_1490753689753.jpg','2','5','2','0','');
@@ -35,14 +35,14 @@ insert into `tforum_splate_template` (`code`, `name`, `bplate_code`, `pic`, `ord
 
 
 
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('001','赏金商城','page:mall,code:BMK201703801055504688','积分商城@2x_1491545328778.png','0','1','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('001','赏金商城','https://www.baidu.com','积分商城@2x_1491545328778.png','0','1','1','0','');
 insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('002','每日签到','page:signin','每日签到@2x_1491545296209.png','0','2','1','0','新版');
 insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('003','同城活动','https://www.baidu.com','活动_1491544975045.gif','0','3','1','0','');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('004','招聘','page:board,code:SPK201704971129101389','招聘@2x_1491546052192.png','1','1','1','0','');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('005','出租','{\"page\":\"board\",\"code\":\"SPK20170497112910220\"}','出租@2x_1491546023873.png','1','3','1','0','');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('006','二手(test）','page:board,code:SPK201704971129108042','二手@2x_1491545997625.png','1','4','1','0','已改22');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('007','求助','page:board,code:SPK201704971129106897','求助@2x_1491545897419.png','1','2','1','0','9090');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('008','便民','{\"page\":\"board\",\"code\":\"SPK2017041000757488881\"}','便民@2x_1491545946070.png','1','5','1','0','');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('009','车友','page:signin','车友@2x_1491534771647.png','1','6','2','0','');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('010','情感','page:board,code:SPK2017041010935214472','情感@2x_1491545376565.png','1','9','2','0','');
-insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('011','吃货','page:board,code:SPK201704971129105187','吃货@2x_1491545352380.png','1','8','2','0','haode');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('004','招聘','https://www.baidu.com','招聘@2x_1491546052192.png','1','1','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('005','出租','https://www.baidu.com','出租@2x_1491546023873.png','1','3','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('006','二手(test）','https://www.baidu.com','二手@2x_1491545997625.png','1','4','1','0','已改22');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('007','求助','https://www.baidu.com','求助@2x_1491545897419.png','1','2','1','0','9090');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('008','便民','https://www.baidu.com','便民@2x_1491545946070.png','1','5','1','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('009','车友','https://www.baidu.com','车友@2x_1491534771647.png','1','6','2','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('010','情感','https://www.baidu.com','情感@2x_1491545376565.png','1','9','2','0','');
+insert into `tforum_subsystem` (`code`, `name`, `url`, `pic`, `location`, `order_no`, `belong`, `company_code`, `remark`) values('011','吃货','https://www.baidu.com','吃货@2x_1491545352380.png','1','8','2','0','haode');

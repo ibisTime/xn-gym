@@ -78,6 +78,7 @@ public class MenuAOImpl implements IMenuAO {
             companyCodeList.add("0");
             condition.setCompanyCodeList(companyCodeList);
             condition.setCompanyCode("");
+
             // 查询所有
             List<Menu> list = menuBO.queryMenuList(condition);
             // 赋值参考
@@ -86,7 +87,7 @@ public class MenuAOImpl implements IMenuAO {
             // 移除重复
             for (Menu menu : menuList) {
                 for (Menu men : list) {
-                    if (menu.getCode().equals(men.getBelong())) {
+                    if (men.getCode().equals(menu.getBelong())) {
                         list.remove(men);
                         break;
                     }
