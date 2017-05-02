@@ -261,12 +261,6 @@ public class PostAOImpl implements IPostAO {
     public void setPostLocation(String code, String location, Integer orderNo,
             String updater) {
         Post post = postBO.getPost(code);
-        // String postLocation = post.getLocation();
-        // if (!post.getLocation().contains(location)) {
-        // postLocation = post.getLocation().concat(location);
-        // } else {
-        // postLocation = post.getLocation().replace(location, "");
-        // }
         String[] locationArr = { "A", "B", "C", "D" };
         String newLocation = "";
         for (String locationStr : locationArr) {

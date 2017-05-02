@@ -61,7 +61,7 @@ public class SplateAOImpl implements ISplateAO {
 
     @Override
     public String addSplate(XN610040Req req) {
-        this.checkIsDefault(req.getIsDefault(), req.getCompanyCode());
+        this.checkIsDefault(null, req.getIsDefault(), req.getCompanyCode());
         return splateBO.saveSplate(req.getName(), req.getParentCode(),
             req.getPic(), req.getOrderNo(), req.getUserId(),
             StringValidater.toInteger(req.getIsDefault()),
@@ -74,7 +74,8 @@ public class SplateAOImpl implements ISplateAO {
         if (!splateBO.isSplateExist(req.getCode())) {
             throw new BizException("xn0000", "小模板编号不存在");
         }
-        this.checkIsDefault(req.getIsDefault(), req.getCompanyCode());
+        this.checkIsDefault(req.getCode(), req.getIsDefault(),
+            req.getCompanyCode());
         return splateBO.refreshSplate(req.getCode(), req.getName(),
             req.getParentCode(), req.getPic(), req.getOrderNo(),
             req.getUserId(), StringValidater.toInteger(req.getIsDefault()),
@@ -82,11 +83,18 @@ public class SplateAOImpl implements ISplateAO {
             req.getRemark());
     }
 
-    private void checkIsDefault(String isDefault, String companyCode) {
+    private void checkIsDefault(String code, String isDefault,
+            String companyCode) {
         if (EBoolean.YES.getCode().equals(isDefault)) {
             List<Splate> splateList = splateBO.queryIsDefaultSplateList(
                 StringValidater.toInteger(EBoolean.YES.getCode()), companyCode);
             if (CollectionUtils.isNotEmpty(splateList)) {
+                if (StringUtils.isNotBlank(code)) {
+                    Splate splate = splateList.get(0);
+                    if (splate.getCode().equals(code)) {
+                        return;
+                    }
+                }
                 throw new BizException("xn0000", "该城市已有默认板块,请先取消在设置");
             }
         }
@@ -174,7 +182,6 @@ public class SplateAOImpl implements ISplateAO {
         res.setTodayPostCount(todayPostCount);
         res.setTop(top);
         res.setEssence(essence);
-
         return res;
     }
 
