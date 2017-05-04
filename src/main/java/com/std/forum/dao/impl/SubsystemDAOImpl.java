@@ -50,4 +50,8 @@ public class SubsystemDAOImpl extends AMybatisTemplate implements ISubsystemDAO 
         return super.update(NAMESPACE.concat("update_subsystem"), data);
     }
 
+    @Override
+    public int updateAll(Subsystem data) {
+        return super.update(NAMESPACE.concat("update_subsystem_all"), data);
+    }
 }

@@ -8,4 +8,6 @@ public interface ISubsystemDAO extends IBaseDAO<Subsystem> {
     String NAMESPACE = ISubsystemDAO.class.getName().concat(".");
 
     public int update(Subsystem data);
+
+    public int updateAll(Subsystem data);
 }

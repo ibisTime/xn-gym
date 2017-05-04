@@ -131,9 +131,10 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
 
     @Override
     public List<Splate> queryIsDefaultSplateList(Integer isDefault,
-            String companyCode) {
+            String status, String companyCode) {
         Splate condition = new Splate();
         condition.setIsDefault(isDefault);
+        condition.setStatus(status);
         condition.setCompanyCode(companyCode);
         return splateDAO.selectList(condition);
     }

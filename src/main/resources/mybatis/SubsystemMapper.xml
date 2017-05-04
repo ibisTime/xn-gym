@@ -114,5 +114,17 @@
 		WHERE code = #{code}
 	</update>
 
-
+	<update id="update_subsystem_all" parameterType="subsystem">
+		UPDATE tforum_subsystem
+		SET
+		name = #{name}
+		,url = #{url}
+		,pic = #{pic}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,belong = #{belong}
+		,company_code = #{companyCode}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

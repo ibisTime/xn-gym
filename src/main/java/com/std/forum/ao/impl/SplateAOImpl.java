@@ -87,7 +87,8 @@ public class SplateAOImpl implements ISplateAO {
             String companyCode) {
         if (EBoolean.YES.getCode().equals(isDefault)) {
             List<Splate> splateList = splateBO.queryIsDefaultSplateList(
-                StringValidater.toInteger(EBoolean.YES.getCode()), companyCode);
+                StringValidater.toInteger(EBoolean.YES.getCode()),
+                EPlateStatus.ENABLE.getCode(), companyCode);
             if (CollectionUtils.isNotEmpty(splateList)) {
                 if (StringUtils.isNotBlank(code)) {
                     Splate splate = splateList.get(0);
@@ -233,7 +234,7 @@ public class SplateAOImpl implements ISplateAO {
         if (StringValidater.toInteger(EBoolean.YES.getCode()).equals(isDefault)) {
             List<Splate> splateList = splateBO.queryIsDefaultSplateList(
                 StringValidater.toInteger(EBoolean.YES.getCode()),
-                splate.getCompanyCode());
+                EPlateStatus.ENABLE.getCode(), splate.getCompanyCode());
             if (CollectionUtils.isNotEmpty(splateList)) {
                 throw new BizException("xn0000", "该城市已有默认板块,请先取消在设置");
             }

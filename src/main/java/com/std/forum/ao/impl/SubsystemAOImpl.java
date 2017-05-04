@@ -42,7 +42,7 @@ public class SubsystemAOImpl implements ISubsystemAO {
             subsystemBO.refreshSubsystem(req.getCode(), req.getName(),
                 req.getUrl(), req.getPic(),
                 StringValidater.toInteger(req.getLocation()),
-                StringValidater.toInteger(req.getOrderNo()),
+                StringValidater.toInteger(req.getOrderNo()), req.getBelong(),
                 req.getCompanyCode(), req.getRemark());
         } else {
             throw new BizException("xn0000", "地方子系统配置，不可修改");

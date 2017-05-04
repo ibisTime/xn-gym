@@ -29,7 +29,7 @@ public interface ISplateBO extends IPaginableBO<Splate> {
 
     public void defaultSplate(Splate splate, Integer isDetault, String updater);
 
-    public List<Splate> queryIsDefaultSplateList(Integer code,
+    public List<Splate> queryIsDefaultSplateList(Integer code, String status,
             String companyCode);
 
 }

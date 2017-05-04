@@ -64,6 +64,27 @@ public class SubsystemBOImpl extends PaginableBOImpl<Subsystem> implements
 
     @Override
     public int refreshSubsystem(String code, String name, String url,
+            String pic, Integer location, Integer orderNo, String belong,
+            String companyCode, String remark) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Subsystem data = new Subsystem();
+            data.setCode(code);
+            data.setName(name);
+            data.setUrl(url);
+            data.setPic(pic);
+            data.setLocation(location);
+            data.setOrderNo(orderNo);
+            data.setBelong(belong);
+            data.setCompanyCode(companyCode);
+            data.setRemark(remark);
+            count = subsystemDAO.updateAll(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshSubsystem(String code, String name, String url,
             String pic, Integer location, Integer orderNo, String companyCode,
             String remark) {
         int count = 0;
