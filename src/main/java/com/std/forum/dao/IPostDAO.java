@@ -72,6 +72,8 @@ public interface IPostDAO extends IBaseDAO<Post> {
      * 评论数
      */
     public int updateSumComment(Post data);
+    
+    public int updateTitle(Post data) ;
 
     public Long getMyPostCount(Post condition);
 
@@ -82,5 +84,7 @@ public interface IPostDAO extends IBaseDAO<Post> {
     public List<Post> selectTDList(Post condition);
 
     public List<Post> queryTDPostList(Post condition, int start, int limit);
+    
+    
 
 }

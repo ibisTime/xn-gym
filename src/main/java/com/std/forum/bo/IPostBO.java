@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.std.forum.bo.base.IPaginableBO;
 import com.std.forum.domain.Post;
+import com.std.forum.domain.User;
 
 /** 
  * 帖子BO
@@ -72,5 +73,7 @@ public interface IPostBO extends IPaginableBO<Post> {
     public List<Post> queryTDPostList(Post condition, int start, int limit);
 
     public List<Post> queryPostList(String splateCode);
+    
+    public void updatePostTitle(Post post,User user ,String title,String remark);
 
 }

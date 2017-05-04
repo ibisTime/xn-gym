@@ -453,4 +453,14 @@
 		sum_comment = #{sumComment}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_title" parameterType="post">
+		UPDATE tforum_post
+		SET
+		title = #{title}
+		,approver = #{approver}
+		,remark = #{remark}		
+		,publish_datetime = #{publishDatetime}		
+		WHERE code = #{code}
+	</update>
 </mapper>

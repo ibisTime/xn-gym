@@ -97,4 +97,6 @@ public interface IPostAO {
 
     public Paginable<Post> queryOSSPostPage(int start, int limit, Post condition);
 
+    //修改标题
+    public void updateTitle(String postCode,String title,String userId,String remark);
 }

@@ -20,6 +20,7 @@ import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.IPostDAO;
 import com.std.forum.domain.Post;
+import com.std.forum.domain.User;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPostStatus;
@@ -321,5 +322,14 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         condition.setPlateCode(splateCode);
         return postDAO.selectList(condition);
     }
+
+	@Override
+	public void updatePostTitle(Post post,User user,String title, String remark) {
+		post.setTitle(title);
+		post.setRemark(remark);
+		post.setApprover(user.getLoginName());
+		post.setApproveDatetime(new Date());
+		postDAO.updateTitle(post);
+	}
 
 }
