@@ -166,4 +166,21 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
             limit, condition, Post.class);
     }
 
+    @Override
+    public Long selectMaxRead(Post condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_max_read"),
+            condition);
+    }
+
+    @Override
+    public Long selectSumRead(Post condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_sum_read"),
+            condition);
+    }
+
+    // 修改标题
+    @Override
+    public int updateTitle(Post data) {
+        return super.update(NAMESPACE.concat("update_title"), data);
+    }
 }

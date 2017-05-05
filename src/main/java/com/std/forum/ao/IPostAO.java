@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Post;
+import com.std.forum.dto.res.XN610124Res;
 
 /** 
  * @author: xieyj 
@@ -97,4 +98,8 @@ public interface IPostAO {
 
     public Paginable<Post> queryOSSPostPage(int start, int limit, Post condition);
 
+    public void updateTitle(String code, String title, String userId,
+            String remark);
+
+    public XN610124Res getTotal(String companyCode);
 }

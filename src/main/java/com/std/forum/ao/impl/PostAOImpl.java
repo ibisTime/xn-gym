@@ -31,6 +31,7 @@ import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
+import com.std.forum.common.DateUtil;
 import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Comment;
 import com.std.forum.domain.LevelRule;
@@ -39,6 +40,7 @@ import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Rule;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.User;
+import com.std.forum.dto.res.XN610124Res;
 import com.std.forum.dto.res.XN805115Res;
 import com.std.forum.enums.EBizType;
 import com.std.forum.enums.EBoolean;
@@ -766,4 +768,48 @@ public class PostAOImpl implements IPostAO {
         return postPage;
     }
 
+    @Override
+    public void updateTitle(String code, String title, String userId,
+            String remark) {
+        User user = userBO.getRemoteUser(userId);
+        Post post = postBO.getPost(code);
+        // 对标题进行关键字过滤
+        EReaction reaction1 = keywordBO.checkContent(title);
+        if (EReaction.REFUSE.getCode().equals(reaction1.getCode())) {
+            throw new BizException("xn000000", "标题包含敏感字");
+        }
+        postBO.updatePostTitle(post, user, title, remark);
+    }
+
+    @Override
+    public XN610124Res getTotal(String companyCode) {
+        Long ztTotal = 0l;
+        Long jtTotal = 0l;
+        Long qbTotal = 0l;
+        Long maxRead = 0l;
+        Long sumRead = 0l;
+        Long avgRead = 0l;
+        // 查询昨天发布的帖子
+        Post post = new Post();
+        post.setPublishDatetimeStart(DateUtil.getYesterdayStart());
+        post.setPublishDatetimeEnd(DateUtil.getYesterdayEnd());
+        ztTotal = postBO.getPostNum(post);
+        // 查询今天发布的帖子
+        Post condition = new Post();
+        condition.setPublishDatetimeStart(DateUtil.getTodayStart());
+        condition.setPublishDatetimeEnd(DateUtil.getTodayEnd());
+        jtTotal = postBO.getPostNum(condition);
+        // 查询全部帖子
+        qbTotal = postBO.getPostNum(null);
+        maxRead = postBO.selectMaxRead(companyCode);
+        sumRead = postBO.selectSumRead(companyCode);
+        avgRead = sumRead / qbTotal;
+        XN610124Res res = new XN610124Res();
+        res.setZtTotal(ztTotal);
+        res.setJtTotal(jtTotal);
+        res.setQbTotal(qbTotal);
+        res.setMaxRead(maxRead);
+        res.setAvgRead(avgRead);
+        return res;
+    }
 }
