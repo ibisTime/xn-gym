@@ -768,18 +768,19 @@ public class PostAOImpl implements IPostAO {
         return postPage;
     }
 
-    @Override
-    public void updateTitle(String code, String title, String userId,
-            String remark) {
-        User user = userBO.getRemoteUser(userId);
-        Post post = postBO.getPost(code);
-        // 对标题进行关键字过滤
-        EReaction reaction1 = keywordBO.checkContent(title);
-        if (EReaction.REFUSE.getCode().equals(reaction1.getCode())) {
-            throw new BizException("xn000000", "标题包含敏感字");
-        }
-        postBO.updatePostTitle(post, user, title, remark);
-    }
+    //修改标题
+	@Override
+	public void updateTitle(String code, String title, String userId, String remark) {
+		User user = userBO.getRemoteUser(userId);
+		Post post = postBO.getPost(code);
+			 // 对标题进行关键字过滤
+			 EReaction reaction1 = keywordBO.checkContent(title);       
+			 if(EReaction.REFUSE.getCode().equals(reaction1.getCode())){
+				 throw new BizException("xn000000", "标题包含敏感字");
+			 }		 
+			 postBO.updatePostTitle(post, user,title, remark);
+	}
+
 
     @Override
     public XN610124Res getTotal(String companyCode) {

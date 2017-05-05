@@ -97,7 +97,6 @@ public interface IPostAO {
     public Post getPost(String code);
 
     public Paginable<Post> queryOSSPostPage(int start, int limit, Post condition);
-
     public void updateTitle(String code, String title, String userId,
             String remark);
 

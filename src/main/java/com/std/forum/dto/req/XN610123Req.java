@@ -52,9 +52,4 @@ public class XN610123Req {
 	public void setCode(String code) {
 		this.code = code;
 	}
-    
-    
-	
-	
-
 }
