@@ -87,4 +87,9 @@ public interface IPostDAO extends IBaseDAO<Post> {
     
     
 
+    public Long selectMaxRead(Post condition);
+
+    public Long selectSumRead(Post condition);
+
+
 }

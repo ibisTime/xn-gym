@@ -323,13 +323,27 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         return postDAO.selectList(condition);
     }
 
-	@Override
-	public void updatePostTitle(Post post,User user,String title, String remark) {
-		post.setTitle(title);
-		post.setRemark(remark);
-		post.setApprover(user.getLoginName());
-		post.setApproveDatetime(new Date());
-		postDAO.updateTitle(post);
-	}
+    @Override
+    public long selectMaxRead(String companyCode) {
+        Post condition = new Post();
+        condition.setCompanyCode(companyCode);
+        return postDAO.selectMaxRead(condition);
+    }
 
+    @Override
+    public long selectSumRead(String companyCode) {
+        Post condition = new Post();
+        condition.setCompanyCode(companyCode);
+        return postDAO.selectMaxRead(condition);
+    }
+
+    @Override
+    public void updatePostTitle(Post post, User user, String title,
+            String remark) {
+        post.setTitle(title);
+        post.setRemark(remark);
+        post.setApprover(user.getLoginName());
+        post.setApproveDatetime(new Date());
+        postDAO.updateTitle(post);
+    }
 }

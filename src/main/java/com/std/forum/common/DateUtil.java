@@ -206,8 +206,33 @@ public class DateUtil {
         return (int) (times / 60 / 60 / 1000 / 24);
     }
 
+    /**
+     * 获取昨天凌晨时间
+     * @return
+     */
+    public static Date getYesterdayStart() {
+        Calendar currentDate = new GregorianCalendar();
+        currentDate.add(Calendar.DATE, -1);
+        currentDate.set(Calendar.HOUR_OF_DAY, 0);
+        currentDate.set(Calendar.MINUTE, 0);
+        currentDate.set(Calendar.SECOND, 0);
+        return (Date) currentDate.getTime().clone();
+    }
+
+    /**
+     * 获取昨天最后时间
+     * @return
+     */
+    public static Date getYesterdayEnd() {
+        Calendar currentDate = new GregorianCalendar();
+        currentDate.add(Calendar.DATE, -1);
+        currentDate.set(Calendar.HOUR_OF_DAY, 23);
+        currentDate.set(Calendar.MINUTE, 59);
+        currentDate.set(Calendar.SECOND, 59);
+        return (Date) currentDate.getTime().clone();
+    }
+
     public static void main(String[] args) {
-        System.out.println(DateUtil.strToDate("2016-01-01",
-            DateUtil.FRONT_DATE_FORMAT_STRING));
+        System.out.println(getYesterdayEnd());
     }
 }

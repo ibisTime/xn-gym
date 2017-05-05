@@ -10,25 +10,24 @@ import com.std.forum.exception.BizException;
 import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
 
-public class XN610123 extends AProcessor{
-	
-	private IPostAO postAO = SpringContextHolder
-			.getBean(IPostAO.class);
-	
-	private XN610123Req req = null ;
+public class XN610123 extends AProcessor {
 
-	@Override
-	public Object doBusiness() throws BizException {
-		postAO.updateTitle(req.getCode(), req.getTitle(), req.getUserId(), req.getRemark());
-		
-		return new BooleanRes(true);
-	}
+    private IPostAO postAO = SpringContextHolder.getBean(IPostAO.class);
 
-	@Override
-	public void doCheck(String inputparams) throws ParaException {
-		req = JsonUtil.json2Bean(inputparams, XN610123Req.class);
-		StringValidater.validateBlank(req.getCode(),req.getTitle(),req.getUserId());;
-		
-	}
+    private XN610123Req req = null;
+
+    @Override
+    public Object doBusiness() throws BizException {
+        postAO.updateTitle(req.getCode(), req.getTitle(), req.getUserId(),
+            req.getRemark());
+        return new BooleanRes(true);
+    }
+
+    @Override
+    public void doCheck(String inputparams) throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN610123Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getTitle(),
+            req.getUserId());
+    }
 
 }

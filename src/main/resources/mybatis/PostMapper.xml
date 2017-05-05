@@ -454,13 +454,25 @@
 		WHERE code = #{code}
 	</update>
 	
+	<select id="select_max_read" parameterType="post"
+		resultType="java.lang.Long">
+		 SELECT MAX(sum_read) FROM tforum_post t left join tforum_splate tp on t.plate_code = tp.code
+		 <include refid="where_condition" />
+	</select>
+	
+	<select id="select_sum_read" parameterType="post"
+		resultType="java.lang.Long">
+		 SELECT SUM(sum_read) FROM tforum_post t left join tforum_splate tp on t.plate_code = tp.code
+		 <include refid="where_condition" />
+	</select>
+	
 	<update id="update_title" parameterType="post">
 		UPDATE tforum_post
 		SET
 		title = #{title}
 		,approver = #{approver}
-		,remark = #{remark}		
 		,publish_datetime = #{publishDatetime}		
+		,remark = #{remark}		
 		WHERE code = #{code}
 	</update>
 </mapper>

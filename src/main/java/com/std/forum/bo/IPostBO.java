@@ -74,6 +74,10 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public List<Post> queryPostList(String splateCode);
     
-    public void updatePostTitle(Post post,User user ,String title,String remark);
+    public long selectMaxRead(String companyCode);
 
+    public long selectSumRead(String companyCode);
+
+    public void updatePostTitle(Post post, User user, String title,
+            String remark);
 }
