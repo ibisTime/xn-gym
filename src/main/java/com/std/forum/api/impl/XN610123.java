@@ -28,8 +28,6 @@ public class XN610123 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN610123Req.class);
         StringValidater.validateBlank(req.getCode(), req.getTitle(),
             req.getUserId());
-        ;
-
     }
 
 }
