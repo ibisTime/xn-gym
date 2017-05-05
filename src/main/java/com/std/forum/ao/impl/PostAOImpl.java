@@ -771,25 +771,12 @@ public class PostAOImpl implements IPostAO {
 	public void updateTitle(String code, String title, String userId, String remark) {
 		User user = userBO.getRemoteUser(userId);
 		Post post = postBO.getPost(code);
-		String status = post.getStatus();
-		//判断是否可以修改('草稿'，'过滤')可以被修改
-		if(status.equals(EPostStatus.DRAFT.getCode())|| status.equals(EPostStatus.FILTERED.getCode())){
 			 // 对标题进行关键字过滤
 			 EReaction reaction1 = keywordBO.checkContent(title);       
 			 if(EReaction.REFUSE.getCode().equals(reaction1.getCode())){
 				 throw new BizException("xn000000", "标题包含敏感字");
-			 }
-			 
+			 }		 
 			 postBO.updatePostTitle(post, user,title, remark);
-		}else{
-			
-			throw new BizException("xn000000", "该帖子不可以被修改");
-		}
-		
-		
-		
-        	
-		
 	}
 
 }
