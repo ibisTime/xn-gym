@@ -1,12 +1,18 @@
 package com.std.forum.bo.impl;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.domain.User;
 import com.std.forum.dto.req.XN001302Req;
 import com.std.forum.dto.req.XN001400Req;
+import com.std.forum.dto.req.XN001401Req;
 import com.std.forum.dto.req.XN805300Req;
 import com.std.forum.dto.req.XN805301Req;
 import com.std.forum.dto.req.XN805302Req;
@@ -104,5 +110,25 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         req.setLevel(level);
         BizConnecter.getBizData("001302", JsonUtils.object2Json(req),
             Object.class);
+    }
+
+    @Override
+    public Integer userTotal(String companyCode) {
+        Integer number = 0;
+        XN001401Req req = new XN001401Req();
+        req.setCompanyCode(companyCode);
+        req.setSystemCode("CD-CCSW000008");
+        String jsonStr = BizConnecter.getBizData("001401",
+            JsonUtils.object2Json(req));
+        Gson gson = new Gson();
+        List<User> userList = gson.fromJson(jsonStr,
+            new TypeToken<List<User>>() {
+            }.getType());
+        if (CollectionUtils.isEmpty(userList)) {
+            number = 0;
+        } else {
+            number = userList.size();
+        }
+        return number;
     }
 }

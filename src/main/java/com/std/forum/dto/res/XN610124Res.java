@@ -14,7 +14,13 @@ public class XN610124Res {
     private Long maxRead;
 
     // 平均阅读数
-    private Long avgRead;
+    private Double avgRead;
+
+    // 用户数量
+    private Integer userTotal;
+
+    // 公司名称
+    private String companyName;
 
     public Long getZtTotal() {
         return ztTotal;
@@ -48,12 +54,28 @@ public class XN610124Res {
         this.maxRead = maxRead;
     }
 
-    public Long getAvgRead() {
+    public Integer getUserTotal() {
+        return userTotal;
+    }
+
+    public void setUserTotal(Integer userTotal) {
+        this.userTotal = userTotal;
+    }
+
+    public Double getAvgRead() {
         return avgRead;
     }
 
-    public void setAvgRead(Long avgRead) {
+    public void setAvgRead(Double avgRead) {
         this.avgRead = avgRead;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
 }

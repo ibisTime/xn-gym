@@ -17,7 +17,6 @@ public class XN610123 extends AProcessor {
     private XN610123Req req = null;
 
     @Override
-    // test update
     public Object doBusiness() throws BizException {
         postAO.updateTitle(req.getCode(), req.getTitle(), req.getUserId(),
             req.getRemark());

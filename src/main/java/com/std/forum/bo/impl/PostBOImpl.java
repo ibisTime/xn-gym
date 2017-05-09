@@ -324,17 +324,17 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
-    public long selectMaxRead(String companyCode) {
+    public Post selectMaxRead(String companyCode) {
         Post condition = new Post();
         condition.setCompanyCode(companyCode);
         return postDAO.selectMaxRead(condition);
     }
 
     @Override
-    public long selectSumRead(String companyCode) {
+    public Post selectSumRead(String companyCode) {
         Post condition = new Post();
         condition.setCompanyCode(companyCode);
-        return postDAO.selectMaxRead(condition);
+        return postDAO.selectSumRead(condition);
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.std.forum.ao.IPostAO;
 import com.std.forum.bo.IAccountBO;
 import com.std.forum.bo.ICommentBO;
+import com.std.forum.bo.ICompanyBO;
 import com.std.forum.bo.IKeywordBO;
 import com.std.forum.bo.ILevelRuleBO;
 import com.std.forum.bo.IPostBO;
@@ -34,6 +35,7 @@ import com.std.forum.bo.base.Paginable;
 import com.std.forum.common.DateUtil;
 import com.std.forum.core.StringValidater;
 import com.std.forum.domain.Comment;
+import com.std.forum.domain.Company;
 import com.std.forum.domain.LevelRule;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.PostTalk;
@@ -89,6 +91,9 @@ public class PostAOImpl implements IPostAO {
 
     @Autowired
     protected IAccountBO accountBO;
+
+    @Autowired
+    protected ICompanyBO companyBO;
 
     // 1.发布帖子
     // 判断是否发帖
@@ -768,19 +773,19 @@ public class PostAOImpl implements IPostAO {
         return postPage;
     }
 
-    //修改标题
-	@Override
-	public void updateTitle(String code, String title, String userId, String remark) {
-		User user = userBO.getRemoteUser(userId);
-		Post post = postBO.getPost(code);
-			 // 对标题进行关键字过滤
-			 EReaction reaction1 = keywordBO.checkContent(title);       
-			 if(EReaction.REFUSE.getCode().equals(reaction1.getCode())){
-				 throw new BizException("xn000000", "标题包含敏感字");
-			 }		 
-			 postBO.updatePostTitle(post, user,title, remark);
-	}
-
+    // 修改标题
+    @Override
+    public void updateTitle(String code, String title, String userId,
+            String remark) {
+        User user = userBO.getRemoteUser(userId);
+        Post post = postBO.getPost(code);
+        // 对标题进行关键字过滤
+        EReaction reaction1 = keywordBO.checkContent(title);
+        if (EReaction.REFUSE.getCode().equals(reaction1.getCode())) {
+            throw new BizException("xn000000", "标题包含敏感字");
+        }
+        postBO.updatePostTitle(post, user, title, remark);
+    }
 
     @Override
     public XN610124Res getTotal(String companyCode) {
@@ -789,28 +794,125 @@ public class PostAOImpl implements IPostAO {
         Long qbTotal = 0l;
         Long maxRead = 0l;
         Long sumRead = 0l;
-        Long avgRead = 0l;
+        Double avgRead = 0.00;
+        Integer userTotal = 0;
         // 查询昨天发布的帖子
         Post post = new Post();
         post.setPublishDatetimeStart(DateUtil.getYesterdayStart());
         post.setPublishDatetimeEnd(DateUtil.getYesterdayEnd());
+        post.setCompanyCode(companyCode);
         ztTotal = postBO.getPostNum(post);
         // 查询今天发布的帖子
-        Post condition = new Post();
-        condition.setPublishDatetimeStart(DateUtil.getTodayStart());
-        condition.setPublishDatetimeEnd(DateUtil.getTodayEnd());
-        jtTotal = postBO.getPostNum(condition);
+        Post data = new Post();
+        data.setPublishDatetimeStart(DateUtil.getTodayStart());
+        data.setPublishDatetimeEnd(DateUtil.getTodayEnd());
+        data.setCompanyCode(companyCode);
+        jtTotal = postBO.getPostNum(data);
         // 查询全部帖子
-        qbTotal = postBO.getPostNum(null);
-        maxRead = postBO.selectMaxRead(companyCode);
-        sumRead = postBO.selectSumRead(companyCode);
-        avgRead = sumRead / qbTotal;
+        Post qbPost = new Post();
+        qbPost.setCompanyCode(companyCode);
+        qbTotal = postBO.getPostNum(qbPost);
+        Post maxReadPost = postBO.selectMaxRead(companyCode);
+        if (maxReadPost == null) {
+            maxRead = 0l;
+        } else {
+            maxRead = StringValidater.toLong(maxReadPost.getMaxRead());
+        }
+        Post sumReadPost = postBO.selectSumRead(companyCode);
+        if (sumReadPost == null) {
+            sumRead = 0l;
+        } else {
+            sumRead = StringValidater.toLong(sumReadPost.getSunRead());
+        }
+        Double sunRead = (double) sumRead;
+        Double qbtotal = (double) qbTotal;
+        avgRead = sunRead / qbtotal;
+        if (sunRead == 0.0) {
+            avgRead = 0.0;
+        } else if (qbtotal == 0.0) {
+            avgRead = 0.0;
+        }
+        userTotal = userBO.userTotal(companyCode);
         XN610124Res res = new XN610124Res();
         res.setZtTotal(ztTotal);
         res.setJtTotal(jtTotal);
         res.setQbTotal(qbTotal);
         res.setMaxRead(maxRead);
         res.setAvgRead(avgRead);
+        res.setUserTotal(userTotal);
         return res;
+    }
+
+    @Override
+    public Paginable<XN610124Res> queryTotalPage(int start, int limit,
+            Post condition) {
+        Paginable<XN610124Res> page = null;
+        List<XN610124Res> postList = new ArrayList<XN610124Res>();
+        Long ztTotal = 0l;
+        Long jtTotal = 0l;
+        Long qbTotal = 0l;
+        Long maxRead = 0l;
+        Long sumRead = 0l;
+        Double avgRead = 0.00;
+        Integer userTotal = 0;
+        if (StringUtils.isBlank(condition.getCompanyCode())) {
+            List<Company> companyList = companyBO.queryCompanyList();
+            for (Company company : companyList) {
+                // 查询昨天发布的帖子
+                Post post = new Post();
+                post.setPublishDatetimeStart(DateUtil.getYesterdayStart());
+                post.setPublishDatetimeEnd(DateUtil.getYesterdayEnd());
+                post.setCompanyCode(company.getCode());
+                ztTotal = postBO.getPostNum(post);
+                // 查询今天发布的帖子
+                Post data = new Post();
+                data.setPublishDatetimeStart(DateUtil.getTodayStart());
+                data.setPublishDatetimeEnd(DateUtil.getTodayEnd());
+                data.setCompanyCode(company.getCode());
+                jtTotal = postBO.getPostNum(data);
+                // 查询全部帖子
+                Post qbPost = new Post();
+                qbPost.setCompanyCode(company.getCode());
+                qbTotal = postBO.getPostNum(qbPost);
+                Post maxReadPost = postBO.selectMaxRead(company.getCode());
+                if (maxReadPost == null) {
+                    maxRead = 0l;
+                } else {
+                    maxRead = StringValidater.toLong(maxReadPost.getMaxRead());
+                }
+                Post sumReadPost = postBO.selectSumRead(company.getCode());
+                if (sumReadPost == null) {
+                    sumRead = 0l;
+                } else {
+                    sumRead = StringValidater.toLong(sumReadPost.getSunRead());
+                }
+                Double sunRead = (double) sumRead;
+                Double qbtotal = (double) qbTotal;
+                avgRead = sunRead / qbtotal;
+                if (sunRead == 0.0) {
+                    avgRead = 0.0;
+                } else if (qbtotal == 0.0) {
+                    avgRead = 0.0;
+                }
+                userTotal = userBO.userTotal(company.getCode());
+                XN610124Res res = new XN610124Res();
+                res.setZtTotal(ztTotal);
+                res.setJtTotal(jtTotal);
+                res.setQbTotal(qbTotal);
+                res.setMaxRead(maxRead);
+                res.setAvgRead(avgRead);
+                res.setUserTotal(userTotal);
+                res.setCompanyName(company.getName());
+                postList.add(res);
+            }
+        }
+        page = new Page<XN610124Res>(start, limit, postList.size());
+        if (postList.size() < limit) {
+            limit = postList.size();
+        }
+        List<XN610124Res> dataList = postList.subList(start - 1, limit);
+        page.setList(dataList);
+        System.out.println(postList.get(0).getAvgRead());
+        return page;
     }
 }

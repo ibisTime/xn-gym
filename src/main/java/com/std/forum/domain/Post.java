@@ -136,6 +136,10 @@ public class Post extends ABaseDO {
     // 举报次数
     private Integer reportNum;
 
+    private String maxRead;
+
+    private String sunRead;
+
     public String getCode() {
         return code;
     }
@@ -431,4 +435,21 @@ public class Post extends ABaseDO {
     public void setReportNum(Integer reportNum) {
         this.reportNum = reportNum;
     }
+
+    public String getMaxRead() {
+        return maxRead;
+    }
+
+    public void setMaxRead(String maxRead) {
+        this.maxRead = maxRead;
+    }
+
+    public String getSunRead() {
+        return sunRead;
+    }
+
+    public void setSunRead(String sunRead) {
+        this.sunRead = sunRead;
+    }
+
 }

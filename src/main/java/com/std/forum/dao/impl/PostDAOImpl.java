@@ -167,15 +167,15 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     }
 
     @Override
-    public Long selectMaxRead(Post condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_max_read"),
-            condition);
+    public Post selectMaxRead(Post condition) {
+        return super.select(NAMESPACE.concat("select_max_read"), condition,
+            Post.class);
     }
 
     @Override
-    public Long selectSumRead(Post condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_sum_read"),
-            condition);
+    public Post selectSumRead(Post condition) {
+        return super.select(NAMESPACE.concat("select_sum_read"), condition,
+            Post.class);
     }
 
     // 修改标题

@@ -67,4 +67,13 @@ public interface IUserBO extends IPaginableBO<User> {
      * @history:
      */
     public void upgradeLevel(String userId, String level);
+
+    /**
+     * 统计用户数
+     * @param companyCode
+     * @return 
+     * @create: 2017年5月8日 上午10:56:36 asus
+     * @history:
+     */
+    public Integer userTotal(String companyCode);
 }

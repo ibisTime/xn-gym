@@ -26,6 +26,8 @@
 		<result column="sum_reward" property="sumReward" />
 		<result column="remark" property="remark" />
 		<result column="plate_name" property="plateName" />
+		<result column="sunRead" property="sunRead" />
+		<result column="maxRead" property="maxRead" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -290,6 +292,38 @@
 		ORDER BY t.publish_datetime DESC	
 	</select>
 	
+	<!-- 分组 -->
+	<select id="select_post_fz" parameterType="post" resultMap="post_DB_Result">
+		SELECT 
+		DISTINCT
+		t.code
+		,t.title
+		,t.content
+		,t.pic
+		,t.publisher
+		
+		,t.publish_datetime
+		,t.approver
+		,t.approve_datetime
+		,t.approve_note
+		,t.status
+		
+		,t.location
+		,t.order_no
+		,t.plate_code
+		,t.is_lock
+		,t.sum_comment
+		
+		,t.sum_like
+		,t.sum_read
+		,t.sum_reward
+		,t.remark
+		FROM
+		tforum_post t left join tforum_splate tp on t.plate_code = tp.code
+		group by tp.company_code
+	</select>
+	
+	
 	<!-- 我收藏的帖子数量 -->
 	<!-- <select id="select_sc_count" parameterType="post"
 		resultType="java.lang.Long">
@@ -454,15 +488,15 @@
 		WHERE code = #{code}
 	</update>
 	
-	<select id="select_max_read" parameterType="post"
-		resultType="java.lang.Long">
-		 SELECT MAX(sum_read) FROM tforum_post t left join tforum_splate tp on t.plate_code = tp.code
+
+	<select id="select_max_read" parameterType="Map" resultMap="post_DB_Result">  
+		 SELECT MAX(sum_read) as maxRead FROM tforum_post t left join tforum_splate tp on t.plate_code = tp.code
 		 <include refid="where_condition" />
 	</select>
 	
-	<select id="select_sum_read" parameterType="post"
-		resultType="java.lang.Long">
-		 SELECT SUM(sum_read) FROM tforum_post t left join tforum_splate tp on t.plate_code = tp.code
+
+	<select id="select_sum_read" parameterType="Map" resultMap="post_DB_Result">  
+		 SELECT SUM(sum_read) as sunRead FROM tforum_post t left join tforum_splate tp on t.plate_code = tp.code
 		 <include refid="where_condition" />
 	</select>
 	
