@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.std.forum.bo.base.IPaginableBO;
 import com.std.forum.domain.PostTalk;
+import com.std.forum.domain.User;
 
 /** 
  * 点赞/收藏/打赏/举报/阅读
@@ -21,8 +22,8 @@ import com.std.forum.domain.PostTalk;
  */
 public interface IPostTalkBO extends IPaginableBO<PostTalk> {
 
-    public int savePostTalk(String postCode, String userId, String type,
-            String remark);
+    public int savePostTalk(String postCode, String userId, User user,
+            String type, String remark);
 
     public List<PostTalk> queryPostTalkSingleList(String postCode, String type,
             String talker);

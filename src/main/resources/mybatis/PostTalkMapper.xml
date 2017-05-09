@@ -8,10 +8,13 @@
 		<result column="post_code" property="postCode" />
 		<result column="post_title" property="postTitle" />
 		<result column="post_content" property="postContent" />
+		
 		<result column="talker" property="talker" />
-		<!-- <result column="nickname" property="nickname" />
-		<result column="photo" property="photo" /> -->
+		<result column="nickname" property="nickname" />
+		<result column="photo" property="photo" />
+		<result column="login_name" property="loginName" />
 		<result column="talk_datetime" property="talkDatetime" />
+		
 		<result column="remark" property="remark" />
 	</resultMap>
 	
@@ -49,8 +52,12 @@
 		,tp.title as post_title
 		,tp.content as post_content
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.talker
 		,t.talk_datetime
+		
 		,t.remark
 		FROM
 		tforum_post_talk t inner join tforum_post tp on t.post_code = tp.code
@@ -63,8 +70,11 @@
 		t.code
 		,t.type
 		,t.post_code
-		
 		,t.talker
+		,t.nickname
+		
+		,t.photo
+		,t.login_name
 		,t.talk_datetime
 		,t.remark
 		FROM
@@ -82,7 +92,11 @@
 		,tp.content as post_content
 		
 		,t.talker
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.talk_datetime
+		
 		,t.remark
 		FROM
 		tforum_post_talk t inner join tforum_post tp on t.post_code = tp.code
@@ -103,6 +117,10 @@
 		,type
 		,post_code
 		,talker
+		,nickname
+		
+		,photo
+		,login_name
 		,talk_datetime
 		,remark
 		)
@@ -111,6 +129,10 @@
 		,#{type}
 		,#{postCode}
 		,#{talker}
+		,#{nickname}
+		
+		,#{photo}
+		,#{loginName}
 		,#{talkDatetime}
 		,#{remark}
 		)

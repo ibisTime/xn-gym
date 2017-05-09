@@ -9,8 +9,12 @@
 		<result column="status" property="status" />
 		<result column="commer" property="commer" />
 		
+		<result column="nickname" property="nickname" />
+		<result column="photo" property="photo" />
+		<result column="login_name" property="loginName" />
 		<result column="comm_datetime" property="commDatetime" />
 		<result column="approver" property="approver" />
+		
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="approve_note" property="approveNote" />
 		<result column="post_code" property="postCode" />
@@ -75,8 +79,12 @@
 		,t.status
 		,t.commer
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.comm_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.post_code
@@ -102,8 +110,12 @@
 		,t.status
 		,t.commer
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.comm_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.post_code
@@ -122,8 +134,12 @@
 		,t.status
 		,t.commer
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.comm_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.post_code
@@ -142,8 +158,12 @@
 		,t.status
 		,t.commer
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.comm_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.post_code
@@ -162,8 +182,12 @@
 		,t.status
 		,t.commer
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.comm_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.post_code
@@ -182,6 +206,9 @@
 		,status
 		,commer
 		
+		,nickname
+		,photo
+		,login_name
 		,comm_datetime
 		,post_code
 		)
@@ -192,6 +219,9 @@
 		,#{status}
 		,#{commer}
 		
+		,#{nickname}
+		,#{photo}
+		,#{loginName}
 		,#{commDatetime}
 		,#{postCode}
 		)

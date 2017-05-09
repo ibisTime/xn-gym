@@ -23,10 +23,11 @@ import com.std.forum.domain.User;
 public interface IPostBO extends IPaginableBO<Post> {
 
     public String savePost(String title, String content, String pic,
-            String plateCode, String publisher, String status);
+            String plateCode, String publisher, User user, String status);
 
     public void refreshPost(String code, String title, String content,
-            String pic, String plateCode, String publisher, String status);
+            String pic, String plateCode, String publisher, User user,
+            String status);
 
     public int removePost(String code);
 

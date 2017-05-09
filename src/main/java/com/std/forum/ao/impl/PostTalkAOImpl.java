@@ -54,6 +54,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
     public void reportPost(String code, String reporter, String reportNote,
             String type) {
         StringBuffer reportNoteBuffer = new StringBuffer(reportNote);
+        User user = userBO.getRemoteUser(reporter);
         // 判断是否达到举报条数，更新帖子或评论状态待审核
         if (EPostType.TZ.getCode().equals(type)) {
             type = ETalkType.TZJB.getCode();
@@ -85,7 +86,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
                     reportNoteBuffer.toString());
             }
         }
-        postTalkBO.savePostTalk(code, reporter, type, reportNote);
+        postTalkBO.savePostTalk(code, reporter, user, type, reportNote);
     }
 
     private boolean isToMax(String code, String publisher, String reporter,
@@ -121,6 +122,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
         if (EBoolean.YES.getCode().equals(post.getIsLock())) {
             throw new BizException("xn0000", "帖子已被锁定，不可进行操作");
         }
+        User user = userBO.getRemoteUser(userId);
         if (null != postTalk) {
             if (ETalkType.DZ.getCode().equals(type)) {
                 postBO.refreshPostSumLike(postCode, post.getSumLike() - 1);
@@ -130,7 +132,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
             if (ETalkType.DZ.getCode().equals(type)) {
                 postBO.refreshPostSumLike(postCode, post.getSumLike() + 1);
             }
-            postTalkBO.savePostTalk(postCode, userId, type, ETalkType
+            postTalkBO.savePostTalk(postCode, userId, user, type, ETalkType
                 .getTalkTypeMap().get(type).getValue());
         }
     }
@@ -142,7 +144,8 @@ public class PostTalkAOImpl implements IPostTalkAO {
         if (userId.equals(post.getPublisher())) {
             throw new BizException("xn0000", "用户为发帖人，不能打赏自己");
         }
-        postTalkBO.savePostTalk(postCode, userId, ETalkType.DS.getCode(),
+        User user = userBO.getRemoteUser(userId);
+        postTalkBO.savePostTalk(postCode, userId, user, ETalkType.DS.getCode(),
             String.valueOf(amount));
         postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);
         accountBO.doTransferAmountRemote(userId, post.getPublisher(),

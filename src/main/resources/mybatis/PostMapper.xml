@@ -9,20 +9,24 @@
 		<result column="pic" property="pic" />
 		<result column="publisher" property="publisher" />
 		
+		<result column="nickname" property="nickname" />
+		<result column="photo" property="photo" />
+		<result column="login_name" property="loginName" />
 		<result column="publish_datetime" property="publishDatetime" />
 		<result column="approver" property="approver" />
+		
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="approve_note" property="approveNote" />
 		<result column="status" property="status" />
-		
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
+		
 		<result column="plate_code" property="plateCode" />
 		<result column="is_lock" property="isLock" />
 		<result column="sum_comment" property="sumComment" />
-		
 		<result column="sum_like" property="sumLike" />
 		<result column="sum_read" property="sumRead" />
+		
 		<result column="sum_reward" property="sumReward" />
 		<result column="remark" property="remark" />
 		<result column="plate_name" property="plateName" />
@@ -100,20 +104,24 @@
 		,t.pic
 		,t.publisher
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.publish_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.status
-		
 		,t.location
 		,t.order_no
+		
 		,t.plate_code
 		,t.is_lock
 		,t.sum_comment
-		
 		,t.sum_like
 		,t.sum_read
+		
 		,t.sum_reward
 		,t.remark
 		,tp.name as plate_name
@@ -167,20 +175,24 @@
 		,t.pic
 		,t.publisher
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.publish_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.status
-		
 		,t.location
 		,t.order_no
+		
 		,t.plate_code
 		,t.is_lock
 		,t.sum_comment
-		
 		,t.sum_like
 		,t.sum_read
+		
 		,t.sum_reward
 		,t.remark
 		,tp.name as plate_name
@@ -200,20 +212,24 @@
 		,t.pic
 		,t.publisher
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.publish_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.status
-		
 		,t.location
 		,t.order_no
+		
 		,t.plate_code
 		,t.is_lock
 		,t.sum_comment
-		
 		,t.sum_like
 		,t.sum_read
+		
 		,t.sum_reward
 		,t.remark
 		FROM
@@ -238,20 +254,24 @@
 		,t.pic
 		,t.publisher
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.publish_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.status
-		
 		,t.location
 		,t.order_no
+		
 		,t.plate_code
 		,t.is_lock
 		,t.sum_comment
-		
 		,t.sum_like
 		,t.sum_read
+		
 		,t.sum_reward
 		,t.remark
 		FROM
@@ -270,20 +290,24 @@
 		,t.pic
 		,t.publisher
 		
+		,t.nickname
+		,t.photo
+		,t.login_name
 		,t.publish_datetime
 		,t.approver
+		
 		,t.approve_datetime
 		,t.approve_note
 		,t.status
-		
 		,t.location
 		,t.order_no
+		
 		,t.plate_code
 		,t.is_lock
 		,t.sum_comment
-		
 		,t.sum_like
 		,t.sum_read
+		
 		,t.sum_reward
 		,t.remark
 		FROM
@@ -291,48 +315,6 @@
 		<include refid="where_condition" />
 		ORDER BY t.publish_datetime DESC	
 	</select>
-	
-	<!-- 分组 -->
-	<select id="select_post_fz" parameterType="post" resultMap="post_DB_Result">
-		SELECT 
-		DISTINCT
-		t.code
-		,t.title
-		,t.content
-		,t.pic
-		,t.publisher
-		
-		,t.publish_datetime
-		,t.approver
-		,t.approve_datetime
-		,t.approve_note
-		,t.status
-		
-		,t.location
-		,t.order_no
-		,t.plate_code
-		,t.is_lock
-		,t.sum_comment
-		
-		,t.sum_like
-		,t.sum_read
-		,t.sum_reward
-		,t.remark
-		FROM
-		tforum_post t left join tforum_splate tp on t.plate_code = tp.code
-		group by tp.company_code
-	</select>
-	
-	
-	<!-- 我收藏的帖子数量 -->
-	<!-- <select id="select_sc_count" parameterType="post"
-		resultType="java.lang.Long">
-		SELECT count(*) from 
-		(SELECT DISTINCT t.code FROM tforum_post t inner join 
-		tforum_splate tp on t.plate_code = tp.code left join
-	 	tforum_post_talk tpt on t.code = tpt.post_code
-		<include refid="where_condition" />) as post
-	</select> -->
 	
 	<select id="select_post1_count" parameterType="post"
 		resultType="java.lang.Long">
@@ -357,13 +339,18 @@
 		,status
 		
 		,plate_code
+		,nickname
+		,photo
+		,login_name
 		,publisher
+		
 		,publish_datetime
 		,is_lock
 		,location
 		
 		,order_no
 		,sum_comment
+		
 		,sum_like
 		,sum_read
 		,sum_reward
@@ -376,13 +363,17 @@
 		,#{status}
 		
 		,#{plateCode}
+		,#{nickname}
+		,#{photo}
+		,#{loginName}
 		,#{publisher}
+		
 		,#{publishDatetime}
 		,#{isLock}
 		,#{location}
-		
 		,#{orderNo}
 		,#{sumComment}
+		
 		,#{sumLike}
 		,#{sumRead}
 		,#{sumReward}
@@ -397,13 +388,19 @@
 		,pic = #{pic}
 		,plate_code = #{plateCode}
 		,status = #{status}
+		
 		,publisher = #{publisher}
+		,nickname = #{nickname}
+		,photo = #{photo}
+		,login_name = #{loginName}
 		,publish_datetime = #{publishDatetime}
+		
 		,is_lock = #{isLock}
 		,location = #{location}
 		,order_no = #{orderNo}
 		,sum_comment = #{sumComment}
 		,sum_like = #{sumLike}
+		
 		,sum_read = #{sumRead}
 		,sum_reward = #{sumReward}
 		WHERE code = #{code}

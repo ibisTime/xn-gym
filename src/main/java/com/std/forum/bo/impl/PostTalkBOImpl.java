@@ -20,6 +20,7 @@ import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.IPostTalkDAO;
 import com.std.forum.domain.PostTalk;
+import com.std.forum.domain.User;
 import com.std.forum.enums.EPrefixCode;
 import com.std.forum.enums.ETalkType;
 
@@ -38,8 +39,8 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
      * @see com.std.forum.bo.IPostTalkBO#savePostTalk(com.std.forum.domain.PostTalk)
      */
     @Override
-    public int savePostTalk(String postCode, String talker, String type,
-            String remark) {
+    public int savePostTalk(String postCode, String talker, User user,
+            String type, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(postCode)) {
             String code = OrderNoGenerater.generate(EPrefixCode.POSTTALK
@@ -48,6 +49,10 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
             data.setCode(code);
             data.setPostCode(postCode);
             data.setTalker(talker);
+            data.setNickname(user.getNickname());
+            data.setPhoto(user.getPhoto());
+
+            data.setLoginName(user.getLoginName());
             data.setType(type);
             data.setTalkDatetime(new Date());
             data.setRemark(remark);

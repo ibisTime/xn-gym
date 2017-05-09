@@ -43,6 +43,15 @@ public class Post extends ABaseDO {
     // 发布人
     private String publisher;
 
+    // 昵称
+    private String nickname;
+
+    // 头像
+    private String photo;
+
+    // 登陆名
+    private String loginName;
+
     // 发布时间
     private Date publishDatetime;
 
@@ -83,14 +92,6 @@ public class Post extends ABaseDO {
     private String remark;
 
     // *****************db properties ********************
-    // 登录名
-    private String loginName;
-
-    // 昵称
-    private String nickname;
-
-    // 照片
-    private String photo;
 
     // 发布时间起
     private Date publishDatetimeStart;

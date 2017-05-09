@@ -37,6 +37,15 @@ public class PostTalk extends ABaseDO {
     // 操作人
     private String talker;
 
+    // 昵称
+    private String nickname;
+
+    // 头像
+    private String photo;
+
+    // 登陆名
+    private String loginName;
+
     // 操作时间
     private Date talkDatetime;
 
@@ -51,9 +60,6 @@ public class PostTalk extends ABaseDO {
 
     // ------------db properties------------
 
-    // 昵称
-    private String nickname;
-
     // 帖子名称
     private String postTitle;
 
@@ -62,9 +68,6 @@ public class PostTalk extends ABaseDO {
 
     // 发布人
     private String publisher;
-
-    // 头像
-    private String photo;
 
     private List<String> postCodeList;
 
@@ -178,5 +181,13 @@ public class PostTalk extends ABaseDO {
 
     public void setPostCodeList(List<String> postCodeList) {
         this.postCodeList = postCodeList;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 }

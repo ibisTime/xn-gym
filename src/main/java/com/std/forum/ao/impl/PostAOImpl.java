@@ -106,11 +106,13 @@ public class PostAOImpl implements IPostAO {
         // 判断版块是否存在
         Splate splate = splateBO.getSplate(plateCode);
         String code = null;
+        User user = userBO.getRemoteUser(publisher);
         if (EBoolean.NO.getCode().equals(isPublish)) {// 保存草稿
             code = postBO.savePost(title, content, pic, splate.getCode(),
-                publisher, EPostStatus.DRAFT.getCode());
+                publisher, user, EPostStatus.DRAFT.getCode());
         } else {// 直接发布
-            code = doPublishPost(null, splate, title, content, pic, publisher);
+            code = doPublishPost(null, splate, title, content, pic, publisher,
+                user);
         }
         return code;
     }
@@ -122,23 +124,23 @@ public class PostAOImpl implements IPostAO {
             String pic, String plateCode, String publisher, String isPublish) {
         // 判断版块是否存在
         Splate splate = splateBO.getSplate(plateCode);
+        User user = userBO.getRemoteUser(publisher);
         if (EBoolean.NO.getCode().equals(isPublish)) {// 继续草稿
             postBO.refreshPost(code, title, content, pic, plateCode, publisher,
-                EPostStatus.DRAFT.getCode());
+                user, EPostStatus.DRAFT.getCode());
         } else {
-            doPublishPost(code, splate, title, content, pic, publisher);
+            doPublishPost(code, splate, title, content, pic, publisher, user);
         }
         return code;
     }
 
     private String doPublishPost(String code, Splate splate, String title,
-            String content, String pic, String publisher) {
+            String content, String pic, String publisher, User user) {
         String status = null;
         // 对标题和内容进行关键字过滤
         EReaction reaction1 = keywordBO.checkContent(title);
         EReaction reaction2 = keywordBO.checkContent(content);
         // 判断用户等级，是否审核
-        User user = userBO.getRemoteUser(publisher);
         LevelRule levelRule = levelRuleBO.getLevelRule(user.getLevel());
         if (EReaction.REFUSE.getCode().equals(reaction1.getCode())
                 || EReaction.REFUSE.getCode().equals(reaction2.getCode())) {
@@ -153,10 +155,10 @@ public class PostAOImpl implements IPostAO {
         }
         if (StringUtils.isNotBlank(code)) {
             postBO.refreshPost(code, title, content, pic, splate.getCode(),
-                publisher, status);
+                publisher, user, status);
         } else {
             code = postBO.savePost(title, content, pic, splate.getCode(),
-                publisher, status);
+                publisher, user, status);
         }
         // 告知前端被过滤了
         if (EPostStatus.FILTERED.getCode().equals(status)) {
@@ -182,7 +184,6 @@ public class PostAOImpl implements IPostAO {
             }
         }
         return code;
-
     }
 
     private List<XN805115Res> queryLevelRuleList() {
@@ -413,7 +414,6 @@ public class PostAOImpl implements IPostAO {
             }
             commentBO.refreshCommentApprove(code, approveResult, approver,
                 approveNote);
-
             // 被举报，确认存在问题，扣积分
             if (EPostStatus.toReportAPPROVE.getCode().equals(
                 comment.getStatus())
@@ -425,7 +425,6 @@ public class PostAOImpl implements IPostAO {
                 // 确认存在问题，减一次评论数
                 postBO.refreshPostSumComment(parentPost.getCode(),
                     parentPost.getSumComment() - 1);
-
             }
         }
     }
@@ -512,9 +511,6 @@ public class PostAOImpl implements IPostAO {
             .getCode());
         List<PostTalk> postTalkList = postTalkBO.queryPostTalkLimitList(post
             .getCode());
-        for (Comment comment : commentList) {
-            this.fullUser(comment);
-        }
         post.setCommentList(commentList);
         for (PostTalk postTalk : postTalkList) {
             this.fullUser(postTalk);
@@ -530,13 +526,6 @@ public class PostAOImpl implements IPostAO {
             }
         }
         return location;
-    }
-
-    private void fullUser(Comment comment) {
-        User user = userBO.getRemoteUser(comment.getCommer());
-        comment.setNickname(user.getNickname());
-        comment.setPhoto(user.getPhoto());
-        comment.setLoginName(user.getLoginName());
     }
 
     private void fullUser(PostTalk postTalk) {
@@ -571,9 +560,6 @@ public class PostAOImpl implements IPostAO {
         Comment condition = new Comment();
         condition.setParentCode(post.getCode());
         List<Comment> commentList = commentBO.queryCommentList(condition);
-        for (Comment comment : commentList) {
-            this.fullUser(comment);
-        }
         post.setCommentList(commentList);
         PostTalk iPostTalk = new PostTalk();
         condition.setParentCode(post.getCode());
@@ -661,8 +647,6 @@ public class PostAOImpl implements IPostAO {
         List<Post> dataList = postBO.queryPostSCList(condition,
             postPage.getStart(), postPage.getPageSize());
         postPage.setList(dataList);
-        // Paginable<Post> postPage = postBO.getPaginable(start, limit,
-        // condition);
         List<Post> postList = postPage.getList();
         for (Post post : postList) {
             cutPic(post);

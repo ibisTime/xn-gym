@@ -41,7 +41,7 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
 
     @Override
     public String savePost(String title, String content, String pic,
-            String plateCode, String publisher, String status) {
+            String plateCode, String publisher, User user, String status) {
         Post data = new Post();
         String code = OrderNoGenerater.generate(EPrefixCode.POST.getCode());
         data.setCode(code);
@@ -50,6 +50,9 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setPic(pic);
         data.setPlateCode(plateCode);
         data.setPublisher(publisher);
+        data.setNickname(user.getNickname());
+        data.setPhoto(user.getPhoto());
+        data.setLoginName(user.getLoginName());
         data.setStatus(status);
         data.setPublishDatetime(new Date());
         data.setIsLock(EBoolean.NO.getCode());
@@ -65,7 +68,8 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
 
     @Override
     public void refreshPost(String code, String title, String content,
-            String pic, String plateCode, String publisher, String status) {
+            String pic, String plateCode, String publisher, User user,
+            String status) {
         Post data = new Post();
         data.setCode(code);
         data.setTitle(title);
@@ -74,6 +78,9 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setPlateCode(plateCode);
         data.setStatus(status);
         data.setPublisher(publisher);
+        data.setNickname(user.getNickname());
+        data.setPhoto(user.getPhoto());
+        data.setLoginName(user.getLoginName());
         data.setPublishDatetime(new Date());
         data.setIsLock(EBoolean.NO.getCode());
         data.setLocation(ELocation.ALL.getCode());

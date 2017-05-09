@@ -132,22 +132,15 @@ public class CommentAOImpl implements ICommentAO {
     public Comment getComment(String code) {
         Comment comment = commentBO.getComment(code);
         getParentComment(comment);
-        this.fullUser(comment);
         return comment;
     }
 
     @Override
     public Comment getOSSComment(String code) {
         Comment comment = commentBO.getComment(code);
-        this.fullUser(comment);
         List<PostTalk> postTalkList = postTalkBO.queryPostTalkList(code,
             ETalkType.PLJB.getCode());
         Post post = postBO.getPost(comment.getPostCode());
-        for (PostTalk postTalk : postTalkList) {
-            User user = userBO.getRemoteUser(postTalk.getTalker());
-            postTalk.setNickname(user.getNickname());
-            postTalk.setPhoto(user.getPhoto());
-        }
         comment.setPost(post);
         comment.setReportNum(postTalkList.size());
         comment.setPostTalkList(postTalkList);
@@ -167,7 +160,6 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = page.getList();
         for (Comment comment : list) {
             getParentComment(comment);
-            this.fullUser(comment);
         }
         return page;
     }
@@ -186,42 +178,25 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = page.getList();
         for (Comment comment : list) {
             getParentComment(comment);
-            this.fullUser(comment);
         }
         return page;
-    }
-
-    private void fullUser(Comment comment) {
-        User user = userBO.getRemoteUser(comment.getCommer());
-        comment.setNickname(user.getNickname());
-        comment.setLoginName(user.getLoginName());
-        comment.setPhoto(user.getPhoto());
     }
 
     private void getParentComment(Comment comment) {
         String parentCode = comment.getParentCode();
         if (EPrefixCode.POST.getCode().equals(parentCode.substring(0, 2))) {
             Post post = postBO.getPost(parentCode);
-            this.fullUser(post);
             comment.setPost(post);
             Splate splate = splateBO.getSplate(post.getPlateCode());
             comment.setSplateName(splate.getName());
         } else {
             Comment data = commentBO.getComment(parentCode);
-            this.fullUser(data);
             comment.setParentComment(data);
         }
         if (null == comment.getPost()) {
             Post post = postBO.getPost(comment.getPostCode());
             comment.setPost(post);
         }
-    }
-
-    private void fullUser(Post post) {
-        User user = userBO.getRemoteUser(post.getPublisher());
-        post.setNickname(user.getNickname());
-        post.setPhoto(user.getPhoto());
-        post.setLoginName(user.getLoginName());
     }
 
     @Override
@@ -236,7 +211,6 @@ public class CommentAOImpl implements ICommentAO {
             Splate splate = splateBO.getSplate(post.getPlateCode());
             comment.setSplateName(splate.getName());
             comment.setPost(post);
-            this.fullUser(comment);
             // 获取上级评论
             if (!comment.getParentCode().equals(comment.getPostCode())) {
                 Comment parentComment = commentBO.getComment(comment
@@ -261,7 +235,6 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = page.getList();
         for (Comment comment : list) {
             getParentComment(comment);
-            this.fullUser(comment);
         }
         return page;
     }
@@ -273,7 +246,6 @@ public class CommentAOImpl implements ICommentAO {
             condition);
         List<Comment> list = page.getList();
         for (Comment comment : list) {
-            this.fullUser(comment);
             getParentComment(comment);
         }
         return page;

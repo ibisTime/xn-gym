@@ -40,6 +40,15 @@ public class Comment extends ABaseDO {
     // 操作人
     private String commer;
 
+    // 昵称
+    private String nickname;
+
+    // 登录名
+    private String loginName;
+
+    // 头像
+    private String photo;
+
     // 操作时间
     private Date commDatetime;
 
@@ -57,15 +66,6 @@ public class Comment extends ABaseDO {
 
     // ****************db properties ***************
     private String parentCommer;
-
-    // 昵称
-    private String nickname;
-
-    // 登录名
-    private String loginName;
-
-    // 头像
-    private String photo;
 
     // 帖子
     private Post post;
