@@ -58,4 +58,8 @@ public interface ICommentBO extends IPaginableBO<Comment> {
     public List<Comment> queryTDCommentList(Comment condition, int start,
             int limit);
 
+    public void updateUserInf(String userId, String nickname, String photo);
+
+    public void updateUserInf(String userId, String loginName);
+
 }

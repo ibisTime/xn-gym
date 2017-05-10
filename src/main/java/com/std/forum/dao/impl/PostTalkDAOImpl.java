@@ -92,4 +92,14 @@ public class PostTalkDAOImpl extends AMybatisTemplate implements IPostTalkDAO {
         return super.selectList(NAMESPACE.concat("select_postTalk"), start,
             count, condition, PostTalk.class);
     }
+
+    @Override
+    public int updateUserInf(PostTalk data) {
+        return super.update(NAMESPACE.concat("update_user_inf"), data);
+    }
+
+    @Override
+    public int updateLoginName(PostTalk data) {
+        return super.update(NAMESPACE.concat("update_login_name"), data);
+    }
 }

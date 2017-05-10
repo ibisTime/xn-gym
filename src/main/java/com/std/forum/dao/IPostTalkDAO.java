@@ -25,4 +25,8 @@ public interface IPostTalkDAO extends IBaseDAO<PostTalk> {
     public List<PostTalk> selectLimitList(PostTalk condition);
 
     public List<PostTalk> selectComList(PostTalk condition);
+
+    public int updateUserInf(PostTalk data);
+
+    public int updateLoginName(PostTalk data);
 }

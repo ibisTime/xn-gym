@@ -183,4 +183,15 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     public int updateTitle(Post data) {
         return super.update(NAMESPACE.concat("update_title"), data);
     }
+
+    // 修改用户头像等信息
+    @Override
+    public int updateUserInf(Post data) {
+        return super.update(NAMESPACE.concat("update_user_inf"), data);
+    }
+
+    @Override
+    public int updateLoginName(Post data) {
+        return super.update(NAMESPACE.concat("update_login_name"), data);
+    }
 }

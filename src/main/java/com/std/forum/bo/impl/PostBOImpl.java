@@ -353,4 +353,21 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         post.setApproveDatetime(new Date());
         postDAO.updateTitle(post);
     }
+
+    @Override
+    public void updateUserInf(String userId, String nickname, String photo) {
+        Post data = new Post();
+        data.setPublisher(userId);
+        data.setNickname(nickname);
+        data.setPhoto(photo);
+        postDAO.updateUserInf(data);
+    }
+
+    @Override
+    public void updateUserInf(String userId, String loginName) {
+        Post data = new Post();
+        data.setPublisher(userId);
+        data.setLoginName(loginName);
+        postDAO.updateLoginName(data);
+    }
 }

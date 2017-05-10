@@ -81,4 +81,8 @@ public interface IPostBO extends IPaginableBO<Post> {
 
     public void updatePostTitle(Post post, User user, String title,
             String remark);
+
+    public void updateUserInf(String userId, String nickname, String photo);
+
+    public void updateUserInf(String userId, String loginName);
 }

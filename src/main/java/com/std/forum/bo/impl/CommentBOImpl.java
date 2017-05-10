@@ -263,4 +263,21 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
             int limit) {
         return commentDAO.queryTDCommentList(condition, start, limit);
     }
+
+    @Override
+    public void updateUserInf(String userId, String nickname, String photo) {
+        Comment data = new Comment();
+        data.setCommer(userId);
+        data.setNickname(nickname);
+        data.setPhoto(photo);
+        commentDAO.updateUserInf(data);
+    }
+
+    @Override
+    public void updateUserInf(String userId, String loginName) {
+        Comment data = new Comment();
+        data.setCommer(userId);
+        data.setLoginName(loginName);
+        commentDAO.updateLoginName(data);
+    }
 }

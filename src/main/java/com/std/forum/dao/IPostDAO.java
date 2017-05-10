@@ -89,4 +89,8 @@ public interface IPostDAO extends IBaseDAO<Post> {
 
     public Post selectSumRead(Post condition);
 
+    public int updateUserInf(Post data);
+
+    public int updateLoginName(Post data);
+
 }

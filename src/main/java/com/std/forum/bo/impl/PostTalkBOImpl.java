@@ -179,4 +179,21 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
         condition.setType(type);
         return postTalkDAO.selectComList(condition);
     }
+
+    @Override
+    public void updateUserInf(String userId, String nickname, String photo) {
+        PostTalk data = new PostTalk();
+        data.setTalker(userId);
+        data.setNickname(nickname);
+        data.setPhoto(photo);
+        postTalkDAO.updateUserInf(data);
+    }
+
+    @Override
+    public void updateUserInf(String userId, String loginName) {
+        PostTalk data = new PostTalk();
+        data.setTalker(userId);
+        data.setLoginName(loginName);
+        postTalkDAO.updateLoginName(data);
+    }
 }

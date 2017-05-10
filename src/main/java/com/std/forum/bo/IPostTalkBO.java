@@ -44,5 +44,9 @@ public interface IPostTalkBO extends IPaginableBO<PostTalk> {
 
     public int removePostTalk(String code);
 
-    List<PostTalk> queryPostTalkLimitList(String postCodeList);
+    public List<PostTalk> queryPostTalkLimitList(String postCodeList);
+
+    public void updateUserInf(String userId, String nickname, String photo);
+
+    public void updateUserInf(String userId, String loginName);
 }

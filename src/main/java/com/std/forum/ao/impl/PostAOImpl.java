@@ -30,6 +30,7 @@ import com.std.forum.bo.IPostTalkBO;
 import com.std.forum.bo.IRuleBO;
 import com.std.forum.bo.ISplateBO;
 import com.std.forum.bo.IUserBO;
+import com.std.forum.bo.IUserExtBO;
 import com.std.forum.bo.base.Page;
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.common.DateUtil;
@@ -94,6 +95,9 @@ public class PostAOImpl implements IPostAO {
 
     @Autowired
     protected ICompanyBO companyBO;
+
+    @Autowired
+    protected IUserExtBO userExtBO;
 
     // 1.发布帖子
     // 判断是否发帖
@@ -898,5 +902,28 @@ public class PostAOImpl implements IPostAO {
         page.setList(dataList);
         System.out.println(postList.get(0).getAvgRead());
         return page;
+    }
+
+    @Override
+    public void modifyUser(String userId, String nickname, String gender,
+            String birthday, String photo, String email, String introduce) {
+        // 修改头像
+        userExtBO.refreshUserPhoto(userId, photo);
+        // 修改用户信息
+        userExtBO.refreshUserExt(userId, photo, gender, birthday, email,
+            introduce);
+        // 修改用户昵称
+        userExtBO.refreshNickname(userId, nickname);
+        postBO.updateUserInf(userId, nickname, photo);
+        commentBO.updateUserInf(userId, nickname, photo);
+        postTalkBO.updateUserInf(userId, nickname, photo);
+    }
+
+    @Override
+    public void modifyUser(String userId, String loginName) {
+        userExtBO.refreshLoginName(userId, loginName);
+        postBO.updateUserInf(userId, loginName);
+        commentBO.updateUserInf(userId, loginName);
+        postTalkBO.updateUserInf(userId, loginName);
     }
 }

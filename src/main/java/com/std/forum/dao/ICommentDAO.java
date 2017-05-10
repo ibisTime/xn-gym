@@ -39,4 +39,8 @@ public interface ICommentDAO extends IBaseDAO<Comment> {
 
     public List<Comment> queryTDCommentList(Comment condition, int start,
             int limit);
+
+    public int updateUserInf(Comment data);
+
+    public int updateLoginName(Comment data);
 }
