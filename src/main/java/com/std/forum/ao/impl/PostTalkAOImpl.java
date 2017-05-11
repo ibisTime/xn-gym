@@ -168,5 +168,6 @@ public class PostTalkAOImpl implements IPostTalkAO {
         condition.setType(ETalkType.DS.getCode());
         return postTalkBO.queryPostTalkList(condition);
     }
+    //
 
 }
