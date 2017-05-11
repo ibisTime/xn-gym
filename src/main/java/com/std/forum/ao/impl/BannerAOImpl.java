@@ -137,7 +137,8 @@ public class BannerAOImpl implements IBannerAO {
         }
         for (Banner banner : bannerList) {
             for (Banner global : globalList) {
-                if (banner.getBelong().equals(global.getCode())) {
+                if (banner.getBelong().equals(global.getCode())
+                        || banner.getCode().equals(global.getCode())) {
                     globalList.remove(global);
                     break;
                 }
