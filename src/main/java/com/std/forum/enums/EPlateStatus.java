@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EPlateStatus {
-    ENABLE("1", "启用"), UNENABLE("0", "禁用");
+    UNENABLE("0", "禁用"),ENABLE("1", "启用"), ALLENABLE("2","全部启用");
     public static Map<String, EPlateStatus> getBooleanResultMap() {
         Map<String, EPlateStatus> map = new HashMap<String, EPlateStatus>();
         for (EPlateStatus status : EPlateStatus.values()) {
