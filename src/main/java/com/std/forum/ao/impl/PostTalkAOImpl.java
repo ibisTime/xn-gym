@@ -158,13 +158,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
     @Override
     public Paginable<PostTalk> queryPostTalkPage(int start, int limit,
             PostTalk condition) {
-        Paginable<PostTalk> page = postTalkBO.getPaginable(start, limit,
-            condition);
-        List<PostTalk> list = page.getList();
-        for (PostTalk postTalk : list) {
-            this.fullUser(postTalk);
-        }
-        return page;
+        return postTalkBO.getPaginable(start, limit, condition);
     }
 
     @Override
@@ -172,16 +166,8 @@ public class PostTalkAOImpl implements IPostTalkAO {
         PostTalk condition = new PostTalk();
         condition.setPostCode(postCode);
         condition.setType(ETalkType.DS.getCode());
-        List<PostTalk> list = postTalkBO.queryPostTalkList(condition);
-        for (PostTalk postTalk : list) {
-            this.fullUser(postTalk);
-        }
-        return list;
+        return postTalkBO.queryPostTalkList(condition);
     }
+    //
 
-    private void fullUser(PostTalk postTalk) {
-        User user = userBO.getRemoteUser(postTalk.getTalker());
-        postTalk.setNickname(user.getNickname());
-        postTalk.setPhoto(user.getPhoto());
-    }
 }

@@ -137,7 +137,8 @@ public class MenuAOImpl implements IMenuAO {
         }
         for (Menu result : resultList) {
             for (Menu menu : menuList) {
-                if (result.getBelong().equals(menu.getCode())) {
+                if (result.getBelong().equals(menu.getCode())
+                        || result.getCode().equals(menu.getCode())) {
                     menuList.remove(menu);
                     break;
                 }

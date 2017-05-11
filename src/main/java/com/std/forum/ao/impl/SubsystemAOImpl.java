@@ -142,7 +142,8 @@ public class SubsystemAOImpl implements ISubsystemAO {
         }
         for (Subsystem subsystem : resultSubsystem) {
             for (Subsystem global : globalList) {
-                if (subsystem.getBelong().equals(global.getCode())) {
+                if (subsystem.getBelong().equals(global.getCode())
+                        || subsystem.getCode().equals(global.getCode())) {
                     globalList.remove(global);
                     break;
                 }
