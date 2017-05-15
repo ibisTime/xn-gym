@@ -13,6 +13,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="viewDatetime != null and viewDatetime != '' ">
+				AND t.view_datetime = #{viewDatetime}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_pageView" parameterType="pageView" resultMap="pageView_DB_Result">
@@ -56,9 +59,7 @@
 	<update id="update_pageView" parameterType="pageView">
 		UPDATE tforum_page_view
 		SET
-		company_code = #{companyCode}
-		,view_datetime = #{viewDatetime}
-		,page_view_num = #{pageViewNum}
+		page_view_num = #{pageViewNum}
 		WHERE code = #{code}
 	</update>
 

@@ -1,5 +1,7 @@
 package com.std.forum.domain;
 
+import java.util.Date;
+
 import com.std.forum.dao.base.ABaseDO;
 
 /**
@@ -10,50 +12,50 @@ import com.std.forum.dao.base.ABaseDO;
 */
 public class PageView extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 编号
+    private String code;
 
-	// 公司编号
-	private String companyCode;
+    // 公司编号
+    private String companyCode;
 
-	// 访问日期
-	private String viewDatetime;
+    // 访问日期
+    private Date viewDatetime;
 
-	// 访问数量
-	private String pageViewNum;
+    // 访问数量
+    private Integer pageViewNum;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
-	}
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 
-	public String getCompanyCode() {
-		return companyCode;
-	}
+    public String getCompanyCode() {
+        return companyCode;
+    }
 
-	public void setViewDatetime(String viewDatetime) {
-		this.viewDatetime = viewDatetime;
-	}
+    public Date getViewDatetime() {
+        return viewDatetime;
+    }
 
-	public String getViewDatetime() {
-		return viewDatetime;
-	}
+    public void setViewDatetime(Date viewDatetime) {
+        this.viewDatetime = viewDatetime;
+    }
 
-	public void setPageViewNum(String pageViewNum) {
-		this.pageViewNum = pageViewNum;
-	}
+    public Integer getPageViewNum() {
+        return pageViewNum;
+    }
 
-	public String getPageViewNum() {
-		return pageViewNum;
-	}
+    public void setPageViewNum(Integer pageViewNum) {
+        this.pageViewNum = pageViewNum;
+    }
 
 }

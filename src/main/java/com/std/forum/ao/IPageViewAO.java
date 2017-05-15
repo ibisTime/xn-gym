@@ -11,11 +11,9 @@ import com.std.forum.domain.PageView;
 public interface IPageViewAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addPageView(PageView data);
+    public void addPageView(String companyCode);
 
-    public int dropPageView(String code);
-
-    public int editPageView(PageView data);
+    public void editPageView(PageView data);
 
     public Paginable<PageView> queryPageViewPage(int start, int limit,
             PageView condition);

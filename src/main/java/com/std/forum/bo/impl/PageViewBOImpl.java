@@ -1,5 +1,6 @@
 package com.std.forum.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -32,31 +33,22 @@ public class PageViewBOImpl extends PaginableBOImpl<PageView> implements
     }
 
     @Override
-    public String savePageView(PageView data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generateME(EPrefixCode.PAGEVIEW.getCode());
-            data.setCode(code);
-            pageViewDAO.insert(data);
-        }
-        return code;
-    }
-
-    @Override
-    public int removePageView(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            PageView data = new PageView();
-            data.setCode(code);
-            count = pageViewDAO.delete(data);
-        }
-        return count;
+    public void savePageView(String companyCode) {
+        PageView data = new PageView();
+        String code = OrderNoGenerater.generateME(EPrefixCode.PAGEVIEW
+            .getCode());
+        data.setCode(code);
+        data.setCompanyCode(companyCode);
+        data.setPageViewNum(1);
+        data.setViewDatetime(new Date());
+        pageViewDAO.insert(data);
     }
 
     @Override
     public int refreshPageView(PageView data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
+            data.setPageViewNum(data.getPageViewNum() + 1);
             count = pageViewDAO.update(data);
         }
         return count;
@@ -75,9 +67,17 @@ public class PageViewBOImpl extends PaginableBOImpl<PageView> implements
             condition.setCode(code);
             data = pageViewDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "编号不存在");
             }
         }
         return data;
+    }
+
+    @Override
+    public List<PageView> queryPageViewList(String companyCode, Date datetime) {
+        PageView condition = new PageView();
+        condition.setViewDatetime(datetime);
+        condition.setCompanyCode(companyCode);
+        return pageViewDAO.selectList(condition);
     }
 }
