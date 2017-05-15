@@ -12,7 +12,8 @@ public enum EPrefixCode {
             "规则"), PRODUCT("CP", "产品"), PRODORDER("DD", "产品订单"), CATEGORY("FL",
             "分类"), BPLATEM("BPKM", "大版块模板"), BPLATE("BMK", "大版块"), SPLATEM(
             "SPKM", "小版块模板"), SPLATE("SPK", "小版块"), MENU("CD", "菜单"), SUBSYSTEM(
-            "XT", "子系统配置"), BANNER("BA", "banner"), VIDEO("VI", "视频");
+            "XT", "子系统配置"), BANNER("BA", "banner"), VIDEO("VI", "视频"), PAGEVIEW(
+            "PV", "站点访问量");
 
     EPrefixCode(String code, String value) {
         this.code = code;

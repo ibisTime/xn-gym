@@ -13,6 +13,9 @@ public class XN610124Res {
     // 最大阅读数
     private Long maxRead;
 
+    // 总的阅读数
+    private Long sumRead;
+
     // 平均阅读数
     private Double avgRead;
 
@@ -76,6 +79,14 @@ public class XN610124Res {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public Long getSumRead() {
+        return sumRead;
+    }
+
+    public void setSumRead(Long sumRead) {
+        this.sumRead = sumRead;
     }
 
 }

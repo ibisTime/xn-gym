@@ -58,7 +58,7 @@ public interface IPostAO {
     /*
      * 阅读帖子
      */
-    public void readPost(String code);
+    public void readPost(String code, String userId);
 
     /*
      * 锁帖
