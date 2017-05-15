@@ -16,6 +16,9 @@
 			<if test="viewDatetime != null and viewDatetime != '' ">
 				AND t.view_datetime = #{viewDatetime}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_pageView" parameterType="pageView" resultMap="pageView_DB_Result">
