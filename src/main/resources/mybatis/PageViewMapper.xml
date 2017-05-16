@@ -25,6 +25,9 @@
 			<if test="endDatetime != null and endDatetime != '' ">
 				<![CDATA[AND t.view_datetime <= #{endDatetime}]]>
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_pageView" parameterType="pageView" resultMap="pageView_DB_Result">
