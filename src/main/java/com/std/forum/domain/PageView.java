@@ -24,7 +24,11 @@ public class PageView extends ABaseDO {
     private Date viewDatetime;
 
     // 访问数量
-    private Integer pageViewNum;
+    private Long pageViewNum;
+    
+    private Date startDatetime ;
+    
+    private Date endDatetime ;
 
     public void setCode(String code) {
         this.code = code;
@@ -50,12 +54,32 @@ public class PageView extends ABaseDO {
         this.viewDatetime = viewDatetime;
     }
 
-    public Integer getPageViewNum() {
-        return pageViewNum;
-    }
 
-    public void setPageViewNum(Integer pageViewNum) {
-        this.pageViewNum = pageViewNum;
-    }
+
+	public Long getPageViewNum() {
+		return pageViewNum;
+	}
+
+	public void setPageViewNum(Long pageViewNum) {
+		this.pageViewNum = pageViewNum;
+	}
+
+	public Date getStartDatetime() {
+		return startDatetime;
+	}
+
+	public void setStartDatetime(Date startDatetime) {
+		this.startDatetime = startDatetime;
+	}
+
+	public Date getEndDatetime() {
+		return endDatetime;
+	}
+
+	public void setEndDatetime(Date endDatetime) {
+		this.endDatetime = endDatetime;
+	}
+    
+    
 
 }

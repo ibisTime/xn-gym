@@ -50,4 +50,10 @@ public class PageViewDAOImpl extends AMybatisTemplate implements IPageViewDAO {
         return super.update(NAMESPACE.concat("update_pageView"), data);
     }
 
+	@Override
+	public PageView selectNum(PageView condition) {
+		return super.select(NAMESPACE.concat("select_pageView_num"), 
+				condition, PageView.class);
+	}
+
 }

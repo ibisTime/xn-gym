@@ -19,5 +19,9 @@ public interface IPageViewBO extends IPaginableBO<PageView> {
     public PageView getPageView(String code);
 
     public List<PageView> queryPageViewList(String companyCode, Date datetime);
+    
+    public PageView getPageView(PageView condition);
+    
+    public PageView getPageViewNum(PageView condition);
 
 }

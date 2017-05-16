@@ -39,7 +39,7 @@ public class PageViewBOImpl extends PaginableBOImpl<PageView> implements
             .getCode());
         data.setCode(code);
         data.setCompanyCode(companyCode);
-        data.setPageViewNum(1);
+        data.setPageViewNum(1L);
         data.setViewDatetime(new Date());
         pageViewDAO.insert(data);
     }
@@ -72,6 +72,12 @@ public class PageViewBOImpl extends PaginableBOImpl<PageView> implements
         }
         return data;
     }
+    
+    @Override
+    public PageView getPageView(PageView condition) {
+    	PageView data = pageViewDAO.select(condition);
+        return data;
+    }
 
     @Override
     public List<PageView> queryPageViewList(String companyCode, Date datetime) {
@@ -80,4 +86,12 @@ public class PageViewBOImpl extends PaginableBOImpl<PageView> implements
         condition.setCompanyCode(companyCode);
         return pageViewDAO.selectList(condition);
     }
+
+	@Override
+	public PageView getPageViewNum(PageView condition) {
+		// TODO Auto-generated method stub
+		
+		PageView data = pageViewDAO.selectNum(condition);
+		return data ;
+	}
 }

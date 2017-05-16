@@ -7,4 +7,6 @@ public interface IPageViewDAO extends IBaseDAO<PageView> {
     String NAMESPACE = IPageViewDAO.class.getName().concat(".");
 
     public int update(PageView data);
+    
+    public PageView selectNum(PageView condition);
 }

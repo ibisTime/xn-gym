@@ -13,8 +13,17 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 			<if test="viewDatetime != null and viewDatetime != '' ">
 				AND t.view_datetime = #{viewDatetime}
+			</if>
+			<if test="startDatetime != null and startDatetime != '' ">
+				<![CDATA[AND t.view_datetime >= #{startDatetime}]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != '' ">
+				<![CDATA[AND t.view_datetime <= #{endDatetime}]]>
 			</if>
 		</trim>
 	</sql>
@@ -62,6 +71,15 @@
 		page_view_num = #{pageViewNum}
 		WHERE code = #{code}
 	</update>
+	
+	<select id="select_pageView_num" parameterType="pageView" resultMap="pageView_DB_Result">
+		SELECT
+		sum(page_view_num)as page_view_num
+		,t.company_code
+		FROM
+		tforum_page_view t
+		<include refid="where_condition" />
+	</select>
 
 
 </mapper>
