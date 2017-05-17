@@ -18,6 +18,7 @@ import com.std.forum.domain.PageView;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.User;
 import com.std.forum.dto.req.XN610408Req;
+import com.std.forum.dto.res.XN001450Res;
 import com.std.forum.dto.res.XN610408Res;
 import com.std.forum.exception.BizException;
 
@@ -103,7 +104,12 @@ public class PageViewAOImpl implements IPageViewAO {
     	pageViewCondition.setStartDatetime(dateStart);
     	pageViewCondition.setEndDatetime(dateEnd);
     	PageView pageView = pageViewBO.getPageViewNum(pageViewCondition);
-    	Long pvNum = pageView.getPageViewNum();
+    	Long pvNum ;    	    	
+    	if(pageView==null){
+    		pvNum = 0L ;
+    	}else{
+    		pvNum = pageView.getPageViewNum();
+    	}
     	//查询用户总人数
     	User userCondition = new User();
     	userCondition.setCompanyCode(req.getCompanyCode());
