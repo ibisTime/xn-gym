@@ -86,7 +86,7 @@
 		        AND tpt.type = #{type}
 			</if>
 			<if test="isLock != null and isLock != '' ">
-		        AND t.type = #{isLock}
+		        AND t.is_lock = #{isLock}
 			</if>
 			<if test="talker != null and talker != '' ">
 		        AND tpt.talker = #{talker}
