@@ -29,13 +29,11 @@ public class XN610408 extends AProcessor {
         if (StringUtils.isBlank(req.getCompanyCode())) {
             return res;
         }
-        return pageViewAO.queryTotalPage(req);
-
+        return pageViewAO.queryNum(req);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN610408Req.class);
-
     }
 }

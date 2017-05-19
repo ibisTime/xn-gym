@@ -74,14 +74,9 @@ public class PageViewAOImpl implements IPageViewAO {
         return pageViewBO.getPageView(code);
     }
 
-    @Override
-    public PageView getPageView(PageView condition) {
-        return pageViewBO.getPageView(condition);
-    }
-
     // 查询统计情况 帖子总数 用户总数 PV数
     @Override
-    public XN610408Res queryTotalPage(XN610408Req req) {
+    public XN610408Res queryNum(XN610408Req req) {
         XN610408Res res = new XN610408Res();
         Date dateStart = DateUtil.strToDate(req.getDateStart(),
             DateUtil.FRONT_DATE_FORMAT_STRING);

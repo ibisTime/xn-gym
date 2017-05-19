@@ -24,8 +24,8 @@ public interface IPageViewAO {
 
     public PageView getPageView(String code);
     
-    public PageView getPageView(PageView condition);
+   
     
-    public XN610408Res queryTotalPage(XN610408Req req);
+    public XN610408Res queryNum(XN610408Req req);
  
 }
