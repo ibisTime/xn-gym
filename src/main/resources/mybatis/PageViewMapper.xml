@@ -77,8 +77,7 @@
 	
 	<select id="select_pageView_num" parameterType="pageView" resultMap="pageView_DB_Result">
 		SELECT
-		sum(page_view_num)as page_view_num
-		,t.company_code
+		sum(page_view_num)as page_view_num		
 		FROM
 		tforum_page_view t
 		<include refid="where_condition" />

@@ -34,7 +34,7 @@ public class XN610408 extends AProcessor {
     		return res ;
     	}
     	
-    	return pageViewAO.queryTotalPage(req);
+    	return pageViewAO.queryNum(req);
     	
         
     }
