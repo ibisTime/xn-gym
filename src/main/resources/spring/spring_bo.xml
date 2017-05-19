@@ -65,4 +65,7 @@
 	<bean id="categoryBO" class="com.std.forum.bo.impl.CategoryBOImpl">
 		<property name="paginableDAO" ref="categoryDAOImpl" />
 	</bean>
+	<bean id="pageViewBO" class="com.std.forum.bo.impl.PageViewBOImpl">
+		<property name="paginableDAO" ref="pageViewDAOImpl" />
+	</bean>
 </beans>

@@ -652,9 +652,11 @@ public class PostAOImpl implements IPostAO {
      * @see com.std.forum.ao.IPostAO#readPost(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public void readPost(String postCode) {
+    public void readPost(String postCode, String userId) {
         Post post = postBO.getPost(postCode);
         postBO.refreshPostSumRead(postCode, post.getSumRead() + 1);
+        postTalkBO.savePostTalk(postCode, userId, ETalkType.YD.getCode(),
+            "阅读帖子");
     }
 
     @Override
@@ -779,21 +781,22 @@ public class PostAOImpl implements IPostAO {
         } else {
             sumRead = StringValidater.toLong(sumReadPost.getSunRead());
         }
-        Double sunRead = (double) sumRead;
-        Double qbtotal = (double) qbTotal;
-        avgRead = sunRead / qbtotal;
-        if (sunRead == 0.0) {
-            avgRead = 0.0;
-        } else if (qbtotal == 0.0) {
-            avgRead = 0.0;
-        }
+        // Double sunRead = (double) sumRead;
+        // Double qbtotal = (double) qbTotal;
+        // avgRead = sunRead / qbtotal;
+        // if (sunRead == 0.0) {
+        // avgRead = 0.0;
+        // } else if (qbtotal == 0.0) {
+        // avgRead = 0.0;
+        // }
         userTotal = userBO.userTotal(companyCode);
         XN610124Res res = new XN610124Res();
         res.setZtTotal(ztTotal);
         res.setJtTotal(jtTotal);
         res.setQbTotal(qbTotal);
-        res.setMaxRead(maxRead);
-        res.setAvgRead(avgRead);
+        // res.setMaxRead(maxRead);
+        // res.setAvgRead(avgRead);
+        res.setSumRead(sumRead);
         res.setUserTotal(userTotal);
         return res;
     }
@@ -841,21 +844,22 @@ public class PostAOImpl implements IPostAO {
                 } else {
                     sumRead = StringValidater.toLong(sumReadPost.getSunRead());
                 }
-                Double sunRead = (double) sumRead;
-                Double qbtotal = (double) qbTotal;
-                avgRead = sunRead / qbtotal;
-                if (sunRead == 0.0) {
-                    avgRead = 0.0;
-                } else if (qbtotal == 0.0) {
-                    avgRead = 0.0;
-                }
+                // Double sunRead = (double) sumRead;
+                // Double qbtotal = (double) qbTotal;
+                // avgRead = sunRead / qbtotal;
+                // if (sunRead == 0.0) {
+                // avgRead = 0.0;
+                // } else if (qbtotal == 0.0) {
+                // avgRead = 0.0;
+                // }
                 userTotal = userBO.userTotal(company.getCode());
                 XN610124Res res = new XN610124Res();
                 res.setZtTotal(ztTotal);
                 res.setJtTotal(jtTotal);
                 res.setQbTotal(qbTotal);
-                res.setMaxRead(maxRead);
-                res.setAvgRead(avgRead);
+                // res.setMaxRead(maxRead);
+                // res.setAvgRead(avgRead);
+                res.setSumRead(sumRead);
                 res.setUserTotal(userTotal);
                 res.setCompanyName(company.getName());
                 postList.add(res);

@@ -76,4 +76,12 @@ public interface IUserBO extends IPaginableBO<User> {
      * @history:
      */
     public Integer userTotal(String companyCode);
+    
+    /**
+     * 统计用户数
+     * @param condition
+     * @return
+     */
+    public Long getUserTotal(User condition);
+ 
 }

@@ -1,5 +1,7 @@
 package com.std.forum.dto.req;
 
+import java.util.Date;
+
 /**
  * 统计用户
  * @author: asus 
@@ -9,6 +11,7 @@ package com.std.forum.dto.req;
 public class XN001401Req {
     private String companyCode;
 
+   
     private String systemCode;
 
     public String getCompanyCode() {
@@ -26,4 +29,8 @@ public class XN001401Req {
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
     }
+
+
+    
+    
 }

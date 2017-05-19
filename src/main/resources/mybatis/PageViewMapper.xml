@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.forum.dao.IPageViewDAO">
+	<resultMap id="pageView_DB_Result" type="pageView">
+		<result column="code" property="code" />
+		<result column="company_code" property="companyCode" />
+		<result column="view_datetime" property="viewDatetime" />
+		<result column="page_view_num" property="pageViewNum" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="viewDatetime != null and viewDatetime != '' ">
+				AND t.view_datetime = #{viewDatetime}
+			</if>
+			<if test="startDatetime != null and startDatetime != '' ">
+				<![CDATA[AND t.view_datetime >= #{startDatetime}]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != '' ">
+				<![CDATA[AND t.view_datetime <= #{endDatetime}]]>
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_pageView" parameterType="pageView" resultMap="pageView_DB_Result">
+		SELECT
+		t.code
+		,t.company_code
+		,t.view_datetime
+		,t.page_view_num
+		FROM
+		tforum_page_view t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_pageView_count" parameterType="pageView"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tforum_page_view t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_pageView" parameterType="pageView">
+		INSERT INTO
+		tforum_page_view(
+		code
+		,company_code
+		,view_datetime
+		,page_view_num
+		)
+		VALUES(
+		#{code}
+		,#{companyCode}
+		,#{viewDatetime}
+		,#{pageViewNum}
+		)
+	</insert>
+
+	<update id="update_pageView" parameterType="pageView">
+		UPDATE tforum_page_view
+		SET
+		page_view_num = #{pageViewNum}
+		WHERE code = #{code}
+	</update>
+	
+	<select id="select_pageView_num" parameterType="pageView" resultMap="pageView_DB_Result">
+		SELECT
+		sum(page_view_num)as page_view_num		
+		FROM
+		tforum_page_view t
+		<include refid="where_condition" />
+	</select>
+
+
+</mapper>
