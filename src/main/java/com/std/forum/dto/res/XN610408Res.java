@@ -7,59 +7,59 @@ package com.std.forum.dto.res;
  * @history
  */
 public class XN610408Res {
+    // 公司编号
+    private String companyCode;
 
-	private String companyCode ;
-	
-	private String companyName ;
-	
-	private Long postNum ;
-	
-	private Long userNum ;
-	
-	private Long pageViewNum ;
+    // 公司名称
+    private String companyName;
 
-	
-	
-	public String getCompanyCode() {
-		return companyCode;
-	}
+    // 帖子数
+    private Long postNum;
 
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
-	}
+    // 用户数
+    private Long userNum;
 
-	public String getCompanyName() {
-		return companyName;
-	}
+    // PV数
+    private Long pageViewNum;
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
+    public String getCompanyCode() {
+        return companyCode;
+    }
 
-	public Long getPostNum() {
-		return postNum;
-	}
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 
-	public void setPostNum(Long postNum) {
-		this.postNum = postNum;
-	}
+    public String getCompanyName() {
+        return companyName;
+    }
 
-	public Long getUserNum() {
-		return userNum;
-	}
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
-	public void setUserNum(Long userNum) {
-		this.userNum = userNum;
-	}
+    public Long getPostNum() {
+        return postNum;
+    }
 
-	public Long getPageViewNum() {
-		return pageViewNum;
-	}
+    public void setPostNum(Long postNum) {
+        this.postNum = postNum;
+    }
 
-	public void setPageViewNum(Long pageViewNum) {
-		this.pageViewNum = pageViewNum;
-	}
+    public Long getUserNum() {
+        return userNum;
+    }
 
-	
-	
+    public void setUserNum(Long userNum) {
+        this.userNum = userNum;
+    }
+
+    public Long getPageViewNum() {
+        return pageViewNum;
+    }
+
+    public void setPageViewNum(Long pageViewNum) {
+        this.pageViewNum = pageViewNum;
+    }
+
 }
