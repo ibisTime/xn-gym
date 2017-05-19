@@ -469,7 +469,6 @@ public class PostAOImpl implements IPostAO {
         // 1、postCode 设置成list,查所有评论，所有点赞
         for (Post post : postList) {
             cutPic(post);
-            this.fullUser(post);
             this.fullPost(post);
             this.fullIsDZ(post, condition.getUserId());
             this.fullIsSC(post, condition.getUserId());
@@ -503,7 +502,6 @@ public class PostAOImpl implements IPostAO {
         for (Post post : postList) {
             this.cutPic(post);
             this.fullPost(post);
-            this.fullUser(post);
             this.fullIsDZ(post, condition.getUserId());
             this.fullIsSC(post, condition.getUserId());
         }
@@ -516,9 +514,6 @@ public class PostAOImpl implements IPostAO {
         List<PostTalk> postTalkList = postTalkBO.queryPostTalkLimitList(post
             .getCode());
         post.setCommentList(commentList);
-        for (PostTalk postTalk : postTalkList) {
-            this.fullUser(postTalk);
-        }
         post.setLikeList(postTalkList);
     }
 
@@ -532,19 +527,6 @@ public class PostAOImpl implements IPostAO {
         return location;
     }
 
-    private void fullUser(PostTalk postTalk) {
-        User user = userBO.getRemoteUser(postTalk.getTalker());
-        postTalk.setNickname(user.getNickname());
-        postTalk.setPhoto(user.getPhoto());
-    }
-
-    private void fullUser(Post post) {
-        User user = userBO.getRemoteUser(post.getPublisher());
-        post.setNickname(user.getNickname());
-        post.setPhoto(user.getPhoto());
-        post.setLoginName(user.getLoginName());
-    }
-
     private void fullSplate(Post post) {
         Splate splate = splateBO.getSplate(post.getPlateCode());
         post.setPlateName(splate.getName());
@@ -555,7 +537,6 @@ public class PostAOImpl implements IPostAO {
         Post post = postBO.getPost(code);
         this.cutPic(post);
         this.getPartInfo(post, userId);
-        this.fullUser(post);
         // this.fullGetPost(post);
         return post;
     }
@@ -568,9 +549,6 @@ public class PostAOImpl implements IPostAO {
         PostTalk iPostTalk = new PostTalk();
         condition.setParentCode(post.getCode());
         List<PostTalk> postTalkList = postTalkBO.queryPostTalkList(iPostTalk);
-        for (PostTalk postTalk : postTalkList) {
-            this.fullUser(postTalk);
-        }
         post.setLikeList(postTalkList);
     }
 
@@ -578,14 +556,8 @@ public class PostAOImpl implements IPostAO {
     public Post getPost(String code) {
         Post post = postBO.getPost(code);
         this.cutPic(post);
-        this.fullUser(post);
         List<PostTalk> postTalkList = postTalkBO.queryPostTalkSingleList(
             post.getCode(), ETalkType.TZJB.getCode(), null);
-        for (PostTalk postTalk : postTalkList) {
-            User user = userBO.getRemoteUser(postTalk.getTalker());
-            postTalk.setNickname(user.getNickname());
-            postTalk.setPhoto(user.getPhoto());
-        }
         post.setReportNum(postTalkList.size());
         post.setLikeList(postTalkList);
         return post;
@@ -655,7 +627,6 @@ public class PostAOImpl implements IPostAO {
         for (Post post : postList) {
             cutPic(post);
             this.getPartInfo(post, condition.getUserId());
-            this.fullUser(post);
             this.fullPost(post);
             this.fullSplate(post);
         }
@@ -672,7 +643,6 @@ public class PostAOImpl implements IPostAO {
             this.fullSplate(post);
             this.cutPic(post);
             this.getPartInfo(post, condition.getUserId());
-            this.fullUser(post);
             this.fullPost(post);
         }
         return postList;
@@ -693,7 +663,6 @@ public class PostAOImpl implements IPostAO {
         Comment comment = commentBO.getComment(commentCode);
         post = postBO.getPost(comment.getPostCode());
         getPartInfo(post, userId);
-        fullUser(post);
         return post;
     }
 
@@ -738,7 +707,6 @@ public class PostAOImpl implements IPostAO {
         for (Post post : list) {
             cutPic(post);
             this.getPartInfo(post, condition.getUserId());
-            this.fullUser(post);
             postCodeList.add(post.getCode());
             this.fullPost(post);
             this.fullSplate(post);
@@ -753,7 +721,6 @@ public class PostAOImpl implements IPostAO {
         List<Post> postList = postPage.getList();
         for (Post post : postList) {
             cutPic(post);
-            this.fullUser(post);
             List<PostTalk> postTalkList = postTalkBO.queryPostTalkSingleList(
                 post.getCode(), ETalkType.TZJB.getCode(), null);
             post.setReportNum(postTalkList.size());
@@ -900,7 +867,6 @@ public class PostAOImpl implements IPostAO {
         }
         List<XN610124Res> dataList = postList.subList(start - 1, limit);
         page.setList(dataList);
-        System.out.println(postList.get(0).getAvgRead());
         return page;
     }
 
