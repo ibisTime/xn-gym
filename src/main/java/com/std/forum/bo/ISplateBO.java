@@ -18,7 +18,7 @@ public interface ISplateBO extends IPaginableBO<Splate> {
 
     public int refreshSplate(String code, String name, String parentCode,
             String pic, String orderNo, String userId, Integer isDefault,
-            String companyCode, String status, String updater, String remark);
+            String companyCode, String status, String updater, String remark,String description);
 
     public List<Splate> querySplateList(Splate condition);
 

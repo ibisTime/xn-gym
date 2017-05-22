@@ -74,6 +74,7 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.description
 		FROM
 		tforum_splate t
 		<include refid="where_condition" />
@@ -105,6 +106,7 @@
 		,updater
 		,update_datetime
 		,remark
+		,description
 		)
 		VALUES(
 		#{code}
@@ -119,6 +121,7 @@
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		,#{description}
 		)
 	</insert>
 
@@ -136,6 +139,7 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		,description = #{description}
 		WHERE code = #{code}
 	</update>
 

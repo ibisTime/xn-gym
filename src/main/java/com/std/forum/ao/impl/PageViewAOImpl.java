@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +79,9 @@ public class PageViewAOImpl implements IPageViewAO {
     @Override
     public XN610408Res queryNum(String companyCode,String dateStartReq,String dateEndReq){
     	XN610408Res res = new XN610408Res();
+    	if(StringUtils.isBlank(companyCode)){
+    		return res ;
+    	}
     	Date dateStart = DateUtil.strToDate(
     			dateStartReq, DateUtil.FRONT_DATE_FORMAT_STRING);
     	Date dateEnd =DateUtil.getEndDatetime(dateEndReq);
@@ -102,18 +106,18 @@ public class PageViewAOImpl implements IPageViewAO {
     	}else{
     		pvNum = pageView.getPageViewNum();
     	}
-    	//查询用户总人数
-    	User userCondition = new User();
-    	userCondition.setCompanyCode(companyCode);
-    	userCondition.setDateStart(dateStart);
-    	userCondition.setDateEnd(dateEnd);
-    	Long userNum = userBO.getUserTotal(userCondition);  
+//    	//查询用户总人数
+//    	User userCondition = new User();
+//    	userCondition.setCompanyCode(companyCode);
+//    	userCondition.setDateStart(dateStart);
+//    	userCondition.setDateEnd(dateEnd);
+//    	Long userNum = userBO.getUserTotal(userCondition);  
     	//填充数据
     	res.setCompanyCode(companyCode);
     	res.setCompanyName(companyName);
     	res.setPageViewNum(pvNum);
     	res.setPostNum(postNum);
-    	res.setUserNum(userNum);
+    	//res.setUserNum(userNum);
     	return res ;
     	}
 }

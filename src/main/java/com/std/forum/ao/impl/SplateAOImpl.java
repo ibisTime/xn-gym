@@ -82,7 +82,7 @@ public class SplateAOImpl implements ISplateAO {
             req.getParentCode(), req.getPic(), req.getOrderNo(),
             req.getUserId(), StringValidater.toInteger(req.getIsDefault()),
             req.getCompanyCode(), req.getStatus(), req.getUpdater(),
-            req.getRemark());
+            req.getRemark(),req.getDescription());
     }
 
     private void checkIsDefault(String code, String isDefault,

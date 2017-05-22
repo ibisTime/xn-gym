@@ -39,6 +39,8 @@ public class XN610042Req {
 
     // 备注
     private String remark;
+    
+    private String description ;
 
     public String getName() {
         return name;
@@ -127,5 +129,15 @@ public class XN610042Req {
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+    
+    
 
 }

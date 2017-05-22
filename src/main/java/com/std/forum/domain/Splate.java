@@ -38,7 +38,8 @@ public class Splate extends ABaseDO {
 
     // 站点编号
     private String companyCode;
-
+    
+  
     // 状态(1 可见 0 不可见)
     private String status;
     

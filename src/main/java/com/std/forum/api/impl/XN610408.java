@@ -25,10 +25,7 @@ public class XN610408 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-    	XN610408Res res = new XN610408Res();
-    	if(StringUtils.isBlank(req.getCompanyCode())){
-    		return res ;
-    	}
+
     	return pageViewAO.queryNum(req.getCompanyCode(),req.getDateStart(),req.getDateEnd());
     }
 

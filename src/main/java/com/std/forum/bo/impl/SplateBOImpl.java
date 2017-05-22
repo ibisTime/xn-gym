@@ -68,7 +68,7 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
     @Override
     public int refreshSplate(String code, String name, String parentCode,
             String pic, String orderNo, String userId, Integer isDefault,
-            String companyCode, String status, String updater, String remark) {
+            String companyCode, String status, String updater, String remark,String description) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Splate data = new Splate();
@@ -84,6 +84,7 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);
+            data.setDescription(description);
             count = splateDAO.update(data);
         }
         return count;
