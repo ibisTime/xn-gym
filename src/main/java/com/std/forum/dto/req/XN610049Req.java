@@ -3,12 +3,12 @@ package com.std.forum.dto.req;
 import java.util.List;
 
 /**
- * 列表查询小板块
- * @author: asus 
- * @since: 2017年3月20日 下午8:13:22 
- * @history:
+ * 列表查询小版块(PC专用)
+ * @author William
+ * @since  2017年5月19日 上午11:53:58
+ * @history
  */
-public class XN610047Req extends APageReq {
+public class XN610049Req extends APageReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
@@ -24,8 +24,10 @@ public class XN610047Req extends APageReq {
     // 状态
     private String status;
     
-    //状态
     private List<String> statusList ;
+    
+   
+    
 
     // 站点编号
     private String companyCode;
@@ -80,6 +82,14 @@ public class XN610047Req extends APageReq {
 	public void setStatusList(List<String> statusList) {
 		this.statusList = statusList;
 	}
+
+	
+
+	
+
+	
+    
+    
     
     
 }

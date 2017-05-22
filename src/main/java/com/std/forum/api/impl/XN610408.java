@@ -34,7 +34,7 @@ public class XN610408 extends AProcessor {
     		return res ;
     	}
     	
-    	return pageViewAO.queryNum(req);
+    	return pageViewAO.queryNum(req.getCompanyCode(),req.getDateStart(),req.getDateEnd());
     	
         
     }

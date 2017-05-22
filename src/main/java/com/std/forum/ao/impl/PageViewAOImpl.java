@@ -80,23 +80,23 @@ public class PageViewAOImpl implements IPageViewAO {
     
     //查询统计情况 帖子总数 用户总数 PV数
     @Override
-    public XN610408Res queryNum(XN610408Req req){
+    public XN610408Res queryNum(String companyCode,String dateStartReq,String dateEndReq){
     	XN610408Res res = new XN610408Res();
     	Date dateStart = DateUtil.strToDate(
-                req.getDateStart(), DateUtil.FRONT_DATE_FORMAT_STRING);
-    	Date dateEnd = DateUtil.strToDate(
-                req.getDateEnd(), DateUtil.FRONT_DATE_FORMAT_STRING);
+    			dateStartReq, DateUtil.FRONT_DATE_FORMAT_STRING);
+    	Date dateEnd =DateUtil.getEndDatetime(dateEndReq);
+    	
     	//查询城市信息
-    	String companyName = companyBO.getCompany(req.getCompanyCode()).getName();
+    	String companyName = companyBO.getCompany(companyCode).getName();
     	//查询帖子总数
     	Post postCondition = new Post();
-    	postCondition.setCompanyCode(req.getCompanyCode());
+    	postCondition.setCompanyCode(companyCode);
     	postCondition.setPublishDatetimeStart(dateStart);
     	postCondition.setPublishDatetimeEnd(dateEnd);
     	long postNum = postBO.getPostNum(postCondition);
     	//查询PV
     	PageView pageViewCondition = new PageView();
-    	pageViewCondition.setCompanyCode(req.getCompanyCode());
+    	pageViewCondition.setCompanyCode(companyCode);
     	pageViewCondition.setStartDatetime(dateStart);
     	pageViewCondition.setEndDatetime(dateEnd);
     	PageView pageView = pageViewBO.getPageViewNum(pageViewCondition);
@@ -108,16 +108,18 @@ public class PageViewAOImpl implements IPageViewAO {
     	}
     	//查询用户总人数
     	User userCondition = new User();
-    	userCondition.setCompanyCode(req.getCompanyCode());
+    	userCondition.setCompanyCode(companyCode);
     	userCondition.setDateStart(dateStart);
     	userCondition.setDateEnd(dateEnd);
     	Long userNum = userBO.getUserTotal(userCondition);  
     	//填充数据
-    	res.setCompanyCode(req.getCompanyCode());
+    	res.setCompanyCode(companyCode);
     	res.setCompanyName(companyName);
     	res.setPageViewNum(pvNum);
     	res.setPostNum(postNum);
     	res.setUserNum(userNum);
     	return res ;
     }
+
+
 }

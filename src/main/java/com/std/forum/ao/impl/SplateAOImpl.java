@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.forum.ao.ISplateAO;
+import com.std.forum.api.impl.XN610049;
 import com.std.forum.bo.IBplateBO;
 import com.std.forum.bo.IBplateTemplateBO;
 import com.std.forum.bo.IPostBO;
@@ -28,6 +29,7 @@ import com.std.forum.domain.User;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
 import com.std.forum.dto.res.XN610046Res;
+import com.std.forum.dto.res.XN610049Res;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.ELocation;
 import com.std.forum.enums.EPlateStatus;
@@ -241,4 +243,15 @@ public class SplateAOImpl implements ISplateAO {
         }
         splateBO.defaultSplate(splate, isDefault, updater);
     }
+
+    /**
+     * 列表查询小版块(详细)
+     */
+	@Override
+	public List<XN610049Res> querySplateDetailList(Splate condition) {
+		
+		List<XN610049Res> list = splateBO.querySplateDetailList(condition);
+		
+		return list;
+	}
 }

@@ -9,6 +9,7 @@ import com.std.forum.domain.Splate;
 import com.std.forum.dto.req.XN610040Req;
 import com.std.forum.dto.req.XN610042Req;
 import com.std.forum.dto.res.XN610046Res;
+import com.std.forum.dto.res.XN610049Res;
 
 @Component
 public interface ISplateAO {
@@ -32,4 +33,6 @@ public interface ISplateAO {
     public void copySplate(String companyCode);
 
     public void defaultSplate(String code, String updater);
+    
+    public List<XN610049Res> querySplateDetailList(Splate conditoin);
 }

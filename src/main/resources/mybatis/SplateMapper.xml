@@ -16,6 +16,18 @@
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	<resultMap id="splate_DB_Detail_Result" type="com.std.forum.dto.res.XN610049Res">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="bplate_code" property="bplateCode" />
+		<result column="pic" property="pic" />
+		<result column="order_no" property="orderNo" />		
+		<result column="company_code" property="companyCode" />
+		<result column="status" property="status" />		
+		<result column="bplate_name" property="bplateName" />
+		<result column="post_num" property="postNum" />
+		<result column="description" property="description" />
+	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -38,6 +50,13 @@
 			</if>
 			<if test="isDefault != null and isDefault != '' ">
 				AND t.is_default = #{isDefault}
+			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in
+				<foreach item="item" index="index" collection="statusList" open="("
+		            separator="," close=")">
+		            #{item}  
+		         </foreach>				
 			</if>
 		</trim>
 	</sql>
@@ -135,4 +154,59 @@
 		WHERE
 		code = #{code}
 	</delete>
+	
+	<select id="select_detail_splate" parameterType="splate" resultMap="splate_DB_Detail_Result">
+		
+		SELECT ts.company_code
+		,ts.code
+		,ts.description
+		,ts.name
+		,ts.pic
+		,ts.status
+		,ts.bplate_code
+		,ts.order_no
+		,ts.post_num
+		,tb.name as bplate_name
+		FROM 
+		(SELECT COUNT(*)AS 
+		post_num
+		,t.code
+		,t.description
+		,t.company_code
+		,t.name,t.pic
+		,t.status
+		,t.bplate_code
+		,t.order_no 
+		FROM 
+		tforum_splate t  
+		LEFT JOIN tforum_post tp 
+		ON t.code=tp.plate_code 
+		GROUP BY tp.plate_code 
+		HAVING 
+		t.company_code=#{companyCode}
+		<if test="status != null and status != '' ">
+				AND t.status = #{status}
+		</if>
+		<if test="statusList != null and statusList != '' ">
+		AND t.status in
+		<foreach item="item" index="index" collection="statusList" open="("
+            separator="," close=")">
+            #{item}  
+         </foreach>
+				
+		</if>
+		
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>) 
+		ts 
+		LEFT JOIN 
+		tforum_bplate tb 
+		ON ts.bplate_code=tb.code
+
+
+	</select>
+	
 </mapper>

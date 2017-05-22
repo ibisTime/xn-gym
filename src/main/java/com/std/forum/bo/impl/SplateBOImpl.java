@@ -12,6 +12,7 @@ import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.ISplateDAO;
 import com.std.forum.domain.Splate;
+import com.std.forum.dto.res.XN610049Res;
 import com.std.forum.enums.EPrefixCode;
 import com.std.forum.exception.BizException;
 
@@ -138,4 +139,11 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
         condition.setCompanyCode(companyCode);
         return splateDAO.selectList(condition);
     }
+
+	@Override
+	public List<XN610049Res> querySplateDetailList(Splate condition) {
+		// TODO Auto-generated method stub
+		
+		return splateDAO.selectDetailSplate(condition);
+	}
 }

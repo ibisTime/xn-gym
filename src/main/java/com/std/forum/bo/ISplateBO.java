@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.std.forum.bo.base.IPaginableBO;
 import com.std.forum.domain.Splate;
+import com.std.forum.dto.res.XN610049Res;
 
 public interface ISplateBO extends IPaginableBO<Splate> {
 
@@ -32,4 +33,5 @@ public interface ISplateBO extends IPaginableBO<Splate> {
     public List<Splate> queryIsDefaultSplateList(Integer code, String status,
             String companyCode);
 
+    public List<XN610049Res> querySplateDetailList(Splate condition);
 }

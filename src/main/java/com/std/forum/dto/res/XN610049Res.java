@@ -1,17 +1,15 @@
-package com.std.forum.domain;
+package com.std.forum.dto.res;
 
 import java.util.Date;
-import java.util.List;
-
-import com.std.forum.dao.base.ABaseDO;
 
 /**
-* 小板块
-* @author: shan
-* @since: 2017年03月20日
-* @history:
-*/
-public class Splate extends ABaseDO {
+ * 小版块类表查询(包含帖子数,大板块名称)
+ * @author William
+ * @since  2017年5月19日 下午1:11:27
+ * @history
+ */
+public class XN610049Res {
+
 
     private static final long serialVersionUID = 1L;
 
@@ -23,6 +21,12 @@ public class Splate extends ABaseDO {
 
     // 大板块编号
     private String bplateCode;
+    
+    //大板块名称
+    private String bplateName ;
+    
+    //帖子数
+    private Long PostNum ;
 
     // 图片
     private String pic;
@@ -41,8 +45,6 @@ public class Splate extends ABaseDO {
 
     // 状态(1 可见 0 不可见)
     private String status;
-    
-    private List<String> statusList;
 
     // 更新人
     private String updater;
@@ -53,8 +55,7 @@ public class Splate extends ABaseDO {
     // 备注
     private String remark;
     
-    //小版块描述
-    private String description ;
+    private String description;
 
     // *****************DB****************
     // 昵称
@@ -197,12 +198,20 @@ public class Splate extends ABaseDO {
         this.isDefault = isDefault;
     }
 
-	public List<String> getStatusList() {
-		return statusList;
+	public String getBplateName() {
+		return bplateName;
 	}
 
-	public void setStatusList(List<String> statusList) {
-		this.statusList = statusList;
+	public void setBplateName(String bplateName) {
+		this.bplateName = bplateName;
+	}
+
+	public Long getPostNum() {
+		return PostNum;
+	}
+
+	public void setPostNum(Long postNum) {
+		PostNum = postNum;
 	}
 
 	public String getDescription() {
@@ -212,12 +221,7 @@ public class Splate extends ABaseDO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-
     
-
-	
-
 	
     
 

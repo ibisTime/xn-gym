@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.std.forum.dao.ISplateDAO;
 import com.std.forum.dao.base.support.AMybatisTemplate;
 import com.std.forum.domain.Splate;
+import com.std.forum.dto.res.XN610049Res;
 
 @Repository("splateDAOImpl")
 public class SplateDAOImpl extends AMybatisTemplate implements ISplateDAO {
@@ -54,5 +55,11 @@ public class SplateDAOImpl extends AMybatisTemplate implements ISplateDAO {
     public int defaultSplate(Splate data) {
         return super.update(NAMESPACE.concat("update_default"), data);
     }
+
+	@Override
+	public List<XN610049Res> selectDetailSplate(Splate condition) {
+		 return super.selectList(NAMESPACE.concat("select_detail_splate"), condition,
+				 XN610049Res.class);
+	}
 
 }

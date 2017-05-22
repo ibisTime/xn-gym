@@ -24,8 +24,8 @@ public interface IPageViewAO {
 
     public PageView getPageView(String code);
     
-   
+    public XN610408Res queryNum(String companyCode,String dateStart,String dateEnd);
     
-    public XN610408Res queryNum(XN610408Req req);
+
  
 }
