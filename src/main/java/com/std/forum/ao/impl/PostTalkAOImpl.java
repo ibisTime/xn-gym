@@ -141,10 +141,18 @@ public class PostTalkAOImpl implements IPostTalkAO {
     @Transactional
     public void doPostTalk(String postCode, String userId, Long amount) {
         Post post = postBO.getPost(postCode);
+        if (post.getIsLock().equals(EBoolean.YES.getCode())) {
+            throw new BizException("xn0000", "帖子已被锁定，不能打赏");
+        }
         if (userId.equals(post.getPublisher())) {
             throw new BizException("xn0000", "用户为发帖人，不能打赏自己");
         }
         User user = userBO.getRemoteUser(userId);
+        List<PostTalk> postTalkList = postTalkBO.queryPostTalkSingleList(
+            postCode, ETalkType.DS.getCode(), userId);
+        if (CollectionUtils.isNotEmpty(postTalkList)) {
+            throw new BizException("xn0000", "您已打赏过该贴，不能重复打赏");
+        }
         postTalkBO.savePostTalk(postCode, user, ETalkType.DS.getCode(),
             String.valueOf(amount));
         postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);

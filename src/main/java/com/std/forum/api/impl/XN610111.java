@@ -5,7 +5,6 @@ import com.std.forum.api.AProcessor;
 import com.std.forum.common.JsonUtil;
 import com.std.forum.core.StringValidater;
 import com.std.forum.dto.req.XN610111Req;
-import com.std.forum.dto.res.PKCodeRes;
 import com.std.forum.exception.BizException;
 import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
@@ -24,10 +23,9 @@ public class XN610111 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        String code = postAO.draftPublishPost(req.getCode(), req.getTitle(),
+        return postAO.draftPublishPost(req.getCode(), req.getTitle(),
             req.getContent(), req.getPic(), req.getPlateCode(),
             req.getPublisher(), req.getIsPublish());
-        return new PKCodeRes(code);
     }
 
     @Override

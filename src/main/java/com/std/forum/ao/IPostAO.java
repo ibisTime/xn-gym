@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Post;
+import com.std.forum.dto.res.XN610110Res;
 import com.std.forum.dto.res.XN610124Res;
 
 /** 
@@ -25,14 +26,15 @@ public interface IPostAO {
     /*
      * 发帖
      */
-    public String publishPost(String title, String content, String pic,
+    public XN610110Res publishPost(String title, String content, String pic,
             String plateCode, String publisher, String isPublish);
 
     /*
      * 草稿发帖
      */
-    public String draftPublishPost(String code, String title, String content,
-            String pic, String plateCode, String publisher, String isPublish);
+    public XN610110Res draftPublishPost(String code, String title,
+            String content, String pic, String plateCode, String publisher,
+            String isPublish);
 
     /*
      * 删除帖子/评论
@@ -58,7 +60,7 @@ public interface IPostAO {
     /*
      * 阅读帖子
      */
-    public void readPost(String code, String userId);
+    public void readPost(String code);
 
     /*
      * 锁帖
