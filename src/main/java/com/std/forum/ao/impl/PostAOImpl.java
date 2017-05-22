@@ -655,8 +655,8 @@ public class PostAOImpl implements IPostAO {
     public void readPost(String postCode, String userId) {
         Post post = postBO.getPost(postCode);
         postBO.refreshPostSumRead(postCode, post.getSumRead() + 1);
-        postTalkBO.savePostTalk(postCode, userId, ETalkType.YD.getCode(),
-            "阅读帖子");
+        User user = userBO.getRemoteUser(userId);
+        postTalkBO.savePostTalk(postCode, user, ETalkType.YD.getCode(), "阅读帖子");
     }
 
     @Override

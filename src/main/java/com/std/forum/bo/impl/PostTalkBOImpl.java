@@ -39,8 +39,8 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
      * @see com.std.forum.bo.IPostTalkBO#savePostTalk(com.std.forum.domain.PostTalk)
      */
     @Override
-    public int savePostTalk(String postCode, String talker, User user,
-            String type, String remark) {
+    public int savePostTalk(String postCode, User user, String type,
+            String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(postCode)) {
             String code = OrderNoGenerater.generate(EPrefixCode.POSTTALK
@@ -48,7 +48,7 @@ public class PostTalkBOImpl extends PaginableBOImpl<PostTalk> implements
             PostTalk data = new PostTalk();
             data.setCode(code);
             data.setPostCode(postCode);
-            data.setTalker(talker);
+            data.setTalker(user.getUserId());
             data.setNickname(user.getNickname());
             data.setPhoto(user.getPhoto());
 

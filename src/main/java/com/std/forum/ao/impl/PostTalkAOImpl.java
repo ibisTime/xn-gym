@@ -86,7 +86,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
                     reportNoteBuffer.toString());
             }
         }
-        postTalkBO.savePostTalk(code, reporter, user, type, reportNote);
+        postTalkBO.savePostTalk(code, user, type, reportNote);
     }
 
     private boolean isToMax(String code, String publisher, String reporter,
@@ -132,7 +132,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
             if (ETalkType.DZ.getCode().equals(type)) {
                 postBO.refreshPostSumLike(postCode, post.getSumLike() + 1);
             }
-            postTalkBO.savePostTalk(postCode, userId, user, type, ETalkType
+            postTalkBO.savePostTalk(postCode, user, type, ETalkType
                 .getTalkTypeMap().get(type).getValue());
         }
     }
@@ -145,7 +145,7 @@ public class PostTalkAOImpl implements IPostTalkAO {
             throw new BizException("xn0000", "用户为发帖人，不能打赏自己");
         }
         User user = userBO.getRemoteUser(userId);
-        postTalkBO.savePostTalk(postCode, userId, user, ETalkType.DS.getCode(),
+        postTalkBO.savePostTalk(postCode, user, ETalkType.DS.getCode(),
             String.valueOf(amount));
         postBO.refreshPostSumReward(postCode, post.getSumReward() + 1);
         accountBO.doTransferAmountRemote(userId, post.getPublisher(),
