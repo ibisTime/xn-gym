@@ -10,6 +10,8 @@ package com.std.forum;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -58,5 +60,23 @@ public class APIServlet extends HttpServlet {
         PrintWriter writer = response.getWriter();
         writer.append(result);
         writer.flush();
+    }
+
+    public static void main(String[] args) {
+        Map<String, String> result = new HashMap<String, String>();
+        Map<String, String> sArray = new HashMap<String, String>();
+        sArray.put("sign", "");
+        sArray.put("", "");
+        sArray.put("sign", "si");
+        sArray.put("sign", "");
+        for (String key : sArray.keySet()) {
+            String value = sArray.get(key);
+            if (value == null || value.equals("")
+                    || key.equalsIgnoreCase("sign")
+                    || key.equalsIgnoreCase("sign_type")) {
+                continue;
+            }
+            result.put(key, value);
+        }
     }
 }

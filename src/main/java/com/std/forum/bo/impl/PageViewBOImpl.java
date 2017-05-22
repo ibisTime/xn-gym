@@ -72,10 +72,10 @@ public class PageViewBOImpl extends PaginableBOImpl<PageView> implements
         }
         return data;
     }
-    
+
     @Override
     public PageView getPageView(PageView condition) {
-    	PageView data = pageViewDAO.select(condition);
+        PageView data = pageViewDAO.select(condition);
         return data;
     }
 
@@ -87,11 +87,8 @@ public class PageViewBOImpl extends PaginableBOImpl<PageView> implements
         return pageViewDAO.selectList(condition);
     }
 
-	@Override
-	public PageView getPageViewNum(PageView condition) {
-		// TODO Auto-generated method stub
-		
-		PageView data = pageViewDAO.selectNum(condition);
-		return data ;
-	}
+    @Override
+    public PageView getPageViewNum(PageView condition) {
+        return pageViewDAO.selectNum(condition);
+    }
 }

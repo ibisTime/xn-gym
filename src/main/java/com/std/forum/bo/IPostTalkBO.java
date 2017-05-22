@@ -22,8 +22,8 @@ import com.std.forum.domain.User;
  */
 public interface IPostTalkBO extends IPaginableBO<PostTalk> {
 
-    public int savePostTalk(String postCode, String userId, User user,
-            String type, String remark);
+    public int savePostTalk(String postCode, User user, String type,
+            String remark);
 
     public List<PostTalk> queryPostTalkSingleList(String postCode, String type,
             String talker);

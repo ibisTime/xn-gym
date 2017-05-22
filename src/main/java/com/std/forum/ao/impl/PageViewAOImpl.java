@@ -18,7 +18,6 @@ import com.std.forum.domain.PageView;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.User;
 import com.std.forum.dto.req.XN610408Req;
-import com.std.forum.dto.res.XN001450Res;
 import com.std.forum.dto.res.XN610408Res;
 import com.std.forum.exception.BizException;
 
@@ -27,16 +26,15 @@ public class PageViewAOImpl implements IPageViewAO {
 
     @Autowired
     private IPageViewBO pageViewBO;
-    
+
     @Autowired
-    private ICompanyBO companyBO ;
-    
+    private ICompanyBO companyBO;
+
     @Autowired
-    private IPostBO postBO  ;
-    
+    private IPostBO postBO;
+
     @Autowired
-    private IUserBO userBO ;
-    
+    private IUserBO userBO;
 
     @Override
     public void addPageView(String companyCode) {
@@ -75,10 +73,8 @@ public class PageViewAOImpl implements IPageViewAO {
     public PageView getPageView(String code) {
         return pageViewBO.getPageView(code);
     }
-    
 
-    
-    //查询统计情况 帖子总数 用户总数 PV数
+    // 查询统计情况 帖子总数 用户总数 PV数
     @Override
     public XN610408Res queryNum(String companyCode,String dateStartReq,String dateEndReq){
     	XN610408Res res = new XN610408Res();
@@ -119,7 +115,5 @@ public class PageViewAOImpl implements IPageViewAO {
     	res.setPostNum(postNum);
     	res.setUserNum(userNum);
     	return res ;
-    }
-
-
+    	}
 }
