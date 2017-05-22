@@ -90,8 +90,8 @@ public class CommentAOImpl implements ICommentAO {
             status = EPostStatus.FILTERED.getCode();
         }
         Post parentPost = getPostByParentCode(parentCode);
-        String code = commentBO.saveComment(content, parentCode, status,
-            commer, parentPost.getCode());
+        String code = commentBO.saveComment(content, parentCode, status, user,
+            parentPost.getCode());
         Long amount = 0l;
         // 评论送钱
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {

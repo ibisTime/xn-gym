@@ -21,6 +21,7 @@ import com.std.forum.bo.base.PaginableBOImpl;
 import com.std.forum.core.OrderNoGenerater;
 import com.std.forum.dao.ICommentDAO;
 import com.std.forum.domain.Comment;
+import com.std.forum.domain.User;
 import com.std.forum.enums.EBoolean;
 import com.std.forum.enums.EPostStatus;
 import com.std.forum.enums.EPrefixCode;
@@ -39,18 +40,21 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
 
     @Override
     public String saveComment(String content, String parentCode, String status,
-            String commer, String postCode) {
+            User user, String postCode) {
         String code = null;
         if (StringUtils.isNotBlank(content)
                 && StringUtils.isNotBlank(parentCode)
-                && StringUtils.isNotBlank(commer)) {
+                && StringUtils.isNotBlank(user.getUserId())) {
             code = OrderNoGenerater.generate(EPrefixCode.COMMENT.getCode());
             Comment data = new Comment();
             data.setCode(code);
             data.setContent(content);
             data.setParentCode(parentCode);
             data.setStatus(status);
-            data.setCommer(commer);
+            data.setCommer(user.getUserId());
+            data.setNickname(user.getNickname());
+            data.setPhoto(user.getPhoto());
+            data.setLoginName(user.getLoginName());
             data.setCommDatetime(new Date());
             data.setPostCode(postCode);
             commentDAO.insert(data);
