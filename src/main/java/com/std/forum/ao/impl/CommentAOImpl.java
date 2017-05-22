@@ -25,6 +25,7 @@ import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Rule;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.User;
+import com.std.forum.dto.res.XN610110Res;
 import com.std.forum.dto.res.XN805115Res;
 import com.std.forum.enums.EBizType;
 import com.std.forum.enums.EBoolean;
@@ -71,7 +72,9 @@ public class CommentAOImpl implements ICommentAO {
     // 1.发布评论
     @Override
     @Transactional
-    public String doComment(String content, String parentCode, String commer) {
+    public XN610110Res doComment(String content, String parentCode,
+            String commer) {
+        XN610110Res req = new XN610110Res();
         // 判断是否锁帖
         User user = userBO.getRemoteUser(commer);
         Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.PL,
@@ -87,8 +90,9 @@ public class CommentAOImpl implements ICommentAO {
             status = EPostStatus.FILTERED.getCode();
         }
         Post parentPost = getPostByParentCode(parentCode);
-        String code = commentBO.saveComment(content, parentCode, status,
-            commer, parentPost.getCode());
+        String code = commentBO.saveComment(content, parentCode, status, user,
+            parentPost.getCode());
+        Long amount = 0l;
         // 评论送钱
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
             // 增加一次评论数
@@ -98,7 +102,7 @@ public class CommentAOImpl implements ICommentAO {
                 commer, EChannelType.JF,
                 StringValidater.toLong(rule.getValue()), EBizType.AJ_PLFB,
                 "发布评论，送赏金", "发布评论，送赏金");
-            Long amount = accountBO.getAccountByUserId(commer, EChannelType.JF);
+            amount = accountBO.getAccountByUserId(commer, EChannelType.JF);
             List<XN805115Res> LevelRuleList = levelRuleBO.queryLevelRuleList();
             for (XN805115Res res : LevelRuleList) {
                 if (amount >= res.getAmountMin()
@@ -110,7 +114,9 @@ public class CommentAOImpl implements ICommentAO {
         } else {
             code = code + ";filter:true";
         }
-        return code;
+        req.setCode(code);
+        req.setAmount(amount);
+        return req;
     }
 
     private Post getPostByParentCode(String code) {

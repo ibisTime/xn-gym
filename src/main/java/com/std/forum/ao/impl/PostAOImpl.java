@@ -43,6 +43,7 @@ import com.std.forum.domain.PostTalk;
 import com.std.forum.domain.Rule;
 import com.std.forum.domain.Splate;
 import com.std.forum.domain.User;
+import com.std.forum.dto.res.XN610110Res;
 import com.std.forum.dto.res.XN610124Res;
 import com.std.forum.dto.res.XN805115Res;
 import com.std.forum.enums.EBizType;
@@ -105,8 +106,9 @@ public class PostAOImpl implements IPostAO {
     // 2、草稿保存
     @Override
     @Transactional
-    public String publishPost(String title, String content, String pic,
-            String plateCode, String publisher, String isPublish) {
+    public synchronized XN610110Res publishPost(String title, String content,
+            String pic, String plateCode, String publisher, String isPublish) {
+        XN610110Res res = new XN610110Res();
         // 判断版块是否存在
         Splate splate = splateBO.getSplate(plateCode);
         String code = null;
@@ -114,31 +116,38 @@ public class PostAOImpl implements IPostAO {
         if (EBoolean.NO.getCode().equals(isPublish)) {// 保存草稿
             code = postBO.savePost(title, content, pic, splate.getCode(),
                 publisher, user, EPostStatus.DRAFT.getCode());
+            res.setCode(code);
+            res.setAmount(0l);
         } else {// 直接发布
-            code = doPublishPost(null, splate, title, content, pic, publisher,
+            res = doPublishPost(null, splate, title, content, pic, publisher,
                 user);
         }
-        return code;
+        return res;
     }
 
     // 2.草稿发布帖子
     @Override
     @Transactional
-    public String draftPublishPost(String code, String title, String content,
-            String pic, String plateCode, String publisher, String isPublish) {
+    public synchronized XN610110Res draftPublishPost(String code, String title,
+            String content, String pic, String plateCode, String publisher,
+            String isPublish) {
+        XN610110Res res = new XN610110Res();
         // 判断版块是否存在
         Splate splate = splateBO.getSplate(plateCode);
         User user = userBO.getRemoteUser(publisher);
         if (EBoolean.NO.getCode().equals(isPublish)) {// 继续草稿
             postBO.refreshPost(code, title, content, pic, plateCode, publisher,
                 user, EPostStatus.DRAFT.getCode());
+            res.setCode(code);
+            res.setAmount(0l);
         } else {
-            doPublishPost(code, splate, title, content, pic, publisher, user);
+            res = doPublishPost(code, splate, title, content, pic, publisher,
+                user);
         }
-        return code;
+        return res;
     }
 
-    private String doPublishPost(String code, Splate splate, String title,
+    private XN610110Res doPublishPost(String code, Splate splate, String title,
             String content, String pic, String publisher, User user) {
         String status = null;
         // 对标题和内容进行关键字过滤
@@ -171,13 +180,13 @@ public class PostAOImpl implements IPostAO {
         // 发帖加积分
         Rule rule = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.FT,
             user.getLevel());
+        Long amount = 0l;
         if (EPostStatus.PUBLISHED.getCode().equals(status)) {
             accountBO.doTransferAmountRemote(ESysAccount.SYS_ACCOUNT.getCode(),
                 publisher, EChannelType.JF,
                 StringValidater.toLong(rule.getValue()), EBizType.AJ_TZFB,
                 "发帖送赏金", "发帖送赏金");
-            Long amount = accountBO.getAccountByUserId(publisher,
-                EChannelType.JF);
+            amount = accountBO.getAccountByUserId(publisher, EChannelType.JF);
             List<XN805115Res> LevelRuleList = queryLevelRuleList();
             for (XN805115Res res : LevelRuleList) {
                 if (amount >= res.getAmountMin()
@@ -187,7 +196,10 @@ public class PostAOImpl implements IPostAO {
                 }
             }
         }
-        return code;
+        XN610110Res res = new XN610110Res();
+        res.setCode(code);
+        res.setAmount(amount);
+        return res;
     }
 
     private List<XN805115Res> queryLevelRuleList() {
@@ -652,11 +664,9 @@ public class PostAOImpl implements IPostAO {
      * @see com.std.forum.ao.IPostAO#readPost(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public void readPost(String postCode, String userId) {
+    public void readPost(String postCode) {
         Post post = postBO.getPost(postCode);
         postBO.refreshPostSumRead(postCode, post.getSumRead() + 1);
-        User user = userBO.getRemoteUser(userId);
-        postTalkBO.savePostTalk(postCode, user, ETalkType.YD.getCode(), "阅读帖子");
     }
 
     @Override

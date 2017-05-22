@@ -24,7 +24,7 @@ public class XN610120 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        postAO.readPost(req.getPostCode(), req.getUserId());
+        postAO.readPost(req.getPostCode());
         return new BooleanRes(true);
     }
 

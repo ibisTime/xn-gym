@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.std.forum.bo.base.IPaginableBO;
 import com.std.forum.domain.Comment;
+import com.std.forum.domain.User;
 
 /** 
  * 评论
@@ -22,7 +23,7 @@ import com.std.forum.domain.Comment;
 public interface ICommentBO extends IPaginableBO<Comment> {
 
     public String saveComment(String content, String parentCode, String status,
-            String commer, String postCode);
+            User user, String postCode);
 
     public int removeComment(String code);
 

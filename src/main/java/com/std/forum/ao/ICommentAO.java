@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.std.forum.bo.base.Paginable;
 import com.std.forum.domain.Comment;
+import com.std.forum.dto.res.XN610110Res;
 
 /** 
  * 评论
@@ -17,7 +18,8 @@ public interface ICommentAO {
     /*
      * 发布评论
      */
-    public String doComment(String content, String parentCode, String commer);
+    public XN610110Res doComment(String content, String parentCode,
+            String commer);
 
     public Comment getComment(String code);
 
