@@ -28,7 +28,7 @@ version="2.5">
   </context-param>
   <context-param>
     <param-name>webAppRootKey</param-name>
-    <param-value>xn-user.root</param-value>
+    <param-value>xn-forum.root</param-value>
   </context-param>
   <context-param>
     <param-name>configOuterFlag</param-name>

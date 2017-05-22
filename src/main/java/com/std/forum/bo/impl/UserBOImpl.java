@@ -9,14 +9,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.std.forum.bo.IUserBO;
 import com.std.forum.bo.base.PaginableBOImpl;
+import com.std.forum.common.DateUtil;
+import com.std.forum.common.JsonUtil;
 import com.std.forum.domain.User;
 import com.std.forum.dto.req.XN001302Req;
 import com.std.forum.dto.req.XN001400Req;
 import com.std.forum.dto.req.XN001401Req;
+import com.std.forum.dto.req.XN001404Req;
 import com.std.forum.dto.req.XN805300Req;
 import com.std.forum.dto.req.XN805301Req;
 import com.std.forum.dto.req.XN805302Req;
 import com.std.forum.dto.res.XN001400Res;
+import com.std.forum.dto.res.XN001404Res;
 import com.std.forum.exception.BizException;
 import com.std.forum.http.BizConnecter;
 import com.std.forum.http.JsonUtils;
@@ -131,4 +135,25 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         return number;
     }
+
+    /**
+     * 统计用户总数
+     */
+	@Override
+	public Long getUserTotal(User condition) {
+		 XN001404Req req = new XN001404Req();
+	        req.setCompanyCode(condition.getCompanyCode());
+	        req.setBeginDatetime(DateUtil.dateToStr(condition.getDateStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
+	        req.setEndDatetime(DateUtil.dateToStr(condition.getDateEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
+	       
+	        req.setSystemCode("CD-CCSW000008");
+	        String jsonStr = BizConnecter.getBizData("001404",
+	            JsonUtils.object2Json(req));
+	       
+	        XN001404Res res = JsonUtil.json2Bean(jsonStr, XN001404Res.class);
+	        
+	       return res.getTotalUserNum() ;
+	}
+
+
 }

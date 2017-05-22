@@ -8,6 +8,8 @@
  */
 package com.std.forum.domain;
 
+import java.util.Date;
+
 import com.std.forum.dao.base.ABaseDO;
 
 /** 
@@ -56,6 +58,16 @@ public class User extends ABaseDO {
 
     // 用戶等級
     private String level;
+    
+    //所属公司
+    private String companyCode ;
+    
+    //开始时间(用于按时间统计人数)
+    private Date dateStart ;
+    
+    //结束时间(用于按时间统计人数)
+    private Date dateEnd ;
+    
 
     public String getUserReferee() {
         return userReferee;
@@ -153,4 +165,30 @@ public class User extends ABaseDO {
         this.level = level;
     }
 
+	public String getCompanyCode() {
+		return companyCode;
+	}
+
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
+	}
+
+	public Date getDateStart() {
+		return dateStart;
+	}
+
+	public void setDateStart(Date dateStart) {
+		this.dateStart = dateStart;
+	}
+
+	public Date getDateEnd() {
+		return dateEnd;
+	}
+
+	public void setDateEnd(Date dateEnd) {
+		this.dateEnd = dateEnd;
+	}
+
+	
+    
 }
