@@ -519,13 +519,13 @@
 		SET
 		nickname = #{nickname}
 		,photo = #{photo}
-		WHERE user_id = #{userId}
+		WHERE publisher = #{publisher}	
 	</update>
 	
 	<update id="update_login_name" parameterType="comment">
 		UPDATE tforum_post
 		SET
 		login_name = #{loginName}
-		WHERE user_id = #{userId}
+		WHERE publisher = #{publisher}	
 	</update>
 </mapper>
