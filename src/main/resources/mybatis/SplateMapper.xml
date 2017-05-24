@@ -185,7 +185,7 @@
 		tforum_splate t  
 		LEFT JOIN tforum_post tp 
 		ON t.code=tp.plate_code 
-		GROUP BY tp.plate_code 
+		GROUP BY t.code 
 		HAVING 
 		t.company_code=#{companyCode}
 		<if test="status != null and status != '' ">
@@ -200,11 +200,7 @@
 				
 		</if>
 		
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>) 
+		) 
 		ts 
 		LEFT JOIN 
 		tforum_bplate tb 
