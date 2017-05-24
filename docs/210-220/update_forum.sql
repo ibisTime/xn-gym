@@ -28,5 +28,6 @@ WHERE t4.commer=t5.user_id;
 ALTER TABLE tr_activity ADD single_num INT(11) NULL after sign_num;
 UPDATE csw_activity.`tr_activity` SET single_num=limit_num;
 
-
+ALTER TABLE `csw_activity`.`tr_activity` 
+CHANGE COLUMN `description` `description` TEXT NULL DEFAULT NULL COMMENT '图文描述' ;
 
