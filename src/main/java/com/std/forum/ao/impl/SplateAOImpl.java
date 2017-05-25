@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.forum.ao.ISplateAO;
-import com.std.forum.api.impl.XN610049;
 import com.std.forum.bo.IBplateBO;
 import com.std.forum.bo.IBplateTemplateBO;
 import com.std.forum.bo.IPostBO;
@@ -82,7 +81,7 @@ public class SplateAOImpl implements ISplateAO {
             req.getParentCode(), req.getPic(), req.getOrderNo(),
             req.getUserId(), StringValidater.toInteger(req.getIsDefault()),
             req.getCompanyCode(), req.getStatus(), req.getUpdater(),
-            req.getRemark(),req.getDescription());
+            req.getRemark(), req.getDescription());
     }
 
     private void checkIsDefault(String code, String isDefault,
@@ -247,11 +246,9 @@ public class SplateAOImpl implements ISplateAO {
     /**
      * 列表查询小版块(详细)
      */
-	@Override
-	public List<XN610049Res> querySplateDetailList(Splate condition) {
-		
-		List<XN610049Res> list = splateBO.querySplateDetailList(condition);
-		
-		return list;
-	}
+    @Override
+    public List<XN610049Res> querySplateDetailList(Splate condition) {
+        List<XN610049Res> list = splateBO.querySplateDetailList(condition);
+        return list;
+    }
 }
