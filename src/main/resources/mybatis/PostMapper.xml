@@ -39,7 +39,7 @@
 				AND t.code = #{code}
 			</if>
 			<if test="title != null and title != '' ">
-		        AND t.title = #{title}
+		        AND t.title like "%"#{title}"%"
 			</if>
 			<choose>
 			     <when test='location == "D"'>

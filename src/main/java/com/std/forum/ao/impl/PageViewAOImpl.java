@@ -106,18 +106,18 @@ public class PageViewAOImpl implements IPageViewAO {
     	}else{
     		pvNum = pageView.getPageViewNum();
     	}
-//    	//查询用户总人数
-//    	User userCondition = new User();
-//    	userCondition.setCompanyCode(companyCode);
-//    	userCondition.setDateStart(dateStart);
-//    	userCondition.setDateEnd(dateEnd);
-//    	Long userNum = userBO.getUserTotal(userCondition);  
+    	//查询用户总人数
+    	User userCondition = new User();
+    	userCondition.setCompanyCode(companyCode);
+    	userCondition.setDateStart(dateStart);
+    	userCondition.setDateEnd(dateEnd);
+    	Long userNum = userBO.getUserTotal(userCondition);  
     	//填充数据
     	res.setCompanyCode(companyCode);
     	res.setCompanyName(companyName);
     	res.setPageViewNum(pvNum);
     	res.setPostNum(postNum);
-    	//res.setUserNum(userNum);
+    	res.setUserNum(userNum);
     	return res ;
     	}
 }

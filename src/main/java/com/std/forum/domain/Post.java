@@ -90,6 +90,9 @@ public class Post extends ABaseDO {
 
     // 备注
     private String remark;
+    
+    //小版块名称
+    private String splateName;
 
     // *****************db properties ********************
 
@@ -453,4 +456,13 @@ public class Post extends ABaseDO {
         this.sunRead = sunRead;
     }
 
+	public String getSplateName() {
+		return splateName;
+	}
+
+	public void setSplateName(String splateName) {
+		this.splateName = splateName;
+	}
+
+    
 }

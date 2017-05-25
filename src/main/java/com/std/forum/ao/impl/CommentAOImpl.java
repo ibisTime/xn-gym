@@ -115,7 +115,7 @@ public class CommentAOImpl implements ICommentAO {
             code = code + ";filter:true";
         }
         req.setCode(code);
-        req.setAmount(amount);
+        req.setAmount(StringValidater.toLong(rule.getValue()));
         return req;
     }
 

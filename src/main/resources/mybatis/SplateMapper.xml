@@ -172,7 +172,7 @@
 		,ts.post_num
 		,tb.name as bplate_name
 		FROM 
-		(SELECT COUNT(*)AS 
+		(SELECT COUNT(tp.plate_code)AS 
 		post_num
 		,t.code
 		,t.description

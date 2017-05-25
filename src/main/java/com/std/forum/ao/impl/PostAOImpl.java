@@ -198,7 +198,7 @@ public class PostAOImpl implements IPostAO {
         }
         XN610110Res res = new XN610110Res();
         res.setCode(code);
-        res.setAmount(amount);
+        res.setAmount(StringValidater.toLong(rule.getValue()));
         return res;
     }
 
@@ -547,6 +547,8 @@ public class PostAOImpl implements IPostAO {
     @Override
     public Post getPost(String code, String userId, String commStatus) {
         Post post = postBO.getPost(code);
+        Splate splate = splateBO.getSplate(post.getPlateCode());
+        post.setSplateName(splate.getName());
         this.cutPic(post);
         this.getPartInfo(post, userId);
         // this.fullGetPost(post);
