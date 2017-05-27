@@ -68,7 +68,8 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
     @Override
     public int refreshSplate(String code, String name, String parentCode,
             String pic, String orderNo, String userId, Integer isDefault,
-            String companyCode, String status, String updater, String remark,String description) {
+            String companyCode, String status, String updater, String remark,
+            String description) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Splate data = new Splate();
@@ -141,10 +142,8 @@ public class SplateBOImpl extends PaginableBOImpl<Splate> implements ISplateBO {
         return splateDAO.selectList(condition);
     }
 
-	@Override
-	public List<XN610049Res> querySplateDetailList(Splate condition) {
-		// TODO Auto-generated method stub
-		
-		return splateDAO.selectDetailSplate(condition);
-	}
+    @Override
+    public List<XN610049Res> querySplateDetailList(Splate condition) {
+        return splateDAO.selectDetailSplate(condition);
+    }
 }

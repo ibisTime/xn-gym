@@ -93,4 +93,8 @@ public interface IPostDAO extends IBaseDAO<Post> {
 
     public int updateLoginName(Post data);
 
+    public List<Post> selectPcList(Post condition);
+
+    public List<Post> queryPcPostList(Post condition, int start, int limit);
+
 }

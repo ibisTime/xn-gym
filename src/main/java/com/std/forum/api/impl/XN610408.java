@@ -1,12 +1,9 @@
 package com.std.forum.api.impl;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.std.forum.ao.IPageViewAO;
 import com.std.forum.api.AProcessor;
 import com.std.forum.common.JsonUtil;
 import com.std.forum.dto.req.XN610408Req;
-import com.std.forum.dto.res.XN610408Res;
 import com.std.forum.exception.BizException;
 import com.std.forum.exception.ParaException;
 import com.std.forum.spring.SpringContextHolder;
@@ -25,8 +22,8 @@ public class XN610408 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
-    	return pageViewAO.queryNum(req.getCompanyCode(),req.getDateStart(),req.getDateEnd());
+        return pageViewAO.queryNum(req.getCompanyCode(), req.getDateStart(),
+            req.getDateEnd());
     }
 
     @Override

@@ -85,4 +85,8 @@ public interface IPostBO extends IPaginableBO<Post> {
     public void updateUserInf(String userId, String nickname, String photo);
 
     public void updateUserInf(String userId, String loginName);
+
+    public List<Post> selectPcList(Post condition);
+
+    public List<Post> queryPostPcList(Post condition, int start, int limit);
 }

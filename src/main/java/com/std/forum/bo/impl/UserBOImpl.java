@@ -139,21 +139,19 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     /**
      * 统计用户总数
      */
-	@Override
-	public Long getUserTotal(User condition) {
-		 XN001404Req req = new XN001404Req();
-	        req.setCompanyCode(condition.getCompanyCode());
-	        req.setBeginDatetime(DateUtil.dateToStr(condition.getDateStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
-	        req.setEndDatetime(DateUtil.dateToStr(condition.getDateEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
-	       
-	        req.setSystemCode("CD-CCSW000008");
-	        String jsonStr = BizConnecter.getBizData("001404",
-	            JsonUtils.object2Json(req));
-	       
-	        XN001404Res res = JsonUtil.json2Bean(jsonStr, XN001404Res.class);
-	        
-	       return res.getTotalUserNum() ;
-	}
-
+    @Override
+    public Long getUserTotal(User condition) {
+        XN001404Req req = new XN001404Req();
+        req.setCompanyCode(condition.getCompanyCode());
+        req.setBeginDatetime(DateUtil.dateToStr(condition.getDateStart(),
+            DateUtil.FRONT_DATE_FORMAT_STRING));
+        req.setEndDatetime(DateUtil.dateToStr(condition.getDateEnd(),
+            DateUtil.FRONT_DATE_FORMAT_STRING));
+        req.setSystemCode("CD-CCSW000008");
+        String jsonStr = BizConnecter.getBizData("001404",
+            JsonUtils.object2Json(req));
+        XN001404Res res = JsonUtil.json2Bean(jsonStr, XN001404Res.class);
+        return res.getTotalUserNum();
+    }
 
 }

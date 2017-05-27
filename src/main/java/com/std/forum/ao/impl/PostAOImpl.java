@@ -474,6 +474,10 @@ public class PostAOImpl implements IPostAO {
     // 分页查
     @Override
     public Paginable<Post> queryPostPage(int start, int limit, Post condition) {
+        Splate splate = splateBO.getSplate(condition.getPlateCode());
+        if (!splate.getCompanyCode().equals(condition.getCompanyCode())) {
+            condition.setCompanyCode(splate.getCompanyCode());
+        }
         condition.setLocation(setLocation(condition.getLocation()));
         Paginable<Post> postPage = postBO.getPaginable(start, limit, condition);
         List<Post> postList = postPage.getList();
@@ -884,6 +888,27 @@ public class PostAOImpl implements IPostAO {
         List<XN610124Res> dataList = postList.subList(start - 1, limit);
         page.setList(dataList);
         return page;
+    }
+
+    // pc端查询
+    @Override
+    public Paginable<Post> queryPcPostPage(int start, int limit, Post condition) {
+        Paginable<Post> postPage = null;
+        List<Post> list = postBO.selectPcList(condition);
+        postPage = new Page<Post>(start, limit, list.size());
+        List<Post> dataList = postBO.queryPostPcList(condition,
+            postPage.getStart(), postPage.getPageSize());
+        postPage.setList(dataList);
+        List<Post> postList = postPage.getList();
+        // 帖子优化
+        // 1、postCode 设置成list,查所有评论，所有点赞
+        for (Post post : postList) {
+            cutPic(post);
+            this.fullPost(post);
+            this.fullIsDZ(post, condition.getUserId());
+            this.fullIsSC(post, condition.getUserId());
+        }
+        return postPage;
     }
 
     @Override

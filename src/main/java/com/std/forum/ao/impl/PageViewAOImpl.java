@@ -18,7 +18,6 @@ import com.std.forum.common.DateUtil;
 import com.std.forum.domain.PageView;
 import com.std.forum.domain.Post;
 import com.std.forum.domain.User;
-import com.std.forum.dto.req.XN610408Req;
 import com.std.forum.dto.res.XN610408Res;
 import com.std.forum.exception.BizException;
 
