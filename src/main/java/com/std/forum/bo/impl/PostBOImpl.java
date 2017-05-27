@@ -370,4 +370,14 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setLoginName(loginName);
         postDAO.updateLoginName(data);
     }
+
+    @Override
+    public List<Post> selectPcList(Post condition) {
+        return postDAO.selectPcList(condition);
+    }
+
+    @Override
+    public List<Post> queryPostPcList(Post condition, int start, int limit) {
+        return postDAO.queryPcPostList(condition, start, limit);
+    }
 }

@@ -108,6 +108,8 @@ public interface IPostAO {
     public Paginable<XN610124Res> queryTotalPage(int start, int limit,
             Post condition);
 
+    public Paginable<Post> queryPcPostPage(int start, int limit, Post condition);
+
     public void modifyUser(String userId, String nickname, String gender,
             String birthday, String photo, String email, String introduce);
 

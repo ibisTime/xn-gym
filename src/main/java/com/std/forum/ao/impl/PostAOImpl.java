@@ -884,6 +884,27 @@ public class PostAOImpl implements IPostAO {
         return page;
     }
 
+    // pc端查询
+    @Override
+    public Paginable<Post> queryPcPostPage(int start, int limit, Post condition) {
+        Paginable<Post> postPage = null;
+        List<Post> list = postBO.selectPcList(condition);
+        postPage = new Page<Post>(start, limit, list.size());
+        List<Post> dataList = postBO.queryPostPcList(condition,
+            postPage.getStart(), postPage.getPageSize());
+        postPage.setList(dataList);
+        List<Post> postList = postPage.getList();
+        // 帖子优化
+        // 1、postCode 设置成list,查所有评论，所有点赞
+        for (Post post : postList) {
+            cutPic(post);
+            this.fullPost(post);
+            this.fullIsDZ(post, condition.getUserId());
+            this.fullIsSC(post, condition.getUserId());
+        }
+        return postPage;
+    }
+
     @Override
     public void modifyUser(String userId, String nickname, String gender,
             String birthday, String photo, String email, String introduce) {

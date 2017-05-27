@@ -323,6 +323,57 @@
 		ORDER BY t.publish_datetime DESC	
 	</select>
 	
+	<!-- pc端帖子查询 -->
+	<select id="select_post_pc" parameterType="post" resultMap="post_DB_Result">
+		SELECT 
+		DISTINCT
+		t.code
+		,t.title
+		,t.content
+		,t.pic
+		,t.publisher
+		
+		,t.nickname
+		,t.photo
+		,t.login_name
+		,t.publish_datetime
+		,t.approver
+		
+		,t.approve_datetime
+		,t.approve_note
+		,t.status
+		,t.location
+		,t.order_no
+		
+		,t.plate_code
+		,t.is_lock
+		,t.sum_comment
+		,t.sum_like
+		,t.sum_read
+		
+		,t.sum_reward
+		,t.remark
+		,CONCAT(SUBSTRING(t.location, LOCATE('A',SUBSTRING(t.location,1,1)),1)) AS a
+		,CONCAT(SUBSTRING(t.location, LOCATE('B',SUBSTRING(t.location,1,3)),1)) AS b
+		,CONCAT(SUBSTRING(t.location, LOCATE('C',SUBSTRING(t.location,1,5)),1)) AS c
+		,CONCAT(SUBSTRING(t.location, LOCATE('D',SUBSTRING(t.location,1,1)),1)) AS d
+		FROM
+		tforum_post t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<choose>
+			     <when test='order != null and order == "location ASC"'>
+				 	a DESC,b DESC,c DESC,d DESC
+				 </when>
+				 <otherwise>
+					 <if test="order != null">
+        				t.${order}
+					</if>
+				 </otherwise>
+			</choose>
+		</trim>
+	</select>
+	
 	<select id="select_post1_count" parameterType="post"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tforum_post t left join tforum_splate tp on t.plate_code = tp.code

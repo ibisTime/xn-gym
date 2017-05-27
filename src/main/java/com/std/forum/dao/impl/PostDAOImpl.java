@@ -194,4 +194,16 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     public int updateLoginName(Post data) {
         return super.update(NAMESPACE.concat("update_login_name"), data);
     }
+
+    @Override
+    public List<Post> selectPcList(Post condition) {
+        return super.selectList(NAMESPACE.concat("select_post_pc"), condition,
+            Post.class);
+    }
+
+    @Override
+    public List<Post> queryPcPostList(Post condition, int start, int limit) {
+        return super.selectList(NAMESPACE.concat("select_post_pc"), start,
+            limit, condition, Post.class);
+    }
 }
