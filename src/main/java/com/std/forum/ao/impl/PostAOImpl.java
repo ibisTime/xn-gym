@@ -474,9 +474,11 @@ public class PostAOImpl implements IPostAO {
     // 分页查
     @Override
     public Paginable<Post> queryPostPage(int start, int limit, Post condition) {
-        Splate splate = splateBO.getSplate(condition.getPlateCode());
-        if (!splate.getCompanyCode().equals(condition.getCompanyCode())) {
-            condition.setCompanyCode(splate.getCompanyCode());
+        if (StringUtils.isNotBlank(condition.getPlateCode())) {
+            Splate splate = splateBO.getSplate(condition.getPlateCode());
+            if (!splate.getCompanyCode().equals(condition.getCompanyCode())) {
+                condition.setCompanyCode(splate.getCompanyCode());
+            }
         }
         condition.setLocation(setLocation(condition.getLocation()));
         Paginable<Post> postPage = postBO.getPaginable(start, limit, condition);
