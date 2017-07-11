@@ -12,14 +12,15 @@ import com.std.gym.http.BizConnecter;
 
 public class DispatcherImpl implements IDispatcher {
 
-	static Logger logger = Logger.getLogger(DispatcherImpl.class);
+    static Logger logger = Logger.getLogger(DispatcherImpl.class);
+
     @Override
     public String doDispatcher(String transcode, String inputParams) {
         String result = null;
         ReturnMessage rm = new ReturnMessage();
         try {
             // 加载配置文件,proxy实例化
-            String classname = "com.std.forum.api.impl.XNOther";
+            String classname = "com.std.gym.api.impl.XNOther";
             // ConfigDescribe configDescribe = ConfigLoader.loadConfig();
             // if (StringUtils.isNotBlank(transcode) && configDescribe != null)
             // {
@@ -28,7 +29,7 @@ public class DispatcherImpl implements IDispatcher {
             // classname = "com.std.forum.api.impl.XN" + transcode;
             // }
             // }
-            classname = "com.std.forum.api.impl.XN" + transcode;
+            classname = "com.std.gym.api.impl.XN" + transcode;
             IProcessor processor = (IProcessor) ReflectUtil
                 .getInstance(classname);
             // 接口调用
@@ -45,25 +46,37 @@ public class DispatcherImpl implements IDispatcher {
                 rm.setErrorCode(EErrorCode.BIZ_ERR.getCode());
                 rm.setErrorInfo(((BizException) e).getErrorMessage());
                 rm.setData("");
-                logger.error("\nURL:"+BizConnecter.getPostUrl(transcode)+"\ncode:"+transcode+"  parameters:"+inputParams+"\ntype:"+EErrorCode.BIZ_ERR.getValue()+"   info:"+((BizException) e).getErrorMessage());
+                logger.error("\nURL:" + BizConnecter.getPostUrl(transcode)
+                        + "\ncode:" + transcode + "  parameters:" + inputParams
+                        + "\ntype:" + EErrorCode.BIZ_ERR.getValue()
+                        + "   info:" + ((BizException) e).getErrorMessage());
             } else if (e instanceof ParaException) {
                 rm.setErrorCode(EErrorCode.PARA_ERR.getCode());
                 rm.setErrorInfo(((ParaException) e).getErrorMessage());
                 rm.setData("");
-                logger.error("\nURL:"+BizConnecter.getPostUrl(transcode)+"\ncode:"+transcode+"  parameters:"+inputParams+"\ntype:"+EErrorCode.PARA_ERR.getValue()+"   info:"+((ParaException) e).getErrorMessage());
+                logger.error("\nURL:" + BizConnecter.getPostUrl(transcode)
+                        + "\ncode:" + transcode + "  parameters:" + inputParams
+                        + "\ntype:" + EErrorCode.PARA_ERR.getValue()
+                        + "   info:" + ((ParaException) e).getErrorMessage());
             } else if (e instanceof NullPointerException) {
                 rm.setErrorCode(EErrorCode.OTHER_ERR.getCode());
                 rm.setErrorInfo("NPE");
                 // rm.setErrorInfo("系统错误，请联系管理员");
                 rm.setData("");
-                logger.error("\nURL:"+BizConnecter.getPostUrl(transcode)+"\ncode:"+transcode+"  parameters:"+inputParams+"\ntype:"+EErrorCode.OTHER_ERR.getValue()+"   info:NPE"+"  系统错误,请联系管理员");
+                logger.error("\nURL:" + BizConnecter.getPostUrl(transcode)
+                        + "\ncode:" + transcode + "  parameters:" + inputParams
+                        + "\ntype:" + EErrorCode.OTHER_ERR.getValue()
+                        + "   info:NPE" + "  系统错误,请联系管理员");
             } else {
                 rm.setErrorCode(EErrorCode.OTHER_ERR.getCode());
                 rm.setErrorInfo(e.getMessage());
                 // rm.setErrorInfo("系统错误，请联系管理员");
                 rm.setData("");
-                logger.error("\nURL:"+BizConnecter.getPostUrl(transcode)+"\ncode:"+transcode+"  parameters:"+inputParams+"\ntype:"+EErrorCode.OTHER_ERR.getValue()+"   info:"+e.getMessage()+"  系统错误,请联系管理员");
-                
+                logger.error("\nURL:" + BizConnecter.getPostUrl(transcode)
+                        + "\ncode:" + transcode + "  parameters:" + inputParams
+                        + "\ntype:" + EErrorCode.OTHER_ERR.getValue()
+                        + "   info:" + e.getMessage() + "  系统错误,请联系管理员");
+
             }
         } finally {
             result = JsonUtil.Object2Json(rm);

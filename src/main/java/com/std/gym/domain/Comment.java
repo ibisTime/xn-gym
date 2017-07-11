@@ -73,9 +73,6 @@ public class Comment extends ABaseDO {
     // 针对评论
     private Comment parentComment;
 
-    // 1 评论我的
-    private String isCommentMy;
-
     // 发布人
     private String publisher;
 
@@ -199,14 +196,6 @@ public class Comment extends ABaseDO {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
-    }
-
-    public String getIsCommentMy() {
-        return isCommentMy;
-    }
-
-    public void setIsCommentMy(String isCommentMy) {
-        this.isCommentMy = isCommentMy;
     }
 
     public String getPublisher() {

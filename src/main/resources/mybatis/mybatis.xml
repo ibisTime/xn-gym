@@ -5,23 +5,6 @@
 		<typeAlias alias="keyword" type="com.std.forum.domain.Keyword" />
 		<typeAlias alias="sysDict" type="com.std.forum.domain.SYSDict" />
 		<typeAlias alias="sysConfig" type="com.std.forum.domain.SYSConfig" />
-		<typeAlias alias="bplateTemplate" type="com.std.forum.domain.BplateTemplate" />
-		<typeAlias alias="bplate" type="com.std.forum.domain.Bplate" />
-		
-		<typeAlias alias="splateTemplate" type="com.std.forum.domain.SplateTemplate" />
-		<typeAlias alias="splate" type="com.std.forum.domain.Splate" />
-		<typeAlias alias="menu" type="com.std.forum.domain.Menu" />
-		<typeAlias alias="banner" type="com.std.forum.domain.Banner" />
-		<typeAlias alias="subsystem" type="com.std.forum.domain.Subsystem" />
-		
-		<typeAlias alias="post" type="com.std.forum.domain.Post" />
-		<typeAlias alias="postTalk" type="com.std.forum.domain.PostTalk" />
 		<typeAlias alias="comment" type="com.std.forum.domain.Comment" />
-		<typeAlias alias="video" type="com.std.forum.domain.Video" />
-		
-		<typeAlias alias="pageView" type="com.std.forum.domain.PageView" />
-		<typeAlias alias="product" type="com.std.forum.domain.Product" />
-		<typeAlias alias="prodOrder" type="com.std.forum.domain.ProdOrder" />
-		<typeAlias alias="category" type="com.std.forum.domain.Category" />
 	</typeAliases>
 </configuration>	
