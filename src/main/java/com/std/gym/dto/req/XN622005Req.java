@@ -1,12 +1,12 @@
 package com.std.gym.dto.req;
 
-/** 
+/**
  * 分页查询关键字
- * @author: zuixian 
- * @since: 2016年9月28日 下午1:47:44 
+ * @author: asus 
+ * @since: 2017年7月12日 下午2:45:39 
  * @history:
  */
-public class XN610005Req extends APageReq {
+public class XN622005Req extends APageReq {
 
     private static final long serialVersionUID = 1L;
 

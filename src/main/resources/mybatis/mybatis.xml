@@ -6,5 +6,8 @@
 		<typeAlias alias="sysDict" type="com.std.forum.domain.SYSDict" />
 		<typeAlias alias="sysConfig" type="com.std.forum.domain.SYSConfig" />
 		<typeAlias alias="comment" type="com.std.forum.domain.Comment" />
+		<typeAlias alias="activity" type="com.cdkj.ride.domain.Activity" />
+	    <typeAlias alias="order" type="com.cdkj.ride.domain.Order" />
+	
 	</typeAliases>
 </configuration>	

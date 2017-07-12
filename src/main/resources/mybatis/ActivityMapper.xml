@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdkj.ride.dao.IActivityDAO">
+	<resultMap id="activity_DB_Result" type="activity">
+		<result column="code" property="code" />
+		<result column="title" property="title" />
+		<result column="pic1" property="pic1" />
+		
+		<result column="fee" property="fee" />
+		<result column="description" property="description" />
+		<result column="hold_place" property="holdPlace" />
+		<result column="location" property="location" />
+		<result column="orderNo" property="orderNo" />
+		
+		<result column="begin_datetime" property="beginDatetime" />
+		<result column="end_datetime" property="endDatetime" />
+		<result column="sign_num" property="signNum" />
+		<result column="single_num" property="singleNum" />
+		<result column="limit_num" property="limitNum" />
+		
+		<result column="scan_num" property="scanNum" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="updateDatetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		
+		<result column="company_code" property="companyCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>	
+			<if test="holdPlace != null and holdPlace != '' ">
+				AND t.hold_place = #{holdPlace}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>	
+			<if test="beginDatetime != null and beginDatetime != '' ">
+				<![CDATA[AND t.begin_datetime >= #{beginDatetime}]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != '' ">
+				<![CDATA[AND t.end_datetime <= #{endDatetime}]]>
+			</if>
+			<if test="title != null and title != '' ">
+				AND t.title like "%"#{title}"%"
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_activity" parameterType="activity" resultMap="activity_DB_Result">
+		SELECT
+		t.code
+		,t.title
+		,t.pic1
+		,t.fee
+		,t.description
+		
+		,t.hold_place
+		,t.location
+		,t.order_no
+		,t.begin_datetime
+		,t.end_datetime
+		
+		,t.sign_num
+		,t.single_num
+		,t.limit_num
+		,t.scan_num
+		,t.status
+		
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.company_code
+		FROM
+		tr_activity t 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>	
+	</select>
+
+	<select id="select_activity_count" parameterType="activity" resultType="java.lang.Long">
+		SELECT count(1) FROM tr_activity t 
+		<include refid="where_condition" />
+	</select>
+	
+	<insert id="insert_activity" parameterType="activity">
+		INSERT INTO tr_activity(
+		code
+		,title
+		,pic1
+		,fee
+		,description
+		
+		,hold_place
+		,location
+		,order_no
+		,begin_datetime
+		,end_datetime
+		
+		,sign_num
+		,single_num
+		,limit_num
+		,scan_num
+		,status
+		,updater
+		
+		,update_datetime
+		,remark
+		,company_code
+		)
+		VALUES(
+		#{code}
+		,#{title}
+		,#{pic1}
+		,#{fee}
+		,#{description}
+		,#{holdPlace}
+		,#{location}
+		
+		,#{orderNo}
+		,#{beginDatetime}
+		,#{endDatetime}
+		,#{signNum}
+		,#{singleNum}
+		,#{limitNum}
+		
+		,#{scanNum}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{companyCode}
+		)
+	</insert>
+
+	<delete id="delete_activity" parameterType="activity">
+		DELETE FROM tr_activity
+		WHERE code = #{code}
+	</delete>
+	
+	<update id="update_activity" parameterType="activity">
+		UPDATE tr_activity SET
+		title=#{title}
+		,pic1=#{pic1}
+		,fee=#{fee}
+		,description=#{description}
+		
+		,hold_place=#{holdPlace}
+		,location=#{location}
+		,order_no=#{orderNo}
+		,begin_datetime=#{beginDatetime}
+		,end_datetime=#{endDatetime}
+		
+		,sign_num=#{signNum}
+		,single_num=#{singleNum}
+		,limit_num=#{limitNum}
+		,scan_num=#{scanNum}
+		,status=#{status}
+		
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_shelves" parameterType="activity">
+		UPDATE tr_activity SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_down" parameterType="activity">
+		UPDATE tr_activity SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_scan" parameterType="activity">
+		UPDATE tr_activity SET
+		scan_num=#{scanNum}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_sign" parameterType="activity">
+		UPDATE tr_activity SET
+		sign_num=#{signNum}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_auto" parameterType="activity">
+		UPDATE tr_activity SET
+		status=#{status}
+		WHERE code = #{code}
+	</update>
+</mapper>

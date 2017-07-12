@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdkj.ride.dao.IOrderDAO">
+	<resultMap id="order_DB_Result" type="order">
+		<result column="code" property="code" />
+		<result column="apply_user" property="applyUser" />
+		<result column="product_code" property="productCode" />
+		<result column="product_name" property="productName" />
+		<result column="real_name" property="realName" />
+		<result column="mobile" property="mobile" />
+		<result column="id_no" property="idNo" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="quantity" property="quantity" />
+		
+		<result column="unit_price" property="unitPrice" />
+		<result column="total_amount" property="totalAmount" />
+		<result column="status" property="status" />
+		<result column="cancel_datetime" property="cancelDatetime" />
+		
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="updater" property="updater" />
+		
+		<result column="update_datetime" property="updateDatetime" />
+        <result column="remark" property="remark" />
+        <result column="company_code" property="companyCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>	
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>	
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="realName != null and realName != '' ">
+				AND t.real_name like "%"#{realName}"%"
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="payBeginDatetime != null and payBeginDatetime != '' ">
+				<![CDATA[AND t.pay_datetime >= #{payBeginDatetime}]]>
+			</if>
+			<if test="payEndDatetime != null and payEndDatetime != '' ">
+				<![CDATA[AND t.pay_datetime <= #{payEndDatetime}]]>
+			</if>
+			<if test="createBeginDatetime != null and createBeginDatetime != '' ">
+				<![CDATA[AND t.create_datetime >= #{createBeginDatetime}]]>
+			</if>	
+			<if test="createEndDatetime != null and createEndDatetime != '' ">
+				<![CDATA[AND t.create_datetime <= #{createEndDatetime}]]>
+			</if>	
+			<if test="mobile != null and mobile != '' ">
+				AND t.mobile like "%"#{mobile}"%"
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
+		</trim>
+	</sql>
+	<select id="select_order" parameterType="order" resultMap="order_DB_Result">
+		SELECT	
+		t.code
+		,t.apply_user
+		,t.product_code
+		,t.product_name
+		,t.real_name
+		,t.mobile
+		,t.id_no
+		,t.create_datetime
+		,t.quantity
+		,t.unit_price
+		,t.total_amount
+		,t.status
+		,t.cancel_datetime
+		,t.pay_group
+		,t.pay_code
+		,t.pay_amount
+		,t.pay_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.company_code
+		FROM
+		tr_order t 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>	
+	</select>
+
+	<select id="select_order_count" parameterType="order" resultType="java.lang.Long">
+		SELECT count(1) FROM tr_order t 
+		<include refid="where_condition" />
+	</select>
+	
+	<insert id="insert_order" parameterType="order">
+		INSERT INTO tr_order(
+		code
+		,apply_user
+		,product_code
+		,product_name
+		,real_name
+		
+		,mobile
+		,id_no
+		,create_datetime
+		,quantity
+		,unit_price
+		
+		,total_amount
+		,status
+		,company_code
+		)
+		VALUES(
+		#{code}
+		,#{applyUser}
+		,#{productCode}
+		,#{productName}
+		,#{realName}
+		
+		,#{mobile}
+		,#{idNo}
+		,#{createDatetime}
+		,#{quantity}
+		,#{unitPrice}
+		
+		,#{totalAmount}
+		,#{status}
+		,#{companyCode}
+		)
+	</insert>
+	
+	<update id="update_payGroup" parameterType="order">
+		UPDATE tr_order SET
+		pay_group=#{payGroup}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_orderPay" parameterType="order">
+		UPDATE tr_order SET
+		status=#{status}
+		,pay_code=#{payCode}
+		,pay_amount=#{payAmount}
+		,pay_datetime=#{payDatetime}
+		WHERE code = #{code}
+	</update>
+
+	<delete id="delete_order" parameterType="order">
+		DELETE FROM tr_order
+		WHERE code = #{code}
+	</delete>
+	
+	<update id="update_cancel" parameterType="order">
+		UPDATE tr_order SET
+		status=#{status}
+		,cancel_datetime=#{cancelDatetime}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_auto" parameterType="order">
+		UPDATE tr_order SET
+		status=#{status}
+		WHERE code = #{code}
+	</update>
+	
+</mapper>

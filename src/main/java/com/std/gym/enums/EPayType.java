@@ -1,16 +1,14 @@
 package com.std.gym.enums;
 
-/** 
- * 编号前缀
+/**
  * @author: xieyj 
- * @since: 2015-3-7 上午8:41:50 
+ * @since: 2016年11月11日 上午10:09:32 
  * @history:
  */
-public enum EPrefixCode {
-    COMMENT("PL", "评论"), KEYWORD("GJ", "关键字"), Activity("AC", "活动"), ActivityOrder(
-            "AOD", "活动订单");
+public enum EPayType {
+    WEIXINAPP("1", "微信APP"), WEIXIN("2", "微信H5");
 
-    EPrefixCode(String code, String value) {
+    EPayType(String code, String value) {
         this.code = code;
         this.value = value;
     }

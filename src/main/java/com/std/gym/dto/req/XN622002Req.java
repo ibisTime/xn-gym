@@ -1,13 +1,12 @@
 package com.std.gym.dto.req;
 
-
-/** 
+/**
  * 修改关键词
- * @author: zuixian 
- * @since: 2016年9月28日 下午1:47:30 
+ * @author: asus 
+ * @since: 2017年7月12日 下午2:45:25 
  * @history:
  */
-public class XN610002Req {
+public class XN622002Req {
 
     // 关键词编号 （必填）
     private String code;

@@ -2,6 +2,7 @@ package com.std.gym.bo;
 
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.Account;
+import com.std.gym.dto.res.XN002501Res;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.EChannelType;
 
@@ -37,4 +38,9 @@ public interface IAccountBO extends IPaginableBO<Account> {
      * @history:
      */
     public Long getAccountByUserId(String userId, EChannelType type);
+
+    public XN002501Res doWeiXinH5PayRemote(String fromUserId,
+            String fromOpenId, String toUserId, Long amount, EBizType bizType,
+            String fromBizNote, String toBizNote, String payGroup);
+
 }

@@ -11,8 +11,8 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Keyword;
-import com.std.gym.dto.req.XN610000Req;
-import com.std.gym.dto.req.XN610002Req;
+import com.std.gym.dto.req.XN622000Req;
+import com.std.gym.dto.req.XN622002Req;
 import com.std.gym.enums.EPrefixCode;
 
 @Service
@@ -22,7 +22,7 @@ public class KeywordAOImpl implements IKeywordAO {
     private IKeywordBO keywordBO;
 
     @Override
-    public String addKeyword(XN610000Req req) {
+    public String addKeyword(XN622000Req req) {
         Keyword data = new Keyword();
         String code = OrderNoGenerater.generate(EPrefixCode.KEYWORD.getCode());
         data.setCode(code);
@@ -44,7 +44,7 @@ public class KeywordAOImpl implements IKeywordAO {
     }
 
     @Override
-    public void editKeyword(XN610002Req req) {
+    public void editKeyword(XN622002Req req) {
 
         Keyword result = new Keyword();
         result.setCode(req.getCode());

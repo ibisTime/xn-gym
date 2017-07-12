@@ -7,23 +7,23 @@ import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Keyword;
-import com.std.gym.dto.req.XN610005Req;
+import com.std.gym.dto.req.XN622005Req;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
 
-/** 
+/**
  * 分页查询关键字
- * @author: zuixian 
- * @since: 2016年9月28日 下午1:53:50 
+ * @author: asus 
+ * @since: 2017年7月12日 下午2:43:33 
  * @history:
  */
-public class XN610005 extends AProcessor {
+public class XN622005 extends AProcessor {
 
     private IKeywordAO keywordAO = SpringContextHolder
         .getBean(IKeywordAO.class);
 
-    private XN610005Req req = null;
+    private XN622005Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -44,7 +44,7 @@ public class XN610005 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN610005Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN622005Req.class);
         StringValidater.validateBlank(req.getStart(), req.getLimit());
     }
 }

@@ -11,21 +11,27 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<!-- 分页BO层注入paginableDao -->
-	<bean id="keywordBO" class="com.std.forum.bo.impl.KeywordBOImpl">
+	<bean id="keywordBO" class="com.std.gym.bo.impl.KeywordBOImpl">
 		<property name="paginableDAO" ref="keywordDAOImpl" />
 	</bean>
 	
 	
-	<bean id="sysDictBO" class="com.std.forum.bo.impl.SYSDictBOImpl">
+	<bean id="sysDictBO" class="com.std.gym.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl" />
 	</bean>
-	<bean id="sysConfigBO" class="com.std.forum.bo.impl.SYSConfigBOImpl">
+	<bean id="sysConfigBO" class="com.std.gym.bo.impl.SYSConfigBOImpl">
 		<property name="paginableDAO" ref="sysConfigDAOImpl" />
 	</bean>
 	
-	<bean id="commentBO" class="com.std.forum.bo.impl.CommentBOImpl">
+	<bean id="commentBO" class="com.std.gym.bo.impl.CommentBOImpl">
 		<property name="paginableDAO" ref="commentDAOImpl" />
 	</bean>
+	<bean id="orderBO" class="com.std.gym.bo.impl.OrderBOImpl">
+		<property name="paginableDAO" ref="orderDAOImpl"/>
+    </bean>	
 	
+	<bean id="activityBO" class="com.std.gym.bo.impl.ActivityBOImpl">
+		<property name="paginableDAO" ref="activityDAOImpl"/>
+	</bean>	 
 	
 </beans>

@@ -1,12 +1,12 @@
 package com.std.gym.dto.req;
 
-/** 
- * 修改关键词
- * @author: zuixian 
- * @since: 2016年9月28日 下午1:47:14 
+/**
+ * 详情查询关键字
+ * @author: asus 
+ * @since: 2017年7月12日 下午2:45:54 
  * @history:
  */
-public class XN610001Req {
+public class XN622006Req {
 
     // 编号 （必填）
     private String code;
