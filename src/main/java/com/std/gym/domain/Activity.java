@@ -11,10 +11,9 @@ import com.std.gym.dao.base.ABaseDO;
  * @history:
  */
 public class Activity extends ABaseDO {
-
     /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+      */
     private static final long serialVersionUID = 1L;
 
     // 编号
@@ -23,8 +22,14 @@ public class Activity extends ABaseDO {
     // 标题
     private String title;
 
-    //
-    private String pic1;
+    // 缩略图
+    private String pic;
+
+    // 广告图
+    private String advPic;
+
+    // 广告语
+    private String slogan;
 
     // 费用
     private Long fee;
@@ -42,22 +47,16 @@ public class Activity extends ABaseDO {
     private Integer orderNo;
 
     // 开始时间
-    private Date beginDatetime;
+    private Date startDatetime;
 
     // 结束时间
     private Date endDatetime;
 
-    // 报名数
-    private Integer signNum;
+    // 总人数
+    private Integer totalNum;
 
-    // 单次报名人数限制
-    private Integer singleNum;
-
-    // 活动最多参加人数
-    private Integer limitNum;
-
-    // 浏览量
-    private Integer scanNum;
+    // 剩余人数
+    private Integer remainNum;
 
     // 状态
     private String status;
@@ -70,15 +69,6 @@ public class Activity extends ABaseDO {
 
     // 备注
     private String remark;
-
-    // 公司编号
-    private String companyCode;
-
-    // 是否已经支付
-    private String isBook;
-
-    // 是否已经预订
-    private String book;
 
     // 订单编号
     private String orderCode;
@@ -99,12 +89,28 @@ public class Activity extends ABaseDO {
         this.title = title;
     }
 
-    public String getPic1() {
-        return pic1;
+    public String getPic() {
+        return pic;
     }
 
-    public void setPic1(String pic1) {
-        this.pic1 = pic1;
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public String getAdvPic() {
+        return advPic;
+    }
+
+    public void setAdvPic(String advPic) {
+        this.advPic = advPic;
+    }
+
+    public String getSlogan() {
+        return slogan;
+    }
+
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
     }
 
     public Long getFee() {
@@ -147,12 +153,12 @@ public class Activity extends ABaseDO {
         this.orderNo = orderNo;
     }
 
-    public Date getBeginDatetime() {
-        return beginDatetime;
+    public Date getStartDatetime() {
+        return startDatetime;
     }
 
-    public void setBeginDatetime(Date beginDatetime) {
-        this.beginDatetime = beginDatetime;
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
     }
 
     public Date getEndDatetime() {
@@ -163,28 +169,20 @@ public class Activity extends ABaseDO {
         this.endDatetime = endDatetime;
     }
 
-    public Integer getSignNum() {
-        return signNum;
+    public Integer getTotalNum() {
+        return totalNum;
     }
 
-    public void setSignNum(Integer signNum) {
-        this.signNum = signNum;
+    public void setTotalNum(Integer totalNum) {
+        this.totalNum = totalNum;
     }
 
-    public Integer getLimitNum() {
-        return limitNum;
+    public Integer getRemainNum() {
+        return remainNum;
     }
 
-    public void setLimitNum(Integer limitNum) {
-        this.limitNum = limitNum;
-    }
-
-    public Integer getScanNum() {
-        return scanNum;
-    }
-
-    public void setScanNum(Integer scanNum) {
-        this.scanNum = scanNum;
+    public void setRemainNum(Integer remainNum) {
+        this.remainNum = remainNum;
     }
 
     public String getStatus() {
@@ -219,44 +217,12 @@ public class Activity extends ABaseDO {
         this.remark = remark;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getIsBook() {
-        return isBook;
-    }
-
-    public void setIsBook(String isBook) {
-        this.isBook = isBook;
-    }
-
-    public String getBook() {
-        return book;
-    }
-
-    public void setBook(String book) {
-        this.book = book;
-    }
-
     public String getOrderCode() {
         return orderCode;
     }
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
-    }
-
-    public Integer getSingleNum() {
-        return singleNum;
-    }
-
-    public void setSingleNum(Integer singleNum) {
-        this.singleNum = singleNum;
     }
 
 }

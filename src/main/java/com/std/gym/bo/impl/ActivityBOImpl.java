@@ -106,13 +106,11 @@ public class ActivityBOImpl extends PaginableBOImpl<Activity> implements
 
     @Override
     public void scanActivity(Activity activity, Integer scanNum) {
-        activity.setScanNum(scanNum);
         activityDAO.scanActivity(activity);
     }
 
     @Override
     public void addSignNum(Activity activity, Integer signNum) {
-        activity.setSignNum(signNum);
         activityDAO.addSignNum(activity);
     }
 

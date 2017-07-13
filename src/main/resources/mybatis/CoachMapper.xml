@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.gym.dao.ICoachDAO">
+	<resultMap id="coach_DB_Result" type="coach">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="age" property="age" />
+		<result column="duration" property="duration" />
+		<result column="strengths" property="strengths" />
+		<result column="pic" property="pic" />
+		<result column="adv_pic" property="advPic" />
+		<result column="description" property="description" />
+		<result column="star" property="star" />
+		<result column="label" property="label" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="price" property="price" />
+		<result column="sum_com" property="sumCom" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_coach" parameterType="coach" resultMap="coach_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.age
+		,t.duration
+		,t.strengths
+		,t.pic
+		,t.adv_pic
+		,t.description
+		,t.star
+		,t.label
+		,t.location
+		,t.order_no
+		,t.price 
+		,t.sum_com
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tgym_coach t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_coach_count" parameterType="coach"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tgym_coach t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_coach" parameterType="coach">
+		INSERT INTO
+		tgym_coach(
+		code
+		,user_id
+		,age
+		,duration
+		,strengths
+		,pic
+		,adv_pic
+		,description
+		,star
+		,label
+		,location
+		,order_no
+		,price 
+		,sum_com
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{age}
+		,#{duration}
+		,#{strengths}
+		,#{pic}
+		,#{advPic}
+		,#{description}
+		,#{star}
+		,#{label}
+		,#{location}
+		,#{orderNo}
+		,#{price }
+		,#{sumCom}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_coach" parameterType="coach">
+		UPDATE tgym_coach
+		SET
+		user_id = #{userId}
+		,age = #{age}
+		,duration = #{duration}
+		,strengths = #{strengths}
+		,pic = #{pic}
+		,adv_pic = #{advPic}
+		,description = #{description}
+		,star = #{star}
+		,label = #{label}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,price = #{price}
+		,sum_com = #{sumCom}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

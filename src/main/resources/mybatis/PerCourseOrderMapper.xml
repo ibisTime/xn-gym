@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.gym.dao.IPerCourseOrderDAO">
+	<resultMap id="perCourseOrder_DB_Result" type="perCourseOrder">
+		<result column="code" property="code" />
+		<result column="coach_user_id" property="coachUserId" />
+		<result column="appoint_datetime" property="appointDatetime" />
+		<result column="class_datetime" property="classDatetime" />
+		<result column="address" property="address" />
+		<result column="quantity" property="quantity" />
+		<result column="price" property="price" />
+		<result column="amount" property="amount" />
+		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="apply_user" property="applyUser" />
+		<result column="mobile" property="mobile" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="apply_note" property="applyNote" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_perCourseOrder" parameterType="perCourseOrder" resultMap="perCourseOrder_DB_Result">
+		SELECT
+		t.code
+		,t.coach_user_id
+		,t.appoint_datetime
+		,t.class_datetime
+		,t.address
+		,t.quantity
+		,t.price
+		,t.amount
+		,t.status
+		,t.pay_type
+		,t.pay_amount
+		,t.pay_group
+		,t.pay_code
+		,t.pay_datetime
+		,t.apply_user
+		,t.mobile
+		,t.apply_datetime
+		,t.apply_note
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tgym_per_course_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_perCourseOrder_count" parameterType="perCourseOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tgym_per_course_order t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_perCourseOrder" parameterType="perCourseOrder">
+		INSERT INTO
+		tgym_per_course_order(
+		code
+		,coach_user_id
+		,appoint_datetime
+		,class_datetime
+		,address
+		,quantity
+		,price
+		,amount
+		,status
+		,pay_type
+		,pay_amount
+		,pay_group
+		,pay_code
+		,pay_datetime
+		,apply_user
+		,mobile
+		,apply_datetime
+		,apply_note
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{coachUserId}
+		,#{appointDatetime}
+		,#{classDatetime}
+		,#{address}
+		,#{quantity}
+		,#{price}
+		,#{amount}
+		,#{status}
+		,#{payType}
+		,#{payAmount}
+		,#{payGroup}
+		,#{payCode}
+		,#{payDatetime}
+		,#{applyUser}
+		,#{mobile}
+		,#{applyDatetime}
+		,#{applyNote}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_perCourseOrder" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		coach_user_id = #{coachUserId}
+		,appoint_datetime = #{appointDatetime}
+		,class_datetime = #{classDatetime}
+		,address = #{address}
+		,quantity = #{quantity}
+		,price = #{price}
+		,amount = #{amount}
+		,status = #{status}
+		,pay_type = #{payType}
+		,pay_amount = #{payAmount}
+		,pay_group = #{payGroup}
+		,pay_code = #{payCode}
+		,pay_datetime = #{payDatetime}
+		,apply_user = #{applyUser}
+		,mobile = #{mobile}
+		,apply_datetime = #{applyDatetime}
+		,apply_note = #{applyNote}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

@@ -21,41 +21,26 @@ public class ActivityOrder extends ABaseDO {
     // 订单编号
     private String code;
 
-    // 下单用户
-    private String applyUser;
+    // 活动编号
+    private String activityCode;
 
-    // 商品编号（活动编号）
-    private String productCode;
-
-    // 商品名称
-    private String productName;
-
-    // 真实姓名
-    private String realName;
-
-    // 手机号
-    private String mobile;
-
-    // 身份证号
-    private String idNo;
-
-    // 下单时间
-    private Date createDatetime;
+    // 活动名称
+    private String activityTitle;
 
     // 报名人数
     private Integer quantity;
 
     // 单价
-    private Long unitPrice;
+    private Long price;
 
     // 订单总额
-    private Long totalAmount;
+    private Long amount;
 
     // 订单状态
     private String status;
 
-    // 取消时间
-    private Date cancelDatetime;
+    // 支付组号
+    private String payType;
 
     // 支付组号
     private String payGroup;
@@ -70,6 +55,18 @@ public class ActivityOrder extends ABaseDO {
     private Date payDatetime;
 
     // 更新人
+    private String applyUser;
+
+    // 联系方式
+    private String mobile;
+
+    // 更新时间
+    private Date applyDatetime;
+
+    // 备注
+    private String applyNote;
+
+    // 更新人
     private String updater;
 
     // 更新时间
@@ -77,9 +74,6 @@ public class ActivityOrder extends ABaseDO {
 
     // 备注
     private String remark;
-
-    // 公司编号
-    private String companyCode;
 
     // *************DB**************
     // 创建开始时间
@@ -106,9 +100,6 @@ public class ActivityOrder extends ABaseDO {
     // 用户名
     private String nickname;
 
-    // 公司名称
-    private String companyName;
-
     // 状态List
     private List<String> statusList;
 
@@ -120,76 +111,44 @@ public class ActivityOrder extends ABaseDO {
         this.code = code;
     }
 
-    public String getApplyUser() {
-        return applyUser;
+    public String getActivityCode() {
+        return activityCode;
     }
 
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
+    public void setActivityCode(String activityCode) {
+        this.activityCode = activityCode;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getActivityTitle() {
+        return activityTitle;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setActivityTitle(String activityTitle) {
+        this.activityTitle = activityTitle;
     }
 
-    public String getProductName() {
-        return productName;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
-    public String getRealName() {
-        return realName;
+    public Long getPrice() {
+        return price;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
-    public String getMobile() {
-        return mobile;
+    public Long getAmount() {
+        return amount;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getIdNo() {
-        return idNo;
-    }
-
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
-    }
-
-    public Date getCreateDatetime() {
-        return createDatetime;
-    }
-
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
-    }
-
-    public Long getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(Long unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public Long getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(Long totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
     public String getStatus() {
@@ -200,12 +159,12 @@ public class ActivityOrder extends ABaseDO {
         this.status = status;
     }
 
-    public Date getCancelDatetime() {
-        return cancelDatetime;
+    public String getPayType() {
+        return payType;
     }
 
-    public void setCancelDatetime(Date cancelDatetime) {
-        this.cancelDatetime = cancelDatetime;
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     public String getPayGroup() {
@@ -240,6 +199,30 @@ public class ActivityOrder extends ABaseDO {
         this.payDatetime = payDatetime;
     }
 
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    public Date getApplyDatetime() {
+        return applyDatetime;
+    }
+
+    public void setApplyDatetime(Date applyDatetime) {
+        this.applyDatetime = applyDatetime;
+    }
+
+    public String getApplyNote() {
+        return applyNote;
+    }
+
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
+    }
+
     public String getUpdater() {
         return updater;
     }
@@ -262,14 +245,6 @@ public class ActivityOrder extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 
     public Date getCreateBeginDatetime() {
@@ -336,28 +311,20 @@ public class ActivityOrder extends ABaseDO {
         this.nickname = nickname;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
     public List<String> getStatusList() {
         return statusList;
     }
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

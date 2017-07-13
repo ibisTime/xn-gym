@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.gym.dao.IOrgCourseDAO">
+	<resultMap id="orgCourse_DB_Result" type="orgCourse">
+		<result column="code" property="code" />
+		<result column="coach_user" property="coachUser" />
+		<result column="name" property="name" />
+		<result column="class_datetime" property="classDatetime" />
+		<result column="sk_start_datetime" property="skStartDatetime" />
+		<result column="sk_end_datetime" property="skEndDatetime" />
+		<result column="total_num" property="totalNum" />
+		<result column="remain_num" property="remainNum" />
+		<result column="address" property="address" />
+		<result column="contact" property="contact" />
+		<result column="pic" property="pic" />
+		<result column="adv_pic" property="advPic" />
+		<result column="description" property="description" />
+		<result column="price" property="price" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="sum_com" property="sumCom" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_orgCourse" parameterType="orgCourse" resultMap="orgCourse_DB_Result">
+		SELECT
+		t.code
+		,t.coach_user
+		,t.name
+		,t.class_datetime
+		,t.sk_start_datetime
+		,t.sk_end_datetime
+		,t.total_num
+		,t.remain_num
+		,t.address
+		,t.contact
+		,t.pic
+		,t.adv_pic
+		,t.description
+		,t.price
+		,t.location
+		,t.order_no
+		,t.sum_com
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tgym_org_course t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_orgCourse_count" parameterType="orgCourse"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tgym_org_course t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_orgCourse" parameterType="orgCourse">
+		INSERT INTO
+		tgym_org_course(
+		code
+		,coach_user
+		,name
+		,class_datetime
+		,sk_start_datetime
+		,sk_end_datetime
+		,total_num
+		,remain_num
+		,address
+		,contact
+		,pic
+		,adv_pic
+		,description
+		,price
+		,location
+		,order_no
+		,sum_com
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{coachUser}
+		,#{name}
+		,#{classDatetime}
+		,#{skStartDatetime}
+		,#{skEndDatetime}
+		,#{totalNum}
+		,#{remainNum}
+		,#{address}
+		,#{contact}
+		,#{pic}
+		,#{advPic}
+		,#{description}
+		,#{price}
+		,#{location}
+		,#{orderNo}
+		,#{sumCom}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_orgCourse" parameterType="orgCourse">
+		UPDATE tgym_org_course
+		SET
+		coach_user = #{coachUser}
+		,name = #{name}
+		,class_datetime = #{classDatetime}
+		,sk_start_datetime = #{skStartDatetime}
+		,sk_end_datetime = #{skEndDatetime}
+		,total_num = #{totalNum}
+		,remain_num = #{remainNum}
+		,address = #{address}
+		,contact = #{contact}
+		,pic = #{pic}
+		,adv_pic = #{advPic}
+		,description = #{description}
+		,price = #{price}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,sum_com = #{sumCom}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

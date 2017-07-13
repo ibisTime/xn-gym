@@ -1,89 +1,131 @@
-/**
- * @Title Comment.java 
- * @Package com.std.forum.domain 
- * @Description 
- * @author xieyj  
- * @date 2016年8月28日 下午8:27:47 
- * @version V1.0   
- */
 package com.std.gym.domain;
-
-import java.util.Date;
-import java.util.List;
 
 import com.std.gym.dao.base.ABaseDO;
 
-/** 
- * 评论
- * @author: xieyj 
- * @since: 2016年8月28日 下午8:27:47 
- * @history:
- */
+/**
+* 评论
+* @author: xieyj 
+* @since: 2017-07-13 16:45:10
+* @history:
+*/
 public class Comment extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 1L;
 
     // 编号
     private String code;
 
-    // 内容
-    private String content;
+    // 是否好评
+    private String isPraise;
 
-    // 上级编号
-    private String parentCode;
+    // 好评分数
+    private String scores;
+
+    // 评论内容
+    private String content;
 
     // 状态
     private String status;
 
-    // 操作人
+    // 评论人
     private String commer;
 
-    // 昵称
-    private String nickname;
+    // 评论时间
+    private String commentDatetime;
 
-    // 登录名
-    private String loginName;
+    // 更新人
+    private String updater;
 
-    // 头像
-    private String photo;
+    // 更新时间
+    private String updateDatetime;
 
-    // 操作时间
-    private Date commDatetime;
+    // 备注
+    private String remark;
 
-    // 审核人
-    private String approver;
+    // 备注
+    private String productCode;
 
-    // 审核时间
-    private Date approveDatetime;
+    // (课程/私教)产品编号
+    private String orderCode;
 
-    // 审核说明
-    private String approveNote;
-
-    // 帖子编号
-    private String postCode;
-
-    // ****************db properties ***************
-    private String parentCommer;
-
-    // 父级昵称
-    private String parentNickname;
-
-    // 针对评论
-    private Comment parentComment;
-
-    // 发布人
-    private String publisher;
-
-    private List<String> statusList;
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setIsPraise(String isPraise) {
+        this.isPraise = isPraise;
+    }
+
+    public String getIsPraise() {
+        return isPraise;
+    }
+
+    public void setScores(String scores) {
+        this.scores = scores;
+    }
+
+    public String getScores() {
+        return scores;
+    }
+
+    public void setCommer(String commer) {
+        this.commer = commer;
+    }
+
+    public String getCommer() {
+        return commer;
+    }
+
+    public void setCommentDatetime(String commentDatetime) {
+        this.commentDatetime = commentDatetime;
+    }
+
+    public String getCommentDatetime() {
+        return commentDatetime;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdateDatetime(String updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public String getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
     }
 
     public String getContent() {
@@ -94,132 +136,12 @@ public class Comment extends ABaseDO {
         this.content = content;
     }
 
-    public String getParentCode() {
-        return parentCode;
-    }
-
-    public void setParentCode(String parentCode) {
-        this.parentCode = parentCode;
-    }
-
-    public String getCommer() {
-        return commer;
-    }
-
-    public void setCommer(String commer) {
-        this.commer = commer;
-    }
-
-    public Date getCommDatetime() {
-        return commDatetime;
-    }
-
-    public void setCommDatetime(Date commDatetime) {
-        this.commDatetime = commDatetime;
-    }
-
-    public String getParentCommer() {
-        return parentCommer;
-    }
-
-    public void setParentCommer(String parentCommer) {
-        this.parentCommer = parentCommer;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getParentNickname() {
-        return parentNickname;
-    }
-
-    public void setParentNickname(String parentNickname) {
-        this.parentNickname = parentNickname;
-    }
-
-    public Comment getParentComment() {
-        return parentComment;
-    }
-
-    public void setParentComment(Comment parentComment) {
-        this.parentComment = parentComment;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getApprover() {
-        return approver;
-    }
-
-    public void setApprover(String approver) {
-        this.approver = approver;
-    }
-
-    public Date getApproveDatetime() {
-        return approveDatetime;
-    }
-
-    public void setApproveDatetime(Date approveDatetime) {
-        this.approveDatetime = approveDatetime;
-    }
-
-    public String getApproveNote() {
-        return approveNote;
-    }
-
-    public void setApproveNote(String approveNote) {
-        this.approveNote = approveNote;
-    }
-
-    public String getPostCode() {
-        return postCode;
-    }
-
-    public void setPostCode(String postCode) {
-        this.postCode = postCode;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public List<String> getStatusList() {
-        return statusList;
-    }
-
-    public void setStatusList(List<String> statusList) {
-        this.statusList = statusList;
     }
 
 }

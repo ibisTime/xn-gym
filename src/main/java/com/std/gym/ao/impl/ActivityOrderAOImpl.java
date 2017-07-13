@@ -20,9 +20,9 @@ import com.std.gym.domain.Activity;
 import com.std.gym.domain.ActivityOrder;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
+import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EActivityStatus;
 import com.std.gym.enums.EBizType;
-import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
@@ -64,16 +64,14 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             .getCode());
         data.setCode(code);
         data.setApplyUser(applyUser);
-        data.setProductCode(productCode);
-        data.setProductName(activity.getTitle());
-        data.setRealName(realName);
+        data.setActivityCode(productCode);
+        data.setActivityTitle(activity.getTitle());
         data.setMobile(mobile);
-        data.setCreateDatetime(new Date());
+        data.setApplyDatetime(new Date());
         data.setQuantity(quantity);
-        data.setUnitPrice(activity.getFee());
-        data.setTotalAmount(quantity * activity.getFee());
+        data.setPrice(activity.getFee());
+        data.setAmount(quantity * activity.getFee());
         data.setStatus(EActivityOrderStatus.NOTPAY.getCode());
-        data.setCompanyCode(activity.getCompanyCode());
         orderBO.saveOrder(data);
         return code;
     }
@@ -85,15 +83,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 || EActivityStatus.END.getCode().equals(activity.getStatus())) {
             throw new BizException("xn0000", "活动不在可下单范围内");
         }
-        if (activity.getBeginDatetime().before(new Date())) {
+        if (activity.getStartDatetime().before(new Date())) {
             throw new BizException("xn0000", "活动已经截止报名");
-        }
-        if (activity.getLimitNum() <= activity.getSignNum()) {
-            throw new BizException("xn0000", "活动人数已满,不能在报名了");
-        }
-        if (quantity > activity.getSingleNum()) {
-            throw new BizException("xn0000", "活动单次报名人数不能超过"
-                    + activity.getSingleNum() + "人");
         }
     }
 
@@ -108,10 +99,10 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             condition);
         List<ActivityOrder> orderList = page.getList();
         for (ActivityOrder order : orderList) {
-            Activity activity = activityBO.getActivity(order.getProductCode());
-            order.setActivityBeginDatetime(activity.getBeginDatetime());
+            Activity activity = activityBO.getActivity(order.getActivityCode());
+            order.setActivityBeginDatetime(activity.getStartDatetime());
             order.setActivityEndDatetime(activity.getEndDatetime());
-            order.setPic(activity.getPic1());
+            order.setPic(activity.getPic());
             User user = userBO.getRemoteUser(order.getApplyUser());
             order.setNickname(user.getNickname());
         }
@@ -126,10 +117,10 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     public List<ActivityOrder> queryOrderList(ActivityOrder condition) {
         List<ActivityOrder> orderList = orderBO.queryOrderList(condition);
         for (ActivityOrder order : orderList) {
-            Activity activity = activityBO.getActivity(order.getProductCode());
-            order.setActivityBeginDatetime(activity.getBeginDatetime());
+            Activity activity = activityBO.getActivity(order.getActivityCode());
+            order.setActivityBeginDatetime(activity.getStartDatetime());
             order.setActivityEndDatetime(activity.getEndDatetime());
-            order.setPic(activity.getPic1());
+            order.setPic(activity.getPic());
             User user = userBO.getRemoteUser(order.getApplyUser());
             order.setNickname(user.getNickname());
         }
@@ -154,7 +145,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             throw new BizException("xn0000", "该活动订单不处于待支付状态，不能进行支付操作");
         }
         // 获取活动信息
-        Activity activity = activityBO.getActivity(order.getProductCode());
+        Activity activity = activityBO.getActivity(order.getActivityCode());
         this.checkActivity(activity, order.getQuantity());
 
         // 获取用户信息
@@ -164,8 +155,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         String payGroup = OrderNoGenerater.generate(EPrefixCode.ActivityOrder
             .getCode());
         orderBO.payGroup(order, payGroup);
-        if (order.getTotalAmount() == 0L) {
-            paySuccess(payGroup, null, order.getTotalAmount());
+        if (order.getAmount() == 0L) {
+            paySuccess(payGroup, null, order.getAmount());
             return new BooleanRes(true);
         }
         if (EPayType.WEIXIN.getCode().equals(payType)) {
@@ -183,7 +174,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             throw new BizException("xn000000", "请先绑定微信");
         }
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), user.getUserId(), order.getTotalAmount(),
+            user.getOpenId(), user.getUserId(), order.getAmount(),
             EBizType.AJ_GW, EBizType.AJ_GW.getValue(),
             EBizType.AJ_GW.getValue(), payGroup);
     }
@@ -197,7 +188,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         if (orderList != null && orderList.size() > 0) {
             for (ActivityOrder order : orderList) {
                 Activity activity = activityBO.getActivity(order
-                    .getProductCode());
+                    .getActivityCode());
                 if (activity.getEndDatetime().before(new Date())) {
                     orderBO.auto(order);
                 }
@@ -214,8 +205,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         }
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
             orderBO.paySuccess(order, payCode, amount);
-            Activity activity = activityBO.getActivity(order.getProductCode());
-            activityBO.addSignNum(activity, activity.getSignNum() + 1);
+            Activity activity = activityBO.getActivity(order.getActivityCode());
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -225,14 +215,13 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     @Override
     public void cancelOrder(String orderCode, String updater, String remark) {
         ActivityOrder order = orderBO.getOrder(orderCode);
-        Activity activity = activityBO.getActivity(order.getProductCode());
+        Activity activity = activityBO.getActivity(order.getActivityCode());
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
             orderBO.refreshCancelOrder(order, updater, remark);
-        } else if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
+        } else if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(
+            order.getStatus())) {
             orderBO.refreshCancelOrder(order, updater, remark);
-            if (activity.getBeginDatetime().after(new Date())) {
-                activityBO.addSignNum(activity,
-                    activity.getSignNum() - order.getQuantity());
+            if (activity.getStartDatetime().after(new Date())) {
             }
         }
     }

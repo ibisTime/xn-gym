@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.gym.dao.IPerCourseDAO">
+	<resultMap id="perCourse_DB_Result" type="perCourse">
+		<result column="code" property="code" />
+		<result column="sk_cycle" property="skCycle" />
+		<result column="sk_start_datetime" property="skStartDatetime" />
+		<result column="sk_end_datetime" property="skEndDatetime" />
+		<result column="user_id" property="userId" />
+		<result column="coach_code" property="coachCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_perCourse" parameterType="perCourse" resultMap="perCourse_DB_Result">
+		SELECT
+		t.code
+		,t.sk_cycle
+		,t.sk_start_datetime
+		,t.sk_end_datetime
+		,t.user_id
+		,t.coach_code
+		FROM
+		tgym_per_course t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_perCourse_count" parameterType="perCourse"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tgym_per_course t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_perCourse" parameterType="perCourse">
+		INSERT INTO
+		tgym_per_course(
+		code
+		,sk_cycle
+		,sk_start_datetime
+		,sk_end_datetime
+		,user_id
+		,coach_code
+		)
+		VALUES(
+		#{code}
+		,#{skCycle}
+		,#{skStartDatetime}
+		,#{skEndDatetime}
+		,#{userId}
+		,#{coachCode}
+		)
+	</insert>
+
+	<update id="update_perCourse" parameterType="perCourse">
+		UPDATE tgym_per_course
+		SET
+		sk_cycle = #{skCycle}
+		,sk_start_datetime = #{skStartDatetime}
+		,sk_end_datetime = #{skEndDatetime}
+		,user_id = #{userId}
+		,coach_code = #{coachCode}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

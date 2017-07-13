@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import com.std.gym.domain.Activity;
 import com.std.gym.domain.ActivityOrder;
 import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EActivityStatus;
-import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
 
@@ -56,10 +54,8 @@ public class ActivityAOImpl implements IActivityAO {
             DateUtil.DATA_TIME_PATTERN_2));
         data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
-        data.setSignNum(0);
         data.setSingleNum(req.getSingleNum());
         data.setLimitNum(StringValidater.toInteger(req.getLimitNum()));
-        data.setScanNum(0);
         data.setStatus(EActivityStatus.DRAFT.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
@@ -77,10 +73,7 @@ public class ActivityAOImpl implements IActivityAO {
                     .equals(activity.getStatus())) {
             throw new BizException("xn0000", "该活动已上线/结束,不可编辑");
         }
-        if (activity.getSignNum() > StringValidater
-            .toInteger(req.getLimitNum())) {
-            throw new BizException("xn0000", "该活动的报名人数已经大于限制人数");
-        }
+
         Activity data = new Activity();
         data.setCode(req.getCode());
         data.setTitle(req.getTitle());
@@ -93,8 +86,6 @@ public class ActivityAOImpl implements IActivityAO {
         data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
         data.setOrderNo(0);
-        data.setSignNum(activity.getSignNum());
-        data.setScanNum(activity.getScanNum());
         data.setSingleNum(req.getSingleNum());
         data.setLimitNum(StringValidater.toInteger(req.getLimitNum()));
         data.setStatus(activity.getStatus());
@@ -131,8 +122,7 @@ public class ActivityAOImpl implements IActivityAO {
     @Override
     public void scanActivity(String code) {
         Activity activity = activityBO.getActivity(code);
-        Integer scanNum = activity.getScanNum() + 1;
-        activityBO.scanActivity(activity, scanNum);
+        activityBO.scanActivity(activity, null);
     }
 
     @Override
@@ -142,33 +132,7 @@ public class ActivityAOImpl implements IActivityAO {
             condition);
         List<Activity> activityList = page.getList();
         for (Activity activity : activityList) {
-            if (StringUtils.isBlank(userId)) {
-                // 未登录,没预定
-                activity.setIsBook(EBoolean.NO.getCode());
-            } else {
-                List<String> statusList = new ArrayList<String>();
-                statusList.add(EActivityOrderStatus.PAYSUCCESS.getCode());
-                statusList.add(EActivityOrderStatus.NOTPAY.getCode());
-                List<ActivityOrder> orderList = orderBO.queryOrderList(userId,
-                    activity.getCode(), statusList);
-                if (CollectionUtils.isNotEmpty(orderList)) {
-                    ActivityOrder order = orderList.get(0);
-                    if (order.getStatus().equals(
-                        EActivityOrderStatus.NOTPAY.getCode())) {
-                        // 已预订未支付
-                        activity.setBook(EBoolean.YES.getCode());
-                    } else if (order.getStatus().equals(
-                        EActivityOrderStatus.PAYSUCCESS.getCode())) {
-                        // 已预订已支付
-                        activity.setIsBook(EBoolean.YES.getCode());
-                    }
-                    activity.setOrderCode(order.getCode());
-                }
-                if (CollectionUtils.isEmpty(orderList)) {
-                    // 未预定
-                    activity.setIsBook(EBoolean.NO.getCode());
-                }
-            }
+
         }
         return page;
     }
@@ -182,24 +146,7 @@ public class ActivityAOImpl implements IActivityAO {
             statusList.add(EActivityOrderStatus.NOTPAY.getCode());
             List<ActivityOrder> orderList = orderBO.queryOrderList(userId,
                 activity.getCode(), statusList);
-            if (CollectionUtils.isNotEmpty(orderList)) {
-                ActivityOrder order = orderList.get(0);
-                if (order.getStatus().equals(
-                    EActivityOrderStatus.NOTPAY.getCode())) {
-                    // 未支付已预定
-                    activity.setBook(EBoolean.YES.getCode());
-                } else if (order.getStatus().equals(
-                    EActivityOrderStatus.PAYSUCCESS.getCode())) {
-                    // 已付款
-                    activity.setIsBook(EBoolean.YES.getCode());
-                }
-                activity.setOrderCode(order.getCode());
-            }
 
-            if (CollectionUtils.isEmpty(orderList)) {
-                // 未预定
-                activity.setIsBook(EBoolean.NO.getCode());
-            }
         }
         return activityList;
     }
@@ -213,46 +160,23 @@ public class ActivityAOImpl implements IActivityAO {
         List<ActivityOrder> orderList = orderBO.queryOrderList(userId,
             activity.getCode(), statusList);
         if (CollectionUtils.isNotEmpty(orderList)) {
-            if (StringUtils.isBlank(userId)) {
-                // 未登录,没预定
-                activity.setIsBook(EBoolean.NO.getCode());
-            } else {
-                if (CollectionUtils.isNotEmpty(orderList)) {
-                    ActivityOrder order = orderList.get(0);
-                    if (order.getStatus().equals(
-                        EActivityOrderStatus.NOTPAY.getCode())) {
-                        // 已预订未支付
-                        activity.setBook(EBoolean.YES.getCode());
-                    } else if (order.getStatus().equals(
-                        EActivityOrderStatus.PAYSUCCESS.getCode())) {
-                        // 已预订已支付
-                        activity.setIsBook(EBoolean.YES.getCode());
-                    }
-                    activity.setOrderCode(order.getCode());
-                }
-                if (CollectionUtils.isEmpty(orderList)) {
-                    // 未预定
-                    activity.setIsBook(EBoolean.NO.getCode());
-                }
-            }
         }
         return activity;
     }
 
     @Override
     public void changeOrder() {
-        // logger.info("***************开始扫描待活动，过期取消***************");
-        // Activity condition = new Activity();
-        // condition.setStatus(EActivityStatus.ONLINE.getCode());
-        // List<Activity> activityList =
-        // activityBO.queryActivityList(condition);
-        // if (CollectionUtils.isNotEmpty(activityList)) {
-        // for (Activity activity : activityList) {
-        // if (activity.getBeginDatetime().before(new Date())) {
-        // activityBO.auto(activity);
-        // }
-        // }
-        // }
-        // logger.info("***************开始扫描待活动，过期取消***************");
+        logger.info("***************开始扫描待活动，过期取消***************");
+        Activity condition = new Activity();
+        condition.setStatus(EActivityStatus.ONLINE.getCode());
+        List<Activity> activityList = activityBO.queryActivityList(condition);
+        if (CollectionUtils.isNotEmpty(activityList)) {
+            for (Activity activity : activityList) {
+                if (activity.getStartDatetime().before(new Date())) {
+                    activityBO.auto(activity);
+                }
+            }
+        }
+        logger.info("***************开始扫描待活动，过期取消***************");
     }
 }

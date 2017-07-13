@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.gym.dao.IPraiseItemDAO">
+	<resultMap id="praiseItem_DB_Result" type="praiseItem">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="score" property="score" />
+		<result column="comment_code" property="commentCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_praiseItem" parameterType="praiseItem" resultMap="praiseItem_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.score
+		,t.comment_code
+		FROM
+		tgym_praise_item t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_praiseItem_count" parameterType="praiseItem"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tgym_praise_item t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_praiseItem" parameterType="praiseItem">
+		INSERT INTO
+		tgym_praise_item(
+		code
+		,name
+		,score
+		,comment_code
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{score}
+		,#{commentCode}
+		)
+	</insert>
+
+	<update id="update_praiseItem" parameterType="praiseItem">
+		UPDATE tgym_praise_item
+		SET
+		name = #{name}
+		,score = #{score}
+		,comment_code = #{commentCode}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

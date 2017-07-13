@@ -62,6 +62,14 @@ public interface IActivityOrderAO {
      */
     public Object orderPay(String orderCode, String payType);
 
+    /**
+     * 支付成功
+     * @param payGroup
+     * @param payCode
+     * @param amount 
+     * @create: 2017年7月13日 下午3:48:16 asus
+     * @history:
+     */
     public void paySuccess(String payGroup, String payCode, Long amount);
 
     public void changeOrder();

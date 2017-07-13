@@ -1,275 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.std.forum.dao.ICommentDAO">
+<mapper namespace="com.std.gym.dao.ICommentDAO">
 	<resultMap id="comment_DB_Result" type="comment">
 		<result column="code" property="code" />
+		<result column="is_praise" property="isPraise" />
+		<result column="scores" property="scores" />
 		<result column="content" property="content" />
-		<result column="parent_code" property="parentCode" />
 		<result column="status" property="status" />
 		<result column="commer" property="commer" />
-		
-		<result column="nickname" property="nickname" />
-		<result column="photo" property="photo" />
-		<result column="login_name" property="loginName" />
-		<result column="comm_datetime" property="commDatetime" />
-		<result column="approver" property="approver" />
-		
-		<result column="approve_datetime" property="approveDatetime" />
-		<result column="approve_note" property="approveNote" />
-		<result column="post_code" property="postCode" />
+		<result column="comment_datetime" property="commentDatetime" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="product_code" property="productCode" />
+		<result column="order_code" property="orderCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="content != null and content != '' ">
-		        AND t.content like "%"#{content}"%"
-			</if>
-			<if test="parentCode != null and parentCode != '' ">
-		        AND t.parent_code = #{parentCode}
-			</if>
-			<choose>
-				 <when test='status == "BD"'>
-				 	AND t.status in ('B','D')
-				 </when>
-				 <otherwise>
-					 <if test='status != null and status != ""'>
-		        		AND t.status = #{status}
-					</if>
-				 </otherwise>
-			</choose>
-			<if test="statusList != null and statusList != '' ">
-				AND t.status in 
-                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
-	            	#{item}
-                </foreach> 
-			</if>
-			<if test="postCodeList != null and postCodeList != '' ">
-				AND t.post_code in 
-                <foreach item="item" index="index" collection="postCodeList" open="(" separator="," close=")">
-	            	#{item}
-                </foreach> 
-			</if>
-			<choose>
-				 <when test='isCommentMy == "1"'>
-				 	AND (EXISTS (select * from tforum_comment tfc where tfc.code = t.parent_code and tfc.commer=#{publisher})
-				 	OR EXISTS (select * from tforum_post tfp where tfp.code = t.parent_code and tfp.publisher=#{publisher}))
-				 </when>
-			</choose>
-			<if test="commer != null and commer != '' ">
-		        AND t.commer = #{commer}
-			</if>
-			<if test="companyCode != null and companyCode != '' ">
-		        AND tpt.company_code = #{companyCode}
-			</if>
-			<if test="postCode != null and postCode != '' ">
-		        AND t.post_code = #{postCode}
-			</if>
 		</trim>
 	</sql>
-	
-	<!-- 分页查  -->
 	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">
 		SELECT
 		t.code
+		,t.is_praise
+		,t.scores
 		,t.content
-		,t.parent_code
 		,t.status
 		,t.commer
-		
-		,t.nickname
-		,t.photo
-		,t.login_name
-		,t.comm_datetime
-		,t.approver
-		
-		,t.approve_datetime
-		,t.approve_note
-		,t.post_code
+		,t.comment_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.product_code
+		,t.order_code
 		FROM
-		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
+		tgym_comment t
 		<include refid="where_condition" />
-		ORDER BY t.code DESC	
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
 	</select>
-	
-	<!-- 分页查数量 -->
+
 	<select id="select_comment_count" parameterType="comment"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
+		SELECT count(1) FROM tgym_comment t
 		<include refid="where_condition" />
 	</select>
-	
-	<!-- 列表查询（限制10条展示） -->
-	<select id="select_comment_limit" parameterType="comment" resultMap="comment_DB_Result">
-		SELECT
-		t.code
-		,t.content
-		,t.parent_code
-		,t.status
-		,t.commer
-		
-		,t.nickname
-		,t.photo
-		,t.login_name
-		,t.comm_datetime
-		,t.approver
-		
-		,t.approve_datetime
-		,t.approve_note
-		,t.post_code
-		FROM
-		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
-		<include refid="where_condition" />
-		ORDER BY t.code DESC limit 10
-	</select>
-	
-	<!-- 查询我的评论 -->
-	<select id="select_MyComment" parameterType="comment" resultMap="comment_DB_Result">
-		SELECT
-		t.code
-		,t.content
-		,t.parent_code
-		,t.status
-		,t.commer
-		
-		,t.nickname
-		,t.photo
-		,t.login_name
-		,t.comm_datetime
-		,t.approver
-		
-		,t.approve_datetime
-		,t.approve_note
-		,t.post_code
-		FROM
-		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
-		<include refid="where_condition" />
-		ORDER BY t.code DESC	
-	</select>
-	
-	<!-- 查询评论我的 -->
-	<select id="select_CommentMy" parameterType="comment" resultMap="comment_DB_Result">
-		SELECT
-		t.code
-		,t.content
-		,t.parent_code
-		,t.status
-		,t.commer
-		
-		,t.nickname
-		,t.photo
-		,t.login_name
-		,t.comm_datetime
-		,t.approver
-		
-		,t.approve_datetime
-		,t.approve_note
-		,t.post_code
-		FROM
-		tforum_comment t left join tforum_post tp on t.post_code = tp.code left join tforum_splate tpt on tp.plate_code = tpt.code
-		<include refid="where_condition" />
-		ORDER BY t.code DESC	
-	</select>
-	
-	<!-- 查询提到我的 -->
-	<select id="select_TDComment" parameterType="comment" resultMap="comment_DB_Result">
-		SELECT
-		t.code
-		,t.content
-		,t.parent_code
-		,t.status
-		,t.commer
-		
-		,t.nickname
-		,t.photo
-		,t.login_name
-		,t.comm_datetime
-		,t.approver
-		
-		,t.approve_datetime
-		,t.approve_note
-		,t.post_code
-		FROM
-		tforum_comment t
-		<include refid="where_condition" />
-		ORDER BY t.code DESC	
-	</select>
-	
+
 	<insert id="insert_comment" parameterType="comment">
 		INSERT INTO
-		tforum_comment(
+		tgym_comment(
 		code
+		,is_praise
+		,scores
 		,content
-		,parent_code
 		,status
 		,commer
-		
-		,nickname
-		,photo
-		,login_name
-		,comm_datetime
-		,post_code
+		,comment_datetime
+		,updater
+		,update_datetime
+		,remark
+		,product_code
+		,order_code
 		)
 		VALUES(
 		#{code}
+		,#{isPraise}
+		,#{scores}
 		,#{content}
-		,#{parentCode}
 		,#{status}
 		,#{commer}
-		
-		,#{nickname}
-		,#{photo}
-		,#{loginName}
-		,#{commDatetime}
-		,#{postCode}
+		,#{commentDatetime}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{productCode}
+		,#{orderCode}
 		)
 	</insert>
-	
-	<update id="update_comment_approve" parameterType="comment">
-		UPDATE tforum_comment
+
+	<update id="update_comment" parameterType="comment">
+		UPDATE tgym_comment
 		SET
-		status = #{status}
-		,approver = #{approver}
-		,approve_datetime = #{approveDatetime}
-		,approve_note = #{approveNote}
+		is_praise = #{isPraise}
+		,scores = #{scores}
+		,content = #{content}
+		,status = #{status}
+		,commer = #{commer}
+		,comment_datetime = #{commentDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		,product_code = #{productCode}
+		,order_code = #{orderCode}
 		WHERE code = #{code}
 	</update>
-	
-	<update id="update_comment_status" parameterType="comment">
-		UPDATE tforum_comment
-		SET
-		status = #{status}
-		WHERE code = #{code}
-	</update>
-	
-	<delete id="delete_comment" parameterType="comment">
-		DELETE FROM
-		tforum_comment
-		WHERE
-		code = #{code}
-	</delete>
-	
-	<delete id="delete_comment_post" parameterType="comment">
-		DELETE FROM
-		tforum_comment
-		WHERE
-		post_code = #{postCode}
-	</delete>
-	
-	<update id="update_user_inf" parameterType="comment">
-		UPDATE tforum_comment
-		SET
-		nickname = #{nickname}
-		,photo = #{photo}
-		WHERE commer = #{commer}
-	</update>
-	
-	<update id="update_login_name" parameterType="comment">
-		UPDATE tforum_comment
-		SET
-		login_name = #{loginName}
-		WHERE commer = #{commer}
-	</update>
+
+
 </mapper>

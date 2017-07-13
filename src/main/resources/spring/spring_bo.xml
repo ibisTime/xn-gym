@@ -11,10 +11,42 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<!-- 分页BO层注入paginableDao -->
+	<bean id="activityBO" class="com.std.gym.bo.impl.ActivityBOImpl">
+		<property name="paginableDAO" ref="activityDAOImpl"/>
+	</bean>	
+	<bean id="activityOrderBO" class="com.std.gym.bo.impl.ActivityOrderBOImpl">
+		<property name="paginableDAO" ref="activityOrderDAOImpl"/>
+    </bean>	
+	
+	
+	<bean id="coachBO" class="com.std.gym.bo.impl.CoachBOImpl">
+		<property name="paginableDAO" ref="coachDAOImpl" />
+	</bean>
+	<bean id="commentBO" class="com.std.gym.bo.impl.CommentBOImpl">
+		<property name="paginableDAO" ref="commentDAOImpl" />
+	</bean>
 	<bean id="keywordBO" class="com.std.gym.bo.impl.KeywordBOImpl">
 		<property name="paginableDAO" ref="keywordDAOImpl" />
 	</bean>
 	
+	
+	<bean id="orgCourseBO" class="com.std.gym.bo.impl.OrgCourseBOImpl">
+		<property name="paginableDAO" ref="orgCourseDAOImpl" />
+	</bean>
+	<bean id="orgCourseOrderBO" class="com.std.gym.bo.impl.OrgCourseOrderBOImpl">
+		<property name="paginableDAO" ref="orgCourseOrderDAOImpl" />
+	</bean>
+	
+	<bean id="perCourseBO" class="com.std.gym.bo.impl.PerCourseBOImpl">
+		<property name="paginableDAO" ref="perCourseDAOImpl" />
+	</bean>
+	<bean id="perCourseOrderBO" class="com.std.gym.bo.impl.PerCourseOrderBOImpl">
+		<property name="paginableDAO" ref="perCourseOrderDAOImpl" />
+	</bean>
+	
+	<bean id="praiseItemBO" class="com.std.gym.bo.impl.PraiseItemBOImpl">
+		<property name="paginableDAO" ref="praiseItemDAOImpl" />
+	</bean>
 	
 	<bean id="sysDictBO" class="com.std.gym.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl" />
@@ -23,15 +55,7 @@
 		<property name="paginableDAO" ref="sysConfigDAOImpl" />
 	</bean>
 	
-	<bean id="commentBO" class="com.std.gym.bo.impl.CommentBOImpl">
-		<property name="paginableDAO" ref="commentDAOImpl" />
-	</bean>
-	<bean id="orderBO" class="com.std.gym.bo.impl.OrderBOImpl">
-		<property name="paginableDAO" ref="orderDAOImpl"/>
-    </bean>	
 	
-	<bean id="activityBO" class="com.std.gym.bo.impl.ActivityBOImpl">
-		<property name="paginableDAO" ref="activityDAOImpl"/>
-	</bean>	 
+	 
 	
 </beans>

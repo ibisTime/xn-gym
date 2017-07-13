@@ -65,7 +65,7 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
             String productCode, List<String> statusList) {
         ActivityOrder data = new ActivityOrder();
         data.setApplyUser(userId);
-        data.setProductCode(productCode);
+        data.setActivityCode(productCode);
         data.setStatusList(statusList);
         return orderDAO.selectList(data);
     }
@@ -116,7 +116,6 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     public void refreshCancelOrder(ActivityOrder order, String updater,
             String remark) {
         order.setStatus(EActivityOrderStatus.CANCEL.getCode());
-        order.setCancelDatetime(new Date());
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);
