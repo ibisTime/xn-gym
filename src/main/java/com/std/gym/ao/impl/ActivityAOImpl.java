@@ -18,6 +18,8 @@ import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Activity;
 import com.std.gym.domain.ActivityOrder;
+import com.std.gym.dto.req.XN622010Req;
+import com.std.gym.dto.req.XN622012Req;
 import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EActivityStatus;
 import com.std.gym.enums.EPrefixCode;
@@ -40,33 +42,30 @@ public class ActivityAOImpl implements IActivityAO {
     IActivityOrderBO orderBO;
 
     @Override
-    public String addNewActivity(XN660000Req req) {
+    public String addNewActivity(XN622010Req req) {
         Activity data = new Activity();
         String code = OrderNoGenerater.generate(EPrefixCode.Activity.getCode());
         data.setCode(code);
         data.setTitle(req.getTitle());
-        data.setPic1(req.getPic1());
-        data.setFee(StringValidater.toLong(req.getFee()));
+        data.setPic(req.getPic());
+        data.setAmount(StringValidater.toLong(req.getAmount()));
         data.setDescription(req.getDescription());
         data.setHoldPlace(req.getHoldPlace());
         data.setOrderNo(0);
-        data.setBeginDatetime(DateUtil.strToDate(req.getBeginDatetime(),
+        data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
         data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
-        data.setSingleNum(req.getSingleNum());
-        data.setLimitNum(StringValidater.toInteger(req.getLimitNum()));
         data.setStatus(EActivityStatus.DRAFT.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
-        data.setCompanyCode(req.getCompanyCode());
         activityBO.saveActivity(data);
         return code;
     }
 
     @Override
-    public void modifyActivity(XN660002Req req) {
+    public void modifyActivity(XN622012Req req) {
         Activity activity = activityBO.getActivity(req.getCode());
         if (EActivityStatus.END.getCode().equals(activity.getStatus())
                 || EActivityStatus.ONLINE.getCode()
@@ -77,17 +76,14 @@ public class ActivityAOImpl implements IActivityAO {
         Activity data = new Activity();
         data.setCode(req.getCode());
         data.setTitle(req.getTitle());
-        data.setPic1(req.getPic1());
-        data.setFee(StringValidater.toLong(req.getFee()));
+        data.setPic(req.getPic());
+        data.setAmount(StringValidater.toLong(req.getAmount()));
         data.setDescription(req.getDescription());
         data.setHoldPlace(req.getHoldPlace());
-        data.setBeginDatetime(DateUtil.strToDate(req.getBeginDatetime(),
+        data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
         data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
-        data.setOrderNo(0);
-        data.setSingleNum(req.getSingleNum());
-        data.setLimitNum(StringValidater.toInteger(req.getLimitNum()));
         data.setStatus(activity.getStatus());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());

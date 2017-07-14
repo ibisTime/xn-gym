@@ -1,5 +1,7 @@
 package com.std.gym.domain;
 
+import java.util.Date;
+
 import com.std.gym.dao.base.ABaseDO;
 
 /**
@@ -10,237 +12,259 @@ import com.std.gym.dao.base.ABaseDO;
 */
 public class PerCourseOrder extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 编号
+    private String code;
 
-	// 私教编号
-	private String coachUserId;
+    // 私课编号
+    private String perCourseCode;
 
-	// 预约上课时间(年月日)
-	private String appointDatetime;
+    // 私课名称
+    private String courseName;
 
-	// 上课时间(几点到几点)
-	private String classDatetime;
+    // 预约上课时间(年月日)
+    private Date appointDatetime;
 
-	// 上课地点
-	private String address;
+    // 上课地点
+    private String address;
 
-	// 上课人数
-	private String quantity;
+    // 上课人数
+    private String quantity;
 
-	// 单价
-	private String price;
+    // 单价
+    private String price;
 
-	// 订单金额
-	private String amount;
+    // 订单金额
+    private String amount;
 
-	// 状态
-	private String status;
+    // 状态
+    private String status;
 
-	// 支付方式
-	private String payType;
+    // 上课时间
+    private Date skStartDatetime;
 
-	// 支付金额
-	private String payAmount;
+    // 下课时间
+    private Date skEndDatetime;
 
-	// 支付组号
-	private String payGroup;
+    // 支付方式
+    private String payType;
 
-	// 支付编号
-	private String payCode;
+    // 支付金额
+    private String payAmount;
 
-	// 支付时间
-	private String payDatetime;
+    // 支付组号
+    private String payGroup;
 
-	// 申请人
-	private String applyUser;
+    // 支付编号
+    private String payCode;
 
-	// 联系方式
-	private String mobile;
+    // 支付时间
+    private String payDatetime;
 
-	// 申请时间
-	private String applyDatetime;
+    // 申请人
+    private String applyUser;
 
-	// 申请备注
-	private String applyNote;
+    // 联系方式
+    private String mobile;
 
-	// 更新人
-	private String updater;
+    // 申请时间
+    private String applyDatetime;
 
-	// 更新时间
-	private String updateDatetime;
+    // 申请备注
+    private String applyNote;
 
-	// 备注
-	private String remark;
+    // 更新人
+    private String updater;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    // 更新时间
+    private String updateDatetime;
 
-	public String getCode() {
-		return code;
-	}
+    // 备注
+    private String remark;
 
-	public void setCoachUserId(String coachUserId) {
-		this.coachUserId = coachUserId;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public String getCoachUserId() {
-		return coachUserId;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public void setAppointDatetime(String appointDatetime) {
-		this.appointDatetime = appointDatetime;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getAppointDatetime() {
-		return appointDatetime;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setClassDatetime(String classDatetime) {
-		this.classDatetime = classDatetime;
-	}
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
 
-	public String getClassDatetime() {
-		return classDatetime;
-	}
+    public String getQuantity() {
+        return quantity;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setPrice(String price) {
+        this.price = price;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public String getPrice() {
+        return price;
+    }
 
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 
-	public String getQuantity() {
-		return quantity;
-	}
+    public String getAmount() {
+        return amount;
+    }
 
-	public void setPrice(String price) {
-		this.price = price;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public String getPrice() {
-		return price;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 
-	public String getAmount() {
-		return amount;
-	}
+    public String getPayType() {
+        return payType;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setPayAmount(String payAmount) {
+        this.payAmount = payAmount;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getPayAmount() {
+        return payAmount;
+    }
 
-	public void setPayType(String payType) {
-		this.payType = payType;
-	}
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
 
-	public String getPayType() {
-		return payType;
-	}
+    public String getPayGroup() {
+        return payGroup;
+    }
 
-	public void setPayAmount(String payAmount) {
-		this.payAmount = payAmount;
-	}
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
 
-	public String getPayAmount() {
-		return payAmount;
-	}
+    public String getPayCode() {
+        return payCode;
+    }
 
-	public void setPayGroup(String payGroup) {
-		this.payGroup = payGroup;
-	}
+    public void setPayDatetime(String payDatetime) {
+        this.payDatetime = payDatetime;
+    }
 
-	public String getPayGroup() {
-		return payGroup;
-	}
+    public String getPayDatetime() {
+        return payDatetime;
+    }
 
-	public void setPayCode(String payCode) {
-		this.payCode = payCode;
-	}
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
 
-	public String getPayCode() {
-		return payCode;
-	}
+    public String getApplyUser() {
+        return applyUser;
+    }
 
-	public void setPayDatetime(String payDatetime) {
-		this.payDatetime = payDatetime;
-	}
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-	public String getPayDatetime() {
-		return payDatetime;
-	}
+    public String getMobile() {
+        return mobile;
+    }
 
-	public void setApplyUser(String applyUser) {
-		this.applyUser = applyUser;
-	}
+    public void setApplyDatetime(String applyDatetime) {
+        this.applyDatetime = applyDatetime;
+    }
 
-	public String getApplyUser() {
-		return applyUser;
-	}
+    public String getApplyDatetime() {
+        return applyDatetime;
+    }
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
+    }
 
-	public String getMobile() {
-		return mobile;
-	}
+    public String getApplyNote() {
+        return applyNote;
+    }
 
-	public void setApplyDatetime(String applyDatetime) {
-		this.applyDatetime = applyDatetime;
-	}
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
 
-	public String getApplyDatetime() {
-		return applyDatetime;
-	}
+    public String getUpdater() {
+        return updater;
+    }
 
-	public void setApplyNote(String applyNote) {
-		this.applyNote = applyNote;
-	}
+    public void setUpdateDatetime(String updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
 
-	public String getApplyNote() {
-		return applyNote;
-	}
+    public String getUpdateDatetime() {
+        return updateDatetime;
+    }
 
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	public String getUpdater() {
-		return updater;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	public void setUpdateDatetime(String updateDatetime) {
-		this.updateDatetime = updateDatetime;
-	}
+    public Date getAppointDatetime() {
+        return appointDatetime;
+    }
 
-	public String getUpdateDatetime() {
-		return updateDatetime;
-	}
+    public void setAppointDatetime(Date appointDatetime) {
+        this.appointDatetime = appointDatetime;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public Date getSkStartDatetime() {
+        return skStartDatetime;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setSkStartDatetime(Date skStartDatetime) {
+        this.skStartDatetime = skStartDatetime;
+    }
+
+    public Date getSkEndDatetime() {
+        return skEndDatetime;
+    }
+
+    public void setSkEndDatetime(Date skEndDatetime) {
+        this.skEndDatetime = skEndDatetime;
+    }
+
+    public String getPerCourseCode() {
+        return perCourseCode;
+    }
+
+    public void setPerCourseCode(String perCourseCode) {
+        this.perCourseCode = perCourseCode;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
 }

@@ -12,7 +12,7 @@
 		<typeAlias alias="orgCourseOrder" type="com.std.gym.domain.OrgCourseOrder" />
 		<typeAlias alias="perCourse" type="com.std.gym.domain.PerCourse" />
 		<typeAlias alias="perCourseOrder" type="com.std.gym.domain.PerCourseOrder" />
-		<typeAlias alias="praiseItem" type="com.std.gym.domain.PraiseItem" />
+		<typeAlias alias="itemScore" type="com.std.gym.domain.ItemScore" />
 	    
 		<typeAlias alias="sysDict" type="com.std.gym.domain.SYSDict" />
 		<typeAlias alias="sysConfig" type="com.std.gym.domain.SYSConfig" />

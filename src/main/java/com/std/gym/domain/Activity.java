@@ -32,7 +32,7 @@ public class Activity extends ABaseDO {
     private String slogan;
 
     // 费用
-    private Long fee;
+    private Long amount;
 
     // 描述
     private String description;
@@ -51,6 +51,9 @@ public class Activity extends ABaseDO {
 
     // 结束时间
     private Date endDatetime;
+
+    // 联系方式
+    private Date contact;
 
     // 总人数
     private Integer totalNum;
@@ -111,14 +114,6 @@ public class Activity extends ABaseDO {
 
     public void setSlogan(String slogan) {
         this.slogan = slogan;
-    }
-
-    public Long getFee() {
-        return fee;
-    }
-
-    public void setFee(Long fee) {
-        this.fee = fee;
     }
 
     public String getDescription() {
@@ -223,6 +218,22 @@ public class Activity extends ABaseDO {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
+    public Date getContact() {
+        return contact;
+    }
+
+    public void setContact(Date contact) {
+        this.contact = contact;
     }
 
 }

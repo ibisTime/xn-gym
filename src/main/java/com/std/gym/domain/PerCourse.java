@@ -10,72 +10,83 @@ import com.std.gym.dao.base.ABaseDO;
 */
 public class PerCourse extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 编号
+    private String code;
 
-	// 上课周期
-	private String skCycle;
+    // 上课周期
+    private String skCycle;
 
-	// 上课时间(时)
-	private String skStartDatetime;
+    // 上课时间(时)
+    private String skStartDatetime;
 
-	// 下课时间(止)
-	private String skEndDatetime;
+    // 下课时间(止)
+    private String skEndDatetime;
 
-	// 私教user_id
-	private String userId;
+    // 价格
+    private String price;
 
-	// 私教编号
-	private String coachCode;
+    // 私教user_id
+    private String userId;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    // 私教编号
+    private String coachCode;
 
-	public String getCode() {
-		return code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setSkCycle(String skCycle) {
-		this.skCycle = skCycle;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getSkCycle() {
-		return skCycle;
-	}
+    public void setSkCycle(String skCycle) {
+        this.skCycle = skCycle;
+    }
 
-	public void setSkStartDatetime(String skStartDatetime) {
-		this.skStartDatetime = skStartDatetime;
-	}
+    public String getSkCycle() {
+        return skCycle;
+    }
 
-	public String getSkStartDatetime() {
-		return skStartDatetime;
-	}
+    public void setSkStartDatetime(String skStartDatetime) {
+        this.skStartDatetime = skStartDatetime;
+    }
 
-	public void setSkEndDatetime(String skEndDatetime) {
-		this.skEndDatetime = skEndDatetime;
-	}
+    public String getSkStartDatetime() {
+        return skStartDatetime;
+    }
 
-	public String getSkEndDatetime() {
-		return skEndDatetime;
-	}
+    public void setSkEndDatetime(String skEndDatetime) {
+        this.skEndDatetime = skEndDatetime;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public String getSkEndDatetime() {
+        return skEndDatetime;
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public void setPrice(String price) {
+        this.price = price;
+    }
 
-	public void setCoachCode(String coachCode) {
-		this.coachCode = coachCode;
-	}
+    public String getPrice() {
+        return price;
+    }
 
-	public String getCoachCode() {
-		return coachCode;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setCoachCode(String coachCode) {
+        this.coachCode = coachCode;
+    }
+
+    public String getCoachCode() {
+        return coachCode;
+    }
 
 }

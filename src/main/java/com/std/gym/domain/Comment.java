@@ -1,5 +1,7 @@
 package com.std.gym.domain;
 
+import java.util.Date;
+
 import com.std.gym.dao.base.ABaseDO;
 
 /**
@@ -15,11 +17,8 @@ public class Comment extends ABaseDO {
     // 编号
     private String code;
 
-    // 是否好评
-    private String isPraise;
-
-    // 好评分数
-    private String scores;
+    // 得分
+    private Integer score;
 
     // 评论内容
     private String content;
@@ -31,22 +30,19 @@ public class Comment extends ABaseDO {
     private String commer;
 
     // 评论时间
-    private String commentDatetime;
+    private Date commentDatetime;
 
-    // 更新人
-    private String updater;
+    // 审核人
+    private String approver;
 
-    // 更新时间
-    private String updateDatetime;
+    // 审核时间
+    private Date approveDatetime;
 
     // 备注
     private String remark;
 
-    // 备注
+    // 产品编号
     private String productCode;
-
-    // (课程/私教)产品编号
-    private String orderCode;
 
     public void setCode(String code) {
         this.code = code;
@@ -54,22 +50,6 @@ public class Comment extends ABaseDO {
 
     public String getCode() {
         return code;
-    }
-
-    public void setIsPraise(String isPraise) {
-        this.isPraise = isPraise;
-    }
-
-    public String getIsPraise() {
-        return isPraise;
-    }
-
-    public void setScores(String scores) {
-        this.scores = scores;
-    }
-
-    public String getScores() {
-        return scores;
     }
 
     public void setCommer(String commer) {
@@ -80,28 +60,12 @@ public class Comment extends ABaseDO {
         return commer;
     }
 
-    public void setCommentDatetime(String commentDatetime) {
+    public void setCommentDatetime(Date commentDatetime) {
         this.commentDatetime = commentDatetime;
     }
 
-    public String getCommentDatetime() {
+    public Date getCommentDatetime() {
         return commentDatetime;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdateDatetime(String updateDatetime) {
-        this.updateDatetime = updateDatetime;
-    }
-
-    public String getUpdateDatetime() {
-        return updateDatetime;
     }
 
     public void setRemark(String remark) {
@@ -120,14 +84,6 @@ public class Comment extends ABaseDO {
         return productCode;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
-    }
-
-    public String getOrderCode() {
-        return orderCode;
-    }
-
     public String getContent() {
         return content;
     }
@@ -142,6 +98,30 @@ public class Comment extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver;
+    }
+
+    public Date getApproveDatetime() {
+        return approveDatetime;
+    }
+
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
 }

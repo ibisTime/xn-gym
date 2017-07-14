@@ -8,7 +8,7 @@ import com.std.gym.dao.base.ABaseDO;
 * @since: 2017-07-13 16:50:48
 * @history:
 */
-public class PraiseItem extends ABaseDO {
+public class ItemScore extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 

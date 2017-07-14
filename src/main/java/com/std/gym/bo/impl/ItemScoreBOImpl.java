@@ -6,24 +6,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.std.gym.bo.IPraiseItemBO;
+import com.std.gym.bo.IItemScoreBO;
 import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.core.OrderNoGenerater;
-import com.std.gym.dao.IPraiseItemDAO;
-import com.std.gym.domain.PraiseItem;
+import com.std.gym.dao.IItemScoreDAO;
+import com.std.gym.domain.ItemScore;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
 
 @Component
-public class PraiseItemBOImpl extends PaginableBOImpl<PraiseItem> implements
-        IPraiseItemBO {
+public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
+        IItemScoreBO {
 
     @Autowired
-    private IPraiseItemDAO praiseItemDAO;
+    private IItemScoreDAO praiseItemDAO;
 
     @Override
     public boolean isPraiseItemExist(String code) {
-        PraiseItem condition = new PraiseItem();
+        ItemScore condition = new ItemScore();
         condition.setCode(code);
         if (praiseItemDAO.selectTotalCount(condition) > 0) {
             return true;
@@ -32,7 +32,7 @@ public class PraiseItemBOImpl extends PaginableBOImpl<PraiseItem> implements
     }
 
     @Override
-    public String savePraiseItem(PraiseItem data) {
+    public String savePraiseItem(ItemScore data) {
         String code = null;
         if (data != null) {
             code = OrderNoGenerater.generate(EPrefixCode.PRAISEITEM.getCode());
@@ -46,7 +46,7 @@ public class PraiseItemBOImpl extends PaginableBOImpl<PraiseItem> implements
     public int removePraiseItem(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
-            PraiseItem data = new PraiseItem();
+            ItemScore data = new ItemScore();
             data.setCode(code);
             count = praiseItemDAO.delete(data);
         }
@@ -54,7 +54,7 @@ public class PraiseItemBOImpl extends PaginableBOImpl<PraiseItem> implements
     }
 
     @Override
-    public int refreshPraiseItem(PraiseItem data) {
+    public int refreshPraiseItem(ItemScore data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
             count = praiseItemDAO.update(data);
@@ -63,15 +63,15 @@ public class PraiseItemBOImpl extends PaginableBOImpl<PraiseItem> implements
     }
 
     @Override
-    public List<PraiseItem> queryPraiseItemList(PraiseItem condition) {
+    public List<ItemScore> queryPraiseItemList(ItemScore condition) {
         return praiseItemDAO.selectList(condition);
     }
 
     @Override
-    public PraiseItem getPraiseItem(String code) {
-        PraiseItem data = null;
+    public ItemScore getPraiseItem(String code) {
+        ItemScore data = null;
         if (StringUtils.isNotBlank(code)) {
-            PraiseItem condition = new PraiseItem();
+            ItemScore condition = new ItemScore();
             condition.setCode(code);
             data = praiseItemDAO.select(condition);
             if (data == null) {

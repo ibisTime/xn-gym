@@ -4,14 +4,16 @@
 <mapper namespace="com.std.gym.dao.IPerCourseOrderDAO">
 	<resultMap id="perCourseOrder_DB_Result" type="perCourseOrder">
 		<result column="code" property="code" />
-		<result column="coach_user_id" property="coachUserId" />
+		<result column="per_course_code" property="perCourseCode" />
+		<result column="course_name" property="courseName" />
 		<result column="appoint_datetime" property="appointDatetime" />
-		<result column="class_datetime" property="classDatetime" />
 		<result column="address" property="address" />
 		<result column="quantity" property="quantity" />
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
 		<result column="status" property="status" />
+		<result column="sk_start_datetime" property="skStartDatetime" />
+		<result column="sk_end_datetime" property="skEndDatetime" />
 		<result column="pay_type" property="payType" />
 		<result column="pay_amount" property="payAmount" />
 		<result column="pay_group" property="payGroup" />
@@ -35,14 +37,16 @@
 	<select id="select_perCourseOrder" parameterType="perCourseOrder" resultMap="perCourseOrder_DB_Result">
 		SELECT
 		t.code
-		,t.coach_user_id
+		,t.per_course_code
+		,t.course_name
 		,t.appoint_datetime
-		,t.class_datetime
 		,t.address
 		,t.quantity
 		,t.price
 		,t.amount
 		,t.status
+		,t.sk_start_datetime
+		,t.sk_end_datetime
 		,t.pay_type
 		,t.pay_amount
 		,t.pay_group
@@ -75,14 +79,16 @@
 		INSERT INTO
 		tgym_per_course_order(
 		code
-		,coach_user_id
+		,per_course_code
+		,course_name
 		,appoint_datetime
-		,class_datetime
 		,address
 		,quantity
 		,price
 		,amount
 		,status
+		,sk_start_datetime
+		,sk_end_datetime
 		,pay_type
 		,pay_amount
 		,pay_group
@@ -98,14 +104,16 @@
 		)
 		VALUES(
 		#{code}
-		,#{coachUserId}
+		,#{perCourseCode}
+		,#{courseName}
 		,#{appointDatetime}
-		,#{classDatetime}
 		,#{address}
 		,#{quantity}
 		,#{price}
 		,#{amount}
 		,#{status}
+		,#{skStartDatetime}
+		,#{skEndDatetime}
 		,#{payType}
 		,#{payAmount}
 		,#{payGroup}
@@ -124,14 +132,16 @@
 	<update id="update_perCourseOrder" parameterType="perCourseOrder">
 		UPDATE tgym_per_course_order
 		SET
-		coach_user_id = #{coachUserId}
+		per_course_code = #{perCourseCode}
+		,course_name = #{courseName}
 		,appoint_datetime = #{appointDatetime}
-		,class_datetime = #{classDatetime}
 		,address = #{address}
 		,quantity = #{quantity}
 		,price = #{price}
 		,amount = #{amount}
 		,status = #{status}
+		,sk_start_datetime = #{skStartDatetime}
+		,sk_end_datetime = #{skEndDatetime}
 		,pay_type = #{payType}
 		,pay_amount = #{payAmount}
 		,pay_group = #{payGroup}

@@ -1,5 +1,7 @@
 package com.std.gym.domain;
 
+import java.util.Date;
+
 import com.std.gym.dao.base.ABaseDO;
 
 /**
@@ -27,9 +29,6 @@ public class Coach extends ABaseDO {
     // 特长
     private String strengths;
 
-    // 缩略图
-    private String pic;
-
     // 广告图
     private String advPic;
 
@@ -42,25 +41,16 @@ public class Coach extends ABaseDO {
     // 标签
     private String label;
 
-    // UI位置
-    private String location;
-
-    // UI顺序
-    private String orderNo;
-
-    // 价格（元/时）
-    private String price;
-
-    // 评论数
-    private String sumCom;
-
     // 状态
     private String status;
 
-    private String updater;
+    // 审核人
+    private String approver;
 
-    private String updateDatetime;
+    // 审核时间
+    private Date approveDatetime;
 
+    // 备注
     private String remark;
 
     public void setCode(String code) {
@@ -103,14 +93,6 @@ public class Coach extends ABaseDO {
         return strengths;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
     public void setAdvPic(String advPic) {
         this.advPic = advPic;
     }
@@ -143,38 +125,6 @@ public class Coach extends ABaseDO {
         return label;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setSumCom(String sumCom) {
-        this.sumCom = sumCom;
-    }
-
-    public String getSumCom() {
-        return sumCom;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -183,20 +133,20 @@ public class Coach extends ABaseDO {
         this.status = status;
     }
 
-    public String getUpdater() {
-        return updater;
+    public String getApprover() {
+        return approver;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
+    public void setApprover(String approver) {
+        this.approver = approver;
     }
 
-    public String getUpdateDatetime() {
-        return updateDatetime;
+    public Date getApproveDatetime() {
+        return approveDatetime;
     }
 
-    public void setUpdateDatetime(String updateDatetime) {
-        this.updateDatetime = updateDatetime;
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
     }
 
     public String getRemark() {

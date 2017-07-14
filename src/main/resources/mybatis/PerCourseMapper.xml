@@ -7,6 +7,14 @@
 		<result column="sk_cycle" property="skCycle" />
 		<result column="sk_start_datetime" property="skStartDatetime" />
 		<result column="sk_end_datetime" property="skEndDatetime" />
+		<result column="pic" property="pic" />
+		<result column="adv_pic" property="advPic" />
+		<result column="description" property="description" />
+		<result column="price" property="price" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="sum_com" property="sumCom" />
+		<result column="status" property="status" />
 		<result column="user_id" property="userId" />
 		<result column="coach_code" property="coachCode" />
 	</resultMap>
@@ -23,6 +31,14 @@
 		,t.sk_cycle
 		,t.sk_start_datetime
 		,t.sk_end_datetime
+		,t.pic
+		,t.adv_pic
+		,t.description
+		,t.price
+		,t.location
+		,t.order_no
+		,t.sum_com
+		,t.status
 		,t.user_id
 		,t.coach_code
 		FROM
@@ -48,6 +64,14 @@
 		,sk_cycle
 		,sk_start_datetime
 		,sk_end_datetime
+		,pic
+		,adv_pic
+		,description
+		,price
+		,location
+		,order_no
+		,sum_com
+		,status
 		,user_id
 		,coach_code
 		)
@@ -56,6 +80,14 @@
 		,#{skCycle}
 		,#{skStartDatetime}
 		,#{skEndDatetime}
+		,#{pic}
+		,#{advPic}
+		,#{description}
+		,#{price}
+		,#{location}
+		,#{orderNo}
+		,#{sumCom}
+		,#{status}
 		,#{userId}
 		,#{coachCode}
 		)
@@ -67,6 +99,14 @@
 		sk_cycle = #{skCycle}
 		,sk_start_datetime = #{skStartDatetime}
 		,sk_end_datetime = #{skEndDatetime}
+		,pic = #{pic}
+		,adv_pic = #{advPic}
+		,description = #{description}
+		,price = #{price}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,sum_com = #{sumCom}
+		,status = #{status}
 		,user_id = #{userId}
 		,coach_code = #{coachCode}
 		WHERE code = #{code}

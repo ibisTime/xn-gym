@@ -69,8 +69,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         data.setMobile(mobile);
         data.setApplyDatetime(new Date());
         data.setQuantity(quantity);
-        data.setPrice(activity.getFee());
-        data.setAmount(quantity * activity.getFee());
+        data.setPrice(activity.getAmount());
+        data.setAmount(quantity * activity.getAmount());
         data.setStatus(EActivityOrderStatus.NOTPAY.getCode());
         orderBO.saveOrder(data);
         return code;

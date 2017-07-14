@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.Activity;
+import com.std.gym.dto.req.XN622010Req;
+import com.std.gym.dto.req.XN622012Req;
 
 /**
  * 活动
@@ -21,7 +23,7 @@ public interface IActivityAO {
      * @create: 2016年12月12日 上午9:32:43 shan
      * @history:
      */
-    public String addNewActivity(XN660000Req req);
+    public String addNewActivity(XN622010Req req);
 
     /**
      * 活动修改
@@ -29,7 +31,7 @@ public interface IActivityAO {
      * @create: 2017年4月20日 下午2:11:59 asus
      * @history:
      */
-    public void modifyActivity(XN660002Req req);
+    public void modifyActivity(XN622012Req req);
 
     /**
      * 活动上架

@@ -4,17 +4,15 @@
 <mapper namespace="com.std.gym.dao.ICommentDAO">
 	<resultMap id="comment_DB_Result" type="comment">
 		<result column="code" property="code" />
-		<result column="is_praise" property="isPraise" />
-		<result column="scores" property="scores" />
+		<result column="score" property="score" />
 		<result column="content" property="content" />
 		<result column="status" property="status" />
 		<result column="commer" property="commer" />
 		<result column="comment_datetime" property="commentDatetime" />
-		<result column="updater" property="updater" />
-		<result column="update_datetime" property="updateDatetime" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
 		<result column="product_code" property="productCode" />
-		<result column="order_code" property="orderCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -26,17 +24,15 @@
 	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">
 		SELECT
 		t.code
-		,t.is_praise
-		,t.scores
+		,t.score
 		,t.content
 		,t.status
 		,t.commer
 		,t.comment_datetime
-		,t.updater
-		,t.update_datetime
+		,t.approver
+		,t.approve_datetime
 		,t.remark
 		,t.product_code
-		,t.order_code
 		FROM
 		tgym_comment t
 		<include refid="where_condition" />
@@ -57,45 +53,40 @@
 		INSERT INTO
 		tgym_comment(
 		code
-		,is_praise
-		,scores
+		,score
 		,content
 		,status
 		,commer
 		,comment_datetime
-		,updater
-		,update_datetime
+		,approver
+		,approve_datetime
 		,remark
 		,product_code
-		,order_code
 		)
 		VALUES(
 		#{code}
-		,#{isPraise}
-		,#{scores}
+		,#{score}
 		,#{content}
 		,#{status}
 		,#{commer}
 		,#{commentDatetime}
-		,#{updater}
-		,#{updateDatetime}
+		,#{approver}
+		,#{approveDatetime}
 		,#{remark}
 		,#{productCode}
-		,#{orderCode}
 		)
 	</insert>
 
 	<update id="update_comment" parameterType="comment">
 		UPDATE tgym_comment
 		SET
-		is_praise = #{isPraise}
-		,scores = #{scores}
-		,content = #{content}
+		content = #{content}
+		,score = #{score}
 		,status = #{status}
 		,commer = #{commer}
 		,comment_datetime = #{commentDatetime}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
 		,remark = #{remark}
 		,product_code = #{productCode}
 		,order_code = #{orderCode}

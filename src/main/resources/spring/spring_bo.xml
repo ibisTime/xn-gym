@@ -44,8 +44,8 @@
 		<property name="paginableDAO" ref="perCourseOrderDAOImpl" />
 	</bean>
 	
-	<bean id="praiseItemBO" class="com.std.gym.bo.impl.PraiseItemBOImpl">
-		<property name="paginableDAO" ref="praiseItemDAOImpl" />
+	<bean id="itemScoreBO" class="com.std.gym.bo.impl.ItemScoreBOImpl">
+		<property name="paginableDAO" ref="itemScoreDAOImpl" />
 	</bean>
 	
 	<bean id="sysDictBO" class="com.std.gym.bo.impl.SYSDictBOImpl">

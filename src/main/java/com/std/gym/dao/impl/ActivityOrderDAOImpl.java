@@ -20,37 +20,37 @@ public class ActivityOrderDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int insert(ActivityOrder data) {
-        return super.insert(NAMESPACE.concat("insert_order"), data);
+        return super.insert(NAMESPACE.concat("insert_activityOrder"), data);
     }
 
     @Override
     public int delete(ActivityOrder data) {
-        return super.delete(NAMESPACE.concat("delete_order"), data);
+        return super.delete(NAMESPACE.concat("delete_activityOrder"), data);
     }
 
     @Override
     public ActivityOrder select(ActivityOrder condition) {
-        return super.select(NAMESPACE.concat("select_order"), condition,
-            ActivityOrder.class);
+        return super.select(NAMESPACE.concat("select_activityOrder"),
+            condition, ActivityOrder.class);
     }
 
     @Override
     public Long selectTotalCount(ActivityOrder condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_order_count"),
-            condition);
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_activityOrder_count"), condition);
     }
 
     @Override
     public List<ActivityOrder> selectList(ActivityOrder condition) {
-        return super.selectList(NAMESPACE.concat("select_order"), condition,
-            ActivityOrder.class);
+        return super.selectList(NAMESPACE.concat("select_activityOrder"),
+            condition, ActivityOrder.class);
     }
 
     @Override
     public List<ActivityOrder> selectList(ActivityOrder condition, int start,
             int count) {
-        return super.selectList(NAMESPACE.concat("select_order"), start, count,
-            condition, ActivityOrder.class);
+        return super.selectList(NAMESPACE.concat("select_activityOrder"),
+            start, count, condition, ActivityOrder.class);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ActivityOrderDAOImpl extends AMybatisTemplate implements
      */
     @Override
     public int update(ActivityOrder data) {
-        return super.update(NAMESPACE.concat("update_order"), data);
+        return super.update(NAMESPACE.concat("update_activityOrder"), data);
     }
 
     @Override
@@ -69,8 +69,8 @@ public class ActivityOrderDAOImpl extends AMybatisTemplate implements
 
     @Override
     public ActivityOrder selectGroup(ActivityOrder condition) {
-        return super.select(NAMESPACE.concat("select_order"), condition,
-            ActivityOrder.class);
+        return super.select(NAMESPACE.concat("select_activityOrder"),
+            condition, ActivityOrder.class);
     }
 
     @Override

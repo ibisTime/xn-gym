@@ -8,18 +8,13 @@
 		<result column="age" property="age" />
 		<result column="duration" property="duration" />
 		<result column="strengths" property="strengths" />
-		<result column="pic" property="pic" />
 		<result column="adv_pic" property="advPic" />
 		<result column="description" property="description" />
 		<result column="star" property="star" />
 		<result column="label" property="label" />
-		<result column="location" property="location" />
-		<result column="order_no" property="orderNo" />
-		<result column="price" property="price" />
-		<result column="sum_com" property="sumCom" />
 		<result column="status" property="status" />
-		<result column="updater" property="updater" />
-		<result column="update_datetime" property="updateDatetime" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
 	<sql id="where_condition">
@@ -36,18 +31,13 @@
 		,t.age
 		,t.duration
 		,t.strengths
-		,t.pic
 		,t.adv_pic
 		,t.description
 		,t.star
 		,t.label
-		,t.location
-		,t.order_no
-		,t.price 
-		,t.sum_com
 		,t.status
-		,t.updater
-		,t.update_datetime
+		,t.approver
+		,t.approve_datetime
 		,t.remark
 		FROM
 		tgym_coach t
@@ -73,18 +63,13 @@
 		,age
 		,duration
 		,strengths
-		,pic
 		,adv_pic
 		,description
 		,star
 		,label
-		,location
-		,order_no
-		,price 
-		,sum_com
 		,status
-		,updater
-		,update_datetime
+		,approver
+		,approve_datetime
 		,remark
 		)
 		VALUES(
@@ -93,18 +78,13 @@
 		,#{age}
 		,#{duration}
 		,#{strengths}
-		,#{pic}
 		,#{advPic}
 		,#{description}
 		,#{star}
 		,#{label}
-		,#{location}
-		,#{orderNo}
-		,#{price }
-		,#{sumCom}
 		,#{status}
-		,#{updater}
-		,#{updateDatetime}
+		,#{approver}
+		,#{approveDatetime}
 		,#{remark}
 		)
 	</insert>
@@ -116,19 +96,10 @@
 		,age = #{age}
 		,duration = #{duration}
 		,strengths = #{strengths}
-		,pic = #{pic}
 		,adv_pic = #{advPic}
 		,description = #{description}
 		,star = #{star}
 		,label = #{label}
-		,location = #{location}
-		,order_no = #{orderNo}
-		,price = #{price}
-		,sum_com = #{sumCom}
-		,status = #{status}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 
