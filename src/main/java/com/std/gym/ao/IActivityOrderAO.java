@@ -37,8 +37,8 @@ public interface IActivityOrderAO {
      * @create: 2016年12月10日 下午2:51:16 shan
      * @history:
      */
-    public Paginable<ActivityOrder> queryActivityOrderPage(int start, int limit,
-            ActivityOrder condition);
+    public Paginable<ActivityOrder> queryActivityOrderPage(int start,
+            int limit, ActivityOrder condition);
 
     /**
      * 查询所有订单
@@ -71,10 +71,12 @@ public interface IActivityOrderAO {
      * @param payGroup
      * @param payCode
      * @param amount 
+     * @param payType
      * @create: 2017年7月13日 下午3:48:16 asus
      * @history:
      */
-    public void paySuccess(String payGroup, String payCode, Long amount);
+    public void paySuccess(String payGroup, String payCode, Long amount,
+            String payType);
 
     public void changeOrder();
 

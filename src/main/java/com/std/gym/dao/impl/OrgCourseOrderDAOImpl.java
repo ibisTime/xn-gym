@@ -52,4 +52,14 @@ public class OrgCourseOrderDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_ordCourseOrder"), data);
     }
 
+    @Override
+    public int payGroup(OrgCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_payGroup"), data);
+    }
+
+    @Override
+    public int paySuccess(OrgCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_paySuccess"), data);
+    }
+
 }

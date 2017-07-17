@@ -12,7 +12,7 @@ public enum EBizType {
     AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_SCTX_FIRST("03", "首次上传头像"), AJ_ZLWS_FIRST(
             "04", "首次完善资料"), AJ_TZFB("CSW01", "帖子发布"), AJ_PLFB("CSW02", "评论发布"), AJ_PLWG(
             "CSW08", "评论违规"), AJ_HDGM("HDGM", "活动购买"), AJ_HDGMTK("HDGMTK",
-            "活动购买退款");
+            "活动购买退款"), AJ_TKGM("TKGM", "团课购买"), AJ_TKGMTK("TKGMTK", "团课购买退款");
 
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();

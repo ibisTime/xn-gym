@@ -64,4 +64,9 @@ public class OrgCourseDAOImpl extends AMybatisTemplate implements IOrgCourseDAO 
     public int stopSign(OrgCourse data) {
         return super.update(NAMESPACE.concat("update_stopSign"), data);
     }
+
+    @Override
+    public int addSignNum(OrgCourse data) {
+        return super.update(NAMESPACE.concat("update_addSignNum"), data);
+    }
 }

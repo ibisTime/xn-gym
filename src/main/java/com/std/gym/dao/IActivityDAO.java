@@ -20,7 +20,5 @@ public interface IActivityDAO extends IBaseDAO<Activity> {
 
     public int auto(Activity data);
 
-    public int scanActivity(Activity data);
-
     public int addSignNum(Activity data);
 }

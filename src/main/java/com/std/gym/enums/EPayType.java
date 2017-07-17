@@ -6,7 +6,7 @@ package com.std.gym.enums;
  * @history:
  */
 public enum EPayType {
-    YUE("1", "余额支付"), WEIXIN("5", "微信H5");
+    YE("1", "余额支付"), WEIXIN("5", "微信H5");
 
     EPayType(String code, String value) {
         this.code = code;

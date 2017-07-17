@@ -26,4 +26,6 @@ public interface IOrgCourseBO extends IPaginableBO<OrgCourse> {
 
     public OrgCourse getOrgCourse(String code);
 
+    public void addSignNum(OrgCourse orgCourse, Integer quantity);
+
 }

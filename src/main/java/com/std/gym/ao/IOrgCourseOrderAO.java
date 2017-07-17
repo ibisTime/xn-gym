@@ -11,11 +11,15 @@ import com.std.gym.domain.OrgCourseOrder;
 public interface IOrgCourseOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addOrgCourseOrder(OrgCourseOrder data);
+    public String commitOrder(String orgCourseCode, Integer quantity,
+            String applyUser, String mobile, String applyNote);
 
-    public int dropOrgCourseOrder(String code);
+    public Object toPayOrder(String orderCode, String payType);
 
-    public int editOrgCourseOrder(OrgCourseOrder data);
+    public void paySuccess(String payGroup, String payCode, Long amount,
+            String payType);
+
+    public void editOrgCourseOrder(OrgCourseOrder data);
 
     public Paginable<OrgCourseOrder> queryOrgCourseOrderPage(int start,
             int limit, OrgCourseOrder condition);

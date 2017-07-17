@@ -33,9 +33,11 @@ public class XN622060 extends AProcessor {
         condition.setAddress(req.getAddress());
         condition.setLocation(req.getLocation());
         condition.setBeginClassDatetime(DateUtil.strToDate(
-            req.getBeginClassDatetime(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getBeginClassDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setEndClassDatetime(DateUtil.strToDate(
-            req.getEndClassDatetime(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getEndClassDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
+            DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());
         String orderColumn = req.getOrderColumn();

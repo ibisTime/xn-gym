@@ -13,4 +13,6 @@ public interface IOrgCourseDAO extends IBaseDAO<OrgCourse> {
     int putOff(OrgCourse data);
 
     int stopSign(OrgCourse data);
+
+    int addSignNum(OrgCourse data);
 }

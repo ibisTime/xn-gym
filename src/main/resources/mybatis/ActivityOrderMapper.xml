@@ -147,6 +147,13 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_sign" parameterType="activityOrder">
+		UPDATE tgym_activity_order SET
+		status=#{status}
+		,remain_num=#{remainNum}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_orderPay" parameterType="activityOrder">
 		UPDATE tgym_activity_order SET
 		status=#{status}

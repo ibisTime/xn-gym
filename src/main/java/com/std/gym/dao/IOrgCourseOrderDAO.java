@@ -7,4 +7,8 @@ public interface IOrgCourseOrderDAO extends IBaseDAO<OrgCourseOrder> {
     String NAMESPACE = IOrgCourseOrderDAO.class.getName().concat(".");
 
     int update(OrgCourseOrder data);
+
+    int payGroup(OrgCourseOrder data);
+
+    int paySuccess(OrgCourseOrder order);
 }

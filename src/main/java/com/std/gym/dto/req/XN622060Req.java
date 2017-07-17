@@ -34,6 +34,9 @@ public class XN622060Req extends APageReq {
     // 开始上课时间（止）
     private String endClassDatetime;
 
+    // 上课时间
+    private String classDatetime;
+
     // 状态
     private String status;
 
@@ -110,5 +113,13 @@ public class XN622060Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getClassDatetime() {
+        return classDatetime;
+    }
+
+    public void setClassDatetime(String classDatetime) {
+        this.classDatetime = classDatetime;
     }
 }

@@ -7,7 +7,7 @@ package com.std.gym.enums;
  * @history:
  */
 public enum EPrefixCode {
-    COMMENT("PL", "评论"), KEYWORD("GJ", "关键字"), Activity("AC", "活动"), ActivityOrder(
+    COMMENT("PL", "评论"), KEYWORD("GJ", "关键字"), ACTIVITY("AC", "活动"), ACTIVITYORDER(
             "AOD", "活动订单"), PRAISEITEM("PI", "评论项"), PERCOURSEORDER("PO",
             "私课订单"), PERCOURSE("PC", "私课"), ORGCOURSEORDER("OO", "团课订单"), ORGCOURSE(
             "OC", "团课"), COACH("SJ", "私教");

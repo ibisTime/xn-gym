@@ -99,4 +99,10 @@ public class OrgCourseBOImpl extends PaginableBOImpl<OrgCourse> implements
         return data;
     }
 
+    @Override
+    public void addSignNum(OrgCourse orgCourse, Integer quantity) {
+        orgCourse.setRemainNum(orgCourse.getRemainNum() - quantity);
+        orgCourseDAO.addSignNum(orgCourse);
+    }
+
 }

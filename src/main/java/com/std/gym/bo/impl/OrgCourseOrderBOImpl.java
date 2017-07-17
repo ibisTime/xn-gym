@@ -1,5 +1,6 @@
 package com.std.gym.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,10 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.base.PaginableBOImpl;
-import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.dao.IOrgCourseOrderDAO;
 import com.std.gym.domain.OrgCourseOrder;
-import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -32,35 +32,30 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
     }
 
     @Override
-    public String saveOrgCourseOrder(OrgCourseOrder data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.ORGCOURSEORDER
-                .getCode());
-            data.setCode(code);
-            orgCourseOrderDAO.insert(data);
-        }
-        return code;
+    public void saveOrgCourseOrder(OrgCourseOrder data) {
+        orgCourseOrderDAO.insert(data);
     }
 
     @Override
-    public int removeOrgCourseOrder(String code) {
-        int count = 0;
+    public void payGroup(OrgCourseOrder order, String payGroup) {
+        order.setPayGroup(payGroup);
+        orgCourseOrderDAO.payGroup(order);
+    }
+
+    @Override
+    public void removeOrgCourseOrder(String code) {
         if (StringUtils.isNotBlank(code)) {
             OrgCourseOrder data = new OrgCourseOrder();
             data.setCode(code);
-            count = orgCourseOrderDAO.delete(data);
+            orgCourseOrderDAO.delete(data);
         }
-        return count;
     }
 
     @Override
-    public int refreshOrgCourseOrder(OrgCourseOrder data) {
-        int count = 0;
+    public void refreshOrgCourseOrder(OrgCourseOrder data) {
         if (StringUtils.isNotBlank(data.getCode())) {
-            count = orgCourseOrderDAO.update(data);
+            orgCourseOrderDAO.update(data);
         }
-        return count;
     }
 
     @Override
@@ -81,4 +76,30 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
         }
         return data;
     }
+
+    @Override
+    public OrgCourseOrder getOrderPayGroup(String payGroup) {
+        OrgCourseOrder data = null;
+        if (StringUtils.isNotBlank(payGroup)) {
+            OrgCourseOrder condition = new OrgCourseOrder();
+            condition.setPayGroup(payGroup);
+            data = orgCourseOrderDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "支付组号不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public void paySuccess(OrgCourseOrder order, String payCode, Long amount,
+            String payType) {
+        order.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
+        order.setPayType(payType);
+        order.setPayCode(payCode);
+        order.setPayAmount(amount);
+        order.setPayDatetime(new Date());
+        orgCourseOrderDAO.paySuccess(order);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.std.gym.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,6 @@ import com.std.gym.bo.IActivityBO;
 import com.std.gym.bo.IActivityOrderBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
-import com.std.gym.common.PropertiesUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.domain.Account;
 import com.std.gym.domain.Activity;
@@ -64,7 +64,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         this.checkActivity(activity, quantity);
 
         ActivityOrder data = new ActivityOrder();
-        String code = OrderNoGenerater.generate(EPrefixCode.ActivityOrder
+        String code = OrderNoGenerater.generate(EPrefixCode.ACTIVITYORDER
             .getCode());
         data.setCode(code);
         data.setActivityCode(activityCode);
@@ -157,15 +157,15 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         String userId = order.getApplyUser();
         User user = userBO.getRemoteUser(userId);
         // 生成payGroup,并把订单进行支付。
-        String payGroup = OrderNoGenerater.generate(EPrefixCode.ActivityOrder
+        String payGroup = OrderNoGenerater.generate(EPrefixCode.ACTIVITYORDER
             .getCode());
         activityOrderBO.payGroup(order, payGroup);
         if (order.getAmount() == 0L) {
-            paySuccess(payGroup, null, order.getAmount());
+            paySuccess(payGroup, null, order.getAmount(), null);
             return new BooleanRes(true);
         }
-        if (EPayType.YUE.getCode().equals(payType)) {
-            result = toPayYUE(order, user, payGroup, activity);
+        if (EPayType.YE.getCode().equals(payType)) {
+            result = toPayYE(order, user, payGroup, activity);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             result = toPayWEIXIH5(order, user, payGroup, activity);
         } else {
@@ -175,7 +175,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     }
 
-    private Object toPayYUE(ActivityOrder order, User user, String payGroup,
+    private Object toPayYE(ActivityOrder order, User user, String payGroup,
             Activity activity) {
         Account rmbAccount = accountBO.getRemoteAccount(order.getApplyUser(),
             ECurrency.CNY);
@@ -186,7 +186,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             ESysAccount.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
             order.getAmount(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
             EBizType.AJ_HDGM.getValue(), order.getCode());
-        paySuccess(payGroup, null, order.getAmount());
+        paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
         return new BooleanRes(true);
     }
 
@@ -195,8 +195,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
             order.getCode(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
-            order.getAmount(), EBizType.AJ_HDGM.getValue(),
-            PropertiesUtil.Config.PAY_BACK_URL);
+            order.getAmount(), EBizType.AJ_HDGM.getValue());
     }
 
     @Override
@@ -219,14 +218,21 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     }
 
     @Override
-    public void paySuccess(String payGroup, String payCode, Long amount) {
+    public void paySuccess(String payGroup, String payCode, Long amount,
+            String payType) {
         ActivityOrder order = activityOrderBO.getOrderPayGroup(payGroup);
         if (null == order) {
             throw new BizException("xn000000", "未找到对应活动订单");
         }
+        if (StringUtils.isBlank(payType)) {
+            payType = EPayType.WEIXIN.getCode();
+        }
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            activityOrderBO.paySuccess(order, payCode, amount);
+            activityOrderBO.paySuccess(order, payCode, amount, payType);
             Activity activity = activityBO.getActivity(order.getActivityCode());
+            if (activity.getRemainNum() - order.getQuantity() == 0) {
+                activity.setStatus(EActivityStatus.END.getCode());
+            }
             activityBO.addSignNum(activity, order.getQuantity());
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");

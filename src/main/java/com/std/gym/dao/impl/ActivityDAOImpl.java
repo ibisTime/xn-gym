@@ -71,11 +71,6 @@ public class ActivityDAOImpl extends AMybatisTemplate implements IActivityDAO {
     }
 
     @Override
-    public int scanActivity(Activity data) {
-        return super.update(NAMESPACE.concat("update_scan"), data);
-    }
-
-    @Override
     public int addSignNum(Activity data) {
         return super.update(NAMESPACE.concat("update_sign"), data);
     }

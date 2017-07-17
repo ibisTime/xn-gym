@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.std.gym.bo.IAccountBO;
 import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.common.JsonUtil;
+import com.std.gym.common.PropertiesUtil;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Account;
 import com.std.gym.dto.req.XN001303Req;
@@ -76,8 +77,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public XN002501Res doWeiXinH5PayRemote(String fromUserId,
             String fromOpenId, String toUserId, String payGroup, String refNo,
-            EBizType bizType, String fromBizNote, Long amount,
-            String toBizNote, String backUrl) {
+            EBizType bizType, String fromBizNote, Long amount, String toBizNote) {
         // 获取微信H5支付信息
         XN002501Req req = new XN002501Req();
         req.setFromUserId(fromUserId);
@@ -88,7 +88,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         req.setFromBizNote(fromBizNote);
         req.setToBizNote(toBizNote);
         req.setPayGroup(payGroup);
-        req.setBackUrl(backUrl);
+        req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         System.out.println(fromUserId + "" + fromOpenId + "" + toUserId + ""
                 + amount + "" + bizType + "" + fromBizNote + "" + toBizNote
                 + "" + payGroup);

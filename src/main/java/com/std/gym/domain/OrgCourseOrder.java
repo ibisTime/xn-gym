@@ -1,5 +1,7 @@
 package com.std.gym.domain;
 
+import java.util.Date;
+
 import com.std.gym.dao.base.ABaseDO;
 
 /**
@@ -10,215 +12,215 @@ import com.std.gym.dao.base.ABaseDO;
 */
 public class OrgCourseOrder extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 编号
+    private String code;
 
-	// 团课编号
-	private String orgCourseCode;
+    // 团课编号
+    private String orgCourseCode;
 
-	// 团课名称
-	private String orgCourseName;
+    // 团课名称
+    private String orgCourseName;
 
-	// 购买数量
-	private String quantity;
+    // 购买数量
+    private Integer quantity;
 
-	// 单价
-	private String price;
+    // 单价
+    private Long price;
 
-	// 订单金额
-	private String amount;
+    // 订单金额
+    private Long amount;
 
-	// 状态
-	private String status;
+    // 状态
+    private String status;
 
-	// 支付方式
-	private String payType;
+    // 支付方式
+    private String payType;
 
-	// 支付编号
-	private String payCode;
+    // 支付编号
+    private String payCode;
 
-	// 支付组号
-	private String payGroup;
+    // 支付组号
+    private String payGroup;
 
-	// 支付金额
-	private String payAmount;
+    // 支付金额
+    private Long payAmount;
 
-	// 支付时间
-	private String payDatetime;
+    // 支付时间
+    private Date payDatetime;
 
-	// 申请人
-	private String applyUser;
+    // 申请人
+    private String applyUser;
 
-	// 联系方式
-	private String mobile;
+    // 联系方式
+    private String mobile;
 
-	// 申请时间
-	private String applyDatetime;
+    // 申请时间
+    private Date applyDatetime;
 
-	// 申请备注
-	private String applyNote;
+    // 申请备注
+    private String applyNote;
 
-	// 更新人
-	private String updater;
+    // 更新人
+    private String updater;
 
-	// 更新时间
-	private String updateDatetime;
+    // 更新时间
+    private Date updateDatetime;
 
-	// 备注
-	private String remark;
+    // 备注
+    private String remark;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setOrgCourseCode(String orgCourseCode) {
-		this.orgCourseCode = orgCourseCode;
-	}
+    public String getOrgCourseCode() {
+        return orgCourseCode;
+    }
 
-	public String getOrgCourseCode() {
-		return orgCourseCode;
-	}
+    public void setOrgCourseCode(String orgCourseCode) {
+        this.orgCourseCode = orgCourseCode;
+    }
 
-	public void setOrgCourseName(String orgCourseName) {
-		this.orgCourseName = orgCourseName;
-	}
+    public String getOrgCourseName() {
+        return orgCourseName;
+    }
 
-	public String getOrgCourseName() {
-		return orgCourseName;
-	}
+    public void setOrgCourseName(String orgCourseName) {
+        this.orgCourseName = orgCourseName;
+    }
 
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-	public String getQuantity() {
-		return quantity;
-	}
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
-	public void setPrice(String price) {
-		this.price = price;
-	}
+    public Long getPrice() {
+        return price;
+    }
 
-	public String getPrice() {
-		return price;
-	}
+    public void setPrice(Long price) {
+        this.price = price;
+    }
 
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
+    public Long getAmount() {
+        return amount;
+    }
 
-	public String getAmount() {
-		return amount;
-	}
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setPayType(String payType) {
-		this.payType = payType;
-	}
+    public String getPayType() {
+        return payType;
+    }
 
-	public String getPayType() {
-		return payType;
-	}
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 
-	public void setPayCode(String payCode) {
-		this.payCode = payCode;
-	}
+    public String getPayCode() {
+        return payCode;
+    }
 
-	public String getPayCode() {
-		return payCode;
-	}
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
 
-	public void setPayGroup(String payGroup) {
-		this.payGroup = payGroup;
-	}
+    public String getPayGroup() {
+        return payGroup;
+    }
 
-	public String getPayGroup() {
-		return payGroup;
-	}
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
 
-	public void setPayAmount(String payAmount) {
-		this.payAmount = payAmount;
-	}
+    public Long getPayAmount() {
+        return payAmount;
+    }
 
-	public String getPayAmount() {
-		return payAmount;
-	}
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
+    }
 
-	public void setPayDatetime(String payDatetime) {
-		this.payDatetime = payDatetime;
-	}
+    public Date getPayDatetime() {
+        return payDatetime;
+    }
 
-	public String getPayDatetime() {
-		return payDatetime;
-	}
+    public void setPayDatetime(Date payDatetime) {
+        this.payDatetime = payDatetime;
+    }
 
-	public void setApplyUser(String applyUser) {
-		this.applyUser = applyUser;
-	}
+    public String getApplyUser() {
+        return applyUser;
+    }
 
-	public String getApplyUser() {
-		return applyUser;
-	}
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    public String getMobile() {
+        return mobile;
+    }
 
-	public String getMobile() {
-		return mobile;
-	}
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-	public void setApplyDatetime(String applyDatetime) {
-		this.applyDatetime = applyDatetime;
-	}
+    public Date getApplyDatetime() {
+        return applyDatetime;
+    }
 
-	public String getApplyDatetime() {
-		return applyDatetime;
-	}
+    public void setApplyDatetime(Date applyDatetime) {
+        this.applyDatetime = applyDatetime;
+    }
 
-	public void setApplyNote(String applyNote) {
-		this.applyNote = applyNote;
-	}
+    public String getApplyNote() {
+        return applyNote;
+    }
 
-	public String getApplyNote() {
-		return applyNote;
-	}
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
+    }
 
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
+    public String getUpdater() {
+        return updater;
+    }
 
-	public String getUpdater() {
-		return updater;
-	}
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
 
-	public void setUpdateDatetime(String updateDatetime) {
-		this.updateDatetime = updateDatetime;
-	}
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
 
-	public String getUpdateDatetime() {
-		return updateDatetime;
-	}
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
 }
