@@ -16,13 +16,17 @@ public interface IActivityOrderAO {
 
     /**
      * 新增订单
-     * @param data
+     * @param activityCode
+     * @param quantity
+     * @param applyUser
+     * @param applyNote
+     * @param mobile
      * @return 
-     * @create: 2016年12月10日 下午2:51:06 shan
+     * @create: 2017年7月17日 下午1:23:54 asus
      * @history:
      */
-    public String addOrder(String applyUser, String productCode,
-            String realName, String mobile, Integer quantity);
+    public String addActivityOrder(String activityCode, Integer quantity,
+            String applyUser, String applyNote, String mobile);
 
     /**
      * 分页查询订单
@@ -33,7 +37,7 @@ public interface IActivityOrderAO {
      * @create: 2016年12月10日 下午2:51:16 shan
      * @history:
      */
-    public Paginable<ActivityOrder> queryOrderPage(int start, int limit,
+    public Paginable<ActivityOrder> queryActivityOrderPage(int start, int limit,
             ActivityOrder condition);
 
     /**
@@ -52,7 +56,7 @@ public interface IActivityOrderAO {
      * @create: 2016年12月10日 下午2:51:23 shan
      * @history:
      */
-    public ActivityOrder getOrder(String code);
+    public ActivityOrder getActivityOrder(String code);
 
     /**
      * 支付订单
@@ -74,6 +78,21 @@ public interface IActivityOrderAO {
 
     public void changeOrder();
 
-    public void cancelOrder(String orderCode, String updater, String remark);
+    public void userCancel(String orderCode, String updater);
+
+    /**
+     * 平台取消订单
+     * @param orderCode
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月17日 下午2:49:41 asus
+     * @history:
+     */
+    public void platCancel(String orderCode, String updater, String remark);
+
+    public void applyRefund(String orderCode, String applyUser, String applyNote);
+
+    public void approveRefund(String orderCode, String result, String updater,
+            String remark);
 
 }

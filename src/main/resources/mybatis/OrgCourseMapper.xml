@@ -30,6 +30,33 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="name != null and name != '' ">
+				AND t.name like "%"#{name}#"%"
+			</if>
+			<if test="address != null and address != '' ">
+				AND t.address like "%"#{address}#"%"
+			</if>
+			<if test="contact != null and contact != '' ">
+				AND t.contact like "%"#{contact}#"%"
+			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
+			<if test="coachUser != null and coachUser != '' ">
+				AND t.coach_user = #{coachUser}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
+			<if test="beginClassDatetime != null and beginClassDatetime != '' ">
+				<![CDATA[AND t.class_datetime >= #{beginClassDatetime}]]>
+			</if>	
+			<if test="endClassDatetime != null and endClassDatetime != '' ">
+				<![CDATA[AND t.class_datetime <= #{endClassDatetime}]]>
+			</if>	
 		</trim>
 	</sql>
 	<select id="select_orgCourse" parameterType="orgCourse" resultMap="orgCourse_DB_Result">
@@ -39,21 +66,25 @@
 		,t.name
 		,t.class_datetime
 		,t.sk_start_datetime
+		
 		,t.sk_end_datetime
 		,t.total_num
 		,t.remain_num
 		,t.address
 		,t.contact
+		
 		,t.pic
 		,t.adv_pic
 		,t.description
 		,t.price
 		,t.location
+		
 		,t.order_no
 		,t.sum_com
 		,t.status
 		,t.updater
 		,t.update_datetime
+		
 		,t.remark
 		FROM
 		tgym_org_course t
@@ -79,18 +110,19 @@
 		,name
 		,class_datetime
 		,sk_start_datetime
+		
 		,sk_end_datetime
 		,total_num
 		,remain_num
 		,address
 		,contact
+		
 		,pic
 		,adv_pic
 		,description
 		,price
-		,location
-		,order_no
 		,sum_com
+		
 		,status
 		,updater
 		,update_datetime
@@ -102,18 +134,19 @@
 		,#{name}
 		,#{classDatetime}
 		,#{skStartDatetime}
+		
 		,#{skEndDatetime}
 		,#{totalNum}
 		,#{remainNum}
 		,#{address}
 		,#{contact}
+		
 		,#{pic}
 		,#{advPic}
 		,#{description}
 		,#{price}
-		,#{location}
-		,#{orderNo}
 		,#{sumCom}
+		
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}
@@ -129,23 +162,52 @@
 		,class_datetime = #{classDatetime}
 		,sk_start_datetime = #{skStartDatetime}
 		,sk_end_datetime = #{skEndDatetime}
+		
 		,total_num = #{totalNum}
 		,remain_num = #{remainNum}
 		,address = #{address}
 		,contact = #{contact}
 		,pic = #{pic}
+		
 		,adv_pic = #{advPic}
 		,description = #{description}
 		,price = #{price}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_putOn" parameterType="orgCourse">
+		UPDATE tgym_org_course
+		SET
+		status=#{status}
 		,location = #{location}
 		,order_no = #{orderNo}
-		,sum_com = #{sumCom}
-		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
-
+	
+	<update id="update_putOff" parameterType="orgCourse">
+		UPDATE tgym_org_course
+		SET
+		status=#{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_stopSign" parameterType="orgCourse">
+		UPDATE tgym_org_course
+		SET
+		status=#{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

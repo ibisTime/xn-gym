@@ -44,6 +44,9 @@ public class Comment extends ABaseDO {
     // 产品编号
     private String productCode;
 
+    // 教练编号
+    private String coachCode;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -122,6 +125,14 @@ public class Comment extends ABaseDO {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public String getCoachCode() {
+        return coachCode;
+    }
+
+    public void setCoachCode(String coachCode) {
+        this.coachCode = coachCode;
     }
 
 }

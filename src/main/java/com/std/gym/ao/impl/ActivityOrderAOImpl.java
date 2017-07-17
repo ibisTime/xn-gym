@@ -3,7 +3,6 @@ package com.std.gym.ao.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,9 @@ import com.std.gym.bo.IActivityBO;
 import com.std.gym.bo.IActivityOrderBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.PropertiesUtil;
 import com.std.gym.core.OrderNoGenerater;
+import com.std.gym.domain.Account;
 import com.std.gym.domain.Activity;
 import com.std.gym.domain.ActivityOrder;
 import com.std.gym.domain.User;
@@ -23,8 +24,11 @@ import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EActivityStatus;
 import com.std.gym.enums.EBizType;
+import com.std.gym.enums.EBoolean;
+import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.ESysAccount;
 import com.std.gym.exception.BizException;
 
 /**
@@ -38,7 +42,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     static Logger logger = Logger.getLogger(ActivityOrderAOImpl.class);
 
     @Autowired
-    IActivityOrderBO orderBO;
+    IActivityOrderBO activityOrderBO;
 
     @Autowired
     IUserBO userBO;
@@ -51,28 +55,28 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     /**
      * 新增订单
-     * @see com.cdkj.ride.ao.IOrderAO#addOrder(com.ActivityOrder.ride.domain.Order)
+     * @see com.std.gym.ao.IActivityOrderAO#addActivityOrder(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer)
      */
     @Override
-    public String addOrder(String applyUser, String productCode,
-            String realName, String mobile, Integer quantity) {
-        Activity activity = activityBO.getActivity(productCode);
+    public String addActivityOrder(String activityCode, Integer quantity,
+            String applyUser, String applyNote, String mobile) {
+        Activity activity = activityBO.getActivity(activityCode);
         this.checkActivity(activity, quantity);
 
         ActivityOrder data = new ActivityOrder();
         String code = OrderNoGenerater.generate(EPrefixCode.ActivityOrder
             .getCode());
         data.setCode(code);
-        data.setApplyUser(applyUser);
-        data.setActivityCode(productCode);
+        data.setActivityCode(activityCode);
         data.setActivityTitle(activity.getTitle());
-        data.setMobile(mobile);
-        data.setApplyDatetime(new Date());
         data.setQuantity(quantity);
         data.setPrice(activity.getAmount());
-        data.setAmount(quantity * activity.getAmount());
+        data.setAmount(activity.getAmount() * quantity);
         data.setStatus(EActivityOrderStatus.NOTPAY.getCode());
-        orderBO.saveOrder(data);
+        data.setApplyUser(applyUser);
+        data.setMobile(mobile);
+        data.setApplyDatetime(new Date());
+        activityOrderBO.saveOrder(data);
         return code;
     }
 
@@ -83,20 +87,20 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 || EActivityStatus.END.getCode().equals(activity.getStatus())) {
             throw new BizException("xn0000", "活动不在可下单范围内");
         }
-        if (activity.getStartDatetime().before(new Date())) {
-            throw new BizException("xn0000", "活动已经截止报名");
+        if (activity.getRemainNum() < quantity) {
+            throw new BizException("xn0000", "活动名额不足");
         }
     }
 
     /**
      * 分页查询订单
-     * @see com.cdkj.ride.ao.IOrderAO#queryOrderPage(int, int, com.ActivityOrder.ride.domain.Order)
+     * @see com.cdkj.ride.ao.IOrderAO#queryActivityOrderPage(int, int, com.ActivityOrder.ride.domain.Order)
      */
     @Override
-    public Paginable<ActivityOrder> queryOrderPage(int start, int limit,
-            ActivityOrder condition) {
-        Paginable<ActivityOrder> page = orderBO.getPaginable(start, limit,
-            condition);
+    public Paginable<ActivityOrder> queryActivityOrderPage(int start,
+            int limit, ActivityOrder condition) {
+        Paginable<ActivityOrder> page = activityOrderBO.getPaginable(start,
+            limit, condition);
         List<ActivityOrder> orderList = page.getList();
         for (ActivityOrder order : orderList) {
             Activity activity = activityBO.getActivity(order.getActivityCode());
@@ -115,7 +119,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
      */
     @Override
     public List<ActivityOrder> queryOrderList(ActivityOrder condition) {
-        List<ActivityOrder> orderList = orderBO.queryOrderList(condition);
+        List<ActivityOrder> orderList = activityOrderBO
+            .queryOrderList(condition);
         for (ActivityOrder order : orderList) {
             Activity activity = activityBO.getActivity(order.getActivityCode());
             order.setActivityBeginDatetime(activity.getStartDatetime());
@@ -129,18 +134,18 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     /**
      * 查询订单详情
-     * @see com.cdkj.ride.ao.IOrderAO#getOrder(java.lang.String)
+     * @see com.cdkj.ride.ao.IOrderAO#getActivityOrder(java.lang.String)
      */
     @Override
-    public ActivityOrder getOrder(String code) {
-        return orderBO.getOrder(code);
+    public ActivityOrder getActivityOrder(String code) {
+        return activityOrderBO.getActivityOrder(code);
     }
 
     @Override
     @Transactional
     public Object orderPay(String orderCode, String payType) {
         Object result = null;
-        ActivityOrder order = orderBO.getOrder(orderCode);
+        ActivityOrder order = activityOrderBO.getActivityOrder(orderCode);
         if (!EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn0000", "该活动订单不处于待支付状态，不能进行支付操作");
         }
@@ -154,12 +159,14 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         // 生成payGroup,并把订单进行支付。
         String payGroup = OrderNoGenerater.generate(EPrefixCode.ActivityOrder
             .getCode());
-        orderBO.payGroup(order, payGroup);
+        activityOrderBO.payGroup(order, payGroup);
         if (order.getAmount() == 0L) {
             paySuccess(payGroup, null, order.getAmount());
             return new BooleanRes(true);
         }
-        if (EPayType.WEIXIN.getCode().equals(payType)) {
+        if (EPayType.YUE.getCode().equals(payType)) {
+            result = toPayYUE(order, user, payGroup, activity);
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             result = toPayWEIXIH5(order, user, payGroup, activity);
         } else {
             throw new BizException("xn000000", "暂不支持该种支付方式");
@@ -168,15 +175,28 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     }
 
+    private Object toPayYUE(ActivityOrder order, User user, String payGroup,
+            Activity activity) {
+        Account rmbAccount = accountBO.getRemoteAccount(order.getApplyUser(),
+            ECurrency.CNY);
+        if (rmbAccount.getAmount() < order.getAmount()) {
+            throw new BizException("xn000000", "余额不足");
+        }
+        accountBO.doTransferAmountRemote(order.getApplyUser(),
+            ESysAccount.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
+            order.getAmount(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
+            EBizType.AJ_HDGM.getValue(), order.getCode());
+        paySuccess(payGroup, null, order.getAmount());
+        return new BooleanRes(true);
+    }
+
     public Object toPayWEIXIH5(ActivityOrder order, User user, String payGroup,
             Activity activity) {
-        if (StringUtils.isBlank(user.getOpenId())) {
-            throw new BizException("xn000000", "请先绑定微信");
-        }
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), user.getUserId(), order.getAmount(),
-            EBizType.AJ_GW, EBizType.AJ_GW.getValue(),
-            EBizType.AJ_GW.getValue(), payGroup);
+            user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
+            order.getCode(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
+            order.getAmount(), EBizType.AJ_HDGM.getValue(),
+            PropertiesUtil.Config.PAY_BACK_URL);
     }
 
     @Override
@@ -184,13 +204,14 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         logger.info("***************开始扫描待支付订单，活动结束制完成状态***************");
         ActivityOrder condition = new ActivityOrder();
         condition.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
-        List<ActivityOrder> orderList = orderBO.queryOrderList(condition);
+        List<ActivityOrder> orderList = activityOrderBO
+            .queryOrderList(condition);
         if (orderList != null && orderList.size() > 0) {
             for (ActivityOrder order : orderList) {
                 Activity activity = activityBO.getActivity(order
                     .getActivityCode());
                 if (activity.getEndDatetime().before(new Date())) {
-                    orderBO.auto(order);
+                    activityOrderBO.auto(order);
                 }
             }
         }
@@ -199,30 +220,71 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     @Override
     public void paySuccess(String payGroup, String payCode, Long amount) {
-        ActivityOrder order = orderBO.getOrderPayGroup(payGroup);
+        ActivityOrder order = activityOrderBO.getOrderPayGroup(payGroup);
         if (null == order) {
             throw new BizException("xn000000", "未找到对应活动订单");
         }
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            orderBO.paySuccess(order, payCode, amount);
+            activityOrderBO.paySuccess(order, payCode, amount);
             Activity activity = activityBO.getActivity(order.getActivityCode());
+            activityBO.addSignNum(activity, order.getQuantity());
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
+        }
+    }
+
+    @Override
+    public void userCancel(String orderCode, String updater) {
+        ActivityOrder order = activityOrderBO.getActivityOrder(orderCode);
+        if (!EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
+            throw new BizException("xn000000", "该状态下不能取消订单");
+        }
+        activityOrderBO.userCancel(order, updater);
+    }
+
+    @Override
+    public void platCancel(String orderCode, String updater, String remark) {
+        ActivityOrder order = activityOrderBO.getActivityOrder(orderCode);
+        activityOrderBO.platCancel(order, updater, remark);
+        if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
+            accountBO.doTransferAmountRemote(
+                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ECurrency.CNY, order.getAmount(), EBizType.AJ_HDGMTK,
+                EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
+                order.getCode());
+        } else {
+            throw new BizException("xn000000", "该状态下不能取消订单");
         }
 
     }
 
     @Override
-    public void cancelOrder(String orderCode, String updater, String remark) {
-        ActivityOrder order = orderBO.getOrder(orderCode);
-        Activity activity = activityBO.getActivity(order.getActivityCode());
+    public void applyRefund(String orderCode, String applyUser, String applyNote) {
+        ActivityOrder order = activityOrderBO.getActivityOrder(orderCode);
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            orderBO.refreshCancelOrder(order, updater, remark);
+            throw new BizException("xn000000", "您还没有支付,不能申请退款");
         } else if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(
             order.getStatus())) {
-            orderBO.refreshCancelOrder(order, updater, remark);
-            if (activity.getStartDatetime().after(new Date())) {
-            }
+            activityOrderBO.applyRefund(order, applyUser, applyNote);
+        } else {
+            throw new BizException("xn000000", "该状态下不能申请退款");
         }
+    }
+
+    @Override
+    public void approveRefund(String orderCode, String result, String updater,
+            String remark) {
+        ActivityOrder order = activityOrderBO.getActivityOrder(orderCode);
+        if (!EActivityOrderStatus.APPLY_REFUND.getCode().equals(
+            order.getStatus())) {
+            throw new BizException("xn000000", "该状态下不能进行退款审核");
+        }
+        EActivityOrderStatus status = null;
+        if (EBoolean.NO.getCode().equals(result)) {
+            status = EActivityOrderStatus.REFUND_NO;
+        } else if (EBoolean.YES.getCode().equals(result)) {
+            status = EActivityOrderStatus.REFUND_YSE;
+        }
+        activityOrderBO.approveRefund(order, status, updater, remark);
     }
 }

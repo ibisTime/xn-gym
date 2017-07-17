@@ -21,7 +21,7 @@
   	<!-- 定义aspectj -->
   	<aop:aspectj-autoproxy proxy-target-class="true"/>
  
-    <bean id="springContextHolder" class="com.std.forum.spring.SpringContextHolder"></bean>
+    <bean id="springContextHolder" class="com.std.gym.spring.SpringContextHolder"></bean>
     
     <!-- 参数验证 -->
     <!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
@@ -44,9 +44,9 @@
 		<property name="plugins">
 			<array>
 				<bean
-					class="com.std.forum.dao.base.interceptor.PaginationInterceptor">
+					class="com.std.gym.dao.base.interceptor.PaginationInterceptor">
 					<property name="dialect">
-						<bean class="com.std.forum.dao.base.dialect.MySQLDialect" />
+						<bean class="com.std.gym.dao.base.dialect.MySQLDialect" />
 					</property>
 				</bean>
 			</array>

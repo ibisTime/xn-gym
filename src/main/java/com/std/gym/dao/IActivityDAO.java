@@ -14,7 +14,7 @@ public interface IActivityDAO extends IBaseDAO<Activity> {
 
     public int update(Activity data);
 
-    public int shelves(Activity data);
+    public int putOn(Activity data);
 
     public int downActivity(Activity data);
 

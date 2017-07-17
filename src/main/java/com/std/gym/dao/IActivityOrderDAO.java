@@ -24,4 +24,6 @@ public interface IActivityOrderDAO extends IBaseDAO<ActivityOrder> {
 
     public int cancelOrder(ActivityOrder order);
 
+    public int applyRefund(ActivityOrder order);
+
 }

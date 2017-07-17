@@ -69,7 +69,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_order" parameterType="activityOrder" resultMap="activityOrder_DB_Result">
+	<select id="select_activityOrder" parameterType="activityOrder" resultMap="activityOrder_DB_Result">
 		SELECT	
 		t.code
 		,t.activity_code
@@ -97,7 +97,7 @@
 		tgym_activity_order t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
-			<if test="activityOrder != null and activityOrder != '' ">
+			<if test="order != null and order != '' ">
 				${order}
 			</if>
 		</trim>	
@@ -118,20 +118,11 @@
 		
 		,amount
 		,status
-		,pay_type
-		,pay_group
-		,pay_code
-		
-		,pay_amount
-		,pay_datetime
 		,apply_user
 		,mobile
 		,apply_datetime
 		
 		,apply_note
-		,updater
-		,update_datetime
-        ,remark
 		)
 		VALUES(
 		#{code}
@@ -142,20 +133,11 @@
 		
 		,#{amount}
 		,#{status}
-		,#{payType}
-		,#{payGroup}
-		,#{payCode}
-		
-		,#{payAmount}
-		,#{payDatetime}
 		,#{applyUser}
 		,#{mobile}
 		,#{applyDatetime}
 		
 		,#{applyNote}
-		,#{updater}
-		,#{updateDatetime}
-        ,#{remark}
 		)
 	</insert>
 	
@@ -194,4 +176,12 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_apply_refund" parameterType="activityOrder">
+		UPDATE tgym_activity_order SET
+		status=#{status}
+		,apply_user=#{applyUser}
+		,apply_datetime=#{applyDatetime}
+		,apply_note=#{applyNote}
+		WHERE code = #{code}
+	</update>
 </mapper>

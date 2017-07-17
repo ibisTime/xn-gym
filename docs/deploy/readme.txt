@@ -21,18 +21,18 @@
   ssh root@121.43.101.148 -p 22
   
   T6dh%$%$ss1
-  cd /home/wwwroot/forum/tomcat_forum_biz/webapps
-  cp ./xn-forum/WEB-INF/classes/application.properties .
-  cp ./xn-forum/WEB-INF/classes/config.properties .
+  cd /home/wwwroot/gym/tomcat_gym_biz/webapps
+  cp ./xn-gym/WEB-INF/classes/application.properties .
+  cp ./xn-gym/WEB-INF/classes/config.properties .
   
-  rm -rf xn-forum.war
-  rm -rf xn-forum
-  mv /home/xn-forum.war .
+  rm -rf xn-gym.war
+  rm -rf xn-gym
+  mv /home/xn-gym.war .
   
-  mv -f application.properties ./xn-forum/WEB-INF/classes/
-  mv -f config.properties ./xn-forum/WEB-INF/classes/
+  mv -f application.properties ./xn-gym/WEB-INF/classes/
+  mv -f config.properties ./xn-gym/WEB-INF/classes/
   
   ../bin/shutdown.sh
   ../bin/startup.sh
   
-http://121.43.101.148:5402/xn-forum/api
+http://121.43.101.148:3602/xn-gym/api

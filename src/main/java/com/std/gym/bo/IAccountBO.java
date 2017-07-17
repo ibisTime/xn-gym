@@ -5,6 +5,7 @@ import com.std.gym.domain.Account;
 import com.std.gym.dto.res.XN002501Res;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.EChannelType;
+import com.std.gym.enums.ECurrency;
 
 /**
  * @author: xieyj
@@ -22,12 +23,13 @@ public interface IAccountBO extends IPaginableBO<Account> {
      * @param bizType
      * @param fromBizNote
      * @param toBizNote 
+     * @param refNo
      * @create: 2017年3月26日 下午8:42:38 xieyj
      * @history:
      */
     public void doTransferAmountRemote(String fromUserId, String toUserId,
-            EChannelType channelType, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote);
+            ECurrency currency, Long amount, EBizType bizType,
+            String fromBizNote, String toBizNote, String refNo);
 
     /**
      * 获取用户账户
@@ -39,8 +41,19 @@ public interface IAccountBO extends IPaginableBO<Account> {
      */
     public Long getAccountByUserId(String userId, EChannelType type);
 
+    /**
+     * 根据用户编号和币种获取账户
+     * @param userId
+     * @param currency
+     * @return 
+     * @create: 2017年3月23日 下午12:02:11 myb858
+     * @history:
+     */
+    public Account getRemoteAccount(String userId, ECurrency currency);
+
     public XN002501Res doWeiXinH5PayRemote(String fromUserId,
-            String fromOpenId, String toUserId, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote, String payGroup);
+            String fromOpenId, String toUserId, String payGroup, String refNo,
+            EBizType bizType, String fromBizNote, Long amount,
+            String toBizNote, String backUrl);
 
 }

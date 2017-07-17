@@ -26,6 +26,14 @@ public interface IActivityAO {
     public String addNewActivity(XN622010Req req);
 
     /**
+     * 删除活动
+     * @param code 
+     * @create: 2017年7月17日 上午10:01:45 asus
+     * @history:
+     */
+    public void dropActivity(String code);
+
+    /**
      * 活动修改
      * @param req 
      * @create: 2017年4月20日 下午2:11:59 asus
@@ -36,12 +44,15 @@ public interface IActivityAO {
     /**
      * 活动上架
      * @param code
+     * @param location
+     * @param orderNo
      * @param updater
      * @param remark 
-     * @create: 2017年4月20日 下午2:54:48 asus
+     * @create: 2017年7月17日 上午10:36:57 asus
      * @history:
      */
-    public void shelves(String code, String updater, String remark);
+    public void putOn(String code, String location, String orderNo,
+            String updater, String remark);
 
     /**
      * 活动下架
@@ -54,45 +65,44 @@ public interface IActivityAO {
     public void downActivity(String code, String updater, String remark);
 
     /**
-     * 浏览活动
-     * @param code 
-     * @create: 2017年4月20日 下午3:14:18 asus
+     * 截止活动
+     * @param code
+     * @param updater
+     * @param remark 
+     * @create: 2017年4月20日 下午2:54:53 asus
      * @history:
      */
-    public void scanActivity(String code);
+    public void stopActivity(String code, String updater, String remark);
 
     /**
      * 分页查询所有活动
      * @param start
      * @param limit
      * @param condition
-     * @param userId
      * @return 
      * @create: 2016年12月12日 上午9:32:51 shan
      * @history:
      */
     public Paginable<Activity> queryActivityPage(int start, int limit,
-            Activity condition, String userId);
+            Activity condition);
 
     /**
      * 查询所有活动
      * @param condition
-     * @param userId
      * @return 
      * @create: 2016年12月12日 上午9:32:54 shan
      * @history:
      */
-    public List<Activity> queryActivityList(Activity condition, String userId);
+    public List<Activity> queryActivityList(Activity condition);
 
     /**
      * 查询活动详情
      * @param code
-     * @param userId
      * @return 
      * @create: 2016年12月12日 上午9:32:57 shan
      * @history:
      */
-    public Activity getActivity(String code, String userId);
+    public Activity getActivity(String code);
 
     public void changeOrder();
 

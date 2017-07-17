@@ -18,42 +18,42 @@ import com.std.gym.exception.BizException;
 public class ItemScoreAOImpl implements IItemScoreAO {
 
 	@Autowired
-	private IItemScoreBO praiseItemBO;
+	private IItemScoreBO itemScoreBO;
 
 	@Override
 	public String addPraiseItem(ItemScore data) {
-		return praiseItemBO.savePraiseItem(data);
+		return itemScoreBO.savePraiseItem(data);
 	}
 
 	@Override
 	public int editPraiseItem(ItemScore data) {
-		if (!praiseItemBO.isPraiseItemExist(data.getCode())) {
+		if (!itemScoreBO.isPraiseItemExist(data.getCode())) {
 			throw new BizException("xn0000", "记录编号不存在");
 		}
-		return praiseItemBO.refreshPraiseItem(data);
+		return itemScoreBO.refreshPraiseItem(data);
 	}
 
 	@Override
 	public int dropPraiseItem(String code) {
-		if (!praiseItemBO.isPraiseItemExist(code)) {
+		if (!itemScoreBO.isPraiseItemExist(code)) {
 			throw new BizException("xn0000", "记录编号不存在");
 		}
-		return praiseItemBO.removePraiseItem(code);
+		return itemScoreBO.removePraiseItem(code);
 	}
 
 	@Override
 	public Paginable<ItemScore> queryPraiseItemPage(int start, int limit,
 			ItemScore condition) {
-		return praiseItemBO.getPaginable(start, limit, condition);
+		return itemScoreBO.getPaginable(start, limit, condition);
 	}
 
 	@Override
 	public List<ItemScore> queryPraiseItemList(ItemScore condition) {
-		return praiseItemBO.queryPraiseItemList(condition);
+		return itemScoreBO.queryPraiseItemList(condition);
 	}
 
 	@Override
 	public ItemScore getPraiseItem(String code) {
-		return praiseItemBO.getPraiseItem(code);
+		return itemScoreBO.getPraiseItem(code);
 	}
 }

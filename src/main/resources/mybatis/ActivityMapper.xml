@@ -7,26 +7,24 @@
 		<result column="title" property="title" />
 		<result column="pic" property="pic" />
 		<result column="adv_pic" property="advPic" />
+		<result column="slogan" property="slogan" />
 		
-		<result column="fee" property="fee" />
+		<result column="amount" property="amount" />
 		<result column="description" property="description" />
 		<result column="hold_place" property="holdPlace" />
 		<result column="location" property="location" />
-		<result column="orderNo" property="orderNo" />
+		<result column="order_no" property="orderNo" />
 		
-		<result column="begin_datetime" property="beginDatetime" />
+		<result column="start_datetime" property="startDatetime" />
 		<result column="end_datetime" property="endDatetime" />
-		<result column="sign_num" property="signNum" />
-		<result column="single_num" property="singleNum" />
-		<result column="limit_num" property="limitNum" />
+		<result column="contact" property="contact" />
+		<result column="total_num" property="totalNum" />
+		<result column="remain_num" property="remainNum" />
 		
-		<result column="scan_num" property="scanNum" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="updateDatetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		
-		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -36,11 +34,14 @@
 			<if test="holdPlace != null and holdPlace != '' ">
 				AND t.hold_place = #{holdPlace}
 			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>	
-			<if test="beginDatetime != null and beginDatetime != '' ">
-				<![CDATA[AND t.begin_datetime >= #{beginDatetime}]]>
+			<if test="startDatetime != null and startDatetime != '' ">
+				<![CDATA[AND t.start_datetime >= #{startDatetime}]]>
 			</if>
 			<if test="endDatetime != null and endDatetime != '' ">
 				<![CDATA[AND t.end_datetime <= #{endDatetime}]]>
@@ -51,37 +52,34 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_activity" parameterType="activity" resultMap="activity_DB_Result">
 		SELECT
 		t.code
 		,t.title
-		,t.pic1
-		,t.fee
-		,t.description
+		,t.pic
+		,t.adv_pic
+		,t.slogan
 		
+		,t.amount
+		,t.description
 		,t.hold_place
 		,t.location
 		,t.order_no
-		,t.begin_datetime
+		
+		,t.start_datetime
 		,t.end_datetime
+		,t.contact
+		,t.total_num
+		,t.remain_num
 		
-		,t.sign_num
-		,t.single_num
-		,t.limit_num
-		,t.scan_num
 		,t.status
-		
 		,t.updater
 		,t.update_datetime
 		,t.remark
-		,t.company_code
 		FROM
-		tr_activity t 
+		tgym_activity t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -91,93 +89,90 @@
 	</select>
 
 	<select id="select_activity_count" parameterType="activity" resultType="java.lang.Long">
-		SELECT count(1) FROM tr_activity t 
+		SELECT count(1) FROM tgym_activity t 
 		<include refid="where_condition" />
 	</select>
 	
 	<insert id="insert_activity" parameterType="activity">
-		INSERT INTO tr_activity(
+		INSERT INTO tgym_activity(
 		code
 		,title
-		,pic1
-		,fee
+		,pic
+		,adv_pic
+		,slogan
+		
+		,amount
 		,description
-		
 		,hold_place
-		,location
-		,order_no
-		,begin_datetime
-		,end_datetime
+		,contact
+		,start_datetime
 		
-		,sign_num
-		,single_num
-		,limit_num
-		,scan_num
+		,end_datetime
+		,total_num
+		,remain_num
 		,status
 		,updater
 		
 		,update_datetime
 		,remark
-		,company_code
 		)
 		VALUES(
 		#{code}
 		,#{title}
-		,#{pic1}
-		,#{fee}
+		,#{pic}
+		,#{advPic}
+		,#{slogan}
+		
+		,#{amount}
 		,#{description}
 		,#{holdPlace}
-		,#{location}
+		,#{contact}
+		,#{startDatetime}
 		
-		,#{orderNo}
-		,#{beginDatetime}
 		,#{endDatetime}
-		,#{signNum}
-		,#{singleNum}
-		,#{limitNum}
-		
-		,#{scanNum}
+		,#{totalNum}
+		,#{remainNum}
 		,#{status}
 		,#{updater}
+		
 		,#{updateDatetime}
 		,#{remark}
-		,#{companyCode}
 		)
 	</insert>
 
 	<delete id="delete_activity" parameterType="activity">
-		DELETE FROM tr_activity
+		DELETE FROM tgym_activity
 		WHERE code = #{code}
 	</delete>
 	
 	<update id="update_activity" parameterType="activity">
-		UPDATE tr_activity SET
-		title=#{title}
-		,pic1=#{pic1}
-		,fee=#{fee}
-		,description=#{description}
+		UPDATE tgym_activity SET
+		title = #{title}
+		,pic = #{pic}
+		,adv_pic = #{advPic}
+		,slogan = #{slogan}
 		
-		,hold_place=#{holdPlace}
-		,location=#{location}
-		,order_no=#{orderNo}
-		,begin_datetime=#{beginDatetime}
-		,end_datetime=#{endDatetime}
+		,amount = #{amount}
+		,description = #{description}
+		,hold_place = #{holdPlace}
+		,contact = #{contact}
+		,start_datetime = #{startDatetime}
 		
-		,sign_num=#{signNum}
-		,single_num=#{singleNum}
-		,limit_num=#{limitNum}
-		,scan_num=#{scanNum}
-		,status=#{status}
+		,end_datetime = #{endDatetime}
+		,total_num = #{totalNum}
+		,remain_num = #{remainNum}
+		,updater = #{updater}
 		
-		,updater=#{updater}
-		,update_datetime=#{updateDatetime}
-		,remark=#{remark}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_shelves" parameterType="activity">
-		UPDATE tr_activity SET
+	<update id="update_putOn" parameterType="activity">
+		UPDATE tgym_activity SET
 		status=#{status}
+		,location =#{location}
+		,order_no=#{orderNo}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
@@ -185,7 +180,7 @@
 	</update>
 	
 	<update id="update_down" parameterType="activity">
-		UPDATE tr_activity SET
+		UPDATE tgym_activity SET
 		status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
@@ -194,19 +189,19 @@
 	</update>
 
 	<update id="update_scan" parameterType="activity">
-		UPDATE tr_activity SET
+		UPDATE tgym_activity SET
 		scan_num=#{scanNum}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_sign" parameterType="activity">
-		UPDATE tr_activity SET
+		UPDATE tgym_activity SET
 		sign_num=#{signNum}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_auto" parameterType="activity">
-		UPDATE tr_activity SET
+		UPDATE tgym_activity SET
 		status=#{status}
 		WHERE code = #{code}
 	</update>

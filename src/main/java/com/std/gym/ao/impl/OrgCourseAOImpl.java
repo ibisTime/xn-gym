@@ -1,5 +1,6 @@
 package com.std.gym.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,53 +8,156 @@ import org.springframework.stereotype.Service;
 
 import com.std.gym.ao.IOrgCourseAO;
 import com.std.gym.bo.IOrgCourseBO;
+import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.DateUtil;
+import com.std.gym.core.OrderNoGenerater;
+import com.std.gym.core.StringValidater;
 import com.std.gym.domain.OrgCourse;
+import com.std.gym.domain.User;
+import com.std.gym.dto.req.XN622050Req;
+import com.std.gym.dto.req.XN622052Req;
+import com.std.gym.enums.EActivityStatus;
+import com.std.gym.enums.EBoolean;
+import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
 
-
-
- 
 @Service
 public class OrgCourseAOImpl implements IOrgCourseAO {
 
-	@Autowired
-	private IOrgCourseBO orgCourseBO;
+    @Autowired
+    private IOrgCourseBO orgCourseBO;
 
-	@Override
-	public String addOrgCourse(OrgCourse data) {
-		return orgCourseBO.saveOrgCourse(data);
-	}
+    @Autowired
+    private IUserBO userBO;
 
-	@Override
-	public int editOrgCourse(OrgCourse data) {
-		if (!orgCourseBO.isOrgCourseExist(data.getCode())) {
-			throw new BizException("xn0000", "记录编号不存在");
-		}
-		return orgCourseBO.refreshOrgCourse(data);
-	}
+    @Override
+    public String addOrgCourse(XN622050Req req) {
+        userBO.getRemoteUser(req.getCoachUser());
+        OrgCourse data = new OrgCourse();
+        String code = OrderNoGenerater
+            .generate(EPrefixCode.ORGCOURSE.getCode());
+        data.setCode(code);
+        data.setCoachUser(req.getCoachUser());
+        data.setName(req.getName());
+        data.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
+            DateUtil.DATA_TIME_PATTERN_1));
+        data.setSkStartDatetime(req.getSkStartDatetime());
+        data.setSkEndDatetime(req.getSkEndDatetime());
+        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
+        data.setRemainNum(StringValidater.toInteger(req.getTotalNum()));
+        data.setAddress(req.getAddress());
+        data.setContact(req.getContact());
+        data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setDescription(req.getDescription());
+        data.setSumCom(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setStatus(EActivityStatus.DRAFT.getCode());
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+        orgCourseBO.saveOrgCourse(data);
+        return code;
+    }
 
-	@Override
-	public int dropOrgCourse(String code) {
-		if (!orgCourseBO.isOrgCourseExist(code)) {
-			throw new BizException("xn0000", "记录编号不存在");
-		}
-		return orgCourseBO.removeOrgCourse(code);
-	}
+    @Override
+    public void editOrgCourse(XN622052Req req) {
+        OrgCourse data = orgCourseBO.getOrgCourse(req.getCode());
+        if (!EActivityStatus.DRAFT.getCode().equals(data.getStatus())) {
+            throw new BizException("xn0000", "该状态下不能修改");
+        }
+        Integer totalNum = StringValidater.toInteger(req.getTotalNum());
+        Integer number = data.getTotalNum() - data.getRemainNum();
+        if (totalNum < number) {
+            throw new BizException("xn0000", "当前报名人数以超过修改总人数");
+        }
+        Integer remainNum = totalNum - number;
+        data.setCoachUser(req.getCoachUser());
+        data.setName(req.getName());
+        data.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
+            DateUtil.DATA_TIME_PATTERN_1));
+        data.setSkStartDatetime(req.getSkStartDatetime());
+        data.setSkEndDatetime(req.getSkEndDatetime());
+        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
+        data.setRemainNum(remainNum);
+        data.setAddress(req.getAddress());
+        data.setContact(req.getContact());
+        data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setDescription(req.getDescription());
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+        orgCourseBO.refreshOrgCourse(data);
+    }
 
-	@Override
-	public Paginable<OrgCourse> queryOrgCoursePage(int start, int limit,
-			OrgCourse condition) {
-		return orgCourseBO.getPaginable(start, limit, condition);
-	}
+    @Override
+    public void dropOrgCourse(String code) {
+        OrgCourse orgCourse = orgCourseBO.getOrgCourse(code);
+        if (!EActivityStatus.DRAFT.getCode().equals(orgCourse.getStatus())) {
+            throw new BizException("xn0000", "该状态下不能删除");
+        }
+        orgCourseBO.removeOrgCourse(code);
+    }
 
-	@Override
-	public List<OrgCourse> queryOrgCourseList(OrgCourse condition) {
-		return orgCourseBO.queryOrgCourseList(condition);
-	}
+    @Override
+    public void putOn(String code, String location, Integer orderNo,
+            String updater, String remark) {
+        OrgCourse orgCourse = orgCourseBO.getOrgCourse(code);
+        if (EActivityStatus.ONLINE.getCode().equals(orgCourse.getStatus())) {
+            throw new BizException("xn0000", "该团课已上架");
+        }
+        orgCourseBO.putOn(orgCourse, location, orderNo, updater, remark);
+    }
 
-	@Override
-	public OrgCourse getOrgCourse(String code) {
-		return orgCourseBO.getOrgCourse(code);
-	}
+    @Override
+    public void putOff(String code, String updater, String remark) {
+        OrgCourse orgCourse = orgCourseBO.getOrgCourse(code);
+        if (!EActivityStatus.ONLINE.getCode().equals(orgCourse.getStatus())) {
+            throw new BizException("xn0000", "该团课没有上架,不能下架");
+        }
+        orgCourseBO.putOff(orgCourse, updater, remark);
+    }
+
+    @Override
+    public void stopSign(String code, String updater, String remark) {
+        OrgCourse orgCourse = orgCourseBO.getOrgCourse(code);
+        if (!EActivityStatus.ONLINE.getCode().equals(orgCourse.getStatus())) {
+            throw new BizException("xn0000", "该团课没有上架,不能截止报名");
+        }
+        orgCourseBO.stopSign(orgCourse, updater, remark);
+    }
+
+    @Override
+    public Paginable<OrgCourse> queryOrgCoursePage(int start, int limit,
+            OrgCourse condition) {
+        Paginable<OrgCourse> page = orgCourseBO.getPaginable(start, limit,
+            condition);
+        List<OrgCourse> list = page.getList();
+        for (OrgCourse orgCourse : list) {
+            User user = userBO.getRemoteUser(orgCourse.getCoachUser());
+            orgCourse.setRealName(user.getRealName());
+        }
+        return page;
+    }
+
+    @Override
+    public List<OrgCourse> queryOrgCourseList(OrgCourse condition) {
+        List<OrgCourse> list = orgCourseBO.queryOrgCourseList(condition);
+        for (OrgCourse orgCourse : list) {
+            User user = userBO.getRemoteUser(orgCourse.getCoachUser());
+            orgCourse.setRealName(user.getRealName());
+        }
+        return list;
+    }
+
+    @Override
+    public OrgCourse getOrgCourse(String code) {
+        OrgCourse orgCourse = orgCourseBO.getOrgCourse(code);
+        User user = userBO.getRemoteUser(orgCourse.getCoachUser());
+        orgCourse.setRealName(user.getRealName());
+        return orgCourse;
+    }
 }

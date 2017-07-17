@@ -56,10 +56,13 @@ public interface IActivityBO extends IPaginableBO<Activity> {
      * @param activity
      * @param updater
      * @param remark 
+     * @param location 
+     * @param orderNo 
      * @create: 2017年4月20日 下午2:46:48 asus
      * @history:
      */
-    public void shelves(Activity activity, String updater, String remark);
+    public void putOn(Activity activity, String location, String orderNo,
+            String updater, String remark);
 
     /**
      * 活动下架
@@ -72,23 +75,24 @@ public interface IActivityBO extends IPaginableBO<Activity> {
     public void downActivity(Activity activity, String updater, String remark);
 
     /**
-     * 活动浏览
+     * 活动截止报名
      * @param activity
-     * @param scanNum 
-     * @create: 2017年4月20日 下午3:16:41 asus
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月17日 上午10:52:17 asus
      * @history:
      */
-    public void scanActivity(Activity activity, Integer scanNum);
+    public void stopActivity(Activity activity, String updater, String remark);
 
     /**
      * 活动报名数
-     * @param code
+     * @param activity
      * @param signNum
      * @return 
      * @create: 2016年12月15日 下午7:59:33 shan
      * @history:
      */
-    public void addSignNum(Activity activity, Integer signNum);
+    public void addSignNum(Activity activity, Integer quantity);
 
     /**
      * 获取活动详情

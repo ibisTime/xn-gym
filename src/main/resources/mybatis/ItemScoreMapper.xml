@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.std.gym.dao.IPraiseItemDAO">
-	<resultMap id="praiseItem_DB_Result" type="praiseItem">
+	<resultMap id="itemScore_DB_Result" type="itemScore">
 		<result column="code" property="code" />
 		<result column="name" property="name" />
 		<result column="score" property="score" />
@@ -15,7 +15,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_praiseItem" parameterType="praiseItem" resultMap="praiseItem_DB_Result">
+	<select id="select_itemScore" parameterType="itemScore" resultMap="itemScore_DB_Result">
 		SELECT
 		t.code
 		,t.name
@@ -31,13 +31,13 @@
 		</trim>
 	</select>
 
-	<select id="select_praiseItem_count" parameterType="praiseItem"
+	<select id="select_itemScore_count" parameterType="itemScore"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tgym_praise_item t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_praiseItem" parameterType="praiseItem">
+	<insert id="insert_itemScore" parameterType="itemScore">
 		INSERT INTO
 		tgym_praise_item(
 		code
@@ -53,7 +53,7 @@
 		)
 	</insert>
 
-	<update id="update_praiseItem" parameterType="praiseItem">
+	<update id="update_itemScore" parameterType="itemScore">
 		UPDATE tgym_praise_item
 		SET
 		name = #{name}

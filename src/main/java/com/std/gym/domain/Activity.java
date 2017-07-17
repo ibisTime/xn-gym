@@ -53,7 +53,7 @@ public class Activity extends ABaseDO {
     private Date endDatetime;
 
     // 联系方式
-    private Date contact;
+    private String contact;
 
     // 总人数
     private Integer totalNum;
@@ -228,11 +228,11 @@ public class Activity extends ABaseDO {
         this.amount = amount;
     }
 
-    public Date getContact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(Date contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 

@@ -7,4 +7,10 @@ public interface IOrgCourseDAO extends IBaseDAO<OrgCourse> {
     String NAMESPACE = IOrgCourseDAO.class.getName().concat(".");
 
     int update(OrgCourse data);
+
+    int putOn(OrgCourse data);
+
+    int putOff(OrgCourse data);
+
+    int stopSign(OrgCourse data);
 }

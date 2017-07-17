@@ -53,10 +53,6 @@ public class ActivityOrderDAOImpl extends AMybatisTemplate implements
             start, count, condition, ActivityOrder.class);
     }
 
-    /**
-     * 
-     * @see com.cdkj.ride.dao.IOrderDAO#update(com.ActivityOrder.ride.domain.Order)
-     */
     @Override
     public int update(ActivityOrder data) {
         return super.update(NAMESPACE.concat("update_activityOrder"), data);
@@ -86,6 +82,11 @@ public class ActivityOrderDAOImpl extends AMybatisTemplate implements
     @Override
     public int cancelOrder(ActivityOrder data) {
         return super.update(NAMESPACE.concat("update_cancel"), data);
+    }
+
+    @Override
+    public int applyRefund(ActivityOrder data) {
+        return super.update(NAMESPACE.concat("update_apply_refund"), data);
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.ActivityOrder;
+import com.std.gym.enums.EActivityOrderStatus;
 
 /**
  * 订单
@@ -30,7 +31,7 @@ public interface IActivityOrderBO extends IPaginableBO<ActivityOrder> {
      * @create: 2016年12月10日 下午2:48:17 shan
      * @history:
      */
-    public ActivityOrder getOrder(String code);
+    public ActivityOrder getActivityOrder(String code);
 
     /**
      * 查询所有订单
@@ -56,8 +57,15 @@ public interface IActivityOrderBO extends IPaginableBO<ActivityOrder> {
 
     public void paySuccess(ActivityOrder order, String payCode, Long amount);
 
-    public void refreshCancelOrder(ActivityOrder order, String updater,
-            String remark);
+    public void userCancel(ActivityOrder order, String updater);
+
+    public void platCancel(ActivityOrder order, String updater, String remark);
+
+    public void applyRefund(ActivityOrder order, String applyUser,
+            String applyNote);
+
+    public void approveRefund(ActivityOrder order, EActivityOrderStatus status,
+            String updater, String remark);
 
     public void auto(ActivityOrder order);
 

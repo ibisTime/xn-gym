@@ -10,8 +10,8 @@ import java.util.Map;
  * @history:
  */
 public enum EActivityStatus {
-    DRAFT("0", "活动草稿"), ONLINE("1", "上架活动"), OFFLINE("2", "下架活动"), END("3",
-            "结束活动");
+    DRAFT("0", "活动草稿"), ONLINE("1", "上架活动"), END("2", "截止"), OFFLINE("3",
+            "下架活动");
 
     public static Map<String, EActivityStatus> getDictTypeMap() {
         Map<String, EActivityStatus> map = new HashMap<String, EActivityStatus>();

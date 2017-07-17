@@ -1,5 +1,7 @@
 package com.std.gym.domain;
 
+import java.util.Date;
+
 import com.std.gym.dao.base.ABaseDO;
 
 /**
@@ -22,7 +24,7 @@ public class OrgCourse extends ABaseDO {
     private String name;
 
     // 上课时间（年月日）
-    private String classDatetime;
+    private Date classDatetime;
 
     // 上课开始时间（起）
     private String skStartDatetime;
@@ -31,10 +33,10 @@ public class OrgCourse extends ABaseDO {
     private String skEndDatetime;
 
     // 总人数
-    private String totalNum;
+    private Integer totalNum;
 
     // 剩余人数
-    private String remainNum;
+    private Integer remainNum;
 
     // 地址
     private String address;
@@ -52,16 +54,16 @@ public class OrgCourse extends ABaseDO {
     private String description;
 
     // 价格
-    private String price;
+    private Long price;
 
     // UI位置
     private String location;
 
     // UI顺序
-    private String orderNo;
+    private Integer orderNo;
 
     // 评论数
-    private String sumCom;
+    private Integer sumCom;
 
     // 状态
     private String status;
@@ -70,10 +72,20 @@ public class OrgCourse extends ABaseDO {
     private String updater;
 
     // 更新时间
-    private String updateDatetime;
+    private Date updateDatetime;
 
     // 备注
     private String remark;
+
+    // ************db**************
+    // 开始上课时间（起）
+    private Date beginClassDatetime;
+
+    // 开始上课时间（止）
+    private Date endClassDatetime;
+
+    // 真实姓名
+    private String realName;
 
     public void setCode(String code) {
         this.code = code;
@@ -99,11 +111,11 @@ public class OrgCourse extends ABaseDO {
         return name;
     }
 
-    public void setClassDatetime(String classDatetime) {
+    public void setClassDatetime(Date classDatetime) {
         this.classDatetime = classDatetime;
     }
 
-    public String getClassDatetime() {
+    public Date getClassDatetime() {
         return classDatetime;
     }
 
@@ -123,19 +135,19 @@ public class OrgCourse extends ABaseDO {
         return skEndDatetime;
     }
 
-    public void setTotalNum(String totalNum) {
+    public void setTotalNum(Integer totalNum) {
         this.totalNum = totalNum;
     }
 
-    public String getTotalNum() {
+    public Integer getTotalNum() {
         return totalNum;
     }
 
-    public void setRemainNum(String remainNum) {
+    public void setRemainNum(Integer remainNum) {
         this.remainNum = remainNum;
     }
 
-    public String getRemainNum() {
+    public Integer getRemainNum() {
         return remainNum;
     }
 
@@ -179,11 +191,11 @@ public class OrgCourse extends ABaseDO {
         return description;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
@@ -195,20 +207,12 @@ public class OrgCourse extends ABaseDO {
         return location;
     }
 
-    public void setOrderNo(String orderNo) {
+    public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
 
-    public String getOrderNo() {
+    public Integer getOrderNo() {
         return orderNo;
-    }
-
-    public void setsumCom(String sumCom) {
-        this.sumCom = sumCom;
-    }
-
-    public String getsumCom() {
-        return sumCom;
     }
 
     public void setStatus(String status) {
@@ -227,11 +231,11 @@ public class OrgCourse extends ABaseDO {
         return updater;
     }
 
-    public void setUpdateDatetime(String updateDatetime) {
+    public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
     }
 
-    public String getUpdateDatetime() {
+    public Date getUpdateDatetime() {
         return updateDatetime;
     }
 
@@ -241,6 +245,38 @@ public class OrgCourse extends ABaseDO {
 
     public String getRemark() {
         return remark;
+    }
+
+    public Date getBeginClassDatetime() {
+        return beginClassDatetime;
+    }
+
+    public void setBeginClassDatetime(Date beginClassDatetime) {
+        this.beginClassDatetime = beginClassDatetime;
+    }
+
+    public Date getEndClassDatetime() {
+        return endClassDatetime;
+    }
+
+    public void setEndClassDatetime(Date endClassDatetime) {
+        this.endClassDatetime = endClassDatetime;
+    }
+
+    public Integer getSumCom() {
+        return sumCom;
+    }
+
+    public void setSumCom(Integer sumCom) {
+        this.sumCom = sumCom;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

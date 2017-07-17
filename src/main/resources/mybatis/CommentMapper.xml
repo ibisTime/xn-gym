@@ -13,6 +13,7 @@
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
 		<result column="product_code" property="productCode" />
+		<result column="coach_code" property="coachCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -33,6 +34,7 @@
 		,t.approve_datetime
 		,t.remark
 		,t.product_code
+		,t.coach_code
 		FROM
 		tgym_comment t
 		<include refid="where_condition" />
@@ -62,6 +64,7 @@
 		,approve_datetime
 		,remark
 		,product_code
+		,coach_code
 		)
 		VALUES(
 		#{code}
@@ -74,6 +77,7 @@
 		,#{approveDatetime}
 		,#{remark}
 		,#{productCode}
+		,#{coachCode}
 		)
 	</insert>
 
@@ -89,7 +93,7 @@
 		,approve_datetime = #{approveDatetime}
 		,remark = #{remark}
 		,product_code = #{productCode}
-		,order_code = #{orderCode}
+		,coach_code = #{coachCode}
 		WHERE code = #{code}
 	</update>
 

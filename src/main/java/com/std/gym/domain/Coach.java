@@ -20,6 +20,9 @@ public class Coach extends ABaseDO {
     // 教练编号
     private String userId;
 
+    // 性别
+    private String gender;
+
     // 年龄
     private String age;
 
@@ -155,6 +158,14 @@ public class Coach extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
 }

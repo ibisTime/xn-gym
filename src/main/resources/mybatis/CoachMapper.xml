@@ -5,6 +5,7 @@
 	<resultMap id="coach_DB_Result" type="coach">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
+		<result column="gender" property="gender" />
 		<result column="age" property="age" />
 		<result column="duration" property="duration" />
 		<result column="strengths" property="strengths" />
@@ -28,6 +29,7 @@
 		SELECT
 		t.code
 		,t.user_id
+		,t.gender
 		,t.age
 		,t.duration
 		,t.strengths
@@ -60,6 +62,7 @@
 		tgym_coach(
 		code
 		,user_id
+		,gender
 		,age
 		,duration
 		,strengths
@@ -75,6 +78,7 @@
 		VALUES(
 		#{code}
 		,#{userId}
+		,#{gender}
 		,#{age}
 		,#{duration}
 		,#{strengths}
@@ -93,6 +97,7 @@
 		UPDATE tgym_coach
 		SET
 		user_id = #{userId}
+		,gender = #{gender}
 		,age = #{age}
 		,duration = #{duration}
 		,strengths = #{strengths}

@@ -1,6 +1,5 @@
 package com.std.gym.ao.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,10 +16,8 @@ import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Activity;
-import com.std.gym.domain.ActivityOrder;
 import com.std.gym.dto.req.XN622010Req;
 import com.std.gym.dto.req.XN622012Req;
-import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EActivityStatus;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
@@ -39,7 +36,7 @@ public class ActivityAOImpl implements IActivityAO {
     IActivityBO activityBO;
 
     @Autowired
-    IActivityOrderBO orderBO;
+    IActivityOrderBO activityOrderBO;
 
     @Override
     public String addNewActivity(XN622010Req req) {
@@ -48,14 +45,18 @@ public class ActivityAOImpl implements IActivityAO {
         data.setCode(code);
         data.setTitle(req.getTitle());
         data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setSlogan(req.getSlogan());
         data.setAmount(StringValidater.toLong(req.getAmount()));
         data.setDescription(req.getDescription());
         data.setHoldPlace(req.getHoldPlace());
-        data.setOrderNo(0);
+        data.setContact(req.getContact());
         data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
         data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
+        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
+        data.setRemainNum(StringValidater.toInteger(req.getTotalNum()));
         data.setStatus(EActivityStatus.DRAFT.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
@@ -65,26 +66,42 @@ public class ActivityAOImpl implements IActivityAO {
     }
 
     @Override
+    public void dropActivity(String code) {
+        Activity activity = activityBO.getActivity(code);
+        if (EActivityStatus.ONLINE.getCode().equals(activity.getStatus())
+                || EActivityStatus.END.getCode().equals(activity.getStatus())) {
+            throw new BizException("xn0000", "该活动已上线/结束,不可删除");
+        }
+        activityBO.deleteActivity(code);
+    }
+
+    @Override
     public void modifyActivity(XN622012Req req) {
-        Activity activity = activityBO.getActivity(req.getCode());
-        if (EActivityStatus.END.getCode().equals(activity.getStatus())
-                || EActivityStatus.ONLINE.getCode()
-                    .equals(activity.getStatus())) {
+        Activity data = activityBO.getActivity(req.getCode());
+        if (EActivityStatus.END.getCode().equals(data.getStatus())
+                || EActivityStatus.ONLINE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该活动已上线/结束,不可编辑");
         }
-
-        Activity data = new Activity();
-        data.setCode(req.getCode());
+        Integer totalNum = StringValidater.toInteger(req.getTotalNum());
+        Integer number = data.getTotalNum() - data.getRemainNum();
+        if (totalNum < number) {
+            throw new BizException("xn0000", "当前报名人数以超过修改总人数");
+        }
+        Integer remainNum = totalNum - number;
         data.setTitle(req.getTitle());
         data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setSlogan(req.getSlogan());
         data.setAmount(StringValidater.toLong(req.getAmount()));
         data.setDescription(req.getDescription());
         data.setHoldPlace(req.getHoldPlace());
+        data.setContact(req.getContact());
         data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
         data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
-        data.setStatus(activity.getStatus());
+        data.setTotalNum(totalNum);
+        data.setRemainNum(remainNum);
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -92,15 +109,16 @@ public class ActivityAOImpl implements IActivityAO {
     }
 
     @Override
-    public void shelves(String code, String updater, String remark) {
+    public void putOn(String code, String location, String orderNo,
+            String updater, String remark) {
         Activity activity = activityBO.getActivity(code);
         if (EActivityStatus.ONLINE.getCode().equals(activity.getStatus())) {
             throw new BizException("xn0000", "该活动已经上线,无需重复上线");
         }
         if (EActivityStatus.END.getCode().equals(activity.getStatus())) {
-            throw new BizException("xn0000", "该活动已经结束,无可上线");
+            throw new BizException("xn0000", "该活动已经结束,不可上线");
         }
-        activityBO.shelves(activity, updater, remark);
+        activityBO.putOn(activity, location, orderNo, updater, remark);
     }
 
     @Override
@@ -116,48 +134,31 @@ public class ActivityAOImpl implements IActivityAO {
     }
 
     @Override
-    public void scanActivity(String code) {
+    public void stopActivity(String code, String updater, String remark) {
         Activity activity = activityBO.getActivity(code);
-        activityBO.scanActivity(activity, null);
+        if (EActivityStatus.DRAFT.getCode().equals(activity.getStatus())
+                || EActivityStatus.OFFLINE.getCode().equals(
+                    activity.getStatus())
+                || EActivityStatus.END.getCode().equals(activity.getStatus())) {
+            throw new BizException("xn0000", "该活动未上架,不可截止。请核对后在操作");
+        }
+        activityBO.stopActivity(activity, updater, remark);
     }
 
     @Override
     public Paginable<Activity> queryActivityPage(int start, int limit,
-            Activity condition, String userId) {
-        Paginable<Activity> page = activityBO.getPaginable(start, limit,
-            condition);
-        List<Activity> activityList = page.getList();
-        for (Activity activity : activityList) {
-
-        }
-        return page;
+            Activity condition) {
+        return activityBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Activity> queryActivityList(Activity condition, String userId) {
-        List<Activity> activityList = activityBO.queryActivityList(condition);
-        for (Activity activity : activityList) {
-            List<String> statusList = new ArrayList<String>();
-            statusList.add(EActivityOrderStatus.PAYSUCCESS.getCode());
-            statusList.add(EActivityOrderStatus.NOTPAY.getCode());
-            List<ActivityOrder> orderList = orderBO.queryOrderList(userId,
-                activity.getCode(), statusList);
-
-        }
-        return activityList;
+    public List<Activity> queryActivityList(Activity condition) {
+        return activityBO.queryActivityList(condition);
     }
 
     @Override
-    public Activity getActivity(String code, String userId) {
-        Activity activity = activityBO.getActivity(code);
-        List<String> statusList = new ArrayList<String>();
-        statusList.add(EActivityOrderStatus.PAYSUCCESS.getCode());
-        statusList.add(EActivityOrderStatus.NOTPAY.getCode());
-        List<ActivityOrder> orderList = orderBO.queryOrderList(userId,
-            activity.getCode(), statusList);
-        if (CollectionUtils.isNotEmpty(orderList)) {
-        }
-        return activity;
+    public Activity getActivity(String code) {
+        return activityBO.getActivity(code);
     }
 
     @Override
@@ -175,4 +176,5 @@ public class ActivityAOImpl implements IActivityAO {
         }
         logger.info("***************开始扫描待活动，过期取消***************");
     }
+
 }

@@ -19,13 +19,13 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
         IItemScoreBO {
 
     @Autowired
-    private IItemScoreDAO praiseItemDAO;
+    private IItemScoreDAO itemScoreDAO;
 
     @Override
     public boolean isPraiseItemExist(String code) {
         ItemScore condition = new ItemScore();
         condition.setCode(code);
-        if (praiseItemDAO.selectTotalCount(condition) > 0) {
+        if (itemScoreDAO.selectTotalCount(condition) > 0) {
             return true;
         }
         return false;
@@ -37,7 +37,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
         if (data != null) {
             code = OrderNoGenerater.generate(EPrefixCode.PRAISEITEM.getCode());
             data.setCode(code);
-            praiseItemDAO.insert(data);
+            itemScoreDAO.insert(data);
         }
         return code;
     }
@@ -48,7 +48,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
         if (StringUtils.isNotBlank(code)) {
             ItemScore data = new ItemScore();
             data.setCode(code);
-            count = praiseItemDAO.delete(data);
+            count = itemScoreDAO.delete(data);
         }
         return count;
     }
@@ -57,14 +57,14 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     public int refreshPraiseItem(ItemScore data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
-            count = praiseItemDAO.update(data);
+            count = itemScoreDAO.update(data);
         }
         return count;
     }
 
     @Override
     public List<ItemScore> queryPraiseItemList(ItemScore condition) {
-        return praiseItemDAO.selectList(condition);
+        return itemScoreDAO.selectList(condition);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
         if (StringUtils.isNotBlank(code)) {
             ItemScore condition = new ItemScore();
             condition.setCode(code);
-            data = praiseItemDAO.select(condition);
+            data = itemScoreDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "编号不存在");
             }

@@ -24,13 +24,13 @@ import com.std.gym.exception.BizException;
 public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
         implements IActivityOrderBO {
     @Autowired
-    IActivityOrderDAO orderDAO;
+    IActivityOrderDAO activityOrderDAO;
 
     @Override
     public boolean isOrderExist(String code) {
         ActivityOrder condition = new ActivityOrder();
         condition.setCode(code);
-        if (orderDAO.selectTotalCount(condition) > 0) {
+        if (activityOrderDAO.selectTotalCount(condition) > 0) {
             return true;
         }
         return false;
@@ -38,16 +38,16 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
 
     @Override
     public void saveOrder(ActivityOrder data) {
-        orderDAO.insert(data);
+        activityOrderDAO.insert(data);
     }
 
     @Override
-    public ActivityOrder getOrder(String code) {
+    public ActivityOrder getActivityOrder(String code) {
         ActivityOrder order = null;
         if (StringUtils.isNotBlank(code)) {
             ActivityOrder data = new ActivityOrder();
             data.setCode(code);
-            order = orderDAO.select(data);
+            order = activityOrderDAO.select(data);
             if (order == null) {
                 throw new BizException("xn0000", "订单不存在");
             }
@@ -57,7 +57,7 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
 
     @Override
     public List<ActivityOrder> queryOrderList(ActivityOrder data) {
-        return orderDAO.selectList(data);
+        return activityOrderDAO.selectList(data);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
         data.setApplyUser(userId);
         data.setActivityCode(productCode);
         data.setStatusList(statusList);
-        return orderDAO.selectList(data);
+        return activityOrderDAO.selectList(data);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
             data.setCode(code);
             data.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
             data.setPayDatetime(new Date());
-            count = orderDAO.updateOrderPay(data);
+            count = activityOrderDAO.updateOrderPay(data);
         }
         return count;
     }
@@ -89,7 +89,7 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
         if (StringUtils.isNotBlank(payGroup)) {
             ActivityOrder data = new ActivityOrder();
             data.setPayGroup(payGroup);
-            order = orderDAO.selectGroup(data);
+            order = activityOrderDAO.selectGroup(data);
             if (order == null) {
                 throw new BizException("xn0000", "订单不存在");
             }
@@ -100,7 +100,7 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     @Override
     public void payGroup(ActivityOrder order, String payGroup) {
         order.setPayGroup(payGroup);
-        orderDAO.payGroup(order);
+        activityOrderDAO.payGroup(order);
     }
 
     @Override
@@ -109,23 +109,50 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
         order.setPayCode(payCode);
         order.setPayAmount(amount);
         order.setPayDatetime(new Date());
-        orderDAO.updateOrderPay(order);
+        activityOrderDAO.updateOrderPay(order);
     }
 
     @Override
-    public void refreshCancelOrder(ActivityOrder order, String updater,
-            String remark) {
-        order.setStatus(EActivityOrderStatus.CANCEL.getCode());
+    public void userCancel(ActivityOrder order, String updater) {
+        order.setStatus(EActivityOrderStatus.USER_CANCEL.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        activityOrderDAO.cancelOrder(order);
+    }
+
+    @Override
+    public void platCancel(ActivityOrder order, String updater, String remark) {
+        order.setStatus(EActivityOrderStatus.PLAT_CANCEL.getCode());
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);
-        orderDAO.cancelOrder(order);
+        activityOrderDAO.cancelOrder(order);
+    }
+
+    @Override
+    public void applyRefund(ActivityOrder order, String applyUser,
+            String applyNote) {
+        order.setStatus(EActivityOrderStatus.APPLY_REFUND.getCode());
+        order.setApplyUser(applyUser);
+        order.setApplyDatetime(new Date());
+        order.setApplyNote(applyNote);
+        activityOrderDAO.applyRefund(order);
+    }
+
+    @Override
+    public void approveRefund(ActivityOrder order, EActivityOrderStatus status,
+            String updater, String remark) {
+        order.setStatus(status.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        activityOrderDAO.cancelOrder(order);
     }
 
     @Override
     public void auto(ActivityOrder order) {
         order.setStatus(EActivityOrderStatus.END.getCode());
-        orderDAO.auto(order);
+        activityOrderDAO.auto(order);
     }
 
 }

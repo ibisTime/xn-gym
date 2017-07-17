@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.IActivityBO;
 import com.std.gym.bo.base.PaginableBOImpl;
+import com.std.gym.core.StringValidater;
 import com.std.gym.dao.IActivityDAO;
 import com.std.gym.domain.Activity;
 import com.std.gym.enums.EActivityStatus;
@@ -87,12 +88,15 @@ public class ActivityBOImpl extends PaginableBOImpl<Activity> implements
     }
 
     @Override
-    public void shelves(Activity activity, String updater, String remark) {
+    public void putOn(Activity activity, String location, String orderNo,
+            String updater, String remark) {
         activity.setStatus(EActivityStatus.ONLINE.getCode());
+        activity.setLocation(location);
+        activity.setOrderNo(StringValidater.toInteger(orderNo));
         activity.setUpdater(updater);
         activity.setUpdateDatetime(new Date());
         activity.setRemark(remark);
-        activityDAO.shelves(activity);
+        activityDAO.putOn(activity);
     }
 
     @Override
@@ -105,12 +109,17 @@ public class ActivityBOImpl extends PaginableBOImpl<Activity> implements
     }
 
     @Override
-    public void scanActivity(Activity activity, Integer scanNum) {
-        activityDAO.scanActivity(activity);
+    public void stopActivity(Activity activity, String updater, String remark) {
+        activity.setStatus(EActivityStatus.END.getCode());
+        activity.setUpdater(updater);
+        activity.setUpdateDatetime(new Date());
+        activity.setRemark(remark);
+        activityDAO.downActivity(activity);
     }
 
     @Override
-    public void addSignNum(Activity activity, Integer signNum) {
+    public void addSignNum(Activity activity, Integer quantity) {
+        activity.setRemainNum(activity.getRemainNum() - quantity);
         activityDAO.addSignNum(activity);
     }
 
@@ -119,4 +128,5 @@ public class ActivityBOImpl extends PaginableBOImpl<Activity> implements
         activity.setStatus(EActivityStatus.END.getCode());
         activityDAO.auto(activity);
     }
+
 }

@@ -107,6 +107,7 @@ CREATE TABLE `tgym_org_course_order` (
 CREATE TABLE `tgym_coach` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '教练编号',
+  `gender` varchar(32) DEFAULT NULL COMMENT '性别(1男，0女)',
   `age` varchar(32) DEFAULT NULL COMMENT '年龄',
   `duration` int(11) DEFAULT NULL COMMENT '工作年限',
   `strengths` varchar(32) DEFAULT NULL COMMENT '特长',
@@ -179,6 +180,7 @@ CREATE TABLE `tgym_comment` (
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `remark` text COMMENT '备注',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `coach_code` varchar(32) DEFAULT NULL COMMENT '私教编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

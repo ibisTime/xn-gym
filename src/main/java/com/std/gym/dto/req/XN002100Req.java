@@ -29,6 +29,9 @@ public class XN002100Req {
     // 去方业务说明
     private String toBizNote;
 
+    // 相关业务编号
+    private String refNo;
+
     public String getFromUserId() {
         return fromUserId;
     }
@@ -83,5 +86,13 @@ public class XN002100Req {
 
     public void setToBizNote(String toBizNote) {
         this.toBizNote = toBizNote;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 }
