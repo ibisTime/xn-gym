@@ -102,4 +102,41 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
         orgCourseOrderDAO.paySuccess(order);
     }
 
+    @Override
+    public void userCancel(OrgCourseOrder order, String applyUser) {
+        order.setStatus(EActivityOrderStatus.USER_CANCEL.getCode());
+        order.setApplyUser(applyUser);
+        order.setApplyDatetime(new Date());
+        orgCourseOrderDAO.userCancel(order);
+    }
+
+    @Override
+    public void platCancel(OrgCourseOrder order, String updater, String remark) {
+        order.setStatus(EActivityOrderStatus.PLAT_CANCEL.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        orgCourseOrderDAO.platCancel(order);
+    }
+
+    @Override
+    public void applyRefund(OrgCourseOrder order, String applyUser,
+            String applyNote) {
+        order.setStatus(EActivityOrderStatus.USER_CANCEL.getCode());
+        order.setApplyUser(applyUser);
+        order.setApplyDatetime(new Date());
+        order.setApplyNote(applyNote);
+        orgCourseOrderDAO.applyRefund(order);
+    }
+
+    @Override
+    public void approveRefund(OrgCourseOrder order,
+            EActivityOrderStatus status, String updater, String remark) {
+        order.setStatus(status.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        orgCourseOrderDAO.approveRefund(order);
+    }
+
 }

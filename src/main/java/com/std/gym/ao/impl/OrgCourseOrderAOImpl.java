@@ -22,6 +22,7 @@ import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EActivityStatus;
 import com.std.gym.enums.EBizType;
+import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
@@ -150,6 +151,61 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
+    }
+
+    @Override
+    public void userCancel(String orderCode, String applyUser) {
+        OrgCourseOrder order = orgCourseOrderBO.getOrgCourseOrder(orderCode);
+        if (!EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
+            throw new BizException("xn0000", "已支付,不可直接取消");
+        }
+        orgCourseOrderBO.userCancel(order, applyUser);
+    }
+
+    @Override
+    public void platCancel(String orderCode, String updater, String remark) {
+        OrgCourseOrder order = orgCourseOrderBO.getOrgCourseOrder(orderCode);
+        if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
+            orgCourseOrderBO.platCancel(order, updater, remark);
+        }
+        if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
+            accountBO.doTransferAmountRemote(
+                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ECurrency.CNY, order.getAmount(), EBizType.AJ_HDGMTK,
+                EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
+                order.getCode());
+            orgCourseOrderBO.platCancel(order, updater, remark);
+        } else {
+            throw new BizException("xn0000", "该状态下不能取消订单");
+        }
+
+    }
+
+    @Override
+    public void applyRefund(String orderCode, String applyUser, String applyNote) {
+        OrgCourseOrder order = orgCourseOrderBO.getOrgCourseOrder(orderCode);
+        if (!EActivityOrderStatus.PAYSUCCESS.getCode()
+            .equals(order.getStatus())) {
+            throw new BizException("xn0000", "该状态下不能申请退款");
+        }
+        orgCourseOrderBO.applyRefund(order, applyUser, applyNote);
+    }
+
+    @Override
+    public void approveRefund(String orderCode, String result, String updater,
+            String remark) {
+        OrgCourseOrder order = orgCourseOrderBO.getOrgCourseOrder(orderCode);
+        if (!EActivityOrderStatus.APPLY_REFUND.getCode().equals(
+            order.getStatus())) {
+            throw new BizException("xn0000", "该状态下不能审批退款申请");
+        }
+        EActivityOrderStatus status = null;
+        if (EBoolean.NO.getCode().equals(result)) {
+            status = EActivityOrderStatus.REFUND_NO;
+        } else if (EBoolean.YES.getCode().equals(result)) {
+            status = EActivityOrderStatus.REFUND_YES;
+        }
+        orgCourseOrderBO.approveRefund(order, status, updater, remark);
     }
 
     @Override

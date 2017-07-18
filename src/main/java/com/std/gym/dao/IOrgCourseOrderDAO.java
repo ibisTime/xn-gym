@@ -10,5 +10,13 @@ public interface IOrgCourseOrderDAO extends IBaseDAO<OrgCourseOrder> {
 
     int payGroup(OrgCourseOrder data);
 
-    int paySuccess(OrgCourseOrder order);
+    int paySuccess(OrgCourseOrder data);
+
+    int userCancel(OrgCourseOrder data);
+
+    int platCancel(OrgCourseOrder data);
+
+    int applyRefund(OrgCourseOrder data);
+
+    int approveRefund(OrgCourseOrder data);
 }

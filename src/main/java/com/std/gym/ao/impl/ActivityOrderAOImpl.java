@@ -251,13 +251,16 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     @Override
     public void platCancel(String orderCode, String updater, String remark) {
         ActivityOrder order = activityOrderBO.getActivityOrder(orderCode);
-        activityOrderBO.platCancel(order, updater, remark);
+        if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
+            activityOrderBO.platCancel(order, updater, remark);
+        }
         if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
             accountBO.doTransferAmountRemote(
                 ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
                 ECurrency.CNY, order.getAmount(), EBizType.AJ_HDGMTK,
                 EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
                 order.getCode());
+            activityOrderBO.platCancel(order, updater, remark);
         } else {
             throw new BizException("xn000000", "该状态下不能取消订单");
         }
@@ -289,7 +292,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         if (EBoolean.NO.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_NO;
         } else if (EBoolean.YES.getCode().equals(result)) {
-            status = EActivityOrderStatus.REFUND_YSE;
+            status = EActivityOrderStatus.REFUND_YES;
         }
         activityOrderBO.approveRefund(order, status, updater, remark);
     }

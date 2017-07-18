@@ -122,48 +122,42 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_addSignNum" parameterType="orgCourseOrder">
+	<update id="update_userCancel" parameterType="orgCourseOrder">
 		UPDATE tgym_org_course_order
 		SET
 		status = #{status}
-		,pay_type = #{payType}
-		,pay_code = #{payCode}
-		,pay_group = #{payGroup}
-		,pay_amount = #{payAmount}
-		,pay_datetime = #{payDatetime}
 		,apply_user = #{applyUser}
-		,mobile = #{mobile}
 		,apply_datetime = #{applyDatetime}
-		,apply_note = #{applyNote}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_orgCourseOrder" parameterType="orgCourseOrder">
+	<update id="update_platCancel" parameterType="orgCourseOrder">
 		UPDATE tgym_org_course_order
 		SET
-		org_course_code = #{orgCourseCode}
-		,org_course_name = #{orgCourseName}
-		,quantity = #{quantity}
-		,price = #{price}
-		,amount = #{amount}
-		,status = #{status}
-		,pay_type = #{payType}
-		,pay_code = #{payCode}
-		,pay_group = #{payGroup}
-		,pay_amount = #{payAmount}
-		,pay_datetime = #{payDatetime}
-		,apply_user = #{applyUser}
-		,mobile = #{mobile}
-		,apply_datetime = #{applyDatetime}
-		,apply_note = #{applyNote}
+		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 
+	<update id="update_applyRefund" parameterType="orgCourseOrder">
+		UPDATE tgym_org_course_order
+		SET
+		status = #{status}
+		,apply_user = #{applyUser}
+		,apply_datetime = #{applyDatetime}
+		,apply_note = #{applyNote}
+		WHERE code = #{code}
+	</update>
+	<update id="update_approveRefund" parameterType="orgCourseOrder">
+		UPDATE tgym_org_course_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 
 </mapper>

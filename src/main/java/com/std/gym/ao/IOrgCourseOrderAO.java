@@ -19,6 +19,15 @@ public interface IOrgCourseOrderAO {
     public void paySuccess(String payGroup, String payCode, Long amount,
             String payType);
 
+    public void userCancel(String orderCode, String applyUser);
+
+    public void platCancel(String orderCode, String updater, String remark);
+
+    public void applyRefund(String orderCode, String applyUser, String applyNote);
+
+    public void approveRefund(String orderCode, String result, String updater,
+            String remark);
+
     public void editOrgCourseOrder(OrgCourseOrder data);
 
     public Paginable<OrgCourseOrder> queryOrgCourseOrderPage(int start,

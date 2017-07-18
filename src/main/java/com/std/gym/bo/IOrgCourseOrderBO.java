@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.OrgCourseOrder;
+import com.std.gym.enums.EActivityOrderStatus;
 
 public interface IOrgCourseOrderBO extends IPaginableBO<OrgCourseOrder> {
 
@@ -25,5 +26,15 @@ public interface IOrgCourseOrderBO extends IPaginableBO<OrgCourseOrder> {
 
     public void paySuccess(OrgCourseOrder order, String payCode, Long amount,
             String payType);
+
+    public void userCancel(OrgCourseOrder order, String applyUser);
+
+    public void platCancel(OrgCourseOrder order, String updater, String remark);
+
+    public void applyRefund(OrgCourseOrder order, String applyUser,
+            String applyNote);
+
+    public void approveRefund(OrgCourseOrder order,
+            EActivityOrderStatus status, String updater, String remark);
 
 }
