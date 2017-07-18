@@ -1,5 +1,6 @@
 package com.std.gym.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,10 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.base.PaginableBOImpl;
-import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.dao.IPerCourseOrderDAO;
 import com.std.gym.domain.PerCourseOrder;
-import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -32,35 +32,15 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     }
 
     @Override
-    public String savePerCourseOrder(PerCourseOrder data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.PERCOURSEORDER
-                .getCode());
-            data.setCode(code);
-            perCourseOrderDAO.insert(data);
-        }
-        return code;
+    public void savePerCourseOrder(PerCourseOrder data) {
+        perCourseOrderDAO.insert(data);
     }
 
     @Override
-    public int removePerCourseOrder(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            PerCourseOrder data = new PerCourseOrder();
-            data.setCode(code);
-            count = perCourseOrderDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshPerCourseOrder(PerCourseOrder data) {
-        int count = 0;
+    public void refreshPerCourseOrder(PerCourseOrder data) {
         if (StringUtils.isNotBlank(data.getCode())) {
-            count = perCourseOrderDAO.update(data);
+            perCourseOrderDAO.update(data);
         }
-        return count;
     }
 
     @Override
@@ -80,5 +60,84 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
             }
         }
         return data;
+    }
+
+    @Override
+    public void payGroup(PerCourseOrder order, String payGroup) {
+        order.setPayGroup(payGroup);
+        perCourseOrderDAO.payGroup(order);
+    }
+
+    @Override
+    public PerCourseOrder getOrderPayGroup(String payGroup) {
+        PerCourseOrder data = null;
+        if (StringUtils.isNotBlank(payGroup)) {
+            PerCourseOrder condition = new PerCourseOrder();
+            condition.setPayGroup(payGroup);
+            data = perCourseOrderDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "支付组号不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public void paySuccess(PerCourseOrder order, String payCode, Long amount,
+            String payType) {
+        order.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
+        order.setPayType(payType);
+        order.setPayAmount(amount);
+        order.setPayCode(payCode);
+        order.setPayDatetime(new Date());
+        perCourseOrderDAO.paySuccess(order);
+    }
+
+    @Override
+    public void receiverOrder(PerCourseOrder order, String updater,
+            String remark) {
+        order.setStatus(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        perCourseOrderDAO.receiverOrder(order);
+    }
+
+    @Override
+    public void classBegin(PerCourseOrder order, String updater, String remark) {
+        order.setStatus(EPerCourseOrderStatus.HAVE_CLASS.getCode());
+        order.setSkStartDatetime(new Date());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        perCourseOrderDAO.classBegin(order);
+    }
+
+    @Override
+    public void classOver(PerCourseOrder order, String updater, String remark) {
+        order.setStatus(EPerCourseOrderStatus.CLASS_OVER.getCode());
+        order.setSkEndDatetime(new Date());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        perCourseOrderDAO.classOver(order);
+    }
+
+    @Override
+    public void userCancel(PerCourseOrder order, String updater, String remark) {
+        order.setStatus(EPerCourseOrderStatus.USER_CANCEL.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        perCourseOrderDAO.receiverOrder(order);
+    }
+
+    @Override
+    public void platCancel(PerCourseOrder order, String updater, String remark) {
+        order.setStatus(EPerCourseOrderStatus.PLAT_CANCEL.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        perCourseOrderDAO.receiverOrder(order);
     }
 }

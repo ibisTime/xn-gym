@@ -14,9 +14,6 @@ public class XN622050Req {
     private String name;
 
     // 上课时间
-    private String classDatetime;
-
-    // 上课时间
     private String skStartDatetime;
 
     // 下课时间
@@ -63,14 +60,6 @@ public class XN622050Req {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getClassDatetime() {
-        return classDatetime;
-    }
-
-    public void setClassDatetime(String classDatetime) {
-        this.classDatetime = classDatetime;
     }
 
     public String getSkStartDatetime() {

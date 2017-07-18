@@ -23,14 +23,14 @@ public class OrgCourse extends ABaseDO {
     // 课程名称
     private String name;
 
-    // 上课时间（年月日）
+    // 上课开始时间
     private Date classDatetime;
 
     // 上课开始时间（起）
-    private String skStartDatetime;
+    private Date skStartDatetime;
 
     // 上课结束时间（止）
-    private String skEndDatetime;
+    private Date skEndDatetime;
 
     // 总人数
     private Integer totalNum;
@@ -111,27 +111,19 @@ public class OrgCourse extends ABaseDO {
         return name;
     }
 
-    public void setClassDatetime(Date classDatetime) {
-        this.classDatetime = classDatetime;
-    }
-
-    public Date getClassDatetime() {
-        return classDatetime;
-    }
-
-    public void setSkStartDatetime(String skStartDatetime) {
+    public void setSkStartDatetime(Date skStartDatetime) {
         this.skStartDatetime = skStartDatetime;
     }
 
-    public String getSkStartDatetime() {
+    public Date getSkStartDatetime() {
         return skStartDatetime;
     }
 
-    public void setSkEndDatetime(String skEndDatetime) {
+    public void setSkEndDatetime(Date skEndDatetime) {
         this.skEndDatetime = skEndDatetime;
     }
 
-    public String getSkEndDatetime() {
+    public Date getSkEndDatetime() {
         return skEndDatetime;
     }
 
@@ -277,6 +269,14 @@ public class OrgCourse extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public Date getClassDatetime() {
+        return classDatetime;
+    }
+
+    public void setClassDatetime(Date classDatetime) {
+        this.classDatetime = classDatetime;
     }
 
 }

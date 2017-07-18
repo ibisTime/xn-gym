@@ -71,6 +71,19 @@ public class OrgCourseOrder extends ABaseDO {
     // 备注
     private String remark;
 
+    // ***********db***********
+    // 开始上课时间（起）
+    private Date applyBeginDatetime;
+
+    // 开始上课时间（止）
+    private Date applyEndDatetime;
+
+    // 用户名称
+    private String realName;
+
+    // 团课
+    private OrgCourse orgCourse;
+
     public String getCode() {
         return code;
     }
@@ -221,6 +234,38 @@ public class OrgCourseOrder extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getApplyBeginDatetime() {
+        return applyBeginDatetime;
+    }
+
+    public void setApplyBeginDatetime(Date applyBeginDatetime) {
+        this.applyBeginDatetime = applyBeginDatetime;
+    }
+
+    public Date getApplyEndDatetime() {
+        return applyEndDatetime;
+    }
+
+    public void setApplyEndDatetime(Date applyEndDatetime) {
+        this.applyEndDatetime = applyEndDatetime;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public OrgCourse getOrgCourse() {
+        return orgCourse;
+    }
+
+    public void setOrgCourse(OrgCourse orgCourse) {
+        this.orgCourse = orgCourse;
     }
 
 }

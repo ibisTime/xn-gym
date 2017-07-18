@@ -5,14 +5,17 @@
 	<resultMap id="coach_DB_Result" type="coach">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
+		<result column="real_name" property="realName" />
+		<result column="pic" property="pic" />
 		<result column="gender" property="gender" />
 		<result column="age" property="age" />
 		<result column="duration" property="duration" />
-		<result column="strengths" property="strengths" />
 		<result column="adv_pic" property="advPic" />
 		<result column="description" property="description" />
 		<result column="star" property="star" />
+		<result column="star_num" property="starNum" />
 		<result column="label" property="label" />
+		<result column="sum_com" property="sumCom" />
 		<result column="status" property="status" />
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
@@ -23,20 +26,38 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="star != null and star != '' ">
+				AND t.star = #{star}
+			</if>
+			<if test="label != null and label != '' ">
+				AND t.label like "%"#{label}#"%"
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="approver != null and approver != '' ">
+				AND t.approver = #{approver}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_coach" parameterType="coach" resultMap="coach_DB_Result">
 		SELECT
 		t.code
 		,t.user_id
+		,t.real_name
+		,t.pic
 		,t.gender
 		,t.age
 		,t.duration
-		,t.strengths
 		,t.adv_pic
 		,t.description
 		,t.star
+		,t.star_num
 		,t.label
+		,t.sum_com
 		,t.status
 		,t.approver
 		,t.approve_datetime
@@ -62,51 +83,58 @@
 		tgym_coach(
 		code
 		,user_id
+		,real_name
+		,pic
 		,gender
 		,age
 		,duration
-		,strengths
 		,adv_pic
 		,description
 		,star
+		,star_num
 		,label
+		,sum_com
 		,status
-		,approver
-		,approve_datetime
-		,remark
 		)
 		VALUES(
 		#{code}
 		,#{userId}
+		,#{realName}
+		,#{pic}
 		,#{gender}
 		,#{age}
 		,#{duration}
-		,#{strengths}
 		,#{advPic}
 		,#{description}
 		,#{star}
+		,#{starNum}
 		,#{label}
+		,#{sumCom}
 		,#{status}
-		,#{approver}
-		,#{approveDatetime}
-		,#{remark}
 		)
 	</insert>
 
 	<update id="update_coach" parameterType="coach">
 		UPDATE tgym_coach
 		SET
-		user_id = #{userId}
+		real_name = #{realName}
+		,pic = #{pic}
 		,gender = #{gender}
 		,age = #{age}
 		,duration = #{duration}
-		,strengths = #{strengths}
 		,adv_pic = #{advPic}
 		,description = #{description}
-		,star = #{star}
 		,label = #{label}
 		WHERE code = #{code}
 	</update>
 
-
+	<update id="update_approveCoach" parameterType="coach">
+		UPDATE tgym_coach
+		SET
+		status=#{status}
+		,approver=#{approver}
+		,approve_datetime=#{approveDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

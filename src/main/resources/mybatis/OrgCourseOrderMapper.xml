@@ -31,6 +31,27 @@
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				AND t.mobile like "%"#{mobile}#"%"
+			</if>
+			<if test="orgCourseCode != null and orgCourseCode != '' ">
+				AND t.org_course_code = #{orgCourseCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
+			<if test="applyBeginDatetime != null and applyBeginDatetime != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyBeginDatetime}]]>
+			</if>	
+			<if test="applyEndDatetime != null and applyEndDatetime != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyEndDatetime}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_orgCourseOrder" parameterType="orgCourseOrder" resultMap="orgCourseOrder_DB_Result">

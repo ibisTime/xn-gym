@@ -11,11 +11,25 @@ import com.std.gym.domain.PerCourseOrder;
 public interface IPerCourseOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addPerCourseOrder(PerCourseOrder data);
+    public String commitOrder(String applyUser, String address, String mobile,
+            String perCourseCode, Integer quantity, String applyNote);
 
-    public int dropPerCourseOrder(String code);
+    public Object toPayOrder(String orderCode, String payType);
 
-    public int editPerCourseOrder(PerCourseOrder data);
+    public void paySuccess(String payGroup, String payCode, Long amount,
+            String payType);
+
+    public void receiverOrder(String orderCode, String updater, String remark);
+
+    public void classBegin(String orderCode, String updater, String remark);
+
+    public void classOver(String orderCode, String updater, String remark);
+
+    public void userCancel(String orderCode, String updater, String remark);
+
+    public void platCancel(String orderCode, String updater, String remark);
+
+    public void editPerCourseOrder(PerCourseOrder data);
 
     public Paginable<PerCourseOrder> queryPerCourseOrderPage(int start,
             int limit, PerCourseOrder condition);

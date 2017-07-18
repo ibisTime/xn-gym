@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.base.PaginableBOImpl;
-import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.dao.IPerCourseDAO;
 import com.std.gym.domain.PerCourse;
-import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -32,34 +30,20 @@ public class PerCourseBOImpl extends PaginableBOImpl<PerCourse> implements
     }
 
     @Override
-    public String savePerCourse(PerCourse data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.PERCOURSE.getCode());
-            data.setCode(code);
-            perCourseDAO.insert(data);
-        }
-        return code;
+    public void savePerCourse(PerCourse data) {
+        perCourseDAO.insert(data);
     }
 
     @Override
-    public int removePerCourse(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            PerCourse data = new PerCourse();
-            data.setCode(code);
-            count = perCourseDAO.delete(data);
-        }
-        return count;
+    public void removePerCourse(PerCourse perCourse) {
+        perCourseDAO.delete(perCourse);
     }
 
     @Override
-    public int refreshPerCourse(PerCourse data) {
-        int count = 0;
+    public void refreshPerCourse(PerCourse data) {
         if (StringUtils.isNotBlank(data.getCode())) {
-            count = perCourseDAO.update(data);
+            perCourseDAO.update(data);
         }
-        return count;
     }
 
     @Override

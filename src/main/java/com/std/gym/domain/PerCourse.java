@@ -1,5 +1,7 @@
 package com.std.gym.domain;
 
+import java.util.Date;
+
 import com.std.gym.dao.base.ABaseDO;
 
 /**
@@ -15,6 +17,9 @@ public class PerCourse extends ABaseDO {
     // 编号
     private String code;
 
+    // 课程名称
+    private String name;
+
     // 上课周期
     private String skCycle;
 
@@ -24,14 +29,33 @@ public class PerCourse extends ABaseDO {
     // 下课时间(止)
     private String skEndDatetime;
 
-    // 价格
-    private String price;
+    // 缩略图
+    private String pic;
 
-    // 私教user_id
-    private String userId;
+    // 广告图
+    private String advPic;
+
+    // 描述
+    private String description;
+
+    // 价格
+    private Long price;
+
+    // UI位置
+    private String location;
+
+    // UI顺序
+    private Integer orderNo;
+
+    // 状态
+    private String status;
 
     // 私教编号
     private String coachCode;
+
+    // ************db***********
+    // 上课时间
+    private Date classDatetime;
 
     public void setCode(String code) {
         this.code = code;
@@ -65,20 +89,12 @@ public class PerCourse extends ABaseDO {
         return skEndDatetime;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public void setCoachCode(String coachCode) {
@@ -87,6 +103,70 @@ public class PerCourse extends ABaseDO {
 
     public String getCoachCode() {
         return coachCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public String getAdvPic() {
+        return advPic;
+    }
+
+    public void setAdvPic(String advPic) {
+        this.advPic = advPic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getClassDatetime() {
+        return classDatetime;
+    }
+
+    public void setClassDatetime(Date classDatetime) {
+        this.classDatetime = classDatetime;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.std.gym.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,10 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.base.PaginableBOImpl;
-import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.dao.ICoachDAO;
 import com.std.gym.domain.Coach;
-import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.ECoachStatus;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -31,34 +31,34 @@ public class CoachBOImpl extends PaginableBOImpl<Coach> implements ICoachBO {
     }
 
     @Override
-    public String saveCoach(Coach data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.COACH.getCode());
-            data.setCode(code);
-            coachDAO.insert(data);
-        }
-        return code;
+    public void saveCoach(Coach data) {
+        coachDAO.insert(data);
     }
 
     @Override
-    public int removeCoach(String code) {
-        int count = 0;
+    public void removeCoach(String code) {
         if (StringUtils.isNotBlank(code)) {
             Coach data = new Coach();
             data.setCode(code);
-            count = coachDAO.delete(data);
+            coachDAO.delete(data);
         }
-        return count;
     }
 
     @Override
-    public int refreshCoach(Coach data) {
-        int count = 0;
+    public void refreshCoach(Coach data) {
         if (StringUtils.isNotBlank(data.getCode())) {
-            count = coachDAO.update(data);
+            coachDAO.update(data);
         }
-        return count;
+    }
+
+    @Override
+    public void approveCoach(Coach data, ECoachStatus status, String approver,
+            String remark) {
+        data.setStatus(status.getCode());
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setRemark(remark);
+        coachDAO.approveCoach(data);
     }
 
     @Override
@@ -74,9 +74,24 @@ public class CoachBOImpl extends PaginableBOImpl<Coach> implements ICoachBO {
             condition.setCode(code);
             data = coachDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "编号不存在");
+                throw new BizException("xn0000", "私教编号不存在");
             }
         }
         return data;
     }
+
+    @Override
+    public Coach getCoachByUserId(String userId) {
+        Coach data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            Coach condition = new Coach();
+            condition.setUserId(userId);
+            data = coachDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "私教编号不存在");
+            }
+        }
+        return data;
+    }
+
 }

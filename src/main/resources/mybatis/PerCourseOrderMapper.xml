@@ -4,9 +4,12 @@
 <mapper namespace="com.std.gym.dao.IPerCourseOrderDAO">
 	<resultMap id="perCourseOrder_DB_Result" type="perCourseOrder">
 		<result column="code" property="code" />
+		<result column="to_user" property="toUser" />
 		<result column="per_course_code" property="perCourseCode" />
 		<result column="course_name" property="courseName" />
 		<result column="appoint_datetime" property="appointDatetime" />
+		<result column="sk_datetime" property="skDatetime" />
+		<result column="xk_datetime" property="xkDatetime" />
 		<result column="address" property="address" />
 		<result column="quantity" property="quantity" />
 		<result column="price" property="price" />
@@ -32,14 +35,47 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="appointDatetime != null and appointDatetime != '' ">
+				AND t.appoint_datetime = #{appointDatetime}
+			</if>
+			<if test="skDatetime != null and skDatetime != '' ">
+				AND t.sk_datetime = #{skDatetime}
+			</if>
+			<if test="xkDatetime != null and xkDatetime != '' ">
+				AND t.xk_datetime = #{xkDatetime}
+			</if>
+			<if test="perCourseCode != null and perCourseCode != '' ">
+				AND t.per_course_code = #{perCourseCode}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				AND t.mobile = #{mobile}
+			</if>
+			<if test="courseName != null and courseName != '' ">
+				AND t.course_name = #{courseName}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_perCourseOrder" parameterType="perCourseOrder" resultMap="perCourseOrder_DB_Result">
 		SELECT
 		t.code
+		,t.to_user
 		,t.per_course_code
 		,t.course_name
 		,t.appoint_datetime
+		,t.sk_datetime
+		,t.xk_datetime
 		,t.address
 		,t.quantity
 		,t.price
@@ -79,55 +115,91 @@
 		INSERT INTO
 		tgym_per_course_order(
 		code
+		,to_user
 		,per_course_code
 		,course_name
 		,appoint_datetime
+		,sk_datetime
+		,xk_datetime
 		,address
 		,quantity
 		,price
 		,amount
 		,status
-		,sk_start_datetime
-		,sk_end_datetime
-		,pay_type
-		,pay_amount
-		,pay_group
-		,pay_code
-		,pay_datetime
 		,apply_user
 		,mobile
 		,apply_datetime
 		,apply_note
-		,updater
-		,update_datetime
-		,remark
 		)
 		VALUES(
 		#{code}
+		,#{toUser}
 		,#{perCourseCode}
 		,#{courseName}
 		,#{appointDatetime}
+		,#{skDatetime}
+		,#{xkDatetime}
 		,#{address}
 		,#{quantity}
 		,#{price}
 		,#{amount}
 		,#{status}
-		,#{skStartDatetime}
-		,#{skEndDatetime}
-		,#{payType}
-		,#{payAmount}
-		,#{payGroup}
-		,#{payCode}
-		,#{payDatetime}
 		,#{applyUser}
 		,#{mobile}
 		,#{applyDatetime}
 		,#{applyNote}
-		,#{updater}
-		,#{updateDatetime}
-		,#{remark}
 		)
 	</insert>
+
+	<update id="update_payGroup" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		pay_group = #{payGroup}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_paySuccess" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		status = #{status}
+		,pay_type = #{payType}
+		,pay_amount = #{payAmount}
+		,pay_code = #{payCode}
+		,pay_datetime = #{payDatetime}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_receiverOrder" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_skClassDatetime" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		status = #{status}
+		,sk_start_datetime = #{skStartDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_xkClassDatetime" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		status = #{status}
+		,sk_end_datetime = #{skEndDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 
 	<update id="update_perCourseOrder" parameterType="perCourseOrder">
 		UPDATE tgym_per_course_order

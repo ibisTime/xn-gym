@@ -20,17 +20,20 @@ public class Coach extends ABaseDO {
     // 教练编号
     private String userId;
 
+    // 真实姓名
+    private String realName;
+
+    // 缩略图
+    private String pic;
+
     // 性别
     private String gender;
 
     // 年龄
-    private String age;
+    private Integer age;
 
     // 健身年限
-    private String duration;
-
-    // 特长
-    private String strengths;
+    private Integer duration;
 
     // 广告图
     private String advPic;
@@ -39,7 +42,10 @@ public class Coach extends ABaseDO {
     private String description;
 
     // 星级
-    private String star;
+    private Integer star;
+
+    // 星数
+    private Integer starNum;
 
     // 标签
     private String label;
@@ -72,28 +78,20 @@ public class Coach extends ABaseDO {
         return userId;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
-    public String getDuration() {
+    public Integer getDuration() {
         return duration;
-    }
-
-    public void setStrengths(String strengths) {
-        this.strengths = strengths;
-    }
-
-    public String getStrengths() {
-        return strengths;
     }
 
     public void setAdvPic(String advPic) {
@@ -112,11 +110,11 @@ public class Coach extends ABaseDO {
         return description;
     }
 
-    public void setStar(String star) {
+    public void setStar(Integer star) {
         this.star = star;
     }
 
-    public String getStar() {
+    public Integer getStar() {
         return star;
     }
 
@@ -166,6 +164,30 @@ public class Coach extends ABaseDO {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public Integer getStarNum() {
+        return starNum;
+    }
+
+    public void setStarNum(Integer starNum) {
+        this.starNum = starNum;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
 }

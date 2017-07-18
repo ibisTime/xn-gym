@@ -4,29 +4,25 @@ import java.util.List;
 
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.Coach;
+import com.std.gym.enums.ECoachStatus;
 
-
-
- 
 public interface ICoachBO extends IPaginableBO<Coach> {
 
+    public boolean isCoachExist(String code);
 
-	public boolean isCoachExist(String code);
+    public void saveCoach(Coach data);
 
+    public void removeCoach(String code);
 
-	public String saveCoach(Coach data);
+    public void refreshCoach(Coach data);
 
+    public void approveCoach(Coach data, ECoachStatus status, String approver,
+            String remark);
 
-	public int removeCoach(String code);
+    public List<Coach> queryCoachList(Coach condition);
 
+    public Coach getCoach(String code);
 
-	public int refreshCoach(Coach data);
-
-
-	public List<Coach> queryCoachList(Coach condition);
-
-
-	public Coach getCoach(String code);
-
+    public Coach getCoachByUserId(String userId);
 
 }

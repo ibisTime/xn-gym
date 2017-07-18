@@ -43,7 +43,7 @@
 		,t.update_datetime
 		,t.remark
 		FROM
-		tforum_keyword t
+		tgym_keyword t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -54,13 +54,13 @@
 
 	<select id="select_keyword_count" parameterType="keyword"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tforum_keyword t
+		SELECT count(1) FROM tgym_keyword t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_keyword" parameterType="keyword">
 		INSERT INTO
-		tforum_keyword(
+		tgym_keyword(
 		code
 		,word
 		,weight
@@ -85,7 +85,7 @@
 	</insert>
 
 	<update id="update_keyword" parameterType="keyword">
-		UPDATE tforum_keyword
+		UPDATE tgym_keyword
 		SET
 		word = #{word}
 		,weight = #{weight}
@@ -99,7 +99,7 @@
 	
 	<delete id="delete_keyword" parameterType="keyword">
 		DELETE FROM
-		tforum_keyword
+		tgym_keyword
 		WHERE
 		code = #{code}
 	</delete>

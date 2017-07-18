@@ -6,16 +6,18 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.PerCourse;
+import com.std.gym.dto.req.XN622100Req;
+import com.std.gym.dto.req.XN622102Req;
 
 @Component
 public interface IPerCourseAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addPerCourse(PerCourse data);
+    public String addPerCourse(XN622100Req req);
 
-    public int dropPerCourse(String code);
+    public void dropPerCourse(String code);
 
-    public int editPerCourse(PerCourse data);
+    public void editPerCourse(XN622102Req req);
 
     public Paginable<PerCourse> queryPerCoursePage(int start, int limit,
             PerCourse condition);

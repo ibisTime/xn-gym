@@ -17,6 +17,9 @@ public class PerCourseOrder extends ABaseDO {
     // 编号
     private String code;
 
+    // 归属私教
+    private String toUser;
+
     // 私课编号
     private String perCourseCode;
 
@@ -26,17 +29,23 @@ public class PerCourseOrder extends ABaseDO {
     // 预约上课时间(年月日)
     private Date appointDatetime;
 
+    // 上课时间
+    private String skDatetime;
+
+    // 下课时间
+    private String xkDatetime;
+
     // 上课地点
     private String address;
 
     // 上课人数
-    private String quantity;
+    private Integer quantity;
 
     // 单价
-    private String price;
+    private Long price;
 
     // 订单金额
-    private String amount;
+    private Long amount;
 
     // 状态
     private String status;
@@ -51,7 +60,7 @@ public class PerCourseOrder extends ABaseDO {
     private String payType;
 
     // 支付金额
-    private String payAmount;
+    private Long payAmount;
 
     // 支付组号
     private String payGroup;
@@ -60,7 +69,7 @@ public class PerCourseOrder extends ABaseDO {
     private String payCode;
 
     // 支付时间
-    private String payDatetime;
+    private Date payDatetime;
 
     // 申请人
     private String applyUser;
@@ -69,7 +78,7 @@ public class PerCourseOrder extends ABaseDO {
     private String mobile;
 
     // 申请时间
-    private String applyDatetime;
+    private Date applyDatetime;
 
     // 申请备注
     private String applyNote;
@@ -78,7 +87,7 @@ public class PerCourseOrder extends ABaseDO {
     private String updater;
 
     // 更新时间
-    private String updateDatetime;
+    private Date updateDatetime;
 
     // 备注
     private String remark;
@@ -99,27 +108,27 @@ public class PerCourseOrder extends ABaseDO {
         return address;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public String getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
-    public String getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
@@ -139,11 +148,11 @@ public class PerCourseOrder extends ABaseDO {
         return payType;
     }
 
-    public void setPayAmount(String payAmount) {
+    public void setPayAmount(Long payAmount) {
         this.payAmount = payAmount;
     }
 
-    public String getPayAmount() {
+    public Long getPayAmount() {
         return payAmount;
     }
 
@@ -163,11 +172,11 @@ public class PerCourseOrder extends ABaseDO {
         return payCode;
     }
 
-    public void setPayDatetime(String payDatetime) {
+    public void setPayDatetime(Date payDatetime) {
         this.payDatetime = payDatetime;
     }
 
-    public String getPayDatetime() {
+    public Date getPayDatetime() {
         return payDatetime;
     }
 
@@ -187,11 +196,11 @@ public class PerCourseOrder extends ABaseDO {
         return mobile;
     }
 
-    public void setApplyDatetime(String applyDatetime) {
+    public void setApplyDatetime(Date applyDatetime) {
         this.applyDatetime = applyDatetime;
     }
 
-    public String getApplyDatetime() {
+    public Date getApplyDatetime() {
         return applyDatetime;
     }
 
@@ -211,11 +220,11 @@ public class PerCourseOrder extends ABaseDO {
         return updater;
     }
 
-    public void setUpdateDatetime(String updateDatetime) {
+    public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
     }
 
-    public String getUpdateDatetime() {
+    public Date getUpdateDatetime() {
         return updateDatetime;
     }
 
@@ -225,14 +234,6 @@ public class PerCourseOrder extends ABaseDO {
 
     public String getRemark() {
         return remark;
-    }
-
-    public Date getAppointDatetime() {
-        return appointDatetime;
-    }
-
-    public void setAppointDatetime(Date appointDatetime) {
-        this.appointDatetime = appointDatetime;
     }
 
     public Date getSkStartDatetime() {
@@ -265,6 +266,38 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public Date getAppointDatetime() {
+        return appointDatetime;
+    }
+
+    public void setAppointDatetime(Date appointDatetime) {
+        this.appointDatetime = appointDatetime;
+    }
+
+    public String getSkDatetime() {
+        return skDatetime;
+    }
+
+    public void setSkDatetime(String skDatetime) {
+        this.skDatetime = skDatetime;
+    }
+
+    public String getXkDatetime() {
+        return xkDatetime;
+    }
+
+    public void setXkDatetime(String xkDatetime) {
+        this.xkDatetime = xkDatetime;
+    }
+
+    public String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 
 }

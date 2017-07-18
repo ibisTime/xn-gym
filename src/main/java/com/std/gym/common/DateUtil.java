@@ -1,5 +1,6 @@
 package com.std.gym.common;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -161,7 +162,7 @@ public class DateUtil {
      * @create: 2015-5-7 上午11:25:23 miyb
      * @history:
      */
-    public static Date getFrontDate(String date, boolean addOneDay) {
+    public static Date getFrontDate(String date, boolean addOneDay, Integer day) {
         Date returnDate = null;
         try {
             returnDate = new SimpleDateFormat(FRONT_DATE_FORMAT_STRING)
@@ -169,7 +170,7 @@ public class DateUtil {
             if (addOneDay) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(returnDate);
-                calendar.add(calendar.DATE, 1);// 把日期往后增加一天.整数往后推,负数往前移动
+                calendar.add(calendar.DATE, day);// 把日期往后增加一天.整数往后推,负数往前移动
                 calendar.add(calendar.SECOND, -1);
                 returnDate = calendar.getTime(); // 这个时间就是日期往后推一天的结果
             }
@@ -232,7 +233,49 @@ public class DateUtil {
         return (Date) currentDate.getTime().clone();
     }
 
+    public static Date getAnyOneStart(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        System.out.println("开始时间：" + calendar.getTime());
+        return calendar.getTime();
+    }
+
+    public static Date getAnyOneEnd(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        System.out.println("结束时间：" + calendar.getTime());
+        return calendar.getTime();
+    }
+
+    public static int getDayofweek(String date) {
+        Calendar cal = Calendar.getInstance();
+        if (date.equals("")) {
+            cal.setTime(new Date(System.currentTimeMillis()));
+        } else {
+            cal.setTime(new Date(getDateByStr2(date).getTime()));
+        }
+        return cal.get(Calendar.DAY_OF_WEEK);
+    }
+
+    public static Date getDateByStr2(String dd) {
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = sd.parse(dd);
+        } catch (ParseException e) {
+            date = null;
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     public static void main(String[] args) {
-        System.out.println(getYesterdayEnd());
+        System.out.println(getDayofweek("2017-7-18"));
     }
 }

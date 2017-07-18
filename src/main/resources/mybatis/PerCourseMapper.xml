@@ -13,15 +13,22 @@
 		<result column="price" property="price" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
-		<result column="sum_com" property="sumCom" />
 		<result column="status" property="status" />
-		<result column="user_id" property="userId" />
 		<result column="coach_code" property="coachCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
+			<if test="skCycle != null and skCycle != '' ">
+				AND t.sk_cycle = #{skCycle}
 			</if>
 		</trim>
 	</sql>
@@ -37,9 +44,7 @@
 		,t.price
 		,t.location
 		,t.order_no
-		,t.sum_com
 		,t.status
-		,t.user_id
 		,t.coach_code
 		FROM
 		tgym_per_course t
@@ -70,9 +75,7 @@
 		,price
 		,location
 		,order_no
-		,sum_com
 		,status
-		,user_id
 		,coach_code
 		)
 		VALUES(
@@ -86,9 +89,7 @@
 		,#{price}
 		,#{location}
 		,#{orderNo}
-		,#{sumCom}
 		,#{status}
-		,#{userId}
 		,#{coachCode}
 		)
 	</insert>
@@ -105,9 +106,7 @@
 		,price = #{price}
 		,location = #{location}
 		,order_no = #{orderNo}
-		,sum_com = #{sumCom}
 		,status = #{status}
-		,user_id = #{userId}
 		,coach_code = #{coachCode}
 		WHERE code = #{code}
 	</update>

@@ -52,4 +52,28 @@ public class PerCourseOrderDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_perCourseOrder"), data);
     }
 
+    @Override
+    public int payGroup(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_payGroup"), data);
+    }
+
+    @Override
+    public int paySuccess(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_paySuccess"), data);
+    }
+
+    @Override
+    public int receiverOrder(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_receiverOrder"), data);
+    }
+
+    @Override
+    public int classBegin(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_skClassDatetime"), data);
+    }
+
+    @Override
+    public int classOver(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_xkClassDatetime"), data);
+    }
 }

@@ -40,10 +40,10 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
         data.setCode(code);
         data.setCoachUser(req.getCoachUser());
         data.setName(req.getName());
-        data.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
+        data.setSkStartDatetime(DateUtil.strToDate(req.getSkStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_1));
-        data.setSkStartDatetime(req.getSkStartDatetime());
-        data.setSkEndDatetime(req.getSkEndDatetime());
+        data.setSkEndDatetime(DateUtil.strToDate(req.getSkEndDatetime(),
+            DateUtil.DATA_TIME_PATTERN_1));
         data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
         data.setRemainNum(StringValidater.toInteger(req.getTotalNum()));
         data.setAddress(req.getAddress());
@@ -75,10 +75,10 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
         Integer remainNum = totalNum - number;
         data.setCoachUser(req.getCoachUser());
         data.setName(req.getName());
-        data.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
+        data.setSkStartDatetime(DateUtil.strToDate(req.getSkStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_1));
-        data.setSkStartDatetime(req.getSkStartDatetime());
-        data.setSkEndDatetime(req.getSkEndDatetime());
+        data.setSkEndDatetime(DateUtil.strToDate(req.getSkEndDatetime(),
+            DateUtil.DATA_TIME_PATTERN_1));
         data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
         data.setRemainNum(remainNum);
         data.setAddress(req.getAddress());
@@ -133,6 +133,12 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
     @Override
     public Paginable<OrgCourse> queryOrgCoursePage(int start, int limit,
             OrgCourse condition) {
+        if (condition.getClassDatetime() != null) {
+            condition.setBeginClassDatetime(DateUtil.getAnyOneStart(condition
+                .getClassDatetime()));
+            condition.setEndClassDatetime(DateUtil.getAnyOneEnd(condition
+                .getClassDatetime()));
+        }
         Paginable<OrgCourse> page = orgCourseBO.getPaginable(start, limit,
             condition);
         List<OrgCourse> list = page.getList();

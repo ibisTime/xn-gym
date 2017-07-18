@@ -171,8 +171,8 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
             accountBO.doTransferAmountRemote(
                 ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, order.getAmount(), EBizType.AJ_HDGMTK,
-                EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
+                ECurrency.CNY, order.getAmount(), EBizType.AJ_TKGMTK,
+                EBizType.AJ_TKGMTK.getValue(), EBizType.AJ_TKGMTK.getValue(),
                 order.getCode());
             orgCourseOrderBO.platCancel(order, updater, remark);
         } else {
@@ -204,6 +204,11 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             status = EActivityOrderStatus.REFUND_NO;
         } else if (EBoolean.YES.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_YES;
+            accountBO.doTransferAmountRemote(
+                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ECurrency.CNY, order.getAmount(), EBizType.AJ_TKGMTK,
+                EBizType.AJ_TKGMTK.getValue(), EBizType.AJ_TKGMTK.getValue(),
+                order.getCode());
         }
         orgCourseOrderBO.approveRefund(order, status, updater, remark);
     }
@@ -219,7 +224,17 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
     @Override
     public Paginable<OrgCourseOrder> queryOrgCourseOrderPage(int start,
             int limit, OrgCourseOrder condition) {
-        return orgCourseOrderBO.getPaginable(start, limit, condition);
+        Paginable<OrgCourseOrder> page = orgCourseOrderBO.getPaginable(start,
+            limit, condition);
+        List<OrgCourseOrder> list = page.getList();
+        for (OrgCourseOrder orgCourseOrder : list) {
+            OrgCourse orgCourse = orgCourseBO.getOrgCourse(orgCourseOrder
+                .getOrgCourseCode());
+            orgCourseOrder.setOrgCourse(orgCourse);
+            User user = userBO.getRemoteUser(orgCourseOrder.getApplyUser());
+            orgCourseOrder.setRealName(user.getRealName());
+        }
+        return page;
     }
 
     @Override
@@ -229,7 +244,14 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
 
     @Override
     public OrgCourseOrder getOrgCourseOrder(String code) {
-        return orgCourseOrderBO.getOrgCourseOrder(code);
+        OrgCourseOrder orgCourseOrder = orgCourseOrderBO
+            .getOrgCourseOrder(code);
+        OrgCourse orgCourse = orgCourseBO.getOrgCourse(orgCourseOrder
+            .getOrgCourseCode());
+        orgCourseOrder.setOrgCourse(orgCourse);
+        User user = userBO.getRemoteUser(orgCourseOrder.getApplyUser());
+        orgCourseOrder.setRealName(user.getRealName());
+        return orgCourseOrder;
     }
 
 }

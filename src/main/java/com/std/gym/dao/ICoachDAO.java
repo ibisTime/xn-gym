@@ -7,4 +7,6 @@ public interface ICoachDAO extends IBaseDAO<Coach> {
     String NAMESPACE = ICoachDAO.class.getName().concat(".");
 
     int update(Coach data);
+
+    int approveCoach(Coach data);
 }

@@ -31,10 +31,6 @@ public class XN622062 extends AProcessor {
         condition.setName(req.getName());
         condition.setAddress(req.getAddress());
         condition.setLocation(req.getLocation());
-        condition.setBeginClassDatetime(DateUtil.strToDate(
-            req.getBeginClassDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
-        condition.setEndClassDatetime(DateUtil.strToDate(
-            req.getEndClassDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setStatus(req.getStatus());

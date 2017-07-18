@@ -6,7 +6,6 @@
 		<result column="code" property="code" />
 		<result column="coach_user" property="coachUser" />
 		<result column="name" property="name" />
-		<result column="class_datetime" property="classDatetime" />
 		<result column="sk_start_datetime" property="skStartDatetime" />
 		<result column="sk_end_datetime" property="skEndDatetime" />
 		<result column="total_num" property="totalNum" />
@@ -55,10 +54,10 @@
 				AND t.class_datetime = #{classDatetime}
 			</if>
 			<if test="beginClassDatetime != null and beginClassDatetime != '' ">
-				<![CDATA[AND t.class_datetime >= #{beginClassDatetime}]]>
+				<![CDATA[AND t.sk_start_datetime >= #{beginClassDatetime}]]>
 			</if>	
 			<if test="endClassDatetime != null and endClassDatetime != '' ">
-				<![CDATA[AND t.class_datetime <= #{endClassDatetime}]]>
+				<![CDATA[AND t.sk_start_datetime <= #{endClassDatetime}]]>
 			</if>	
 		</trim>
 	</sql>
@@ -67,7 +66,6 @@
 		t.code
 		,t.coach_user
 		,t.name
-		,t.class_datetime
 		,t.sk_start_datetime
 		
 		,t.sk_end_datetime
@@ -111,7 +109,6 @@
 		code
 		,coach_user
 		,name
-		,class_datetime
 		,sk_start_datetime
 		
 		,sk_end_datetime
@@ -135,7 +132,6 @@
 		#{code}
 		,#{coachUser}
 		,#{name}
-		,#{classDatetime}
 		,#{skStartDatetime}
 		
 		,#{skEndDatetime}
@@ -162,7 +158,6 @@
 		SET
 		coach_user = #{coachUser}
 		,name = #{name}
-		,class_datetime = #{classDatetime}
 		,sk_start_datetime = #{skStartDatetime}
 		,sk_end_datetime = #{skEndDatetime}
 		
