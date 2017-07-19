@@ -52,13 +52,6 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
     }
 
     @Override
-    public void refreshOrgCourseOrder(OrgCourseOrder data) {
-        if (StringUtils.isNotBlank(data.getCode())) {
-            orgCourseOrderDAO.update(data);
-        }
-    }
-
-    @Override
     public List<OrgCourseOrder> queryOrgCourseOrderList(OrgCourseOrder condition) {
         return orgCourseOrderDAO.selectList(condition);
     }

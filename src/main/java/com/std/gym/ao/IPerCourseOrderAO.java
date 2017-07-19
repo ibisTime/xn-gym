@@ -29,13 +29,13 @@ public interface IPerCourseOrderAO {
 
     public void platCancel(String orderCode, String updater, String remark);
 
-    public void editPerCourseOrder(PerCourseOrder data);
-
     public Paginable<PerCourseOrder> queryPerCourseOrderPage(int start,
             int limit, PerCourseOrder condition);
 
     public List<PerCourseOrder> queryPerCourseOrderList(PerCourseOrder condition);
 
     public PerCourseOrder getPerCourseOrder(String code);
+
+    public void changeOrder();
 
 }

@@ -70,7 +70,7 @@ public class ActivityOrderDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int auto(ActivityOrder data) {
+    public int finishOrder(ActivityOrder data) {
         return super.update(NAMESPACE.concat("update_auto"), data);
     }
 

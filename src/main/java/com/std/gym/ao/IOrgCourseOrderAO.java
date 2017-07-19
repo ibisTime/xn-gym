@@ -28,13 +28,13 @@ public interface IOrgCourseOrderAO {
     public void approveRefund(String orderCode, String result, String updater,
             String remark);
 
-    public void editOrgCourseOrder(OrgCourseOrder data);
-
     public Paginable<OrgCourseOrder> queryOrgCourseOrderPage(int start,
             int limit, OrgCourseOrder condition);
 
     public List<OrgCourseOrder> queryOrgCourseOrderList(OrgCourseOrder condition);
 
     public OrgCourseOrder getOrgCourseOrder(String code);
+
+    public void changeOrder();
 
 }

@@ -18,7 +18,7 @@ public interface IActivityOrderDAO extends IBaseDAO<ActivityOrder> {
 
     public int updateOrderPay(ActivityOrder data);
 
-    public int auto(ActivityOrder data);
+    public int finishOrder(ActivityOrder data);
 
     public ActivityOrder selectGroup(ActivityOrder data);
 

@@ -68,7 +68,7 @@ public interface IActivityOrderBO extends IPaginableBO<ActivityOrder> {
     public void approveRefund(ActivityOrder order, EActivityOrderStatus status,
             String updater, String remark);
 
-    public void auto(ActivityOrder order);
+    public void finishOrder(ActivityOrder order);
 
     public List<ActivityOrder> queryOrderList(String userId,
             String productCode, List<String> statusList);

@@ -37,13 +37,6 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     }
 
     @Override
-    public void refreshPerCourseOrder(PerCourseOrder data) {
-        if (StringUtils.isNotBlank(data.getCode())) {
-            perCourseOrderDAO.update(data);
-        }
-    }
-
-    @Override
     public List<PerCourseOrder> queryPerCourseOrderList(PerCourseOrder condition) {
         return perCourseOrderDAO.selectList(condition);
     }

@@ -18,20 +18,46 @@
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
        <property name="triggers">  
            <list>
-              <!-- <ref bean="postTrigger"/>  -->
+              <ref bean="activityOrderTrigger"/>  
+              <ref bean="orgCourseOrderTrigger"/> 
+              <ref bean="perCourseOrderTrigger"/> 
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
     </bean> 
 	
-	<!-- <bean id="postTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="postJobDetail"/>  
-       <property name="cronExpression" value="0 0/10 * * * ?"/> 0 0 0/1 * * ?每隔1个小时  
-	</bean> -->
+	<bean id="activityOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="changeActivityOrderStatus"/>  
+       <property name="cronExpression" value="59 59 23 * * * ?"/> <!-- 59 59 23 * * * ?每天23:59:59触发 -->  
+	</bean>
 	
-	<!-- <bean id="postJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
-	   <property name="targetObject" ref="postAOImpl"/>  
-	   <property name="targetMethod" value="doChangePostLocation"/>  
-	   <property name="concurrent" value="true"/>  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程  
-	</bean> -->
+	<bean id="changeActivityOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	   <property name="targetObject" ref="activityOrderAOImpl"/>  
+	   <property name="targetMethod" value="changeOrder"/>  
+	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean>
+	
+	<bean id="orgCourseOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="changeActivityOrderStatus"/>  
+       <property name="cronExpression" value="59 59 23 * * * ?"/> <!-- 59 59 23 * * * ?每天23:59:59触发 -->
+	</bean>
+	
+	<bean id="changeOrgCourseOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	   <property name="targetObject" ref="orgCourseOrderAOImpl"/>  
+	   <property name="targetMethod" value="changeOrder"/>  
+	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean>
+	
+	<bean id="perCourseOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="changePerCourseOrderStatus"/>  
+       <property name="cronExpression" value="59 59 23 * * * ?"/> <!-- 59 59 23 * * * ?每天23:59:59触发 -->  
+	</bean>
+	
+	<bean id="changePerCourseOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	   <property name="targetObject" ref="perCourseOrderAOImpl"/>  
+	   <property name="targetMethod" value="changeOrder"/>  
+	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean>
+	
+	
 </beans>

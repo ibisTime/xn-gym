@@ -13,12 +13,16 @@ import com.std.gym.ao.IActivityOrderAO;
 import com.std.gym.bo.IAccountBO;
 import com.std.gym.bo.IActivityBO;
 import com.std.gym.bo.IActivityOrderBO;
+import com.std.gym.bo.ISYSConfigBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.AmountUtil;
+import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.domain.Account;
 import com.std.gym.domain.Activity;
 import com.std.gym.domain.ActivityOrder;
+import com.std.gym.domain.SYSConfig;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.enums.EActivityOrderStatus;
@@ -29,6 +33,7 @@ import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.enums.ESysAccount;
+import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
 
 /**
@@ -52,6 +57,9 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     @Autowired
     IActivityBO activityBO;
+
+    @Autowired
+    ISYSConfigBO sysConfigBO;
 
     /**
      * 新增订单
@@ -200,6 +208,25 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     @Override
     public void changeOrder() {
+        changePaySuccessOrder();
+        changeNoPayOrder();
+    }
+
+    private void changeNoPayOrder() {
+        logger.info("***************开始扫描待订单，未支付的3天后取消***************");
+        ActivityOrder condition = new ActivityOrder();
+        condition.setStatus(EActivityOrderStatus.NOTPAY.getCode());
+        condition.setCreateBeginDatetime(DateUtil.getRelativeDate(new Date(),
+            -(60 * 60 * 24 * 3 + 1)));
+        List<ActivityOrder> activityOrderList = activityOrderBO
+            .queryOrderList(condition);
+        for (ActivityOrder activityOrder : activityOrderList) {
+            activityOrderBO.platCancel(activityOrder, "系统取消", "超时支付,系统自动取消");
+        }
+        logger.info("***************结束扫描待订单，未支付的3天后取消***************");
+    }
+
+    private void changePaySuccessOrder() {
         logger.info("***************开始扫描待支付订单，活动结束制完成状态***************");
         ActivityOrder condition = new ActivityOrder();
         condition.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
@@ -210,11 +237,23 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 Activity activity = activityBO.getActivity(order
                     .getActivityCode());
                 if (activity.getEndDatetime().before(new Date())) {
-                    activityOrderBO.auto(order);
+                    activityOrderBO.finishOrder(order);
+                    // 订单完成送积分
+                    SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                        EBizType.HDGM.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode());
+                    Long amount = AmountUtil.mul(1000L,
+                        Double.valueOf(sysConfig.getCvalue()));
+                    accountBO.doTransferAmountRemote(
+                        ESysAccount.SYS_USER_ZWZJ.getCode(),
+                        order.getApplyUser(), ECurrency.JF, amount,
+                        EBizType.HDGM, EBizType.HDGM.getValue(),
+                        EBizType.HDGM.getValue(), order.getCode());
                 }
             }
         }
-        logger.info("***************开始扫描待支付订单，活动结束制完成状态***************");
+        logger.info("***************结束扫描待支付订单，活动结束制完成状态***************");
     }
 
     @Override
@@ -264,7 +303,6 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         } else {
             throw new BizException("xn000000", "该状态下不能取消订单");
         }
-
     }
 
     @Override

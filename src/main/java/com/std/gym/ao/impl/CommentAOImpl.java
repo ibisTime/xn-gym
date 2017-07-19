@@ -18,6 +18,7 @@ import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.ISYSConfigBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.AmountUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Coach;
@@ -137,13 +138,14 @@ public class CommentAOImpl implements ICommentAO {
                     coachBO.updateStar(coach, star, starNum);
                 }
             }
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                EBizType.SKGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(sysConfig.getCvalue()));
             accountBO.doTransferAmountRemote(
                 ESysAccount.SYS_USER_ZWZJ.getCode(),
-                perCourseOrder.getApplyUser(),
-                ECurrency.JF,
-                StringValidater.toLong(sysConfigBO.getConfigValue(
-                    EBizType.SKGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
-                    ESystemCode.SYSTEM_CODE.getCode()).getCvalue()),
+                perCourseOrder.getApplyUser(), ECurrency.JF, amount,
                 EBizType.SKGM, EBizType.SKGM.getValue(),
                 EBizType.SKGM.getValue(), perCourseOrder.getCode());
         } else if (orderCode.startsWith(EPrefixCode.ORGCOURSEORDER.getCode())) {
@@ -155,13 +157,14 @@ public class CommentAOImpl implements ICommentAO {
             }
             productCode = orgCourseOrder.getOrgCourseCode();
             orgCourseOrderBO.finishOrder(orgCourseOrder);
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                EBizType.KCGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(sysConfig.getCvalue()));
             accountBO.doTransferAmountRemote(
                 ESysAccount.SYS_USER_ZWZJ.getCode(),
-                orgCourseOrder.getApplyUser(),
-                ECurrency.JF,
-                StringValidater.toLong(sysConfigBO.getConfigValue(
-                    EBizType.KCGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
-                    ESystemCode.SYSTEM_CODE.getCode()).getCvalue()),
+                orgCourseOrder.getApplyUser(), ECurrency.JF, amount,
                 EBizType.KCGM, EBizType.KCGM.getValue(),
                 EBizType.KCGM.getValue(), orgCourseOrder.getCode());
         }

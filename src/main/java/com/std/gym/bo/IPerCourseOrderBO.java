@@ -11,8 +11,6 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
 
     public void savePerCourseOrder(PerCourseOrder data);
 
-    public void refreshPerCourseOrder(PerCourseOrder data);
-
     public List<PerCourseOrder> queryPerCourseOrderList(PerCourseOrder condition);
 
     public PerCourseOrder getPerCourseOrder(String code);

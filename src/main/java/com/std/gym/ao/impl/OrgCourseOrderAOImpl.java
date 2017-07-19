@@ -13,6 +13,7 @@ import com.std.gym.bo.IOrgCourseBO;
 import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.domain.Account;
 import com.std.gym.domain.OrgCourse;
@@ -214,14 +215,6 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
     }
 
     @Override
-    public void editOrgCourseOrder(OrgCourseOrder data) {
-        if (!orgCourseOrderBO.isOrgCourseOrderExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        orgCourseOrderBO.refreshOrgCourseOrder(data);
-    }
-
-    @Override
     public Paginable<OrgCourseOrder> queryOrgCourseOrderPage(int start,
             int limit, OrgCourseOrder condition) {
         Paginable<OrgCourseOrder> page = orgCourseOrderBO.getPaginable(start,
@@ -254,4 +247,18 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         return orgCourseOrder;
     }
 
+    @Override
+    public void changeOrder() {
+        logger.info("***************开始扫描待订单，未支付的3天后取消***************");
+        OrgCourseOrder condition = new OrgCourseOrder();
+        condition.setStatus(EActivityOrderStatus.NOTPAY.getCode());
+        condition.setApplyBeginDatetime(DateUtil.getRelativeDate(new Date(),
+            -(60 * 60 * 24 * 3 + 1)));
+        List<OrgCourseOrder> orgCourseOrderList = orgCourseOrderBO
+            .queryOrgCourseOrderList(condition);
+        for (OrgCourseOrder orgCourseOrder : orgCourseOrderList) {
+            orgCourseOrderBO.platCancel(orgCourseOrder, "系统取消", "超时支付,系统自动取消");
+        }
+        logger.info("***************结束扫描待订单，未支付的3天后取消***************");
+    }
 }

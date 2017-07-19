@@ -72,10 +72,10 @@ public class OrgCourseOrder extends ABaseDO {
     private String remark;
 
     // ***********db***********
-    // 开始上课时间（起）
+    // 下单时间（起）
     private Date applyBeginDatetime;
 
-    // 开始上课时间（止）
+    // 下单时间（止）
     private Date applyEndDatetime;
 
     // 用户名称

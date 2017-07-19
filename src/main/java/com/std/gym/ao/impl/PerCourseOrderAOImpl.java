@@ -23,6 +23,7 @@ import com.std.gym.domain.PerCourse;
 import com.std.gym.domain.PerCourseOrder;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
+import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
@@ -255,27 +256,50 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     }
 
     @Override
-    public void editPerCourseOrder(PerCourseOrder data) {
-        if (!perCourseOrderBO.isPerCourseOrderExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        perCourseOrderBO.refreshPerCourseOrder(data);
-    }
-
-    @Override
     public Paginable<PerCourseOrder> queryPerCourseOrderPage(int start,
             int limit, PerCourseOrder condition) {
-        return perCourseOrderBO.getPaginable(start, limit, condition);
+        Paginable<PerCourseOrder> page = perCourseOrderBO.getPaginable(start,
+            limit, condition);
+        List<PerCourseOrder> list = page.getList();
+        for (PerCourseOrder perCourseOrder : list) {
+            User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
+            perCourseOrder.setRealName(user.getRealName());
+        }
+        return page;
     }
 
     @Override
     public List<PerCourseOrder> queryPerCourseOrderList(PerCourseOrder condition) {
-        return perCourseOrderBO.queryPerCourseOrderList(condition);
+        List<PerCourseOrder> list = perCourseOrderBO
+            .queryPerCourseOrderList(condition);
+        for (PerCourseOrder perCourseOrder : list) {
+            User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
+            perCourseOrder.setRealName(user.getRealName());
+        }
+        return list;
     }
 
     @Override
     public PerCourseOrder getPerCourseOrder(String code) {
-        return perCourseOrderBO.getPerCourseOrder(code);
+        PerCourseOrder perCourseOrder = perCourseOrderBO
+            .getPerCourseOrder(code);
+        User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
+        perCourseOrder.setRealName(user.getRealName());
+        return perCourseOrder;
     }
 
+    @Override
+    public void changeOrder() {
+        logger.info("***************开始扫描待订单，未支付的3天后取消***************");
+        PerCourseOrder condition = new PerCourseOrder();
+        condition.setStatus(EActivityOrderStatus.NOTPAY.getCode());
+        condition.setApplyBeginDatetime(DateUtil.getRelativeDate(new Date(),
+            -(60 * 60 * 24 * 3 + 1)));
+        List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
+            .queryPerCourseOrderList(condition);
+        for (PerCourseOrder perCourseOrder : perCourseOrderList) {
+            perCourseOrderBO.platCancel(perCourseOrder, "系统取消", "超时支付,系统自动取消");
+        }
+        logger.info("***************结束扫描待订单，未支付的3天后取消***************");
+    }
 }

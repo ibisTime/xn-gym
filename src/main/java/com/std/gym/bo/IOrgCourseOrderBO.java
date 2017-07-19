@@ -16,8 +16,6 @@ public interface IOrgCourseOrderBO extends IPaginableBO<OrgCourseOrder> {
 
     public void removeOrgCourseOrder(String code);
 
-    public void refreshOrgCourseOrder(OrgCourseOrder data);
-
     public List<OrgCourseOrder> queryOrgCourseOrderList(OrgCourseOrder condition);
 
     public OrgCourseOrder getOrgCourseOrder(String code);

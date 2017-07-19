@@ -92,6 +92,16 @@ public class PerCourseOrder extends ABaseDO {
     // 备注
     private String remark;
 
+    // ***********db***********
+    // 下单时间（起）
+    private Date applyBeginDatetime;
+
+    // 下单时间（止）
+    private Date applyEndDatetime;
+
+    // 用户名称
+    private String realName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -298,6 +308,30 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setToUser(String toUser) {
         this.toUser = toUser;
+    }
+
+    public Date getApplyBeginDatetime() {
+        return applyBeginDatetime;
+    }
+
+    public void setApplyBeginDatetime(Date applyBeginDatetime) {
+        this.applyBeginDatetime = applyBeginDatetime;
+    }
+
+    public Date getApplyEndDatetime() {
+        return applyEndDatetime;
+    }
+
+    public void setApplyEndDatetime(Date applyEndDatetime) {
+        this.applyEndDatetime = applyEndDatetime;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

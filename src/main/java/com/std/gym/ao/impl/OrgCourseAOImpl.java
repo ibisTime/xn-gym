@@ -138,6 +138,7 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
                 .getClassDatetime()));
             condition.setEndClassDatetime(DateUtil.getAnyOneEnd(condition
                 .getClassDatetime()));
+            condition.setClassDatetime(null);
         }
         Paginable<OrgCourse> page = orgCourseBO.getPaginable(start, limit,
             condition);

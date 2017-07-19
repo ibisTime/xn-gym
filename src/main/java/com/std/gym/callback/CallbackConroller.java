@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.std.gym.ao.IActivityOrderAO;
 import com.std.gym.ao.IOrgCourseOrderAO;
+import com.std.gym.ao.IPerCourseOrderAO;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.EPayType;
 
@@ -30,6 +31,9 @@ public class CallbackConroller {
 
     @Autowired
     IOrgCourseOrderAO orgCourseOrderAO;
+
+    @Autowired
+    IPerCourseOrderAO perCourseOrderAO;
 
     @RequestMapping("/thirdPay/callback")
     public synchronized void doCallbackZhpay(HttpServletRequest request,
@@ -58,6 +62,13 @@ public class CallbackConroller {
                     orgCourseOrderAO.paySuccess(payGroup, payCode, amount,
                         EPayType.WEIXIN.getCode());
                     logger.info("**** 自玩自健团课购买支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
+                } else if (EBizType.AJ_SKGM.getCode().equals(bizType)) {
+                    logger.info("**** 自玩自健私课购买支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    perCourseOrderAO.paySuccess(payGroup, payCode, amount,
+                        EPayType.WEIXIN.getCode());
+                    logger.info("**** 自玩自健私课购买支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {

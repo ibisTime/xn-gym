@@ -71,17 +71,23 @@ public class CoachAOImpl implements ICoachAO {
     @Override
     public void editCoach(XN622091Req req) {
         Coach data = coachBO.getCoach(req.getCode());
-        if (ECoachStatus.APPROVE_YES.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "审批已通过，不可随意修改");
+        if (!ECoachStatus.APPROVE_YES.getCode().equals(data.getStatus())) {
+            data.setStatus(ECoachStatus.TO_APPROVE.getCode());
+            data.setRealName(req.getRealName());
+            data.setGender(req.getGender());
         }
-        data.setRealName(req.getRealName());
+        if (!data.getRealName().equals(req.getRealName())) {
+            throw new BizException("xn0000", "姓名不可修改");
+        }
+        if (!data.getGender().equals(req.getGender())) {
+            throw new BizException("xn0000", "性别不可修改");
+        }
         data.setPic(req.getPic());
-        data.setGender(req.getGender());
         data.setAge(StringValidater.toInteger(req.getAge()));
         data.setDuration(StringValidater.toInteger(req.getDuration()));
-        data.setStatus(ECoachStatus.TO_APPROVE.getCode());
         data.setLabel(req.getLabel());
         data.setDescription(req.getDescription());
+
         coachBO.refreshCoach(data);
     }
 

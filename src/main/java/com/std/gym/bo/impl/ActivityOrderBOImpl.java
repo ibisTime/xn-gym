@@ -49,7 +49,7 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
             data.setCode(code);
             order = activityOrderDAO.select(data);
             if (order == null) {
-                throw new BizException("xn0000", "订单不存在");
+                throw new BizException("xn0000", "活动订单不存在");
             }
         }
         return order;
@@ -152,9 +152,9 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     }
 
     @Override
-    public void auto(ActivityOrder order) {
+    public void finishOrder(ActivityOrder order) {
         order.setStatus(EActivityOrderStatus.END.getCode());
-        activityOrderDAO.auto(order);
+        activityOrderDAO.finishOrder(order);
     }
 
 }

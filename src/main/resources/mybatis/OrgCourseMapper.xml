@@ -50,9 +50,6 @@
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
-			<if test="classDatetime != null and classDatetime != '' ">
-				AND t.class_datetime = #{classDatetime}
-			</if>
 			<if test="beginClassDatetime != null and beginClassDatetime != '' ">
 				<![CDATA[AND t.sk_start_datetime >= #{beginClassDatetime}]]>
 			</if>	
