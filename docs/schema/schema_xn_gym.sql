@@ -126,7 +126,6 @@ CREATE TABLE `tgym_coach` (
 
 CREATE TABLE `tgym_per_course` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `name` varchar(64) NOT NULL COMMENT '课程名称',
   `sk_cycle` varchar(32) DEFAULT NULL COMMENT '上课周期',
   `sk_start_datetime` varchar(32) DEFAULT NULL COMMENT '上课开始时间',
   `sk_end_datetime` varchar(32) DEFAULT NULL COMMENT '上课结束时间',

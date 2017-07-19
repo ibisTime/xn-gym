@@ -14,6 +14,7 @@ import com.std.gym.bo.IOrgCourseBO;
 import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.AmountUtil;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.domain.Account;
@@ -210,9 +211,11 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             status = EActivityOrderStatus.REFUND_NO;
         } else if (EBoolean.YES.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_YES;
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(order.getAmount() * 0.8));
             accountBO.doTransferAmountRemote(
                 ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, order.getAmount(), EBizType.AJ_TKGMTK,
+                ECurrency.CNY, amount, EBizType.AJ_TKGMTK,
                 EBizType.AJ_TKGMTK.getValue(), EBizType.AJ_TKGMTK.getValue(),
                 order.getCode());
         }

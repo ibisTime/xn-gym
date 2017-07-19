@@ -36,3 +36,18 @@
   ../bin/startup.sh
   
 http://121.43.101.148:3602/xn-gym/api
+
+
+cd /home/wwwroot/gym/tomcat_std_account/webapps
+  cp ./std-account/WEB-INF/classes/application.properties .
+  cp ./std-account/WEB-INF/classes/config.properties .
+  
+  rm -rf std-account.war
+  rm -rf std-account
+  mv /home/std-account.war .
+  
+  mv -f application.properties ./std-account/WEB-INF/classes/
+  mv -f config.properties ./std-account/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh

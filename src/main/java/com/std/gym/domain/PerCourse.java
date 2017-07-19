@@ -17,9 +17,6 @@ public class PerCourse extends ABaseDO {
     // 编号
     private String code;
 
-    // 课程名称
-    private String name;
-
     // 上课周期
     private String skCycle;
 
@@ -103,14 +100,6 @@ public class PerCourse extends ABaseDO {
 
     public String getCoachCode() {
         return coachCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPic() {

@@ -33,7 +33,6 @@ public class PerCourseAOImpl implements IPerCourseAO {
         String code = OrderNoGenerater
             .generate(EPrefixCode.PERCOURSE.getCode());
         data.setCode(code);
-        data.setName(req.getName());
         data.setSkCycle(req.getSkCycle());
         data.setSkStartDatetime(req.getSkStartDatetime());
         data.setSkEndDatetime(req.getSkEndDatetime());
@@ -49,7 +48,6 @@ public class PerCourseAOImpl implements IPerCourseAO {
     @Override
     public void editPerCourse(XN622102Req req) {
         PerCourse data = perCourseBO.getPerCourse(req.getCode());
-        data.setName(req.getName());
         data.setSkCycle(req.getSkCycle());
         data.setSkStartDatetime(req.getSkStartDatetime());
         data.setSkEndDatetime(req.getSkEndDatetime());

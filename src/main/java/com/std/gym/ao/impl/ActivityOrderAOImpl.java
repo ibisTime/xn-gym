@@ -331,6 +331,13 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             status = EActivityOrderStatus.REFUND_NO;
         } else if (EBoolean.YES.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_YES;
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(order.getAmount() * 0.8));
+            accountBO.doTransferAmountRemote(
+                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ECurrency.CNY, amount, EBizType.AJ_HDGMTK,
+                EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
+                order.getCode());
         }
         activityOrderBO.approveRefund(order, status, updater, remark);
     }

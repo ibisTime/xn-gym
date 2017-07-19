@@ -95,9 +95,9 @@ public class CommentAOImpl implements ICommentAO {
         String productCode = null;
         if (orderCode.startsWith(EPrefixCode.PERCOURSEORDER.getCode())) {
             PerCourseOrder perCourseOrder = perCourseOrderBO
-                .getPerCourseOrder(productCode);
+                .getPerCourseOrder(orderCode);
             productCode = perCourseOrder.getPerCourseCode();
-            if (EPerCourseOrderStatus.CLASS_OVER.getCode().equals(
+            if (!EPerCourseOrderStatus.CLASS_OVER.getCode().equals(
                 perCourseOrder.getStatus())) {
                 throw new BizException("xn0000", "该私课订单还不能评论");
             }
@@ -150,8 +150,8 @@ public class CommentAOImpl implements ICommentAO {
                 EBizType.SKGM.getValue(), perCourseOrder.getCode());
         } else if (orderCode.startsWith(EPrefixCode.ORGCOURSEORDER.getCode())) {
             OrgCourseOrder orgCourseOrder = orgCourseOrderBO
-                .getOrgCourseOrder(productCode);
-            if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(
+                .getOrgCourseOrder(orderCode);
+            if (!EActivityOrderStatus.PAYSUCCESS.getCode().equals(
                 orgCourseOrder.getStatus())) {
                 throw new BizException("xn0000", "该团课订单还不能评论");
             }

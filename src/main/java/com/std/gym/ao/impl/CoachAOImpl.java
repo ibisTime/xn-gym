@@ -64,6 +64,7 @@ public class CoachAOImpl implements ICoachAO {
         data.setStatus(ECoachStatus.TO_APPROVE.getCode());
         data.setLabel(req.getLabel());
         data.setDescription(req.getDescription());
+        data.setSumCom(StringValidater.toInteger(EBoolean.NO.getCode()));
         coachBO.saveCoach(data);
         return code;
     }
