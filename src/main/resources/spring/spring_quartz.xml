@@ -28,7 +28,7 @@
 	
 	<bean id="activityOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="changeActivityOrderStatus"/>  
-       <property name="cronExpression" value="59 59 23 * * * ?"/> <!-- 59 59 23 * * * ?每天23:59:59触发 -->  
+       <property name="cronExpression" value="59 59 23 * * ?"/> <!-- 每天23:59:59触发 -->  
 	</bean>
 	
 	<bean id="changeActivityOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
@@ -38,8 +38,8 @@
 	</bean>
 	
 	<bean id="orgCourseOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="changeActivityOrderStatus"/>  
-       <property name="cronExpression" value="59 59 23 * * * ?"/> <!-- 59 59 23 * * * ?每天23:59:59触发 -->
+       <property name="jobDetail" ref="changeOrgCourseOrderStatus"/>  
+       <property name="cronExpression" value="59 59 23 * * ?"/> <!-- 每天23:59:59触发 -->
 	</bean>
 	
 	<bean id="changeOrgCourseOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
@@ -50,7 +50,7 @@
 	
 	<bean id="perCourseOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="changePerCourseOrderStatus"/>  
-       <property name="cronExpression" value="59 59 23 * * * ?"/> <!-- 59 59 23 * * * ?每天23:59:59触发 -->  
+       <property name="cronExpression" value="59 59 23 * *  ?"/> <!-- 每天23:59:59触发 -->  
 	</bean>
 	
 	<bean id="changePerCourseOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
