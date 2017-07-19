@@ -19,9 +19,9 @@ import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.dao.ISYSDictDAO;
 import com.std.gym.domain.SYSDict;
 
-/** 
- * @author: haiqingzheng 
- * @since: 2016年4月17日 下午2:50:06 
+/**
+ * @author: xieyj 
+ * @since: 2016年10月21日 上午9:58:54 
  * @history:
  */
 @Component

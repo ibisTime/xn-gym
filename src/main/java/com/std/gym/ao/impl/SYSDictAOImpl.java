@@ -36,7 +36,7 @@ public class SYSDictAOImpl implements ISYSDictAO {
      */
     @Override
     public Long addSYSDict(String type, String parentKey, String key,
-            String value, String updater, String remark) {
+            String value, String updater, String remark, String systemCode) {
         if (EDictType.SECOND.getCode().equals(type)) {
             if (StringUtils.isBlank(parentKey)) {
                 throw new BizException("xn000000", "第二层字典数据，parentKey不能为空");
@@ -68,7 +68,6 @@ public class SYSDictAOImpl implements ISYSDictAO {
             throw new BizException("xn000000", "type类型不在枚举类中 0-第一层 1-第二层");
         }
         SYSDict sysDict = new SYSDict();
-        sysDict.setToSystem("8");
         sysDict.setType(type);
         if (EDictType.SECOND.getCode().equals(type)) {
             sysDict.setParentKey(parentKey);
@@ -77,6 +76,7 @@ public class SYSDictAOImpl implements ISYSDictAO {
         sysDict.setDvalue(value);
         sysDict.setUpdater(updater);
         sysDict.setRemark(remark);
+        sysDict.setSystemCode(systemCode);
         return sysDictBO.saveSYSDict(sysDict);
     }
 

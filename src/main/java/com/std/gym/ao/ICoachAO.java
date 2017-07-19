@@ -8,6 +8,7 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.Coach;
 import com.std.gym.dto.req.XN622090Req;
 import com.std.gym.dto.req.XN622091Req;
+import com.std.gym.dto.res.XN622094Res;
 
 @Component
 public interface ICoachAO {
@@ -29,5 +30,10 @@ public interface ICoachAO {
     public Coach getCoach(String code);
 
     public Coach getCoachByUserId(String userId);
+
+    public Paginable<Coach> queryFrontCoachPage(int start, int limit,
+            Coach condition);
+
+    public XN622094Res getFrontCoach(String code);
 
 }

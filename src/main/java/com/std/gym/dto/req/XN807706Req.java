@@ -2,14 +2,14 @@ package com.std.gym.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2016年9月17日 下午4:09:09 
+ * @since: 2016年9月17日 下午4:09:17 
  * @history:
  */
-public class XN809005Req extends APageReq {
+public class XN807706Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
-    private static final long serialVersionUID = 5780013307270124748L;
+    private static final long serialVersionUID = 2796572107342038372L;
 
     // 类型（第一层/第二层）（选填）
     private String type;
@@ -19,6 +19,17 @@ public class XN809005Req extends APageReq {
 
     // key（选填）
     private String dkey;
+
+    // 系统编号（必填）
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getType() {
         return type;

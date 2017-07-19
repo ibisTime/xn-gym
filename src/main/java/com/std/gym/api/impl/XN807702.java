@@ -4,32 +4,32 @@ import com.std.gym.ao.ISYSDictAO;
 import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
-import com.std.gym.dto.req.XN809000Req;
-import com.std.gym.dto.res.PKIdRes;
+import com.std.gym.dto.req.XN807702Req;
+import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
 
 /**
- * 新增数据字典
+ * 修改数据字典
  * @author: xieyj 
- * @since: 2016年9月17日 下午1:45:23 
+ * @since: 2016年9月17日 下午1:48:11 
  * @history:
  */
-public class XN809000 extends AProcessor {
+public class XN807702 extends AProcessor {
     private ISYSDictAO sysDictAO = SpringContextHolder
         .getBean(ISYSDictAO.class);
 
-    private XN809000Req req = null;
+    private XN807702Req req = null;
 
     /** 
      * @see com.xnjr.base.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return new PKIdRes(sysDictAO.addSYSDict(req.getType(),
-            req.getParentKey(), req.getDkey(), req.getDvalue(),
-            req.getUpdater(), req.getRemark()));
+        sysDictAO.editSYSDict(StringValidater.toLong(req.getId()),
+            req.getDvalue(), req.getUpdater(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     /** 
@@ -37,8 +37,7 @@ public class XN809000 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN809000Req.class);
-        StringValidater.validateBlank(req.getType(), req.getDkey(),
-            req.getDvalue(), req.getUpdater());
+        req = JsonUtil.json2Bean(inputparams, XN807702Req.class);
+        StringValidater.validateBlank(req.getId(), req.getDvalue());
     }
 }

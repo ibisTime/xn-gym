@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.ICommentBO;
 import com.std.gym.bo.base.PaginableBOImpl;
-import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.dao.ICommentDAO;
 import com.std.gym.domain.Comment;
-import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -32,34 +30,24 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     }
 
     @Override
-    public String saveComment(Comment data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.COMMENT.getCode());
-            data.setCode(code);
-            commentDAO.insert(data);
-        }
-        return code;
+    public void saveComment(Comment data) {
+        commentDAO.insert(data);
     }
 
     @Override
-    public int removeComment(String code) {
-        int count = 0;
+    public void removeComment(String code) {
         if (StringUtils.isNotBlank(code)) {
             Comment data = new Comment();
             data.setCode(code);
-            count = commentDAO.delete(data);
+            commentDAO.delete(data);
         }
-        return count;
     }
 
     @Override
-    public int refreshComment(Comment data) {
-        int count = 0;
+    public void refreshComment(Comment data) {
         if (StringUtils.isNotBlank(data.getCode())) {
-            count = commentDAO.update(data);
+            commentDAO.update(data);
         }
-        return count;
     }
 
     @Override
@@ -79,5 +67,12 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
             }
         }
         return data;
+    }
+
+    @Override
+    public List<Comment> queryCommentList(String coachCode) {
+        Comment condition = new Comment();
+        condition.setCoachCode(coachCode);
+        return commentDAO.selectList(condition);
     }
 }

@@ -5,8 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.std.gym.ao.ISYSDictAO;
 import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
+import com.std.gym.core.StringValidater;
 import com.std.gym.domain.SYSDict;
-import com.std.gym.dto.req.XN809006Req;
+import com.std.gym.dto.req.XN807706Req;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
@@ -17,11 +18,11 @@ import com.std.gym.spring.SpringContextHolder;
  * @since: 2016年9月17日 下午1:50:02 
  * @history:
  */
-public class XN809006 extends AProcessor {
+public class XN807706 extends AProcessor {
     private ISYSDictAO sysDictAO = SpringContextHolder
         .getBean(ISYSDictAO.class);
 
-    private XN809006Req req = null;
+    private XN807706Req req = null;
 
     /** 
      * @see com.xnjr.base.api.IProcessor#doBusiness()
@@ -32,6 +33,7 @@ public class XN809006 extends AProcessor {
         condition.setType(req.getType());
         condition.setParentKey(req.getParentKey());
         condition.setDkey(req.getDkey());
+        condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISYSDictAO.DEFAULT_ORDER_COLUMN;
@@ -45,7 +47,7 @@ public class XN809006 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN809006Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN807706Req.class);
+        StringValidater.validateBlank(req.getSystemCode());
     }
-
 }

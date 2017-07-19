@@ -25,4 +25,11 @@ public interface ICoachBO extends IPaginableBO<Coach> {
 
     public Coach getCoachByUserId(String userId);
 
+    public List<Coach> queryFrontCoachList(Coach condition);
+
+    public List<Coach> queryFrontCoachList(Coach condition, int start,
+            int pageSize);
+
+    public void updateStar(Coach coach, Integer star, Integer starNum);
+
 }

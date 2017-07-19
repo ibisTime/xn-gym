@@ -94,4 +94,21 @@ public class CoachBOImpl extends PaginableBOImpl<Coach> implements ICoachBO {
         return data;
     }
 
+    @Override
+    public List<Coach> queryFrontCoachList(Coach condition) {
+        return coachDAO.queryFrontCoachList(condition);
+    }
+
+    @Override
+    public List<Coach> queryFrontCoachList(Coach condition, int start, int limit) {
+        return coachDAO.queryFrontCoachList(condition, start, limit);
+    }
+
+    @Override
+    public void updateStar(Coach coach, Integer star, Integer starNum) {
+        coach.setStar(star);
+        coach.setStarNum(starNum);
+        coach.setSumCom(coach.getSumCom() + 1);
+        coachDAO.updateStar(coach);
+    }
 }

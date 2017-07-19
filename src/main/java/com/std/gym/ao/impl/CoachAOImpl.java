@@ -7,13 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.std.gym.ao.ICoachAO;
 import com.std.gym.bo.ICoachBO;
+import com.std.gym.bo.ICommentBO;
+import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IUserBO;
+import com.std.gym.bo.base.Page;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Coach;
+import com.std.gym.domain.Comment;
+import com.std.gym.domain.PerCourse;
 import com.std.gym.dto.req.XN622090Req;
 import com.std.gym.dto.req.XN622091Req;
+import com.std.gym.dto.res.XN622094Res;
 import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECoachStatus;
 import com.std.gym.enums.EPrefixCode;
@@ -27,6 +33,12 @@ public class CoachAOImpl implements ICoachAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private IPerCourseBO perCourseBO;
+
+    @Autowired
+    private ICommentBO commentBO;
 
     @Override
     public String addCoach(XN622090Req req) {
@@ -102,6 +114,18 @@ public class CoachAOImpl implements ICoachAO {
     }
 
     @Override
+    public Paginable<Coach> queryFrontCoachPage(int start, int limit,
+            Coach condition) {
+        Paginable<Coach> page = null;
+        List<Coach> list = coachBO.queryFrontCoachList(condition);
+        page = new Page<Coach>(start, limit, list.size());
+        List<Coach> dataList = coachBO.queryFrontCoachList(condition,
+            page.getStart(), page.getPageSize());
+        page.setList(dataList);
+        return page;
+    }
+
+    @Override
     public List<Coach> queryCoachList(Coach condition) {
         return coachBO.queryCoachList(condition);
     }
@@ -116,4 +140,15 @@ public class CoachAOImpl implements ICoachAO {
         return coachBO.getCoachByUserId(userId);
     }
 
+    @Override
+    public XN622094Res getFrontCoach(String code) {
+        XN622094Res res = new XN622094Res();
+        Coach coach = coachBO.getCoach(code);
+        List<PerCourse> perCourseList = perCourseBO.queryPerCourseList(code);
+        List<Comment> commentList = commentBO.queryCommentList(code);
+        res.setCoach(coach);
+        res.setPerCourseList(perCourseList);
+        res.setCommentList(commentList);
+        return res;
+    }
 }

@@ -53,6 +53,9 @@ public class Coach extends ABaseDO {
     // 状态
     private String status;
 
+    // 评论数
+    private Integer sumCom;
+
     // 审核人
     private String approver;
 
@@ -61,6 +64,10 @@ public class Coach extends ABaseDO {
 
     // 备注
     private String remark;
+
+    // *************db**********
+    // 上课周期
+    private String skCycle;
 
     public void setCode(String code) {
         this.code = code;
@@ -188,6 +195,22 @@ public class Coach extends ABaseDO {
 
     public void setPic(String pic) {
         this.pic = pic;
+    }
+
+    public String getSkCycle() {
+        return skCycle;
+    }
+
+    public void setSkCycle(String skCycle) {
+        this.skCycle = skCycle;
+    }
+
+    public Integer getSumCom() {
+        return sumCom;
+    }
+
+    public void setSumCom(Integer sumCom) {
+        this.sumCom = sumCom;
     }
 
 }

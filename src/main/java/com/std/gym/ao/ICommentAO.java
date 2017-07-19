@@ -6,16 +6,18 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.Comment;
+import com.std.gym.dto.req.XN622200Req;
 
 @Component
 public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addComment(Comment data);
+    public String addComment(String content, List<XN622200Req> itemScoreList,
+            String commer, String productCode);
 
-    public int dropComment(String code);
+    public void dropComment(String code);
 
-    public int editComment(Comment data);
+    public void editComment(Comment data);
 
     public Paginable<Comment> queryCommentPage(int start, int limit,
             Comment condition);

@@ -41,6 +41,9 @@
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
+			<if test="skCycle != null and skCycle != '' ">
+				AND tpc.sk_cycle = #{skCycle}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_coach" parameterType="coach" resultMap="coach_DB_Result">
@@ -75,6 +78,45 @@
 	<select id="select_coach_count" parameterType="coach"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tgym_coach t
+		<include refid="where_condition" />
+	</select>
+
+	<select id="select_coach_sx" parameterType="coach" resultMap="coach_DB_Result">
+		SELECT 
+		t.code
+		,t.user_id
+		,t.real_name
+		,t.pic
+		,t.gender
+		,t.age
+		,t.duration
+		,t.adv_pic
+		,t.description
+		,t.star
+		,t.star_num
+		,t.label
+		,t.sum_com
+		,t.status
+		,t.approver
+		,t.approve_datetime
+		,t.remark
+		FROM
+		tgym_coach t RIGHT JOIN (SELECT * FROM tgym_coach tc ,(SELECT DISTINCT(tpc.user_id) AS ocode
+		FROM tgym_per_course tpc <include refid="where_condition" />)  tp
+		WHERE tc.code=tp.ocode) tt ON t.code=tt.code
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_coach_sx_count" parameterType="coach"
+		resultType="java.lang.Long">
+		SELECT COUNT(1) FROM  tgym_coach t RIGHT JOIN (SELECT * FROM tgym_coach tc
+		,(SELECT DISTINCT(tpc.user_id) AS ocode FROM tgym_per_course tpc <include refid="where_condition" />)  tp
+		WHERE tc.code=tp.ocode) tt ON t.code=tt.code
 		<include refid="where_condition" />
 	</select>
 
@@ -135,6 +177,15 @@
 		,approver=#{approver}
 		,approve_datetime=#{approveDatetime}
 		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_star" parameterType="coach">
+		UPDATE tgym_coach
+		SET
+		star=#{star}
+		,star_num=#{starNum}
+		,sum_com=#{sumCom}
 		WHERE code = #{code}
 	</update>
 </mapper>

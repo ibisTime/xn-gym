@@ -2,13 +2,12 @@ package com.std.gym.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2016年9月17日 下午4:09:29 
+ * @since: 2016年9月17日 下午4:09:34 
  * @history:
  */
-public class XN809010Req {
-
-    // key值（必填）
-    private String ckey;
+public class XN807711Req {
+    // 编号
+    private Long id;
 
     // 值（必填）
     private String cvalue;
@@ -22,12 +21,12 @@ public class XN809010Req {
     // 备注（选填）
     private String remark;
 
-    public String getCkey() {
-        return ckey;
+    public Long getId() {
+        return id;
     }
 
-    public void setCkey(String ckey) {
-        this.ckey = ckey;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCvalue() {

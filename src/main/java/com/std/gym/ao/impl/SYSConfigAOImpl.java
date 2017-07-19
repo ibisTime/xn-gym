@@ -1,6 +1,5 @@
 package com.std.gym.ao.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,26 +22,9 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     ISYSConfigBO sysConfigBO;
 
     @Override
-    public Long addSYSConfig(SYSConfig data) {
-        Long id = null;
-        if (data != null) {
-            if (StringUtils.isNotBlank(data.getCkey())) {
-                SYSConfig condition = new SYSConfig();
-                condition.setCkey(data.getCkey());
-                if (sysConfigBO.getTotalCount(condition) > 0) {
-                    throw new BizException("lh5030", "ckey不能重复");
-                }
-                sysConfigBO.saveSYSConfig(data);
-                id = data.getId();
-            }
-        }
-        return id;
-    }
-
-    @Override
     public int editSYSConfig(SYSConfig data) {
         int count = 0;
-        if (data != null && sysConfigBO.isSYSConfigExist(data.getId())) {
+        if (data != null) {
             count = sysConfigBO.refreshSYSConfig(data);
         } else {
             throw new BizException("lh5031", "系统参数ID不存在！");
@@ -62,8 +44,8 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     }
 
     @Override
-    public SYSConfig getConfigValue(String ckey) {
-        return sysConfigBO.getConfigValue(ckey);
+    public SYSConfig getSYSConfig(String key, String companyCode,
+            String systemCode) {
+        return sysConfigBO.getConfigValue(key, companyCode, systemCode);
     }
-
 }

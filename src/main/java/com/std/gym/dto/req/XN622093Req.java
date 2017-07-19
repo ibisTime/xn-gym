@@ -6,7 +6,12 @@ package com.std.gym.dto.req;
  * @since: 2017年7月18日 下午2:15:00 
  * @history:
  */
-public class XN622093Req {
+public class XN622093Req extends APageReq {
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = -3807779672274861782L;
+
     // 私教用户
     private String userId;
 
@@ -21,6 +26,9 @@ public class XN622093Req {
 
     // 审核人
     private String approver;
+
+    // 上课周期
+    private String skCycle;
 
     public String getUserId() {
         return userId;
@@ -60,5 +68,13 @@ public class XN622093Req {
 
     public void setApprover(String approver) {
         this.approver = approver;
+    }
+
+    public String getSkCycle() {
+        return skCycle;
+    }
+
+    public void setSkCycle(String skCycle) {
+        this.skCycle = skCycle;
     }
 }

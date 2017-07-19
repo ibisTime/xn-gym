@@ -8,6 +8,8 @@
  */
 package com.std.gym.bo;
 
+import java.util.List;
+
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.SYSConfig;
 
@@ -17,31 +19,21 @@ import com.std.gym.domain.SYSConfig;
  * @history:
  */
 public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
-
-    public int saveSYSConfig(SYSConfig data);
-
-    /**
-     * 更新系统参数值
-     * @param value 参数值
-     * @param note 参数说明
-     * @param updater 更新人
-     * @param remark 备注
-     * @return 
-     * @create: 2016年4月17日 下午2:43:11 haiqingzheng
-     * @history:
-     */
     public int refreshSYSConfig(SYSConfig data);
 
     public SYSConfig getConfig(Long id);
 
-    boolean isSYSConfigExist(Long Id);
-
     /**
      * 根据key获取value
      * @param ckey
+     * @param companyCode
+     * @param systemCode
      * @return 
-     * @create: 2016年4月20日 下午3:04:47 xieyj
+     * @create: 2017年4月23日 下午8:08:12 xieyj
      * @history:
      */
-    public SYSConfig getConfigValue(String ckey);
+    public SYSConfig getConfigValue(String ckey, String companyCode,
+            String systemCode);
+
+    public List<SYSConfig> querySYSConfigList(String type);
 }

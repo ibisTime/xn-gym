@@ -26,14 +26,17 @@ public class SYSConfig extends ABaseDO {
     // 编号（自增长）
     private Long id;
 
-    // 针对系统
-    private String toSystem;
+    // 类型
+    private String type;
 
     // key值
     private String ckey;
 
     // value值
     private String cvalue;
+
+    // 参数说明(预留字段)
+    private String note;
 
     // 最近更新人
     private String updater;
@@ -44,10 +47,24 @@ public class SYSConfig extends ABaseDO {
     // 备注
     private String remark;
 
+    // 所属公司编号
+    private String companyCode;
+
+    // 系统编号（必填）
+    private String systemCode;
+
+    // *************db properties*************
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     // ************* 模糊查询 *****************
     private String ckeyForQuery;
-
-    private String dhhlFlag;
 
     public Long getId() {
         return id;
@@ -57,12 +74,12 @@ public class SYSConfig extends ABaseDO {
         this.id = id;
     }
 
-    public String getToSystem() {
-        return toSystem;
+    public String getType() {
+        return type;
     }
 
-    public void setToSystem(String toSystem) {
-        this.toSystem = toSystem;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getCkey() {
@@ -79,6 +96,14 @@ public class SYSConfig extends ABaseDO {
 
     public void setCvalue(String cvalue) {
         this.cvalue = cvalue;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getUpdater() {
@@ -105,19 +130,19 @@ public class SYSConfig extends ABaseDO {
         this.remark = remark;
     }
 
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getCkeyForQuery() {
         return ckeyForQuery;
     }
 
     public void setCkeyForQuery(String ckeyForQuery) {
         this.ckeyForQuery = ckeyForQuery;
-    }
-
-    public String getDhhlFlag() {
-        return dhhlFlag;
-    }
-
-    public void setDhhlFlag(String dhhlFlag) {
-        this.dhhlFlag = dhhlFlag;
     }
 }

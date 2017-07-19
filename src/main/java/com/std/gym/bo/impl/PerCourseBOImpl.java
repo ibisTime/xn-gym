@@ -64,4 +64,11 @@ public class PerCourseBOImpl extends PaginableBOImpl<PerCourse> implements
         }
         return data;
     }
+
+    @Override
+    public List<PerCourse> queryPerCourseList(String coachCode) {
+        PerCourse condition = new PerCourse();
+        condition.setCoachCode(coachCode);
+        return perCourseDAO.selectList(condition);
+    }
 }

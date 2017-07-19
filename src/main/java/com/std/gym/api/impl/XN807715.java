@@ -7,7 +7,7 @@ import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.SYSConfig;
-import com.std.gym.dto.req.XN615915Req;
+import com.std.gym.dto.req.XN807715Req;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
@@ -18,30 +18,33 @@ import com.std.gym.spring.SpringContextHolder;
  * @since: 2016年9月17日 下午1:55:07 
  * @history:
  */
-public class XN610915 extends AProcessor {
+public class XN807715 extends AProcessor {
     private ISYSConfigAO sysConfigAO = SpringContextHolder
         .getBean(ISYSConfigAO.class);
 
-    private XN615915Req req = null;
+    private XN807715Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        SYSConfig data = new SYSConfig();
-        data.setCkeyForQuery(req.getCkey());
+        SYSConfig condition = new SYSConfig();
+        condition.setType(req.getType());
+        condition.setCkeyForQuery(req.getCkey());
+        condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISYSConfigAO.DEFAULT_ORDER_COLUMN;
         }
-        data.setOrder(orderColumn, req.getOrderDir());
+        condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return sysConfigAO.querySYSConfigPage(start, limit, data);
+        return sysConfigAO.querySYSConfigPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN615915Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN807715Req.class);
         StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 
 }

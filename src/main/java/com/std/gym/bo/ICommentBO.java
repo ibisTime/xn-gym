@@ -5,28 +5,20 @@ import java.util.List;
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.Comment;
 
-
-
- 
 public interface ICommentBO extends IPaginableBO<Comment> {
 
+    public boolean isCommentExist(String code);
 
-	public boolean isCommentExist(String code);
+    public void saveComment(Comment data);
 
+    public void removeComment(String code);
 
-	public String saveComment(Comment data);
+    public void refreshComment(Comment data);
 
+    public List<Comment> queryCommentList(Comment condition);
 
-	public int removeComment(String code);
+    public Comment getComment(String code);
 
-
-	public int refreshComment(Comment data);
-
-
-	public List<Comment> queryCommentList(Comment condition);
-
-
-	public Comment getComment(String code);
-
+    public List<Comment> queryCommentList(String coachCode);
 
 }

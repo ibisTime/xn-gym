@@ -1,32 +1,32 @@
 package com.std.gym.api.impl;
 
-import com.std.gym.ao.ISYSConfigAO;
+import com.std.gym.ao.ISYSDictAO;
 import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
-import com.std.gym.dto.req.XN610916Req;
+import com.std.gym.dto.req.XN807707Req;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
 
 /**
- * 详情查询系统参数
+ * 详情查询数据字典
  * @author: xieyj 
- * @since: 2016年9月17日 下午1:55:26 
+ * @since: 2016年9月17日 下午1:50:23 
  * @history:
  */
-public class XN610916 extends AProcessor {
-    private ISYSConfigAO sysConfigAO = SpringContextHolder
-        .getBean(ISYSConfigAO.class);
+public class XN807707 extends AProcessor {
+    private ISYSDictAO sysDictAO = SpringContextHolder
+        .getBean(ISYSDictAO.class);
 
-    private XN610916Req req = null;
+    private XN807707Req req = null;
 
     /** 
      * @see com.xnjr.base.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return sysConfigAO.getSYSConfig(StringValidater.toLong(req.getId()));
+        return sysDictAO.getSYSDict(StringValidater.toLong(req.getId()));
     }
 
     /** 
@@ -34,8 +34,7 @@ public class XN610916 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN610916Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN807707Req.class);
         StringValidater.validateBlank(req.getId());
     }
-
 }

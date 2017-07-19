@@ -55,4 +55,26 @@ public class CoachDAOImpl extends AMybatisTemplate implements ICoachDAO {
         return super.update(NAMESPACE.concat("update_approveCoach"), data);
     }
 
+    @Override
+    public Long selectFrontTotalCount(Coach condition) {
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_coach_sx_count"), condition);
+    }
+
+    @Override
+    public List<Coach> queryFrontCoachList(Coach condition) {
+        return super.selectList(NAMESPACE.concat("select_coach_sx"), condition,
+            Coach.class);
+    }
+
+    @Override
+    public List<Coach> queryFrontCoachList(Coach condition, int start, int count) {
+        return super.selectList(NAMESPACE.concat("select_coach_sx"), start,
+            count, condition, Coach.class);
+    }
+
+    @Override
+    public int updateStar(Coach data) {
+        return super.update(NAMESPACE.concat("update_star"), data);
+    }
 }

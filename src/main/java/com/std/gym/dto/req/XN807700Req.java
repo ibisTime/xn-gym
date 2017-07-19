@@ -5,7 +5,7 @@ package com.std.gym.dto.req;
  * @since: 2016年9月17日 下午1:39:41 
  * @history:
  */
-public class XN809000Req {
+public class XN807700Req {
 
     // 类型（第一层/第二层）（必填）
     private String type;
@@ -24,6 +24,17 @@ public class XN809000Req {
 
     // 备注（选填）
     private String remark;
+
+    // 系统编号（必填）
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getType() {
         return type;
