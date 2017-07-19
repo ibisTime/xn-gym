@@ -40,6 +40,9 @@ public class XN002501Req {
     // 支付组号(必填)
     private String payGroup;
 
+    // 关联单号(必填)
+    private String refNo;
+
     // 回调地址(必填)
     private String backUrl;
 
@@ -113,6 +116,14 @@ public class XN002501Req {
 
     public void setPayGroup(String payGroup) {
         this.payGroup = payGroup;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
 }

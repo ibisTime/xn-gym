@@ -11,11 +11,14 @@ public class XN002100Req {
     // 来方用户编号(必填)
     private String fromUserId;
 
+    // 来方币种(必填)
+    private String fromCurrency;
+
     // 接收方用户编号(必填)
     private String toUserId;
 
-    // 币种
-    private String currency;
+    // 去方币种(必填)
+    private String toCurrency;
 
     // 划转资金(必填)
     private String transAmount;
@@ -46,14 +49,6 @@ public class XN002100Req {
 
     public void setToUserId(String toUserId) {
         this.toUserId = toUserId;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public String getTransAmount() {
@@ -94,5 +89,21 @@ public class XN002100Req {
 
     public void setRefNo(String refNo) {
         this.refNo = refNo;
+    }
+
+    public String getFromCurrency() {
+        return fromCurrency;
+    }
+
+    public void setFromCurrency(String fromCurrency) {
+        this.fromCurrency = fromCurrency;
+    }
+
+    public String getToCurrency() {
+        return toCurrency;
+    }
+
+    public void setToCurrency(String toCurrency) {
+        this.toCurrency = toCurrency;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.std.gym.ao.IOrgCourseOrderAO;
 import com.std.gym.bo.IAccountBO;
+import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.IOrgCourseBO;
 import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IUserBO;
@@ -16,6 +17,7 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.domain.Account;
+import com.std.gym.domain.Coach;
 import com.std.gym.domain.OrgCourse;
 import com.std.gym.domain.OrgCourseOrder;
 import com.std.gym.domain.User;
@@ -42,6 +44,9 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
 
     @Autowired
     private IOrgCourseBO orgCourseBO;
+
+    @Autowired
+    private ICoachBO coachBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -223,9 +228,11 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         for (OrgCourseOrder orgCourseOrder : list) {
             OrgCourse orgCourse = orgCourseBO.getOrgCourse(orgCourseOrder
                 .getOrgCourseCode());
+            Coach coach = coachBO.getCoachByUserId(orgCourse.getCoachUser());
             orgCourseOrder.setOrgCourse(orgCourse);
             User user = userBO.getRemoteUser(orgCourseOrder.getApplyUser());
-            orgCourseOrder.setRealName(user.getRealName());
+            orgCourseOrder.setApplyRealName(user.getRealName());
+            orgCourseOrder.setCoachRealName(coach.getRealName());
         }
         return page;
     }
@@ -241,9 +248,11 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             .getOrgCourseOrder(code);
         OrgCourse orgCourse = orgCourseBO.getOrgCourse(orgCourseOrder
             .getOrgCourseCode());
+        Coach coach = coachBO.getCoachByUserId(orgCourse.getCoachUser());
         orgCourseOrder.setOrgCourse(orgCourse);
         User user = userBO.getRemoteUser(orgCourseOrder.getApplyUser());
-        orgCourseOrder.setRealName(user.getRealName());
+        orgCourseOrder.setApplyRealName(user.getRealName());
+        orgCourseOrder.setCoachRealName(coach.getRealName());
         return orgCourseOrder;
     }
 

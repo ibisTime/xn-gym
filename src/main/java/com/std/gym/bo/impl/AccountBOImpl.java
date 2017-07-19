@@ -43,7 +43,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             XN002100Req req = new XN002100Req();
             req.setFromUserId(fromUserId);
             req.setToUserId(toUserId);
-            req.setCurrency(currency.getCode());
+            req.setFromCurrency(currency.getCode());
+            req.setToCurrency(currency.getCode());
             req.setTransAmount(String.valueOf(amount));
             req.setBizType(bizType.getCode());
             req.setFromBizNote(fromBizNote);
@@ -83,11 +84,12 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         req.setFromUserId(fromUserId);
         req.setFromOpenId(fromOpenId);
         req.setToUserId(toUserId);
-        req.setTransAmount(String.valueOf(amount));
+        req.setPayGroup(payGroup);
+        req.setRefNo(refNo);
         req.setBizType(bizType.getCode());
         req.setFromBizNote(fromBizNote);
+        req.setTransAmount(String.valueOf(amount));
         req.setToBizNote(toBizNote);
-        req.setPayGroup(payGroup);
         req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         System.out.println(fromUserId + "" + fromOpenId + "" + toUserId + ""
                 + amount + "" + bizType + "" + fromBizNote + "" + toBizNote

@@ -79,7 +79,10 @@ public class OrgCourseOrder extends ABaseDO {
     private Date applyEndDatetime;
 
     // 用户名称
-    private String realName;
+    private String applyRealName;
+
+    // 用户名称
+    private String coachRealName;
 
     // 团课
     private OrgCourse orgCourse;
@@ -252,20 +255,28 @@ public class OrgCourseOrder extends ABaseDO {
         this.applyEndDatetime = applyEndDatetime;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
     public OrgCourse getOrgCourse() {
         return orgCourse;
     }
 
     public void setOrgCourse(OrgCourse orgCourse) {
         this.orgCourse = orgCourse;
+    }
+
+    public String getApplyRealName() {
+        return applyRealName;
+    }
+
+    public void setApplyRealName(String applyRealName) {
+        this.applyRealName = applyRealName;
+    }
+
+    public String getCoachRealName() {
+        return coachRealName;
+    }
+
+    public void setCoachRealName(String coachRealName) {
+        this.coachRealName = coachRealName;
     }
 
 }
