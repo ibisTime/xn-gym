@@ -5,7 +5,7 @@ import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.SYSConfig;
-import com.std.gym.dto.req.XN807711Req;
+import com.std.gym.dto.req.XN622911Req;
 import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
@@ -17,11 +17,11 @@ import com.std.gym.spring.SpringContextHolder;
  * @since: 2016年9月17日 下午1:54:21 
  * @history:
  */
-public class XN807711 extends AProcessor {
+public class XN622911 extends AProcessor {
     private ISYSConfigAO sysConfigAO = SpringContextHolder
         .getBean(ISYSConfigAO.class);
 
-    private XN807711Req req = null;
+    private XN622911Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -37,7 +37,7 @@ public class XN807711 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN807711Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN622911Req.class);
         StringValidater.validateBlank(req.getCvalue(), req.getUpdater());
 
     }

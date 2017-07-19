@@ -5,7 +5,7 @@ package com.std.gym.dto.req;
  * @since: 2016年9月17日 下午4:09:39 
  * @history:
  */
-public class XN807715Req extends APageReq {
+public class XN622915Req extends APageReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 

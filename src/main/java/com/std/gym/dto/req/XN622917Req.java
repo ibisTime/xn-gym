@@ -5,7 +5,7 @@ package com.std.gym.dto.req;
  * @since: 2016年9月17日 下午3:58:52 
  * @history:
  */
-public class XN807717Req {
+public class XN622917Req {
     // 配置名（必填）
     private String ckey;
 

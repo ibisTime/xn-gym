@@ -5,7 +5,7 @@ package com.std.gym.dto.req;
  * @since: 2016年9月17日 下午4:09:34 
  * @history:
  */
-public class XN807711Req {
+public class XN622911Req {
     // 编号
     private Long id;
 

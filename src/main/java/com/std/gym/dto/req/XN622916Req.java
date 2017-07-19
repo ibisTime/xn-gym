@@ -2,11 +2,10 @@ package com.std.gym.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2016年9月17日 下午4:09:23 
+ * @since: 2016年9月17日 下午4:09:49 
  * @history:
  */
-public class XN807707Req {
-    // 编号（必填）
+public class XN622916Req {
     private String id;
 
     public String getId() {
@@ -16,4 +15,5 @@ public class XN807707Req {
     public void setId(String id) {
         this.id = id;
     }
+
 }

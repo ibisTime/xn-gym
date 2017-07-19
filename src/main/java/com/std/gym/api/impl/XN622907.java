@@ -1,33 +1,32 @@
 package com.std.gym.api.impl;
 
-import com.std.gym.ao.ISYSConfigAO;
+import com.std.gym.ao.ISYSDictAO;
 import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
-import com.std.gym.dto.req.XN807717Req;
+import com.std.gym.dto.req.XN6229007Req;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
 
 /**
- * 根据key获取value值
+ * 详情查询数据字典
  * @author: xieyj 
- * @since: 2016年9月17日 下午1:56:04 
+ * @since: 2016年9月17日 下午1:50:23 
  * @history:
  */
-public class XN807717 extends AProcessor {
-    private ISYSConfigAO sysConfigAO = SpringContextHolder
-        .getBean(ISYSConfigAO.class);
+public class XN622907 extends AProcessor {
+    private ISYSDictAO sysDictAO = SpringContextHolder
+        .getBean(ISYSDictAO.class);
 
-    private XN807717Req req = null;
+    private XN6229007Req req = null;
 
     /** 
      * @see com.xnjr.base.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return sysConfigAO.getSYSConfig(req.getCkey(), req.getCompanyCode(),
-            req.getSystemCode());
+        return sysDictAO.getSYSDict(StringValidater.toLong(req.getId()));
     }
 
     /** 
@@ -35,8 +34,7 @@ public class XN807717 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN807717Req.class);
-        StringValidater.validateBlank(req.getCkey(), req.getSystemCode());
+        req = JsonUtil.json2Bean(inputparams, XN6229007Req.class);
+        StringValidater.validateBlank(req.getId());
     }
-
 }

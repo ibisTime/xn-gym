@@ -1,6 +1,6 @@
 package com.std.gym.dto.req;
 
-public class XN806013Req {
+public class XN622913Req {
     private String companyCode;
 
     private String systemCode;

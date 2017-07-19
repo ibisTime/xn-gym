@@ -2,10 +2,10 @@ package com.std.gym.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2016年9月17日 下午4:08:57 
+ * @since: 2016年9月17日 下午4:09:23 
  * @history:
  */
-public class XN807701Req {
+public class XN6229007Req {
     // 编号（必填）
     private String id;
 

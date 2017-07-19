@@ -4,7 +4,7 @@ import com.std.gym.ao.ISYSDictAO;
 import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
-import com.std.gym.dto.req.XN807700Req;
+import com.std.gym.dto.req.XN622900Req;
 import com.std.gym.dto.res.PKIdRes;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
@@ -16,11 +16,11 @@ import com.std.gym.spring.SpringContextHolder;
  * @since: 2016年9月17日 下午1:45:23 
  * @history:
  */
-public class XN807700 extends AProcessor {
+public class XN622900 extends AProcessor {
     private ISYSDictAO sysDictAO = SpringContextHolder
         .getBean(ISYSDictAO.class);
 
-    private XN807700Req req = null;
+    private XN622900Req req = null;
 
     /** 
      * @see com.xnjr.base.api.IProcessor#doBusiness()
@@ -37,7 +37,7 @@ public class XN807700 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN807700Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN622900Req.class);
         StringValidater.validateBlank(req.getType(), req.getDkey(),
             req.getDvalue(), req.getUpdater(), req.getSystemCode());
     }

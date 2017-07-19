@@ -2,23 +2,28 @@ package com.std.gym.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2016年9月17日 下午4:09:17 
+ * @since: 2016年9月17日 下午1:39:41 
  * @history:
  */
-public class XN807706Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 2796572107342038372L;
+public class XN622900Req {
 
-    // 类型（第一层/第二层）（选填）
+    // 类型（第一层/第二层）（必填）
     private String type;
 
-    // 父key（选填）
+    // 父key（第二层必填）
     private String parentKey;
 
-    // key（选填）
+    // key（必填）
     private String dkey;
+
+    // value（必填）
+    private String dvalue;
+
+    // 修改人（必填）
+    private String updater;
+
+    // 备注（选填）
+    private String remark;
 
     // 系统编号（必填）
     private String systemCode;
@@ -55,4 +60,27 @@ public class XN807706Req extends APageReq {
         this.dkey = dkey;
     }
 
+    public String getDvalue() {
+        return dvalue;
+    }
+
+    public void setDvalue(String dvalue) {
+        this.dvalue = dvalue;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }
