@@ -16,9 +16,9 @@ import com.std.gym.dao.ISYSDictDAO;
 import com.std.gym.dao.base.support.AMybatisTemplate;
 import com.std.gym.domain.SYSDict;
 
-/** 
- * @author: haiqingzheng 
- * @since: 2016年4月17日 上午10:22:32 
+/**
+ * @author: xieyj 
+ * @since: 2016年10月21日 上午9:57:52 
  * @history:
  */
 @Repository("sysDictDAOImpl")
@@ -74,7 +74,7 @@ public class SYSDictDAOImpl extends AMybatisTemplate implements ISYSDictDAO {
     }
 
     /**
-     * @see com.xnjr.base.dao.ISYSDictDAO#updateByGlobal(com.xnjr.base.domain.SYSDict)
+     * @see com.xnjr.base.dao.ISYSDictDAO#update(com.xnjr.base.domain.SYSDict)
      */
     @Override
     public int update(SYSDict data) {

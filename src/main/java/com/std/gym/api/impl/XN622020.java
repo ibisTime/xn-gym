@@ -29,6 +29,7 @@ public class XN622020 extends AProcessor {
     public Object doBusiness() throws BizException {
         Activity condition = new Activity();
         condition.setLocation(req.getLocation());
+        condition.setTitle(req.getTitle());
         condition.setHoldPlace(req.getHoldPlace());
         condition.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));

@@ -18,8 +18,8 @@ public class XN622140Req {
     // 评论人
     private String commer;
 
-    // 产品编号
-    private String productCode;
+    // 订单编号
+    private String orderCode;
 
     public String getContent() {
         return content;
@@ -37,19 +37,19 @@ public class XN622140Req {
         this.commer = commer;
     }
 
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
-
     public List<XN622200Req> getItemScoreList() {
         return itemScoreList;
     }
 
     public void setItemScoreList(List<XN622200Req> itemScoreList) {
         this.itemScoreList = itemScoreList;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 }

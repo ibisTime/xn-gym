@@ -17,4 +17,6 @@ public interface IPerCourseOrderDAO extends IBaseDAO<PerCourseOrder> {
     int classBegin(PerCourseOrder data);
 
     int classOver(PerCourseOrder data);
+
+    int finishOrder(PerCourseOrder data);
 }

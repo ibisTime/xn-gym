@@ -22,7 +22,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     private IItemScoreDAO itemScoreDAO;
 
     @Override
-    public boolean isPraiseItemExist(String code) {
+    public boolean isItemScoreExist(String code) {
         ItemScore condition = new ItemScore();
         condition.setCode(code);
         if (itemScoreDAO.selectTotalCount(condition) > 0) {
@@ -32,7 +32,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     }
 
     @Override
-    public String savePraiseItem(ItemScore data) {
+    public String saveItemScore(ItemScore data) {
         String code = null;
         if (data != null) {
             code = OrderNoGenerater.generate(EPrefixCode.PRAISEITEM.getCode());
@@ -43,7 +43,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     }
 
     @Override
-    public int removePraiseItem(String code) {
+    public int removeItemScore(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             ItemScore data = new ItemScore();
@@ -54,7 +54,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     }
 
     @Override
-    public int refreshPraiseItem(ItemScore data) {
+    public int refreshItemScore(ItemScore data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
             count = itemScoreDAO.update(data);
@@ -63,12 +63,12 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     }
 
     @Override
-    public List<ItemScore> queryPraiseItemList(ItemScore condition) {
+    public List<ItemScore> queryItemScoreList(ItemScore condition) {
         return itemScoreDAO.selectList(condition);
     }
 
     @Override
-    public ItemScore getPraiseItem(String code) {
+    public ItemScore getItemScore(String code) {
         ItemScore data = null;
         if (StringUtils.isNotBlank(code)) {
             ItemScore condition = new ItemScore();

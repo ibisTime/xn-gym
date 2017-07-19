@@ -111,5 +111,10 @@
 		WHERE code = #{code}
 	</update>
 
-
+	<delete id="delete_perCourse" parameterType="perCourse">
+		DELETE FROM
+		tgym_per_course
+		WHERE
+		code = #{code}
+	</delete>
 </mapper>

@@ -171,6 +171,7 @@
 		,apply_note = #{applyNote}
 		WHERE code = #{code}
 	</update>
+	
 	<update id="update_approveRefund" parameterType="orgCourseOrder">
 		UPDATE tgym_org_course_order
 		SET
@@ -178,6 +179,13 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_finishOrder" parameterType="orgCourseOrder">
+		UPDATE tgym_org_course_order
+		SET
+		status = #{status}
 		WHERE code = #{code}
 	</update>
 

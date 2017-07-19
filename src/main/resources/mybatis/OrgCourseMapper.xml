@@ -216,4 +216,11 @@
 		,remain_num = #{remainNum}
 		WHERE code = #{code}
 	</update>
+	
+	<delete id="delete_orgCourse" parameterType="orgCourse">
+		DELETE FROM
+		tgym_org_course
+		WHERE
+		code = #{code}
+	</delete>
 </mapper>

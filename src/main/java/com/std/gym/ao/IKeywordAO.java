@@ -1,5 +1,7 @@
 package com.std.gym.ao;
 
+import java.util.List;
+
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.Keyword;
 import com.std.gym.dto.req.XN622000Req;
@@ -18,5 +20,7 @@ public interface IKeywordAO {
             Keyword condition);
 
     public Keyword getKeyword(String code);
+
+    public void addKeyword(List<XN622000Req> reqList);
 
 }

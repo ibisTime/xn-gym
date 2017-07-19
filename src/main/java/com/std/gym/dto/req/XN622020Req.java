@@ -16,6 +16,9 @@ public class XN622020Req extends APageReq {
     // UI位置
     private String location;
 
+    // 活动标题
+    private String title;
+
     // 举办地
     private String holdPlace;
 
@@ -77,6 +80,14 @@ public class XN622020Req extends APageReq {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }

@@ -35,6 +35,7 @@ public class XN622060 extends AProcessor {
         condition.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setStatus(req.getStatus());
+        condition.setContact(req.getContact());
         condition.setUpdater(req.getUpdater());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

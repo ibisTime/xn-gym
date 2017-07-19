@@ -37,4 +37,6 @@ public interface IOrgCourseOrderBO extends IPaginableBO<OrgCourseOrder> {
     public void approveRefund(OrgCourseOrder order,
             EActivityOrderStatus status, String updater, String remark);
 
+    public void finishOrder(OrgCourseOrder orgCourseOrder);
+
 }

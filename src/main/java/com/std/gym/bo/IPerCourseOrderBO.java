@@ -35,4 +35,6 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
 
     public void platCancel(PerCourseOrder order, String updater, String remark);
 
+    public void finishOrder(PerCourseOrder perCourseOrder);
+
 }

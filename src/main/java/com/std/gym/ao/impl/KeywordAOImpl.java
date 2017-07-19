@@ -1,6 +1,7 @@
 package com.std.gym.ao.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,5 +69,12 @@ public class KeywordAOImpl implements IKeywordAO {
     @Override
     public Keyword getKeyword(String code) {
         return keywordBO.getKeyword(code);
+    }
+
+    @Override
+    public void addKeyword(List<XN622000Req> reqList) {
+        for (XN622000Req req : reqList) {
+            this.addKeyword(req);
+        }
     }
 }

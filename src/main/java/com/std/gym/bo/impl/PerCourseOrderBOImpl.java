@@ -140,4 +140,10 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
         order.setRemark(remark);
         perCourseOrderDAO.receiverOrder(order);
     }
+
+    @Override
+    public void finishOrder(PerCourseOrder perCourseOrder) {
+        perCourseOrder.setStatus(EPerCourseOrderStatus.FINISH.getCode());
+        perCourseOrderDAO.finishOrder(perCourseOrder);
+    }
 }

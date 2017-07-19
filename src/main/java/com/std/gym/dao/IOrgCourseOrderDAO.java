@@ -19,4 +19,6 @@ public interface IOrgCourseOrderDAO extends IBaseDAO<OrgCourseOrder> {
     int applyRefund(OrgCourseOrder data);
 
     int approveRefund(OrgCourseOrder data);
+
+    int finishOrder(OrgCourseOrder data);
 }

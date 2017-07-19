@@ -200,7 +200,14 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
+	
+	<update id="update_finishOver" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_perCourseOrder" parameterType="perCourseOrder">
 		UPDATE tgym_per_course_order
 		SET

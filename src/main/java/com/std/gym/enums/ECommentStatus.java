@@ -6,8 +6,8 @@ package com.std.gym.enums;
  * @history:
  */
 public enum ECommentStatus {
-    PUBLISHED("A", "已发布"), APPROVE_YES("B", "审批通过"), FILTERED("C", "被过滤"), PUBLISHALL(
-            "AB", "已发布和审核通过");
+    PUBLISHED("A", "已发布"), APPROVE_YES("B", "审批通过"), APPROVE_NO("C", "审批不通过"), FILTERED(
+            "D", "被过滤"), PUBLISHALL("AB", "已发布和审核通过");
 
     ECommentStatus(String code, String value) {
         this.code = code;

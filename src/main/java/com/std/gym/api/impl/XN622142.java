@@ -4,34 +4,36 @@ import com.std.gym.ao.ICommentAO;
 import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.core.StringValidater;
-import com.std.gym.dto.req.XN622140Req;
-import com.std.gym.dto.res.PKCodeRes;
+import com.std.gym.dto.req.XN622142Req;
+import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.exception.BizException;
 import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
 
 /**
- * 评论
+ * 
  * @author: asus 
- * @since: 2017年7月19日 上午11:40:38 
+ * @since: 2017年7月19日 下午3:19:45 
  * @history:
  */
-public class XN622140 extends AProcessor {
+public class XN622142 extends AProcessor {
     private ICommentAO commentAO = SpringContextHolder
         .getBean(ICommentAO.class);
 
-    private XN622140Req req = null;
+    private XN622142Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(commentAO.addComment(req.getContent(),
-            req.getItemScoreList(), req.getCommer(), req.getOrderCode()));
+        commentAO.approveComment(req.getCode(), req.getResult(),
+            req.getApprover(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN622140Req.class);
-        StringValidater.validateBlank(req.getOrderCode(), req.getContent(),
-            req.getCommer());
+        req = JsonUtil.json2Bean(inputparams, XN622142Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getResult(),
+            req.getApprover());
     }
+
 }

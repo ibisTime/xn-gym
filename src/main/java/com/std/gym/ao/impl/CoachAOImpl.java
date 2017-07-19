@@ -46,7 +46,7 @@ public class CoachAOImpl implements ICoachAO {
         Coach condition = new Coach();
         condition.setUserId(req.getUserId());
         Long num = coachBO.getTotalCount(condition);
-        if (num != null) {
+        if (num > 0) {
             throw new BizException("xn0000", "您已添加过信息,可直接修改");
         }
         Coach data = new Coach();
@@ -55,6 +55,7 @@ public class CoachAOImpl implements ICoachAO {
         data.setUserId(req.getUserId());
         data.setRealName(req.getRealName());
         data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
         data.setGender(req.getGender());
         data.setAge(StringValidater.toInteger(req.getAge()));
         data.setStar(StringValidater.toInteger(EBoolean.NO.getCode()));

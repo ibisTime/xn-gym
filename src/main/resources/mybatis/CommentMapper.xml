@@ -20,6 +20,22 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="coachCode != null and coachCode != '' ">
+				AND t.coach_code = #{coachCode}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.productCode = #{productCode}
+			</if>
+			<choose>
+				 <when test='status == "BD"'>
+				 	AND t.status in ('B','D')
+				 </when>
+				 <otherwise>
+					 <if test='status != null and status != ""'>
+		        		AND t.status = #{status}
+					</if>
+				 </otherwise>
+			</choose>
 		</trim>
 	</sql>
 	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">
@@ -97,5 +113,14 @@
 		WHERE code = #{code}
 	</update>
 
+	<update id="update_approve" parameterType="comment">
+		UPDATE tgym_comment
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 
 </mapper>

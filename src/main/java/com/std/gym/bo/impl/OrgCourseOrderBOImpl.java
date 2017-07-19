@@ -139,4 +139,10 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
         orgCourseOrderDAO.approveRefund(order);
     }
 
+    @Override
+    public void finishOrder(OrgCourseOrder orgCourseOrder) {
+        orgCourseOrder.setStatus(EActivityOrderStatus.END.getCode());
+        orgCourseOrderDAO.finishOrder(orgCourseOrder);
+    }
+
 }

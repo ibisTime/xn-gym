@@ -82,4 +82,9 @@ public class OrgCourseOrderDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_approveRefund"), data);
     }
 
+    @Override
+    public int finishOrder(OrgCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_finishOrder"), data);
+    }
+
 }

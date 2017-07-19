@@ -76,4 +76,9 @@ public class PerCourseOrderDAOImpl extends AMybatisTemplate implements
     public int classOver(PerCourseOrder data) {
         return super.update(NAMESPACE.concat("update_xkClassDatetime"), data);
     }
+
+    @Override
+    public int finishOrder(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_finishOver"), data);
+    }
 }

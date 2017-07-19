@@ -1,5 +1,6 @@
 package com.std.gym.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +45,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     }
 
     @Override
-    public void refreshComment(Comment data) {
+    public void approveComment(Comment data) {
         if (StringUtils.isNotBlank(data.getCode())) {
             commentDAO.update(data);
         }
@@ -74,5 +75,15 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
         Comment condition = new Comment();
         condition.setCoachCode(coachCode);
         return commentDAO.selectList(condition);
+    }
+
+    @Override
+    public void approveComment(Comment data, String status, String approver,
+            String remark) {
+        data.setStatus(status);
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setRemark(remark);
+        commentDAO.approveComment(data);
     }
 }

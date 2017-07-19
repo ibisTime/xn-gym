@@ -11,17 +11,17 @@ import com.std.gym.domain.ItemScore;
 public interface IItemScoreAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addPraiseItem(ItemScore data);
+    public String addItemScore(ItemScore data);
 
-    public int dropPraiseItem(String code);
+    public int dropItemScore(String code);
 
-    public int editPraiseItem(ItemScore data);
+    public int editItemScore(ItemScore data);
 
-    public Paginable<ItemScore> queryPraiseItemPage(int start, int limit,
+    public Paginable<ItemScore> queryItemScorePage(int start, int limit,
             ItemScore condition);
 
-    public List<ItemScore> queryPraiseItemList(ItemScore condition);
+    public List<ItemScore> queryItemScoreList(ItemScore condition);
 
-    public ItemScore getPraiseItem(String code);
+    public ItemScore getItemScore(String code);
 
 }

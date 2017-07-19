@@ -11,49 +11,46 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.ItemScore;
 import com.std.gym.exception.BizException;
 
-
-
- 
 @Service
 public class ItemScoreAOImpl implements IItemScoreAO {
 
-	@Autowired
-	private IItemScoreBO itemScoreBO;
+    @Autowired
+    private IItemScoreBO itemScoreBO;
 
-	@Override
-	public String addPraiseItem(ItemScore data) {
-		return itemScoreBO.savePraiseItem(data);
-	}
+    @Override
+    public String addItemScore(ItemScore data) {
+        return itemScoreBO.saveItemScore(data);
+    }
 
-	@Override
-	public int editPraiseItem(ItemScore data) {
-		if (!itemScoreBO.isPraiseItemExist(data.getCode())) {
-			throw new BizException("xn0000", "记录编号不存在");
-		}
-		return itemScoreBO.refreshPraiseItem(data);
-	}
+    @Override
+    public int editItemScore(ItemScore data) {
+        if (!itemScoreBO.isItemScoreExist(data.getCode())) {
+            throw new BizException("xn0000", "记录编号不存在");
+        }
+        return itemScoreBO.refreshItemScore(data);
+    }
 
-	@Override
-	public int dropPraiseItem(String code) {
-		if (!itemScoreBO.isPraiseItemExist(code)) {
-			throw new BizException("xn0000", "记录编号不存在");
-		}
-		return itemScoreBO.removePraiseItem(code);
-	}
+    @Override
+    public int dropItemScore(String code) {
+        if (!itemScoreBO.isItemScoreExist(code)) {
+            throw new BizException("xn0000", "记录编号不存在");
+        }
+        return itemScoreBO.removeItemScore(code);
+    }
 
-	@Override
-	public Paginable<ItemScore> queryPraiseItemPage(int start, int limit,
-			ItemScore condition) {
-		return itemScoreBO.getPaginable(start, limit, condition);
-	}
+    @Override
+    public Paginable<ItemScore> queryItemScorePage(int start, int limit,
+            ItemScore condition) {
+        return itemScoreBO.getPaginable(start, limit, condition);
+    }
 
-	@Override
-	public List<ItemScore> queryPraiseItemList(ItemScore condition) {
-		return itemScoreBO.queryPraiseItemList(condition);
-	}
+    @Override
+    public List<ItemScore> queryItemScoreList(ItemScore condition) {
+        return itemScoreBO.queryItemScoreList(condition);
+    }
 
-	@Override
-	public ItemScore getPraiseItem(String code) {
-		return itemScoreBO.getPraiseItem(code);
-	}
+    @Override
+    public ItemScore getItemScore(String code) {
+        return itemScoreBO.getItemScore(code);
+    }
 }

@@ -13,11 +13,12 @@ public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public String addComment(String content, List<XN622200Req> itemScoreList,
-            String commer, String productCode);
+            String commer, String orderCode);
 
     public void dropComment(String code);
 
-    public void editComment(Comment data);
+    public void approveComment(String code, String result, String approver,
+            String remark);
 
     public Paginable<Comment> queryCommentPage(int start, int limit,
             Comment condition);

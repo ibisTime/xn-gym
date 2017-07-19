@@ -1,14 +1,13 @@
 package com.std.gym.dto.req;
 
 /**
- * 评论详情查询
- * @author: xieyj 
- * @since: 2016年10月13日 下午2:10:14 
+ * 删除评论
+ * @author: asus 
+ * @since: 2017年7月19日 下午3:08:53 
  * @history:
  */
-public class XN610134Req {
-
-    // 编号（必填）
+public class XN622141Req {
+    // 编号
     private String code;
 
     public String getCode() {
@@ -18,5 +17,4 @@ public class XN610134Req {
     public void setCode(String code) {
         this.code = code;
     }
-
 }

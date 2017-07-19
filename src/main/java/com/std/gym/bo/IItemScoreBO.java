@@ -5,28 +5,18 @@ import java.util.List;
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.ItemScore;
 
-
-
- 
 public interface IItemScoreBO extends IPaginableBO<ItemScore> {
 
+    public boolean isItemScoreExist(String code);
 
-	public boolean isPraiseItemExist(String code);
+    public String saveItemScore(ItemScore data);
 
+    public int removeItemScore(String code);
 
-	public String savePraiseItem(ItemScore data);
+    public int refreshItemScore(ItemScore data);
 
+    public List<ItemScore> queryItemScoreList(ItemScore condition);
 
-	public int removePraiseItem(String code);
-
-
-	public int refreshPraiseItem(ItemScore data);
-
-
-	public List<ItemScore> queryPraiseItemList(ItemScore condition);
-
-
-	public ItemScore getPraiseItem(String code);
-
+    public ItemScore getItemScore(String code);
 
 }

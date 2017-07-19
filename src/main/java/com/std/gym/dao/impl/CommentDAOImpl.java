@@ -50,4 +50,9 @@ public class CommentDAOImpl extends AMybatisTemplate implements ICommentDAO {
         return super.update(NAMESPACE.concat("update_comment"), data);
     }
 
+    @Override
+    public int approveComment(Comment data) {
+        return super.update(NAMESPACE.concat("update_approve"), data);
+    }
+
 }
