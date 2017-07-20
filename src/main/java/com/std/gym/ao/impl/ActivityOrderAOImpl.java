@@ -146,7 +146,14 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
      */
     @Override
     public ActivityOrder getActivityOrder(String code) {
-        return activityOrderBO.getActivityOrder(code);
+        ActivityOrder order = activityOrderBO.getActivityOrder(code);
+        Activity activity = activityBO.getActivity(order.getActivityCode());
+        order.setActivityBeginDatetime(activity.getStartDatetime());
+        order.setActivityEndDatetime(activity.getEndDatetime());
+        order.setPic(activity.getPic());
+        User user = userBO.getRemoteUser(order.getApplyUser());
+        order.setNickname(user.getNickname());
+        return order;
     }
 
     @Override
