@@ -7,10 +7,10 @@ package com.std.gym.dto.req;
  * @history:
  */
 public class XN622200Req {
-    // 编号
+    // 编号（必填）
     private String code;
 
-    // 分数
+    // 分数（必填）
     private String score;
 
     public String getCode() {

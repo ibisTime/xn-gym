@@ -3,18 +3,18 @@ package com.std.gym.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ESysAccount {
+public enum ESysUser {
     SYS_USER_ZWZJ("SYS_USER_ZWZJ", "系统账号");
 
-    public static Map<String, ESysAccount> getChannelTypeResultMap() {
-        Map<String, ESysAccount> map = new HashMap<String, ESysAccount>();
-        for (ESysAccount type : ESysAccount.values()) {
-            map.put(type.getCode(), type);
+    public static Map<String, ESysUser> getResultMap() {
+        Map<String, ESysUser> map = new HashMap<String, ESysUser>();
+        for (ESysUser sysUser : ESysUser.values()) {
+            map.put(sysUser.getCode(), sysUser);
         }
         return map;
     }
 
-    ESysAccount(String code, String value) {
+    ESysUser(String code, String value) {
         this.code = code;
         this.value = value;
     }

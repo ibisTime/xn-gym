@@ -29,7 +29,7 @@ import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.enums.EPrefixCode;
-import com.std.gym.enums.ESysAccount;
+import com.std.gym.enums.ESysUser;
 import com.std.gym.exception.BizException;
 
 @Service
@@ -54,35 +54,29 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     @Override
     public String commitOrder(String applyUser, String address, String mobile,
             String perCourseCode, Integer quantity, String applyNote) {
-        userBO.getRemoteUser(applyUser);
         PerCourse perCourse = perCourseBO.getPerCourse(perCourseCode);
+
         // 计算今天是周几
-        Integer day = DateUtil.getDayofweek(DateUtil.dateToStr(new Date(),
+        Integer weekDay = DateUtil.getDayofweek(DateUtil.dateToStr(new Date(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
-        Integer skCycle = 0;
-        boolean flag = true;
-        // 如果小于0，说明是在下周，加7天
-        if (StringValidater.toInteger(perCourse.getSkCycle()) - day < 0) {
-            skCycle = day - StringValidater.toInteger(perCourse.getSkCycle())
-                    + 7;
-            // 如果大于0，说明是在本周
-        } else if (StringValidater.toInteger(perCourse.getSkCycle()) - day > 0) {
-            skCycle = day - StringValidater.toInteger(perCourse.getSkCycle());
-        } else {
-            // 等于0说明就是今天
-            flag = false;
+        Integer skDays = 0;// 距离下次上课天数
+        Integer skCycle = StringValidater.toInteger(perCourse.getSkCycle());
+        if (skCycle < weekDay) {// 下周预约
+            skDays = 7 - (weekDay - skCycle);
+        } else if (skCycle > weekDay) {// 本周预约
+            skDays = weekDay - skCycle;
         }
-        Date appointment = DateUtil.getFrontDate(
-            DateUtil.dateToStr(new Date(), DateUtil.FRONT_DATE_FORMAT_STRING),
-            flag, skCycle);
+        Date appointment = DateUtil.getRelativeDate(DateUtil.getTodayStart(),
+            24 * 3600 * skDays);
+
         PerCourseOrder condition = new PerCourseOrder();
         condition.setPerCourseCode(perCourseCode);
         condition.setAppointDatetime(appointment);
         condition.setSkDatetime(perCourse.getSkStartDatetime());
         condition.setXkDatetime(perCourse.getSkEndDatetime());
         condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
-        Long buyOver = perCourseOrderBO.getTotalCount(condition);
-        if (buyOver != null) {
+        Long skCount = perCourseOrderBO.getTotalCount(condition);
+        if (skCount > 0) {
             throw new BizException("xn0000", "该课程已被预订");
         }
         Coach coach = coachBO.getCoach(perCourse.getCoachCode());
@@ -154,8 +148,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn000000", "余额不足");
         }
         accountBO.doTransferAmountRemote(order.getApplyUser(),
-            ESysAccount.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
-            order.getAmount(), EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
+            ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, order.getAmount(),
+            EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
             EBizType.AJ_SKGM.getValue(), order.getCode());
         paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
         return new BooleanRes(true);
@@ -164,7 +158,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     public Object toPayWEIXIH5(PerCourseOrder order, User user,
             String payGroup, PerCourse perCourse) {
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
+            user.getOpenId(), ESysUser.SYS_USER_ZWZJ.getCode(), payGroup,
             order.getCode(), EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
             order.getAmount());
     }
@@ -232,11 +226,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             }
             Long amount = AmountUtil.mul(1000L,
                 Double.valueOf(order.getAmount() * 0.8));
-            accountBO.doTransferAmountRemote(
-                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, amount, EBizType.AJ_SKGMTK,
-                EBizType.AJ_SKGMTK.getValue(), EBizType.AJ_SKGMTK.getValue(),
-                order.getCode());
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, amount,
+                EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
+                EBizType.AJ_SKGMTK.getValue(), order.getCode());
         }
         perCourseOrderBO.userCancel(order, updater, remark);
     }
@@ -254,11 +247,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         }
         if (EPerCourseOrderStatus.PAYSUCCESS.getCode()
             .equals(order.getStatus())) {
-            accountBO.doTransferAmountRemote(
-                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, order.getAmount(), EBizType.AJ_SKGMTK,
-                EBizType.AJ_SKGMTK.getValue(), EBizType.AJ_SKGMTK.getValue(),
-                order.getCode());
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, order.getAmount(),
+                EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
+                EBizType.AJ_SKGMTK.getValue(), order.getCode());
         }
         perCourseOrderBO.platCancel(order, updater, remark);
     }
@@ -327,7 +319,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         for (PerCourseOrder order : perCourseOrderList) {
             // 给私教加钱
             accountBO.doTransferAmountRemote(order.getToUser(),
-                ESysAccount.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
+                ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
                 order.getAmount(), EBizType.KCGM, EBizType.KCGM.getValue(),
                 EBizType.KCGM.getValue(), order.getCode());
         }

@@ -24,7 +24,7 @@ public class XN622140 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(commentAO.addComment(req.getContent(),
+        return new PKCodeRes(commentAO.comment(req.getContent(),
             req.getItemScoreList(), req.getCommer(), req.getOrderCode()));
     }
 

@@ -35,9 +35,6 @@ public class SYSConfig extends ABaseDO {
     // value值
     private String cvalue;
 
-    // 参数说明(预留字段)
-    private String note;
-
     // 最近更新人
     private String updater;
 

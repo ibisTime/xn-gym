@@ -9,16 +9,17 @@ import java.util.List;
  * @history:
  */
 public class XN622140Req {
-    // 内容
+
+    // 内容（必填）
     private String content;
 
-    // 项目
+    // 项目（选填）
     private List<XN622200Req> itemScoreList;
 
-    // 评论人
+    // 评论人（必填）
     private String commer;
 
-    // 订单编号
+    // 订单编号（必填）
     private String orderCode;
 
     public String getContent() {

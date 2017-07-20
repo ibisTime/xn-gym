@@ -12,7 +12,7 @@ import com.std.gym.dto.req.XN622200Req;
 public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addComment(String content, List<XN622200Req> itemScoreList,
+    public String comment(String content, List<XN622200Req> itemScoreList,
             String commer, String orderCode);
 
     public void dropComment(String code);

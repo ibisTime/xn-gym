@@ -41,8 +41,8 @@ import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.enums.EReaction;
-import com.std.gym.enums.ESysAccount;
 import com.std.gym.enums.ESysConfigType;
+import com.std.gym.enums.ESysUser;
 import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
 
@@ -83,25 +83,25 @@ public class CommentAOImpl implements ICommentAO {
     private IAccountBO accountBO;
 
     @Override
-    public String addComment(String content, List<XN622200Req> itemScoreList,
+    public String comment(String content, List<XN622200Req> itemScoreList,
             String commer, String orderCode) {
-
         userBO.getRemoteUser(commer);
+        // 判断是否含有关键字
         String status = ECommentStatus.PUBLISHED.getCode();
         EReaction result = keywordBO.checkContent(content);
         if (EReaction.REFUSE.getCode().equals(result.getCode())) {
             status = ECommentStatus.FILTERED.getCode();
         }
+
         Comment data = new Comment();
         String code = OrderNoGenerater.generate(EPrefixCode.COMMENT.getCode());
         data.setCode(code);
         String productCode = null;
         if (orderCode.startsWith(EPrefixCode.PERCOURSEORDER.getCode())) {
-            productCode = finishPerCourseOrder(orderCode, itemScoreList, data);
+            productCode = finishPerCourseOrder(orderCode, itemScoreList, data);// 完成私课处理
         } else if (orderCode.startsWith(EPrefixCode.ORGCOURSEORDER.getCode())) {
-            productCode = finishOrgCourseOrder(orderCode);
+            productCode = finishOrgCourseOrder(orderCode);// 完成团课处理
         }
-
         data.setContent(content);
         data.setCommer(commer);
         data.setCommentDatetime(new Date());
@@ -122,13 +122,15 @@ public class CommentAOImpl implements ICommentAO {
         String productCode = orgCourseOrder.getOrgCourseCode();
         OrgCourse orgCourse = orgCourseBO.getOrgCourse(productCode);
         orgCourseBO.addSumCom(orgCourse);
+
+        // 给用户加积分
         SYSConfig sysConfig = sysConfigBO.getConfigValue(
             EBizType.KCGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
             ESystemCode.SYSTEM_CODE.getCode());
         Long amount = AmountUtil.mul(1000L,
             Double.valueOf(sysConfig.getCvalue()));
-        // 给用户加积分
-        accountBO.doTransferAmountRemote(ESysAccount.SYS_USER_ZWZJ.getCode(),
+
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
             orgCourseOrder.getApplyUser(), ECurrency.JF, amount, EBizType.KCGM,
             EBizType.KCGM.getValue(), EBizType.KCGM.getValue(),
             orgCourseOrder.getCode());
@@ -137,12 +139,10 @@ public class CommentAOImpl implements ICommentAO {
 
     private String finishPerCourseOrder(String orderCode,
             List<XN622200Req> itemScoreList, Comment data) {
+        // 参数验证
         if (CollectionUtils.isEmpty(itemScoreList)) {
             throw new BizException("xn0000", "您还没有评分");
         }
-        Double score = 0.0;
-        Double num = 0.0;
-        Integer dfScore = 0;
         PerCourseOrder perCourseOrder = perCourseOrderBO
             .getPerCourseOrder(orderCode);
         String productCode = perCourseOrder.getPerCourseCode();
@@ -150,32 +150,33 @@ public class CommentAOImpl implements ICommentAO {
             perCourseOrder.getStatus())) {
             throw new BizException("xn0000", "该私课订单还不能评论");
         }
+
         perCourseOrderBO.finishOrder(perCourseOrder);
         PerCourse perCourse = perCourseBO.getPerCourse(productCode);
         data.setCoachCode(perCourse.getCoachCode());
 
+        // 统计分值，修改私教等级以及星数
+        Double totalScore = 0.0;// 分数
         for (XN622200Req req : itemScoreList) {
             SYSConfig sysConfig = sysConfigBO.getConfig(StringValidater
-                .toLong(req.getCode()));
+                .toLong(req.getCode()));// 改动
             // 记录得分项目,及得分
             ItemScore itemScore = new ItemScore();
             itemScore.setScore(StringValidater.toInteger(req.getScore()));
             itemScore.setName(sysConfig.getNote());
             itemScore.setCommentCode(data.getCode());
             itemScoreBO.saveItemScore(itemScore);
-            num = StringValidater.toInteger(req.getScore())
+            double num = StringValidater.toInteger(req.getScore())
                     * StringValidater.toDouble(sysConfig.getCvalue());
-            score = score + num;
+            totalScore = totalScore + num;
         }
-        score = score / itemScoreList.size();
-        dfScore = score.intValue();
-        data.setScore(dfScore);
-        // 修改私教等级以及星数
+        totalScore = totalScore / itemScoreList.size();
+        data.setScore(totalScore.intValue());
         Coach coach = coachBO.getCoach(perCourse.getCoachCode());
-        int starNum = coach.getStarNum() + dfScore;
+        int starNum = coach.getStarNum() + data.getScore();// 星级数量
         List<SYSConfig> sysConfigList = sysConfigBO
             .querySYSConfigList(ESysConfigType.LEVER_RULE.getCode());
-        int star = coach.getStar();
+        int star = coach.getStar(); // 教练等级
         for (SYSConfig sysConfig : sysConfigList) {
             if (starNum > StringValidater.toInteger(sysConfig.getCvalue())) {
                 star = StringValidater.toInteger(sysConfig.getRemark());
@@ -185,13 +186,14 @@ public class CommentAOImpl implements ICommentAO {
             star = coach.getStar();
         }
         coachBO.updateStar(coach, star, starNum);
-        // 加积分
+
+        // 私课评论加积分
         SYSConfig sysConfig = sysConfigBO.getConfigValue(
             EBizType.SKGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
             ESystemCode.SYSTEM_CODE.getCode());
         Long amount = AmountUtil.mul(1000L,
             Double.valueOf(sysConfig.getCvalue()));
-        accountBO.doTransferAmountRemote(ESysAccount.SYS_USER_ZWZJ.getCode(),
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
             perCourseOrder.getApplyUser(), ECurrency.JF, amount, EBizType.SKGM,
             EBizType.SKGM.getValue(), EBizType.SKGM.getValue(),
             perCourseOrder.getCode());

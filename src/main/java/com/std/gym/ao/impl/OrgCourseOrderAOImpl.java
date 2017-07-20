@@ -30,7 +30,7 @@ import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
-import com.std.gym.enums.ESysAccount;
+import com.std.gym.enums.ESysUser;
 import com.std.gym.exception.BizException;
 
 @Service
@@ -125,7 +125,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             throw new BizException("xn000000", "余额不足");
         }
         accountBO.doTransferAmountRemote(order.getApplyUser(),
-            ESysAccount.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
+            ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
             order.getAmount(), EBizType.AJ_TKGM, EBizType.AJ_TKGM.getValue(),
             EBizType.AJ_TKGM.getValue(), order.getCode());
         paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
@@ -135,7 +135,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
     public Object toPayWEIXIH5(OrgCourseOrder order, User user,
             String payGroup, OrgCourse orgCourse) {
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
+            user.getOpenId(), ESysUser.SYS_USER_ZWZJ.getCode(), payGroup,
             order.getCode(), EBizType.AJ_TKGM, EBizType.AJ_TKGM.getValue(),
             order.getAmount());
     }
@@ -177,7 +177,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         }
         if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
             accountBO.doTransferAmountRemote(
-                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
                 ECurrency.CNY, order.getAmount(), EBizType.AJ_TKGMTK,
                 EBizType.AJ_TKGMTK.getValue(), EBizType.AJ_TKGMTK.getValue(),
                 order.getCode());
@@ -220,7 +220,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             Long amount = AmountUtil.mul(1000L,
                 Double.valueOf(order.getAmount() * 0.8));
             accountBO.doTransferAmountRemote(
-                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
                 ECurrency.CNY, amount, EBizType.AJ_TKGMTK,
                 EBizType.AJ_TKGMTK.getValue(), EBizType.AJ_TKGMTK.getValue(),
                 order.getCode());

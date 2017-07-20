@@ -32,7 +32,7 @@ import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
-import com.std.gym.enums.ESysAccount;
+import com.std.gym.enums.ESysUser;
 import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
 
@@ -198,7 +198,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             throw new BizException("xn000000", "余额不足");
         }
         accountBO.doTransferAmountRemote(order.getApplyUser(),
-            ESysAccount.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
+            ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
             order.getAmount(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
             EBizType.AJ_HDGM.getValue(), order.getCode());
         paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
@@ -208,7 +208,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     public Object toPayWEIXIH5(ActivityOrder order, User user, String payGroup,
             Activity activity) {
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
+            user.getOpenId(), ESysUser.SYS_USER_ZWZJ.getCode(), payGroup,
             order.getCode(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
             order.getAmount());
     }
@@ -253,7 +253,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                     Long amount = AmountUtil.mul(1000L,
                         Double.valueOf(sysConfig.getCvalue()));
                     accountBO.doTransferAmountRemote(
-                        ESysAccount.SYS_USER_ZWZJ.getCode(),
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
                         order.getApplyUser(), ECurrency.JF, amount,
                         EBizType.HDGM, EBizType.HDGM.getValue(),
                         EBizType.HDGM.getValue(), order.getCode());
@@ -302,7 +302,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         }
         if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
             accountBO.doTransferAmountRemote(
-                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
                 ECurrency.CNY, order.getAmount(), EBizType.AJ_HDGMTK,
                 EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
                 order.getCode());
@@ -341,7 +341,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             Long amount = AmountUtil.mul(1000L,
                 Double.valueOf(order.getAmount() * 0.8));
             accountBO.doTransferAmountRemote(
-                ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
                 ECurrency.CNY, amount, EBizType.AJ_HDGMTK,
                 EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
                 order.getCode());
