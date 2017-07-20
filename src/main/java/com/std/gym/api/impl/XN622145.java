@@ -30,6 +30,7 @@ public class XN622145 extends AProcessor {
         condition.setCoachCode(req.getCoachCode());
         condition.setProductCode(req.getProductCode());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ICommentAO.DEFAULT_ORDER_COLUMN;

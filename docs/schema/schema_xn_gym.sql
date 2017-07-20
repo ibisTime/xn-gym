@@ -142,11 +142,14 @@ CREATE TABLE `tgym_per_course` (
 
 CREATE TABLE `tgym_per_course_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `to_user` varchar(32) DEFAULT NULL COMMENT '归属私教',
   `per_course_code` varchar(32) DEFAULT NULL COMMENT '私课编号',
   `course_name` varchar(32) DEFAULT NULL COMMENT '私课名称',
-  `appoint_datetime` varchar(255) DEFAULT NULL COMMENT '预约时间',
+  `appoint_datetime` datetime DEFAULT NULL COMMENT '预约时间',
+  `sk_satetime` varchar(32) DEFAULT NULL COMMENT '上课时间',
+  `xk_datetime` varchar(32) DEFAULT NULL COMMENT '下课时间',
+  `quantity` int(11) DEFAULT NULL COMMENT '上课人数',
   `address` varchar(255) DEFAULT NULL COMMENT '上课地址',
-  `quantity` int(11) DEFAULT NULL COMMENT '数量',
   `price` bigint(11) DEFAULT NULL COMMENT '单价',
   `amount` bigint(11) DEFAULT NULL COMMENT '总金额',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',

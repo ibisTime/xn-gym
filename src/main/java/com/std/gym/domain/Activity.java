@@ -40,6 +40,9 @@ public class Activity extends ABaseDO {
     // 举办地
     private String holdPlace;
 
+    // 联系方式
+    private String contact;
+
     // ui位置
     private String location;
 
@@ -51,9 +54,6 @@ public class Activity extends ABaseDO {
 
     // 结束时间
     private Date endDatetime;
-
-    // 联系方式
-    private String contact;
 
     // 总人数
     private Integer totalNum;
@@ -72,9 +72,6 @@ public class Activity extends ABaseDO {
 
     // 备注
     private String remark;
-
-    // 订单编号
-    private String orderCode;
 
     public String getCode() {
         return code;
@@ -210,14 +207,6 @@ public class Activity extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getOrderCode() {
-        return orderCode;
-    }
-
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
     }
 
     public Long getAmount() {

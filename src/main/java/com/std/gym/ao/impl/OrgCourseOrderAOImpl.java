@@ -240,7 +240,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             Coach coach = coachBO.getCoachByUserId(orgCourse.getCoachUser());
             orgCourseOrder.setOrgCourse(orgCourse);
             User user = userBO.getRemoteUser(orgCourseOrder.getApplyUser());
-            orgCourseOrder.setApplyRealName(user.getRealName());
+            orgCourseOrder.setApplyRealName(user.getNickname());
             orgCourseOrder.setCoachRealName(coach.getRealName());
         }
         return page;
@@ -260,7 +260,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         Coach coach = coachBO.getCoachByUserId(orgCourse.getCoachUser());
         orgCourseOrder.setOrgCourse(orgCourse);
         User user = userBO.getRemoteUser(orgCourseOrder.getApplyUser());
-        orgCourseOrder.setApplyRealName(user.getRealName());
+        orgCourseOrder.setApplyRealName(user.getNickname());
         orgCourseOrder.setCoachRealName(coach.getRealName());
         return orgCourseOrder;
     }

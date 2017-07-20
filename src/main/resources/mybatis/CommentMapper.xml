@@ -36,6 +36,12 @@
 					</if>
 				 </otherwise>
 			</choose>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
 	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">

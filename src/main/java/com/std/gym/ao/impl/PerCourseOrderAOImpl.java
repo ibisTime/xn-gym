@@ -271,7 +271,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         List<PerCourseOrder> list = page.getList();
         for (PerCourseOrder perCourseOrder : list) {
             User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
-            perCourseOrder.setRealName(user.getRealName());
+            perCourseOrder.setRealName(user.getNickname());
         }
         return page;
     }
@@ -282,7 +282,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder perCourseOrder : list) {
             User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
-            perCourseOrder.setRealName(user.getRealName());
+            perCourseOrder.setRealName(user.getNickname());
         }
         return list;
     }
@@ -292,7 +292,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         PerCourseOrder perCourseOrder = perCourseOrderBO
             .getPerCourseOrder(code);
         User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
-        perCourseOrder.setRealName(user.getRealName());
+        perCourseOrder.setRealName(user.getNickname());
         return perCourseOrder;
     }
 

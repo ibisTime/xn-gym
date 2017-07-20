@@ -105,4 +105,10 @@ public class OrgCourseBOImpl extends PaginableBOImpl<OrgCourse> implements
         orgCourseDAO.addSignNum(orgCourse);
     }
 
+    @Override
+    public void addSumCom(OrgCourse orgCourse) {
+        orgCourse.setSumCom(orgCourse.getSumCom() + 1);
+        orgCourseDAO.addSumCom(orgCourse);
+    }
+
 }

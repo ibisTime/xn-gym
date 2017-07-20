@@ -1,6 +1,7 @@
 package com.std.gym.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.gym.dao.base.ABaseDO;
 
@@ -56,6 +57,9 @@ public class Comment extends ABaseDO {
 
     // 教练名称
     private String coachRealName;
+
+    // 状态List
+    private List<String> statusList;
 
     public void setCode(String code) {
         this.code = code;
@@ -167,6 +171,14 @@ public class Comment extends ABaseDO {
 
     public void setCoachRealName(String coachRealName) {
         this.coachRealName = coachRealName;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

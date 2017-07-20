@@ -119,6 +119,9 @@ public class CommentAOImpl implements ICommentAO {
             throw new BizException("xn0000", "该团课订单还不能评论");
         }
         orgCourseOrderBO.finishOrder(orgCourseOrder);
+        String productCode = orgCourseOrder.getOrgCourseCode();
+        OrgCourse orgCourse = orgCourseBO.getOrgCourse(productCode);
+        orgCourseBO.addSumCom(orgCourse);
         SYSConfig sysConfig = sysConfigBO.getConfigValue(
             EBizType.KCGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
             ESystemCode.SYSTEM_CODE.getCode());
@@ -129,7 +132,7 @@ public class CommentAOImpl implements ICommentAO {
             orgCourseOrder.getApplyUser(), ECurrency.JF, amount, EBizType.KCGM,
             EBizType.KCGM.getValue(), EBizType.KCGM.getValue(),
             orgCourseOrder.getCode());
-        return orgCourseOrder.getOrgCourseCode();
+        return productCode;
     }
 
     private String finishPerCourseOrder(String orderCode,

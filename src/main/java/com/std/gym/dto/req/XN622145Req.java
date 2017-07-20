@@ -1,5 +1,7 @@
 package com.std.gym.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询评论
  * @author: asus 
@@ -21,6 +23,9 @@ public class XN622145Req extends APageReq {
 
     // 状态
     private String status;
+
+    // 状态List
+    private List<String> statusList;
 
     public String getCoachCode() {
         return coachCode;
@@ -44,5 +49,13 @@ public class XN622145Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 }

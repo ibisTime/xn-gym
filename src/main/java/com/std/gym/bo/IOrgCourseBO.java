@@ -28,4 +28,6 @@ public interface IOrgCourseBO extends IPaginableBO<OrgCourse> {
 
     public void addSignNum(OrgCourse orgCourse, Integer quantity);
 
+    public void addSumCom(OrgCourse orgCourse);
+
 }

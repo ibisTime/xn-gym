@@ -214,6 +214,13 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_addSumCom" parameterType="orgCourse">
+		UPDATE tgym_org_course
+		SET
+		sum_com = #{sumCom}
+		WHERE code = #{code}
+	</update>
+	
 	<delete id="delete_orgCourse" parameterType="orgCourse">
 		DELETE FROM
 		tgym_org_course

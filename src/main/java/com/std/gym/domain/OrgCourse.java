@@ -23,9 +23,6 @@ public class OrgCourse extends ABaseDO {
     // 课程名称
     private String name;
 
-    // 上课开始时间
-    private Date classDatetime;
-
     // 上课开始时间（起）
     private Date skStartDatetime;
 
@@ -78,13 +75,16 @@ public class OrgCourse extends ABaseDO {
     private String remark;
 
     // ************db**************
+    // 上课开始时间
+    private Date classDatetime;
+
     // 开始上课时间（起）
     private Date beginClassDatetime;
 
     // 开始上课时间（止）
     private Date endClassDatetime;
 
-    // 真实姓名
+    // 教练真实姓名
     private String realName;
 
     public void setCode(String code) {
