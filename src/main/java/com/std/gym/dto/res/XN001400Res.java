@@ -43,6 +43,9 @@ public class XN001400Res {
     // 手機號
     private String mobile;
 
+    // 第三方登录名
+    private String openId;
+
     // 公司编号
     private String companyCode;
 
@@ -164,5 +167,13 @@ public class XN001400Res {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

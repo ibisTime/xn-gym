@@ -203,7 +203,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
             order.getCode(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
-            order.getAmount(), EBizType.AJ_HDGM.getValue());
+            order.getAmount());
     }
 
     @Override

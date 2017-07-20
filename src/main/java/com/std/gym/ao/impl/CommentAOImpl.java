@@ -102,41 +102,38 @@ public class CommentAOImpl implements ICommentAO {
                 throw new BizException("xn0000", "该私课订单还不能评论");
             }
             perCourseOrderBO.finishOrder(perCourseOrder);
-            if (productCode.startsWith(EPrefixCode.PERCOURSE.getCode())) {
-                PerCourse perCourse = perCourseBO.getPerCourse(productCode);
-                if (ECommentStatus.PUBLISHED.getCode().equals(status)) {
-                    for (XN622200Req req : itemScoreList) {
-                        SYSConfig sysConfig = sysConfigBO
-                            .getConfig(StringValidater.toLong(req.getCode()));
-                        // 记录得分项目,及得分
-                        ItemScore itemScore = new ItemScore();
-                        itemScore.setScore(StringValidater.toInteger(req
-                            .getScore()));
-                        itemScore.setName(sysConfig.getNote());
-                        itemScore.setCommentCode(code);
-                        itemScoreBO.saveItemScore(itemScore);
-                        num = StringValidater.toInteger(req.getScore())
-                                * StringValidater.toDouble(sysConfig
-                                    .getCvalue());
-                        score = score + num;
-                    }
-                    score = score / itemScoreList.size();
-                    dfScore = score.intValue();
-                    // 修改私教等级以及星数
-                    Coach coach = coachBO.getCoach(perCourse.getCoachCode());
-                    int starNum = coach.getStarNum() + dfScore;
-                    List<SYSConfig> sysConfigList = sysConfigBO
-                        .querySYSConfigList(ESysConfigType.LEVER_RULE.getCode());
-                    int star = coach.getStar();
-                    for (SYSConfig sysConfig : sysConfigList) {
-                        if (starNum > StringValidater.toInteger(sysConfig
-                            .getCvalue())) {
-                            star = StringValidater.toInteger(sysConfig
-                                .getRemark());
-                        }
-                    }
-                    coachBO.updateStar(coach, star, starNum);
+            PerCourse perCourse = perCourseBO.getPerCourse(productCode);
+            data.setCoachCode(perCourse.getCoachCode());
+            if (ECommentStatus.PUBLISHED.getCode().equals(status)) {
+                for (XN622200Req req : itemScoreList) {
+                    SYSConfig sysConfig = sysConfigBO.getConfig(StringValidater
+                        .toLong(req.getCode()));
+                    // 记录得分项目,及得分
+                    ItemScore itemScore = new ItemScore();
+                    itemScore
+                        .setScore(StringValidater.toInteger(req.getScore()));
+                    itemScore.setName(sysConfig.getNote());
+                    itemScore.setCommentCode(code);
+                    itemScoreBO.saveItemScore(itemScore);
+                    num = StringValidater.toInteger(req.getScore())
+                            * StringValidater.toDouble(sysConfig.getCvalue());
+                    score = score + num;
                 }
+                score = score / itemScoreList.size();
+                dfScore = score.intValue();
+                // 修改私教等级以及星数
+                Coach coach = coachBO.getCoach(perCourse.getCoachCode());
+                int starNum = coach.getStarNum() + dfScore;
+                List<SYSConfig> sysConfigList = sysConfigBO
+                    .querySYSConfigList(ESysConfigType.LEVER_RULE.getCode());
+                int star = coach.getStar();
+                for (SYSConfig sysConfig : sysConfigList) {
+                    if (starNum > StringValidater.toInteger(sysConfig
+                        .getCvalue())) {
+                        star = StringValidater.toInteger(sysConfig.getRemark());
+                    }
+                }
+                coachBO.updateStar(coach, star, starNum);
             }
             SYSConfig sysConfig = sysConfigBO.getConfigValue(
                 EBizType.SKGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
@@ -171,6 +168,7 @@ public class CommentAOImpl implements ICommentAO {
 
         data.setScore(dfScore);
         data.setContent(content);
+        data.setCommer(commer);
         data.setCommentDatetime(new Date());
         data.setProductCode(productCode);
         data.setStatus(status);

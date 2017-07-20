@@ -11,6 +11,7 @@ import com.std.gym.bo.ICommentBO;
 import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.dao.ICommentDAO;
 import com.std.gym.domain.Comment;
+import com.std.gym.enums.ECommentStatus;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -74,6 +75,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     public List<Comment> queryCommentList(String coachCode) {
         Comment condition = new Comment();
         condition.setCoachCode(coachCode);
+        condition.setStatus(ECommentStatus.PUBLISHALL.getCode());
         return commentDAO.selectList(condition);
     }
 

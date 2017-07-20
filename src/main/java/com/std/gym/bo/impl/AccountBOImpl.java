@@ -78,22 +78,20 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public XN002501Res doWeiXinH5PayRemote(String fromUserId,
             String fromOpenId, String toUserId, String payGroup, String refNo,
-            EBizType bizType, String fromBizNote, Long amount, String toBizNote) {
+            EBizType bizType, String bizNote, Long amount) {
         // 获取微信H5支付信息
         XN002501Req req = new XN002501Req();
-        req.setFromUserId(fromUserId);
-        req.setFromOpenId(fromOpenId);
-        req.setToUserId(toUserId);
+        req.setApplyUser(fromUserId);
+        req.setOpenId(fromOpenId);
+        req.setToUser(toUserId);
         req.setPayGroup(payGroup);
         req.setRefNo(refNo);
         req.setBizType(bizType.getCode());
-        req.setFromBizNote(fromBizNote);
-        req.setTransAmount(String.valueOf(amount));
-        req.setToBizNote(toBizNote);
+        req.setBizNote(bizNote);
+        req.setAmount(String.valueOf(amount));
         req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         System.out.println(fromUserId + "" + fromOpenId + "" + toUserId + ""
-                + amount + "" + bizType + "" + fromBizNote + "" + toBizNote
-                + "" + payGroup);
+                + amount + "" + bizType + "" + bizNote + "" + payGroup);
         XN002501Res res = BizConnecter.getBizData("002501",
             JsonUtil.Object2Json(req), XN002501Res.class);
         return res;

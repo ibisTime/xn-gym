@@ -53,6 +53,6 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     public XN002501Res doWeiXinH5PayRemote(String fromUserId,
             String fromOpenId, String toUserId, String payGroup, String refNo,
-            EBizType bizType, String fromBizNote, Long amount, String toBizNote);
+            EBizType bizType, String bizNote, Long amount);
 
 }

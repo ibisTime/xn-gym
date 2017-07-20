@@ -137,7 +137,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
             order.getCode(), EBizType.AJ_TKGM, EBizType.AJ_TKGM.getValue(),
-            order.getAmount(), EBizType.AJ_TKGM.getValue());
+            order.getAmount());
     }
 
     @Override
@@ -195,7 +195,18 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             .equals(order.getStatus())) {
             throw new BizException("xn0000", "该状态下不能申请退款");
         }
+        OrgCourse orgCourse = orgCourseBO
+            .getOrgCourse(order.getOrgCourseCode());
+        if (!DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1)).before(
+            orgCourse.getSkStartDatetime())) {
+            throw new BizException("xn0000", "临近上课时间不到两小时,不能取消订单");
+        }
         orgCourseOrderBO.applyRefund(order, applyUser, applyNote);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(DateUtil.getRelativeDate(new Date(),
+            -(60 * 60 * 2 + 1)).before(new Date()));
     }
 
     @Override

@@ -52,6 +52,12 @@
 			<if test="applyEndDatetime != null and applyEndDatetime != '' ">
 				<![CDATA[AND t.apply_datetime <= #{applyEndDatetime}]]>
 			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
 	<select id="select_orgCourseOrder" parameterType="orgCourseOrder" resultMap="orgCourseOrder_DB_Result">

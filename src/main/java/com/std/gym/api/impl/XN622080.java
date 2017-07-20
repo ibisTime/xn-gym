@@ -31,6 +31,7 @@ public class XN622080 extends AProcessor {
         condition.setApplyUser(req.getApplyUser());
         condition.setMobile(req.getMobile());
         condition.setOrgCourseCode(req.getOrgCourseCode());
+        condition.setStatusList(req.getStatusList());
         condition.setApplyBeginDatetime(DateUtil.strToDate(
             req.getApplyBeginDatetime(), DateUtil.DATA_TIME_PATTERN_1));
         condition.setApplyEndDatetime(DateUtil.strToDate(

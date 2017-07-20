@@ -14,6 +14,7 @@ import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.AmountUtil;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
@@ -166,7 +167,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), ESysAccount.SYS_USER_ZWZJ.getCode(), payGroup,
             order.getCode(), EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
-            order.getAmount(), EBizType.AJ_SKGM.getValue());
+            order.getAmount());
     }
 
     @Override
@@ -223,7 +224,15 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         }
         if (EPerCourseOrderStatus.PAYSUCCESS.getCode()
             .equals(order.getStatus())) {
-            Long amount = (order.getAmount() * 8) / 10;
+            Date appointDatetime = DateUtil.strToDate(
+                order.getAppointDatetime() + order.getSkDatetime(),
+                DateUtil.DATA_TIME_PATTERN_1);
+            if (!DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1))
+                .before(appointDatetime)) {
+                throw new BizException("xn0000", "临近上课时间不到两小时,不能取消订单");
+            }
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(order.getAmount() * 0.8));
             accountBO.doTransferAmountRemote(
                 ESysAccount.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
                 ECurrency.CNY, amount, EBizType.AJ_SKGMTK,
