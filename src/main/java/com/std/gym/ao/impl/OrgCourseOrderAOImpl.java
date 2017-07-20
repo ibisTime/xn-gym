@@ -204,11 +204,6 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         orgCourseOrderBO.applyRefund(order, applyUser, applyNote);
     }
 
-    public static void main(String[] args) {
-        System.out.println(DateUtil.getRelativeDate(new Date(),
-            -(60 * 60 * 2 + 1)).before(new Date()));
-    }
-
     @Override
     public void approveRefund(String orderCode, String result, String updater,
             String remark) {
@@ -272,6 +267,10 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
 
     @Override
     public void changeOrder() {
+        changeNoPayOrder();
+    }
+
+    private void changeNoPayOrder() {
         logger.info("***************开始扫描待订单，未支付的3天后取消***************");
         OrgCourseOrder condition = new OrgCourseOrder();
         condition.setStatus(EActivityOrderStatus.NOTPAY.getCode());

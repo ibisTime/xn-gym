@@ -47,6 +47,16 @@ public class Comment extends ABaseDO {
     // 教练编号
     private String coachCode;
 
+    // **********db************
+    // 评论人名称
+    private String commerRealName;
+
+    // 课程名称
+    private String courseName;
+
+    // 教练名称
+    private String coachRealName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -133,6 +143,30 @@ public class Comment extends ABaseDO {
 
     public void setCoachCode(String coachCode) {
         this.coachCode = coachCode;
+    }
+
+    public String getCommerRealName() {
+        return commerRealName;
+    }
+
+    public void setCommerRealName(String commerRealName) {
+        this.commerRealName = commerRealName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCoachRealName() {
+        return coachRealName;
+    }
+
+    public void setCoachRealName(String coachRealName) {
+        this.coachRealName = coachRealName;
     }
 
 }

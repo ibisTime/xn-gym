@@ -7,14 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.gym.ao.IOrgCourseAO;
+import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.IOrgCourseBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
+import com.std.gym.domain.Coach;
 import com.std.gym.domain.OrgCourse;
-import com.std.gym.domain.User;
 import com.std.gym.dto.req.XN622050Req;
 import com.std.gym.dto.req.XN622052Req;
 import com.std.gym.enums.EActivityStatus;
@@ -30,6 +31,9 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private ICoachBO coachBO;
 
     @Override
     public String addOrgCourse(XN622050Req req) {
@@ -144,8 +148,8 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
             condition);
         List<OrgCourse> list = page.getList();
         for (OrgCourse orgCourse : list) {
-            User user = userBO.getRemoteUser(orgCourse.getCoachUser());
-            orgCourse.setRealName(user.getRealName());
+            Coach coach = coachBO.getCoachByUserId(orgCourse.getCoachUser());
+            orgCourse.setRealName(coach.getRealName());
         }
         return page;
     }
@@ -154,8 +158,8 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
     public List<OrgCourse> queryOrgCourseList(OrgCourse condition) {
         List<OrgCourse> list = orgCourseBO.queryOrgCourseList(condition);
         for (OrgCourse orgCourse : list) {
-            User user = userBO.getRemoteUser(orgCourse.getCoachUser());
-            orgCourse.setRealName(user.getRealName());
+            Coach coach = coachBO.getCoachByUserId(orgCourse.getCoachUser());
+            orgCourse.setRealName(coach.getRealName());
         }
         return list;
     }
@@ -163,8 +167,8 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
     @Override
     public OrgCourse getOrgCourse(String code) {
         OrgCourse orgCourse = orgCourseBO.getOrgCourse(code);
-        User user = userBO.getRemoteUser(orgCourse.getCoachUser());
-        orgCourse.setRealName(user.getRealName());
+        Coach coach = coachBO.getCoachByUserId(orgCourse.getCoachUser());
+        orgCourse.setRealName(coach.getRealName());
         return orgCourse;
     }
 }

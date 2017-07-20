@@ -24,7 +24,7 @@
 				AND t.coach_code = #{coachCode}
 			</if>
 			<if test="productCode != null and productCode != '' ">
-				AND t.productCode = #{productCode}
+				AND t.product_code = #{productCode}
 			</if>
 			<choose>
 				 <when test='status == "BD"'>

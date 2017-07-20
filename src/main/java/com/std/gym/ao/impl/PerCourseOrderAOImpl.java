@@ -24,7 +24,6 @@ import com.std.gym.domain.PerCourse;
 import com.std.gym.domain.PerCourseOrder;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
-import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
@@ -299,9 +298,14 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
     @Override
     public void changeOrder() {
+        changeNoPayOrder();
+        changePaySuccessOrder();
+    }
+
+    private void changeNoPayOrder() {
         logger.info("***************开始扫描待订单，未支付的3天后取消***************");
         PerCourseOrder condition = new PerCourseOrder();
-        condition.setStatus(EActivityOrderStatus.NOTPAY.getCode());
+        condition.setStatus(EPerCourseOrderStatus.NOTPAY.getCode());
         condition.setApplyBeginDatetime(DateUtil.getRelativeDate(new Date(),
             -(60 * 60 * 24 * 3 + 1)));
         List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
@@ -311,4 +315,23 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         }
         logger.info("***************结束扫描待订单，未支付的3天后取消***************");
     }
+
+    private void changePaySuccessOrder() {
+        logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
+        PerCourseOrder condition = new PerCourseOrder();
+        condition.setStatus(EPerCourseOrderStatus.CLASS_OVER.getCode());
+        condition.setSkEndDatetime(DateUtil.getRelativeDate(new Date(),
+            -(60 * 60 * 24 * 7 + 1)));
+        List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
+            .queryPerCourseOrderList(condition);
+        for (PerCourseOrder order : perCourseOrderList) {
+            // 给私教加钱
+            accountBO.doTransferAmountRemote(order.getToUser(),
+                ESysAccount.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
+                order.getAmount(), EBizType.KCGM, EBizType.KCGM.getValue(),
+                EBizType.KCGM.getValue(), order.getCode());
+        }
+        logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
+    }
+
 }

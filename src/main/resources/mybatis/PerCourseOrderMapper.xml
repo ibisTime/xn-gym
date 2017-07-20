@@ -65,6 +65,9 @@
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
+			<if test="skEndDatetime != null and skEndDatetime != '' ">
+				<![CDATA[AND t.sk_end_datetime >= #{skEndDatetime}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_perCourseOrder" parameterType="perCourseOrder" resultMap="perCourseOrder_DB_Result">
