@@ -139,4 +139,16 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
         perCourseOrder.setStatus(EPerCourseOrderStatus.FINISH.getCode());
         perCourseOrderDAO.finishOrder(perCourseOrder);
     }
+
+    @Override
+    public Long getTotalCount(String perCourseCode, Date appointment,
+            String skStartDatetime, String skEndDatetime) {
+        PerCourseOrder condition = new PerCourseOrder();
+        condition.setPerCourseCode(perCourseCode);
+        condition.setAppointDatetime(appointment);
+        condition.setSkDatetime(skStartDatetime);
+        condition.setXkDatetime(skEndDatetime);
+        condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
+        return perCourseOrderDAO.selectTotalCount(condition);
+    }
 }

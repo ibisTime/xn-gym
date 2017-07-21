@@ -1,5 +1,6 @@
 package com.std.gym.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.std.gym.bo.base.IPaginableBO;
@@ -34,5 +35,8 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
     public void platCancel(PerCourseOrder order, String updater, String remark);
 
     public void finishOrder(PerCourseOrder perCourseOrder);
+
+    public Long getTotalCount(String perCourseCode, Date appointment,
+            String skStartDatetime, String skEndDatetime);
 
 }

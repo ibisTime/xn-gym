@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 活动状态
+ * 系统参数类型
  * @author: shan 
  * @since: 2016年12月8日 下午10:01:27 
  * @history:

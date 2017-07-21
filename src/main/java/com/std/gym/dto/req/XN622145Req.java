@@ -15,16 +15,19 @@ public class XN622145Req extends APageReq {
      */
     private static final long serialVersionUID = 3447659632595280080L;
 
-    // 私教编号
+    // 私教编号（选填）
     private String coachCode;
 
-    // 产品编号
+    // 产品编号（选填）
     private String productCode;
 
-    // 状态
+    // 状态（选填）
     private String status;
 
-    // 状态List
+    // 内容（选填）
+    private String content;
+
+    // 状态List（选填）
     private List<String> statusList;
 
     public String getCoachCode() {
@@ -57,5 +60,13 @@ public class XN622145Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

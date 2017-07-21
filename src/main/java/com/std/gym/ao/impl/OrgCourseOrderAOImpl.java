@@ -12,15 +12,18 @@ import com.std.gym.bo.IAccountBO;
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.IOrgCourseBO;
 import com.std.gym.bo.IOrgCourseOrderBO;
+import com.std.gym.bo.ISYSConfigBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.AmountUtil;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
+import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Account;
 import com.std.gym.domain.Coach;
 import com.std.gym.domain.OrgCourse;
 import com.std.gym.domain.OrgCourseOrder;
+import com.std.gym.domain.SYSConfig;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.enums.EActivityOrderStatus;
@@ -30,7 +33,9 @@ import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.ESysConfigCkey;
 import com.std.gym.enums.ESysUser;
+import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
 
 @Service
@@ -51,6 +56,9 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
 
     @Autowired
     private IAccountBO accountBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public String commitOrder(String orgCourseCode, Integer quantity,
@@ -125,8 +133,8 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             throw new BizException("xn000000", "余额不足");
         }
         accountBO.doTransferAmountRemote(order.getApplyUser(),
-            ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
-            order.getAmount(), EBizType.AJ_TKGM, EBizType.AJ_TKGM.getValue(),
+            ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, order.getAmount(),
+            EBizType.AJ_TKGM, EBizType.AJ_TKGM.getValue(),
             EBizType.AJ_TKGM.getValue(), order.getCode());
         paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
         return new BooleanRes(true);
@@ -176,11 +184,10 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             orgCourseOrderBO.platCancel(order, updater, remark);
         }
         if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
-            accountBO.doTransferAmountRemote(
-                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, order.getAmount(), EBizType.AJ_TKGMTK,
-                EBizType.AJ_TKGMTK.getValue(), EBizType.AJ_TKGMTK.getValue(),
-                order.getCode());
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, order.getAmount(),
+                EBizType.AJ_TKGMTK, EBizType.AJ_TKGMTK.getValue(),
+                EBizType.AJ_TKGMTK.getValue(), order.getCode());
             orgCourseOrderBO.platCancel(order, updater, remark);
         } else {
             throw new BizException("xn0000", "该状态下不能取消订单");
@@ -219,11 +226,10 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             status = EActivityOrderStatus.REFUND_YES;
             Long amount = AmountUtil.mul(1000L,
                 Double.valueOf(order.getAmount() * 0.8));
-            accountBO.doTransferAmountRemote(
-                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, amount, EBizType.AJ_TKGMTK,
-                EBizType.AJ_TKGMTK.getValue(), EBizType.AJ_TKGMTK.getValue(),
-                order.getCode());
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, amount,
+                EBizType.AJ_TKGMTK, EBizType.AJ_TKGMTK.getValue(),
+                EBizType.AJ_TKGMTK.getValue(), order.getCode());
         }
         orgCourseOrderBO.approveRefund(order, status, updater, remark);
     }
@@ -268,6 +274,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
     @Override
     public void changeOrder() {
         changeNoPayOrder();
+        changePaySuccessOrder();
     }
 
     private void changeNoPayOrder() {
@@ -282,5 +289,36 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             orgCourseOrderBO.platCancel(orgCourseOrder, "系统取消", "超时支付,系统自动取消");
         }
         logger.info("***************结束扫描待订单，未支付的3天后取消***************");
+    }
+
+    private void changePaySuccessOrder() {
+        logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
+        OrgCourseOrder condition = new OrgCourseOrder();
+        condition.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
+        List<OrgCourseOrder> orgCourseOrderList = orgCourseOrderBO
+            .queryOrgCourseOrderList(condition);
+        for (OrgCourseOrder order : orgCourseOrderList) {
+            OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
+                .getOrgCourseCode());
+            if (orgCourse.getSkEndDatetime().before(
+                DateUtil.getRelativeDate(new Date(), -(60 * 60 * 24 * 7 + 1)))) {
+                User user = userBO.getRemoteUser(order.getApplyUser());
+                if (user.getUserReferee() != null) {
+                    SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                        ESysConfigCkey.HKFC.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode());
+                    Long amount = AmountUtil.mul(1000L, order.getAmount()
+                            * StringValidater.toDouble(sysConfig.getCvalue()));
+                    // 给推荐人加钱
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY, amount,
+                        EBizType.TJ, EBizType.TJ.getValue(),
+                        EBizType.TJ.getValue(), order.getCode());
+                }
+            }
+        }
+        logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
     }
 }

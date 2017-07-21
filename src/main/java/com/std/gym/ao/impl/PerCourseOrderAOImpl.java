@@ -69,13 +69,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         Date appointment = DateUtil.getRelativeDate(DateUtil.getTodayStart(),
             24 * 3600 * skDays);
 
-        PerCourseOrder condition = new PerCourseOrder();
-        condition.setPerCourseCode(perCourseCode);
-        condition.setAppointDatetime(appointment);
-        condition.setSkDatetime(perCourse.getSkStartDatetime());
-        condition.setXkDatetime(perCourse.getSkEndDatetime());
-        condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
-        Long skCount = perCourseOrderBO.getTotalCount(condition);
+        Long skCount = perCourseOrderBO.getTotalCount(perCourseCode,
+            appointment, perCourse.getSkStartDatetime(),
+            perCourse.getSkEndDatetime());
         if (skCount > 0) {
             throw new BizException("xn0000", "该课程已被预订");
         }
@@ -112,14 +108,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
         PerCourse perCourse = perCourseBO
             .getPerCourse(order.getPerCourseCode());
-        PerCourseOrder condition = new PerCourseOrder();
-        condition.setPerCourseCode(order.getPerCourseCode());
-        condition.setAppointDatetime(order.getAppointDatetime());
-        condition.setSkDatetime(order.getSkDatetime());
-        condition.setXkDatetime(order.getXkDatetime());
-        condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
-        Long buyOver = perCourseOrderBO.getTotalCount(condition);
-        if (buyOver != null) {
+        Long skCount = perCourseOrderBO.getTotalCount(order.getPerCourseCode(),
+            order.getAppointDatetime(), order.getSkDatetime(),
+            order.getXkDatetime());
+        if (skCount > 0) {
             throw new BizException("xn0000", "该课程已被预订");
         }
 
@@ -318,9 +310,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder order : perCourseOrderList) {
             // 给私教加钱
-            accountBO.doTransferAmountRemote(order.getToUser(),
-                ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
-                order.getAmount(), EBizType.KCGM, EBizType.KCGM.getValue(),
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getToUser(), ECurrency.CNY, order.getAmount(),
+                EBizType.KCGM, EBizType.KCGM.getValue(),
                 EBizType.KCGM.getValue(), order.getCode());
         }
         logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");

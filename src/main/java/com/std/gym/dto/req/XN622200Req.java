@@ -8,17 +8,17 @@ package com.std.gym.dto.req;
  */
 public class XN622200Req {
     // 编号（必填）
-    private String code;
+    private String ckey;
 
     // 分数（必填）
     private String score;
 
-    public String getCode() {
-        return code;
+    public String getCkey() {
+        return ckey;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCkey(String ckey) {
+        this.ckey = ckey;
     }
 
     public String getScore() {
@@ -28,4 +28,5 @@ public class XN622200Req {
     public void setScore(String score) {
         this.score = score;
     }
+
 }

@@ -26,6 +26,9 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
+			<if test="content != null and content != '' ">
+				AND t.content like "%"#{content}#"%"
+			</if>
 			<choose>
 				 <when test='status == "BD"'>
 				 	AND t.status in ('B','D')
