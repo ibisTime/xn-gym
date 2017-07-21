@@ -29,6 +29,9 @@
 			<if test="ckeyForQuery != null and ckeyForQuery != '' ">
 				AND t.ckey like "%"#{ckeyForQuery}"%"
 			</if>
+			<if test="note != null and note != '' ">
+				AND t.note like "%"#{note}#"%"
+			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>

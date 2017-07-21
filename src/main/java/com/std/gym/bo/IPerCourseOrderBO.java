@@ -21,7 +21,7 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
     public PerCourseOrder getOrderPayGroup(String payGroup);
 
     public void paySuccess(PerCourseOrder order, String payCode, Long amount,
-            String payType);
+            Long penalty, String payType);
 
     public void receiverOrder(PerCourseOrder order, String updater,
             String remark);

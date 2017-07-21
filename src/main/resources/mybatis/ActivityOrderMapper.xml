@@ -16,6 +16,7 @@
 		<result column="pay_code" property="payCode" />
 		
 		<result column="pay_amount" property="payAmount" />
+		<result column="penalty" property="penalty" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="apply_user" property="applyUser" />
 		<result column="mobile" property="mobile" />
@@ -84,6 +85,7 @@
 		,t.pay_code
 		
 		,t.pay_amount
+		,t.penalty
 		,t.pay_datetime
 		,t.apply_user
 		,t.mobile
@@ -111,7 +113,7 @@
 	<insert id="insert_activityOrder" parameterType="activityOrder">
 		INSERT INTO tgym_activity_order(
 		code
-		,activity_code,
+		,activity_code
 		,activity_title
 		,quantity
 		,price
@@ -157,8 +159,10 @@
 	<update id="update_orderPay" parameterType="activityOrder">
 		UPDATE tgym_activity_order SET
 		status=#{status}
+		,pay_type=#{payType}
 		,pay_code=#{payCode}
 		,pay_amount=#{payAmount}
+		,penalty = #{penalty}
 		,pay_datetime=#{payDatetime}
 		WHERE code = #{code}
 	</update>

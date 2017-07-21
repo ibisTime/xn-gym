@@ -71,6 +71,9 @@ public class PerCourseOrder extends ABaseDO {
     // 支付时间
     private Date payDatetime;
 
+    // 违约金
+    private Long penalty;
+
     // 申请人
     private String applyUser;
 
@@ -101,6 +104,9 @@ public class PerCourseOrder extends ABaseDO {
 
     // 用户名称
     private String realName;
+
+    // 用户名称
+    private Coach coach;
 
     public void setCode(String code) {
         this.code = code;
@@ -332,6 +338,22 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public Coach getCoach() {
+        return coach;
+    }
+
+    public void setCoach(Coach coach) {
+        this.coach = coach;
+    }
+
+    public Long getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(Long penalty) {
+        this.penalty = penalty;
     }
 
 }

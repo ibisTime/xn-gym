@@ -18,6 +18,9 @@ public class XN622915Req extends APageReq {
     // key值(选填)
     private String ckey;
 
+    // value值说明(选填)
+    private String note;
+
     // 系统编号（必填）
     private String systemCode;
 
@@ -43,5 +46,13 @@ public class XN622915Req extends APageReq {
 
     public void setCkey(String ckey) {
         this.ckey = ckey;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

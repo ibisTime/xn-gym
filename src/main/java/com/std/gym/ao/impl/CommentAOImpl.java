@@ -188,14 +188,14 @@ public class CommentAOImpl implements ICommentAO {
 
         // 私课评论加积分
         SYSConfig sysConfig = sysConfigBO.getConfigValue(
-            EBizType.SKGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+            EBizType.SKGMSJF.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
             ESystemCode.SYSTEM_CODE.getCode());
         Long amount = AmountUtil.mul(1000L,
             Double.valueOf(sysConfig.getCvalue()));
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-            perCourseOrder.getApplyUser(), ECurrency.JF, amount, EBizType.SKGM,
-            EBizType.SKGM.getValue(), EBizType.SKGM.getValue(),
-            perCourseOrder.getCode());
+            perCourseOrder.getApplyUser(), ECurrency.JF, amount,
+            EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
+            EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
         return code;
     }
 
@@ -203,7 +203,7 @@ public class CommentAOImpl implements ICommentAO {
             List<XN622200Req> itemScoreList, String status, String commer) {
         OrgCourseOrder orgCourseOrder = orgCourseOrderBO
             .getOrgCourseOrder(orderCode);
-        if (!EActivityOrderStatus.PAYSUCCESS.getCode().equals(
+        if (!EActivityOrderStatus.TO_COMMENT.getCode().equals(
             orgCourseOrder.getStatus())) {
             throw new BizException("xn0000", "该团课订单还不能评论");
         }
@@ -225,15 +225,15 @@ public class CommentAOImpl implements ICommentAO {
 
         // 给用户加积分
         SYSConfig sysConfig = sysConfigBO.getConfigValue(
-            EBizType.KCGM.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+            EBizType.KCGMSJF.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
             ESystemCode.SYSTEM_CODE.getCode());
         Long amount = AmountUtil.mul(1000L,
             Double.valueOf(sysConfig.getCvalue()));
 
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-            orgCourseOrder.getApplyUser(), ECurrency.JF, amount, EBizType.KCGM,
-            EBizType.KCGM.getValue(), EBizType.KCGM.getValue(),
-            orgCourseOrder.getCode());
+            orgCourseOrder.getApplyUser(), ECurrency.JF, amount,
+            EBizType.KCGMSJF, EBizType.KCGMSJF.getValue(),
+            EBizType.KCGMSJF.getValue(), orgCourseOrder.getCode());
         return code;
     }
 

@@ -156,7 +156,15 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             throw new BizException("xn000000", "未找到对应活动订单");
         }
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            orgCourseOrderBO.paySuccess(order, payCode, amount, payType);
+            // 计算违约金额
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penalty = AmountUtil.mul(1L,
+                amount * StringValidater.toDouble(sysConfig.getCvalue()));
+            // 支付成功
+            orgCourseOrderBO.paySuccess(order, payCode, amount, penalty,
+                payType);
             OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
                 .getOrgCourseCode());
             if (orgCourse.getRemainNum() - order.getQuantity() == 0) {
@@ -224,8 +232,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             status = EActivityOrderStatus.REFUND_NO;
         } else if (EBoolean.YES.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_YES;
-            Long amount = AmountUtil.mul(1000L,
-                Double.valueOf(order.getAmount() * 0.8));
+            Long amount = order.getAmount() - order.getPenalty();
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
                 order.getApplyUser(), ECurrency.CNY, amount,
                 EBizType.AJ_TKGMTK, EBizType.AJ_TKGMTK.getValue(),
@@ -274,6 +281,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
     @Override
     public void changeOrder() {
         changeNoPayOrder();
+        changeToCommentOrder();
         changePaySuccessOrder();
     }
 
@@ -291,10 +299,27 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         logger.info("***************结束扫描待订单，未支付的3天后取消***************");
     }
 
+    private void changeToCommentOrder() {
+        logger.info("***************开始扫描待订单,在上课结束后1天待评价***************");
+        OrgCourseOrder condition = new OrgCourseOrder();
+        condition.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
+        List<OrgCourseOrder> orgCourseOrderList = orgCourseOrderBO
+            .queryOrgCourseOrderList(condition);
+        for (OrgCourseOrder order : orgCourseOrderList) {
+            OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
+                .getOrgCourseCode());
+            if (orgCourse.getSkEndDatetime().before(
+                DateUtil.getRelativeDate(new Date(), -(60 * 60 * 24 * 2 + 1)))) {
+                orgCourseOrderBO.toComment(order);
+            }
+        }
+        logger.info("***************开始扫描待订单,在上课结束后1天待评价***************");
+    }
+
     private void changePaySuccessOrder() {
         logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
         OrgCourseOrder condition = new OrgCourseOrder();
-        condition.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
+        condition.setStatus(EActivityOrderStatus.TO_COMMENT.getCode());
         List<OrgCourseOrder> orgCourseOrderList = orgCourseOrderBO
             .queryOrgCourseOrderList(condition);
         for (OrgCourseOrder order : orgCourseOrderList) {
@@ -308,7 +333,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                         ESysConfigCkey.HKFC.getCode(),
                         ESystemCode.SYSTEM_CODE.getCode(),
                         ESystemCode.SYSTEM_CODE.getCode());
-                    Long amount = AmountUtil.mul(1000L, order.getAmount()
+                    Long amount = AmountUtil.mul(1L, order.getAmount()
                             * StringValidater.toDouble(sysConfig.getCvalue()));
                     // 给推荐人加钱
                     accountBO.doTransferAmountRemote(
@@ -316,6 +341,21 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                         user.getUserReferee(), ECurrency.CNY, amount,
                         EBizType.TJ, EBizType.TJ.getValue(),
                         EBizType.TJ.getValue(), order.getCode());
+                    // 给团课上课教练加钱
+                    SYSConfig sysConfigCoach = sysConfigBO.getConfigValue(
+                        ESysConfigCkey.TTJFC.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode());
+                    Long coachAmount = AmountUtil.mul(
+                        1L,
+                        order.getAmount()
+                                * StringValidater.toDouble(sysConfigCoach
+                                    .getCvalue()));
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        orgCourse.getCoachUser(), ECurrency.CNY, coachAmount,
+                        EBizType.TTJFC, EBizType.TTJFC.getValue(),
+                        EBizType.TTJFC.getValue(), order.getCode());
                 }
             }
         }

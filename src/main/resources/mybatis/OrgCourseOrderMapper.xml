@@ -14,6 +14,7 @@
 		<result column="pay_code" property="payCode" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_amount" property="payAmount" />
+		<result column="penalty" property="penalty" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="apply_user" property="applyUser" />
 		<result column="mobile" property="mobile" />
@@ -73,6 +74,7 @@
 		,t.pay_code
 		,t.pay_group
 		,t.pay_amount
+		,t.penalty
 		,t.pay_datetime
 		,t.apply_user
 		,t.mobile
@@ -145,6 +147,7 @@
 		,pay_type = #{payType}
 		,pay_code = #{payCode}
 		,pay_amount = #{payAmount}
+		,penalty = #{penalty}
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>

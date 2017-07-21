@@ -56,7 +56,7 @@ public interface IActivityOrderBO extends IPaginableBO<ActivityOrder> {
     public void payGroup(ActivityOrder order, String payGroup);
 
     public void paySuccess(ActivityOrder order, String payCode, Long amount,
-            String payType);
+            Long penalty, String payType);
 
     public void userCancel(ActivityOrder order, String updater);
 

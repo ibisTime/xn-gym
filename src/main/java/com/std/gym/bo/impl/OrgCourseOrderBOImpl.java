@@ -86,11 +86,12 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
 
     @Override
     public void paySuccess(OrgCourseOrder order, String payCode, Long amount,
-            String payType) {
+            Long penalty, String payType) {
         order.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
         order.setPayType(payType);
         order.setPayCode(payCode);
         order.setPayAmount(amount);
+        order.setPenalty(penalty);
         order.setPayDatetime(new Date());
         orgCourseOrderDAO.paySuccess(order);
     }
@@ -133,9 +134,15 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
     }
 
     @Override
-    public void finishOrder(OrgCourseOrder orgCourseOrder) {
-        orgCourseOrder.setStatus(EActivityOrderStatus.END.getCode());
-        orgCourseOrderDAO.finishOrder(orgCourseOrder);
+    public void finishOrder(OrgCourseOrder order) {
+        order.setStatus(EActivityOrderStatus.END.getCode());
+        orgCourseOrderDAO.finishOrder(order);
+    }
+
+    @Override
+    public void toComment(OrgCourseOrder order) {
+        order.setStatus(EActivityOrderStatus.TO_COMMENT.getCode());
+        orgCourseOrderDAO.finishOrder(order);
     }
 
 }

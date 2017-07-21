@@ -51,6 +51,9 @@ public class ActivityOrder extends ABaseDO {
     // 支付金额
     private Long payAmount;
 
+    // 违约金
+    private Long penalty;
+
     // 用户支付时间
     private Date payDatetime;
 
@@ -325,6 +328,14 @@ public class ActivityOrder extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Long getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(Long penalty) {
+        this.penalty = penalty;
     }
 
 }

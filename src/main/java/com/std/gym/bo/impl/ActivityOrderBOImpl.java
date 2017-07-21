@@ -105,9 +105,10 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
 
     @Override
     public void paySuccess(ActivityOrder order, String payCode, Long amount,
-            String payType) {
+            Long penalty, String payType) {
         order.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
         order.setPayType(payType);
+        order.setPenalty(penalty);
         order.setPayCode(payCode);
         order.setPayAmount(amount);
         order.setPayDatetime(new Date());

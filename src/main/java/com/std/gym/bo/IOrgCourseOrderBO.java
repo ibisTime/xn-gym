@@ -23,7 +23,7 @@ public interface IOrgCourseOrderBO extends IPaginableBO<OrgCourseOrder> {
     public OrgCourseOrder getOrderPayGroup(String payGroup);
 
     public void paySuccess(OrgCourseOrder order, String payCode, Long amount,
-            String payType);
+            Long penalty, String payType);
 
     public void userCancel(OrgCourseOrder order, String applyUser);
 
@@ -35,6 +35,8 @@ public interface IOrgCourseOrderBO extends IPaginableBO<OrgCourseOrder> {
     public void approveRefund(OrgCourseOrder order,
             EActivityOrderStatus status, String updater, String remark);
 
-    public void finishOrder(OrgCourseOrder orgCourseOrder);
+    public void finishOrder(OrgCourseOrder order);
+
+    public void toComment(OrgCourseOrder order);
 
 }

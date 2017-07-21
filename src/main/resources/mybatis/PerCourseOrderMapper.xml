@@ -19,6 +19,7 @@
 		<result column="sk_end_datetime" property="skEndDatetime" />
 		<result column="pay_type" property="payType" />
 		<result column="pay_amount" property="payAmount" />
+		<result column="penalty" property="penalty" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		<result column="pay_datetime" property="payDatetime" />
@@ -62,6 +63,9 @@
 			<if test="courseName != null and courseName != '' ">
 				AND t.course_name = #{courseName}
 			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
@@ -88,6 +92,7 @@
 		,t.sk_end_datetime
 		,t.pay_type
 		,t.pay_amount
+		,t.penalty
 		,t.pay_group
 		,t.pay_code
 		,t.pay_datetime
@@ -167,6 +172,7 @@
 		status = #{status}
 		,pay_type = #{payType}
 		,pay_amount = #{payAmount}
+		,penalty = #{penalty}
 		,pay_code = #{payCode}
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}

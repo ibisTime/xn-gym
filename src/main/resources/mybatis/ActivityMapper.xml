@@ -188,15 +188,10 @@
 		WHERE code = #{code}
 	</update>
 
-	<update id="update_scan" parameterType="activity">
-		UPDATE tgym_activity SET
-		scan_num=#{scanNum}
-		WHERE code = #{code}
-	</update>
 	
 	<update id="update_sign" parameterType="activity">
 		UPDATE tgym_activity SET
-		sign_num=#{signNum}
+		remain_num = #{remainNum}
 		WHERE code = #{code}
 	</update>
 	

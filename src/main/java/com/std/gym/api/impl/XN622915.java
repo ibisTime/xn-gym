@@ -29,6 +29,7 @@ public class XN622915 extends AProcessor {
         SYSConfig condition = new SYSConfig();
         condition.setType(req.getType());
         condition.setCkeyForQuery(req.getCkey());
+        condition.setNote(req.getNote());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

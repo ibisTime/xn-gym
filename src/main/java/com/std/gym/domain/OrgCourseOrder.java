@@ -51,6 +51,9 @@ public class OrgCourseOrder extends ABaseDO {
     // 支付时间
     private Date payDatetime;
 
+    // 违约金
+    private Long penalty;
+
     // 申请人
     private String applyUser;
 
@@ -289,6 +292,14 @@ public class OrgCourseOrder extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public Long getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(Long penalty) {
+        this.penalty = penalty;
     }
 
 }

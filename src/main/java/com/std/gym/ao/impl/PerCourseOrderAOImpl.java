@@ -12,6 +12,7 @@ import com.std.gym.bo.IAccountBO;
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IPerCourseOrderBO;
+import com.std.gym.bo.ISYSConfigBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.AmountUtil;
@@ -22,6 +23,7 @@ import com.std.gym.domain.Account;
 import com.std.gym.domain.Coach;
 import com.std.gym.domain.PerCourse;
 import com.std.gym.domain.PerCourseOrder;
+import com.std.gym.domain.SYSConfig;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.enums.EBizType;
@@ -29,7 +31,9 @@ import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.ESysConfigCkey;
 import com.std.gym.enums.ESysUser;
+import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
 
 @Service
@@ -44,6 +48,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
     @Autowired
     private IAccountBO accountBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Autowired
     private IUserBO userBO;
@@ -163,7 +170,15 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn000000", "未找到对应活动订单");
         }
         if (EPerCourseOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            perCourseOrderBO.paySuccess(order, payCode, amount, payType);
+            // 计算违约金额
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penalty = AmountUtil.mul(1L,
+                amount * StringValidater.toDouble(sysConfig.getCvalue()));
+            // 支付成功
+            perCourseOrderBO.paySuccess(order, payCode, amount, penalty,
+                payType);
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -202,28 +217,43 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     @Override
     public void userCancel(String orderCode, String updater, String remark) {
         PerCourseOrder order = perCourseOrderBO.getPerCourseOrder(orderCode);
-        if (!EPerCourseOrderStatus.NOTPAY.getCode().equals(order.getStatus())
-                || !EPerCourseOrderStatus.PAYSUCCESS.getCode().equals(
+        if (EPerCourseOrderStatus.NOTPAY.getCode().equals(order.getStatus())
+                || EPerCourseOrderStatus.PAYSUCCESS.getCode().equals(
                     order.getStatus())) {
-            throw new BizException("xn0000", "该私课订单状态下，不能取消");
-        }
-        if (EPerCourseOrderStatus.PAYSUCCESS.getCode()
-            .equals(order.getStatus())) {
-            Date appointDatetime = DateUtil.strToDate(
-                order.getAppointDatetime() + order.getSkDatetime(),
-                DateUtil.DATA_TIME_PATTERN_1);
-            if (!DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1))
-                .before(appointDatetime)) {
-                throw new BizException("xn0000", "临近上课时间不到两小时,不能取消订单");
+            if (EPerCourseOrderStatus.PAYSUCCESS.getCode().equals(
+                order.getStatus())) {
+                Date appointDatetime = DateUtil.strToDate(
+                    order.getAppointDatetime() + order.getSkDatetime(),
+                    DateUtil.DATA_TIME_PATTERN_1);
+                if (!DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1))
+                    .before(appointDatetime)) {
+                    throw new BizException("xn0000", "临近上课时间不到两小时,不能取消订单");
+                }
+                // 违约后用户能得到的钱
+                Long amount = order.getAmount() - order.getPenalty();
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, amount, EBizType.AJ_SKGMTK,
+                    EBizType.AJ_SKGMTK.getValue(),
+                    EBizType.AJ_SKGMTK.getValue(), order.getCode());
+
+                // 私教获得多少钱
+                SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.SJFC.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long coachAmount = AmountUtil.mul(1L, order.getPenalty()
+                        * StringValidater.toDouble(sysConfig.getCvalue()));
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
+                    ECurrency.CNY, coachAmount, EBizType.TTJFC,
+                    EBizType.TTJFC.getValue(), EBizType.TTJFC.getValue(),
+                    order.getCode());
             }
-            Long amount = AmountUtil.mul(1000L,
-                Double.valueOf(order.getAmount() * 0.8));
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-                order.getApplyUser(), ECurrency.CNY, amount,
-                EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
-                EBizType.AJ_SKGMTK.getValue(), order.getCode());
+            perCourseOrderBO.userCancel(order, updater, remark);
+            return;
         }
-        perCourseOrderBO.userCancel(order, updater, remark);
+        throw new BizException("xn0000", "该私课订单状态下，不能取消");
     }
 
     @Override
@@ -256,6 +286,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         for (PerCourseOrder perCourseOrder : list) {
             User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
             perCourseOrder.setRealName(user.getNickname());
+            Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
+            perCourseOrder.setCoach(coach);
         }
         return page;
     }
@@ -267,6 +299,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         for (PerCourseOrder perCourseOrder : list) {
             User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
             perCourseOrder.setRealName(user.getNickname());
+            Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
+            perCourseOrder.setCoach(coach);
         }
         return list;
     }
@@ -277,6 +311,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             .getPerCourseOrder(code);
         User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
         perCourseOrder.setRealName(user.getNickname());
+        Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
+        perCourseOrder.setCoach(coach);
         return perCourseOrder;
     }
 
@@ -309,13 +345,18 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder order : perCourseOrderList) {
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.SJFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long amount = AmountUtil.mul(1L, order.getAmount()
+                    * StringValidater.toDouble(sysConfig.getCvalue()));
             // 给私教加钱
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-                order.getToUser(), ECurrency.CNY, order.getAmount(),
-                EBizType.KCGM, EBizType.KCGM.getValue(),
-                EBizType.KCGM.getValue(), order.getCode());
+                order.getToUser(), ECurrency.CNY, amount, EBizType.AJ_SKGM,
+                EBizType.AJ_SKGM.getValue(), EBizType.AJ_SKGM.getValue(),
+                order.getCode());
         }
         logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
     }
-
 }

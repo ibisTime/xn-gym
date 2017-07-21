@@ -19,6 +19,7 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.AmountUtil;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
+import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Account;
 import com.std.gym.domain.Activity;
 import com.std.gym.domain.ActivityOrder;
@@ -32,6 +33,7 @@ import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.ESysConfigCkey;
 import com.std.gym.enums.ESysUser;
 import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
@@ -198,8 +200,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             throw new BizException("xn000000", "余额不足");
         }
         accountBO.doTransferAmountRemote(order.getApplyUser(),
-            ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY,
-            order.getAmount(), EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
+            ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, order.getAmount(),
+            EBizType.AJ_HDGM, EBizType.AJ_HDGM.getValue(),
             EBizType.AJ_HDGM.getValue(), order.getCode());
         paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
         return new BooleanRes(true);
@@ -247,16 +249,16 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                     activityOrderBO.finishOrder(order);
                     // 订单完成送积分
                     SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                        EBizType.HDGM.getCode(),
+                        EBizType.HDGMSJF.getCode(),
                         ESystemCode.SYSTEM_CODE.getCode(),
                         ESystemCode.SYSTEM_CODE.getCode());
                     Long amount = AmountUtil.mul(1000L,
                         Double.valueOf(sysConfig.getCvalue()));
                     accountBO.doTransferAmountRemote(
-                        ESysUser.SYS_USER_ZWZJ.getCode(),
-                        order.getApplyUser(), ECurrency.JF, amount,
-                        EBizType.HDGM, EBizType.HDGM.getValue(),
-                        EBizType.HDGM.getValue(), order.getCode());
+                        ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                        ECurrency.JF, amount, EBizType.HDGMSJF,
+                        EBizType.HDGMSJF.getValue(),
+                        EBizType.HDGMSJF.getValue(), order.getCode());
                 }
             }
         }
@@ -274,7 +276,13 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             payType = EPayType.WEIXIN.getCode();
         }
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            activityOrderBO.paySuccess(order, payCode, amount, payType);
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penalty = AmountUtil.mul(1L,
+                amount * StringValidater.toDouble(sysConfig.getCvalue()));
+            activityOrderBO
+                .paySuccess(order, payCode, amount, penalty, payType);
             Activity activity = activityBO.getActivity(order.getActivityCode());
             if (activity.getRemainNum() - order.getQuantity() == 0) {
                 activity.setStatus(EActivityStatus.END.getCode());
@@ -301,11 +309,10 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             activityOrderBO.platCancel(order, updater, remark);
         }
         if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(order.getStatus())) {
-            accountBO.doTransferAmountRemote(
-                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, order.getAmount(), EBizType.AJ_HDGMTK,
-                EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
-                order.getCode());
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, order.getAmount(),
+                EBizType.AJ_HDGMTK, EBizType.AJ_HDGMTK.getValue(),
+                EBizType.AJ_HDGMTK.getValue(), order.getCode());
             activityOrderBO.platCancel(order, updater, remark);
         } else {
             throw new BizException("xn000000", "该状态下不能取消订单");
@@ -338,13 +345,11 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             status = EActivityOrderStatus.REFUND_NO;
         } else if (EBoolean.YES.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_YES;
-            Long amount = AmountUtil.mul(1000L,
-                Double.valueOf(order.getAmount() * 0.8));
-            accountBO.doTransferAmountRemote(
-                ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                ECurrency.CNY, amount, EBizType.AJ_HDGMTK,
-                EBizType.AJ_HDGMTK.getValue(), EBizType.AJ_HDGMTK.getValue(),
-                order.getCode());
+            Long amount = order.getAmount() - order.getPenalty();
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, amount,
+                EBizType.AJ_HDGMTK, EBizType.AJ_HDGMTK.getValue(),
+                EBizType.AJ_HDGMTK.getValue(), order.getCode());
         }
         activityOrderBO.approveRefund(order, status, updater, remark);
     }
