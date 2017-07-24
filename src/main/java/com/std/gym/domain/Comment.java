@@ -61,6 +61,9 @@ public class Comment extends ABaseDO {
     // 状态List
     private List<String> statusList;
 
+    // 头像
+    private String photo;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -179,6 +182,14 @@ public class Comment extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 }

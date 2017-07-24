@@ -3,7 +3,6 @@ package com.std.gym.ao.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,10 +105,6 @@ public class CommentAOImpl implements ICommentAO {
 
     private String finishPerCourseOrder(String orderCode, String content,
             List<XN622200Req> itemScoreList, String status, String commer) {
-        // 参数验证
-        if (CollectionUtils.isEmpty(itemScoreList)) {
-            throw new BizException("xn0000", "您还没有评分");
-        }
         PerCourseOrder perCourseOrder = perCourseOrderBO
             .getPerCourseOrder(orderCode);
 
@@ -135,7 +130,7 @@ public class CommentAOImpl implements ICommentAO {
             ItemScore itemScore = new ItemScore();
             itemScore.setScore(StringValidater.toInteger(req.getScore()));
             itemScore.setName(sysConfig.getNote());
-            itemScore.setCommentCode(data.getCode());
+            itemScore.setCommentCode(code);
             itemScoreBO.saveItemScore(itemScore);
             double num = StringValidater.toInteger(req.getScore())
                     * StringValidater.toDouble(sysConfig.getCvalue());
@@ -212,7 +207,26 @@ public class CommentAOImpl implements ICommentAO {
 
         Comment data = new Comment();
         String code = OrderNoGenerater.generate(EPrefixCode.COMMENT.getCode());
+        // 统计分值，修改私教等级以及星数
+        Double totalScore = 0.0;// 分数
+        for (XN622200Req req : itemScoreList) {
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(req.getCkey(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());// 改动
+            // 记录得分项目,及得分
+            ItemScore itemScore = new ItemScore();
+            itemScore.setScore(StringValidater.toInteger(req.getScore()));
+            itemScore.setName(sysConfig.getNote());
+            itemScore.setCommentCode(code);
+            itemScoreBO.saveItemScore(itemScore);
+            double num = StringValidater.toInteger(req.getScore())
+                    * StringValidater.toDouble(sysConfig.getCvalue());
+            totalScore = totalScore + num;
+        }
+        totalScore = totalScore / itemScoreList.size();
+
         data.setCode(code);
+        data.setScore(totalScore.intValue());
         data.setContent(content);
         data.setCommer(commer);
         data.setCommentDatetime(new Date());
@@ -297,5 +311,18 @@ public class CommentAOImpl implements ICommentAO {
             comment.setCoachRealName(coach.getRealName());
         }
         comment.setCommerRealName(user.getNickname());
+        comment.setPhoto(user.getPhoto());
+    }
+
+    @Override
+    public int avgCommentScore(String coachCode, String productCode) {
+        List<Comment> list = commentBO.queryCommentList(coachCode, productCode);
+        int avgNum = 0;
+        int totalScore = 0;
+        for (Comment comment : list) {
+            totalScore = totalScore + comment.getScore();
+        }
+        avgNum = totalScore / list.size();
+        return avgNum;
     }
 }

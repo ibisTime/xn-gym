@@ -19,7 +19,7 @@ public interface ICommentBO extends IPaginableBO<Comment> {
 
     public Comment getComment(String code);
 
-    public List<Comment> queryCommentList(String coachCode);
+    public List<Comment> queryCommentList(String coachCode, String productCode);
 
     public void approveComment(Comment data, String status, String approver,
             String remark);

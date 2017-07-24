@@ -27,6 +27,9 @@
 			<if test="location != null and location != '' ">
 				AND t.location = #{location}
 			</if>
+			<if test="coachCode != null and coachCode != '' ">
+				AND t.coach_code = #{coachCode}
+			</if>
 			<if test="skCycle != null and skCycle != '' ">
 				AND t.sk_cycle = #{skCycle}
 			</if>

@@ -153,7 +153,7 @@ public class CoachAOImpl implements ICoachAO {
         XN622094Res res = new XN622094Res();
         Coach coach = coachBO.getCoach(code);
         List<PerCourse> perCourseList = perCourseBO.queryPerCourseList(code);
-        List<Comment> commentList = commentBO.queryCommentList(code);
+        List<Comment> commentList = commentBO.queryCommentList(code, null);
         res.setCoach(coach);
         res.setPerCourseList(perCourseList);
         res.setCommentList(commentList);

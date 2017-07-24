@@ -1,5 +1,7 @@
 package com.std.gym.api.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.std.gym.ao.ICommentAO;
 import com.std.gym.api.AProcessor;
 import com.std.gym.common.JsonUtil;
@@ -33,5 +35,8 @@ public class XN622140 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN622140Req.class);
         StringValidater.validateBlank(req.getOrderCode(), req.getContent(),
             req.getCommer());
+        if (CollectionUtils.isEmpty(req.getItemScoreList())) {
+            throw new BizException("xn0000", "您还没有评分");
+        }
     }
 }

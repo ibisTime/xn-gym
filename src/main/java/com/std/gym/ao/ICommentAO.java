@@ -27,4 +27,6 @@ public interface ICommentAO {
 
     public Comment getComment(String code);
 
+    public int avgCommentScore(String coachCode, String productCode);
+
 }

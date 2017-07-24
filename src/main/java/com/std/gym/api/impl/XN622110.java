@@ -28,6 +28,7 @@ public class XN622110 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         PerCourse condition = new PerCourse();
+        condition.setCoachCode(req.getCoachCode());
         condition.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setLocation(req.getLocation());

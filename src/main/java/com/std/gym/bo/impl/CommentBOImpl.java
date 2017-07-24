@@ -72,9 +72,10 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     }
 
     @Override
-    public List<Comment> queryCommentList(String coachCode) {
+    public List<Comment> queryCommentList(String coachCode, String productCode) {
         Comment condition = new Comment();
         condition.setCoachCode(coachCode);
+        condition.setProductCode(productCode);
         condition.setStatus(ECommentStatus.PUBLISHALL.getCode());
         return commentDAO.selectList(condition);
     }
@@ -88,4 +89,5 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
         data.setRemark(remark);
         commentDAO.approveComment(data);
     }
+
 }

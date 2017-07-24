@@ -207,7 +207,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     @Override
     public void classOver(String orderCode, String updater, String remark) {
         PerCourseOrder order = perCourseOrderBO.getPerCourseOrder(orderCode);
-        if (!EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
+        if (!EPerCourseOrderStatus.HAVE_CLASS.getCode().equals(
             order.getStatus())) {
             throw new BizException("xn0000", "该私课订单还未上课，不能下课");
         }

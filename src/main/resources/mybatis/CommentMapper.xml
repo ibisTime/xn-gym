@@ -30,8 +30,8 @@
 				AND t.content like "%"#{content}#"%"
 			</if>
 			<choose>
-				 <when test='status == "BD"'>
-				 	AND t.status in ('B','D')
+				 <when test='status == "AB"'>
+				 	AND t.status in ('A','B')
 				 </when>
 				 <otherwise>
 					 <if test='status != null and status != ""'>
