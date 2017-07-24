@@ -65,7 +65,6 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     /**
      * 新增订单
-     * @see com.std.gym.ao.IActivityOrderAO#addActivityOrder(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer)
      */
     @Override
     public String addActivityOrder(String activityCode, Integer quantity,
@@ -94,7 +93,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         if (EActivityStatus.DRAFT.getCode().equals(activity.getStatus())
                 || EActivityStatus.OFFLINE.getCode().equals(
                     activity.getStatus())
-                || EActivityStatus.END.getCode().equals(activity.getStatus())) {
+                || EActivityStatus.END.getCode().equals(activity.getStatus())
+                || activity.getStartDatetime().before(new Date())) {
             throw new BizException("xn0000", "活动不在可下单范围内");
         }
         if (activity.getRemainNum() < quantity) {
@@ -144,7 +144,6 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
 
     /**
      * 查询订单详情
-     * @see com.cdkj.ride.ao.IOrderAO#getActivityOrder(java.lang.String)
      */
     @Override
     public ActivityOrder getActivityOrder(String code) {
@@ -287,7 +286,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             if (activity.getRemainNum() - order.getQuantity() == 0) {
                 activity.setStatus(EActivityStatus.END.getCode());
             }
-            activityBO.addSignNum(activity, order.getQuantity());
+            Integer remainNum = activity.getRemainNum() - order.getQuantity();
+            activityBO.addSignNum(activity, remainNum);
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -314,6 +314,9 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 EBizType.AJ_HDGMTK, EBizType.AJ_HDGMTK.getValue(),
                 EBizType.AJ_HDGMTK.getValue(), order.getCode());
             activityOrderBO.platCancel(order, updater, remark);
+            Activity activity = activityBO.getActivity(order.getActivityCode());
+            activityBO.addSignNum(activity,
+                activity.getRemainNum() - order.getQuantity());
         } else {
             throw new BizException("xn000000", "该状态下不能取消订单");
         }

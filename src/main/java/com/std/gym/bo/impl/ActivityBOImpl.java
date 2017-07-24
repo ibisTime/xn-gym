@@ -119,7 +119,7 @@ public class ActivityBOImpl extends PaginableBOImpl<Activity> implements
 
     @Override
     public void addSignNum(Activity activity, Integer quantity) {
-        activity.setRemainNum(activity.getRemainNum() - quantity);
+        activity.setRemainNum(quantity);
         activityDAO.addSignNum(activity);
     }
 

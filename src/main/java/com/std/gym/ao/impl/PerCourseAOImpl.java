@@ -33,7 +33,7 @@ public class PerCourseAOImpl implements IPerCourseAO {
         String code = OrderNoGenerater
             .generate(EPrefixCode.PERCOURSE.getCode());
         data.setCode(code);
-        data.setSkCycle(req.getSkCycle());
+        data.setSkCycle(StringValidater.toInteger(req.getSkCycle()));
         data.setSkStartDatetime(req.getSkStartDatetime());
         data.setSkEndDatetime(req.getSkEndDatetime());
         data.setPic(req.getPic());
@@ -48,7 +48,7 @@ public class PerCourseAOImpl implements IPerCourseAO {
     @Override
     public void editPerCourse(XN622102Req req) {
         PerCourse data = perCourseBO.getPerCourse(req.getCode());
-        data.setSkCycle(req.getSkCycle());
+        data.setSkCycle(StringValidater.toInteger(req.getSkCycle()));
         data.setSkStartDatetime(req.getSkStartDatetime());
         data.setSkEndDatetime(req.getSkEndDatetime());
         data.setPic(req.getPic());
@@ -72,7 +72,7 @@ public class PerCourseAOImpl implements IPerCourseAO {
                 .getDayofweek(DateUtil.dateToStr(condition.getClassDatetime(),
                     DateUtil.FRONT_DATE_FORMAT_STRING));
             condition.setClassDatetime(null);
-            condition.setSkCycle(Integer.toString(week));
+            condition.setSkCycle(week);
         }
         return perCourseBO.getPaginable(start, limit, condition);
     }
@@ -84,7 +84,7 @@ public class PerCourseAOImpl implements IPerCourseAO {
                 .getDayofweek(DateUtil.dateToStr(condition.getClassDatetime(),
                     DateUtil.FRONT_DATE_FORMAT_STRING));
             condition.setClassDatetime(null);
-            condition.setSkCycle(Integer.toString(week));
+            condition.setSkCycle(week);
         }
 
         return perCourseBO.queryPerCourseList(condition);

@@ -115,7 +115,7 @@ public class ActivityAOImpl implements IActivityAO {
         if (EActivityStatus.ONLINE.getCode().equals(activity.getStatus())) {
             throw new BizException("xn0000", "该活动已经上线,无需重复上线");
         }
-        if (EActivityStatus.END.getCode().equals(activity.getStatus())) {
+        if (activity.getStartDatetime().before(new Date())) {
             throw new BizException("xn0000", "该活动已经结束,不可上线");
         }
         activityBO.putOn(activity, location, orderNo, updater, remark);

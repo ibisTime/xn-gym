@@ -67,7 +67,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         Integer weekDay = DateUtil.getDayofweek(DateUtil.dateToStr(new Date(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         Integer skDays = 0;// 距离下次上课天数
-        Integer skCycle = StringValidater.toInteger(perCourse.getSkCycle());
+        Integer skCycle = perCourse.getSkCycle();
         if (skCycle < weekDay) {// 下周预约
             skDays = 7 - (weekDay - skCycle);
         } else if (skCycle > weekDay) {// 本周预约

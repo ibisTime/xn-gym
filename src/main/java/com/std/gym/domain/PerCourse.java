@@ -18,7 +18,7 @@ public class PerCourse extends ABaseDO {
     private String code;
 
     // 上课周期
-    private String skCycle;
+    private Integer skCycle;
 
     // 上课时间(时)
     private String skStartDatetime;
@@ -62,11 +62,11 @@ public class PerCourse extends ABaseDO {
         return code;
     }
 
-    public void setSkCycle(String skCycle) {
+    public void setSkCycle(Integer skCycle) {
         this.skCycle = skCycle;
     }
 
-    public String getSkCycle() {
+    public Integer getSkCycle() {
         return skCycle;
     }
 

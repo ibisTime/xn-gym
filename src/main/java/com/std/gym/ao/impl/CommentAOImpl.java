@@ -3,6 +3,7 @@ package com.std.gym.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -319,10 +320,12 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> list = commentBO.queryCommentList(coachCode, productCode);
         int avgNum = 0;
         int totalScore = 0;
-        for (Comment comment : list) {
-            totalScore = totalScore + comment.getScore();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Comment comment : list) {
+                totalScore = totalScore + comment.getScore();
+            }
+            avgNum = totalScore / list.size();
         }
-        avgNum = totalScore / list.size();
         return avgNum;
     }
 }
