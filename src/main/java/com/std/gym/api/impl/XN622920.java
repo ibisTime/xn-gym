@@ -23,7 +23,7 @@ public class XN622920 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return perCourseAO;
+        return perCourseAO.totalUnfinish(req.getApplyUser());
     }
 
     @Override
