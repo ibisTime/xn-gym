@@ -12,6 +12,7 @@ import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.dao.IOrgCourseDAO;
 import com.std.gym.domain.OrgCourse;
 import com.std.gym.enums.EActivityStatus;
+import com.std.gym.enums.EOrgCourseStatus;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -73,7 +74,7 @@ public class OrgCourseBOImpl extends PaginableBOImpl<OrgCourse> implements
 
     @Override
     public void stopSign(OrgCourse orgCourse, String updater, String remark) {
-        orgCourse.setStatus(EActivityStatus.END.getCode());
+        orgCourse.setStatus(EActivityStatus.STOP.getCode());
         orgCourse.setUpdater(updater);
         orgCourse.setUpdateDatetime(new Date());
         orgCourse.setRemark(remark);
@@ -109,6 +110,16 @@ public class OrgCourseBOImpl extends PaginableBOImpl<OrgCourse> implements
     public void addSumCom(OrgCourse orgCourse) {
         orgCourse.setSumCom(orgCourse.getSumCom() + 1);
         orgCourseDAO.addSumCom(orgCourse);
+    }
+
+    @Override
+    public void beginOrgCourse(OrgCourse orgCourse, String updater,
+            String remark) {
+        orgCourse.setStatus(EOrgCourseStatus.BEGIN.getCode());
+        orgCourse.setUpdater(updater);
+        orgCourse.setUpdateDatetime(new Date());
+        orgCourse.setRemark(remark);
+        orgCourseDAO.stopSign(orgCourse);
     }
 
 }

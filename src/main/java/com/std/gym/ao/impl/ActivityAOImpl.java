@@ -3,7 +3,6 @@ package com.std.gym.ao.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +68,7 @@ public class ActivityAOImpl implements IActivityAO {
     public void dropActivity(String code) {
         Activity activity = activityBO.getActivity(code);
         if (EActivityStatus.ONLINE.getCode().equals(activity.getStatus())
-                || EActivityStatus.END.getCode().equals(activity.getStatus())) {
+                || EActivityStatus.STOP.getCode().equals(activity.getStatus())) {
             throw new BizException("xn0000", "该活动已上线/结束,不可删除");
         }
         activityBO.deleteActivity(code);
@@ -78,7 +77,7 @@ public class ActivityAOImpl implements IActivityAO {
     @Override
     public void modifyActivity(XN622012Req req) {
         Activity data = activityBO.getActivity(req.getCode());
-        if (EActivityStatus.END.getCode().equals(data.getStatus())
+        if (EActivityStatus.STOP.getCode().equals(data.getStatus())
                 || EActivityStatus.ONLINE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该活动已上线/结束,不可编辑");
         }
@@ -127,7 +126,7 @@ public class ActivityAOImpl implements IActivityAO {
         if (EActivityStatus.DRAFT.getCode().equals(activity.getStatus())
                 || EActivityStatus.OFFLINE.getCode().equals(
                     activity.getStatus())
-                || EActivityStatus.END.getCode().equals(activity.getStatus())) {
+                || EActivityStatus.STOP.getCode().equals(activity.getStatus())) {
             throw new BizException("xn0000", "该活动不处于可下架状态,请核对后在操作");
         }
         activityBO.downActivity(activity, updater, remark);
@@ -139,7 +138,7 @@ public class ActivityAOImpl implements IActivityAO {
         if (EActivityStatus.DRAFT.getCode().equals(activity.getStatus())
                 || EActivityStatus.OFFLINE.getCode().equals(
                     activity.getStatus())
-                || EActivityStatus.END.getCode().equals(activity.getStatus())) {
+                || EActivityStatus.STOP.getCode().equals(activity.getStatus())) {
             throw new BizException("xn0000", "该活动未上架,不可截止。请核对后在操作");
         }
         activityBO.stopActivity(activity, updater, remark);
@@ -159,22 +158,6 @@ public class ActivityAOImpl implements IActivityAO {
     @Override
     public Activity getActivity(String code) {
         return activityBO.getActivity(code);
-    }
-
-    @Override
-    public void changeOrder() {
-        logger.info("***************开始扫描待活动，过期取消***************");
-        Activity condition = new Activity();
-        condition.setStatus(EActivityStatus.ONLINE.getCode());
-        List<Activity> activityList = activityBO.queryActivityList(condition);
-        if (CollectionUtils.isNotEmpty(activityList)) {
-            for (Activity activity : activityList) {
-                if (activity.getStartDatetime().before(new Date())) {
-                    activityBO.auto(activity);
-                }
-            }
-        }
-        logger.info("***************开始扫描待活动，过期取消***************");
     }
 
 }

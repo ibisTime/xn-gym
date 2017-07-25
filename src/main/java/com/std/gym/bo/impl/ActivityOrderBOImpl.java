@@ -61,16 +61,6 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     }
 
     @Override
-    public List<ActivityOrder> queryOrderList(String userId,
-            String productCode, List<String> statusList) {
-        ActivityOrder data = new ActivityOrder();
-        data.setApplyUser(userId);
-        data.setActivityCode(productCode);
-        data.setStatusList(statusList);
-        return activityOrderDAO.selectList(data);
-    }
-
-    @Override
     public int refreshPay(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
@@ -156,6 +146,21 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     public void finishOrder(ActivityOrder order) {
         order.setStatus(EActivityOrderStatus.END.getCode());
         activityOrderDAO.finishOrder(order);
+    }
+
+    @Override
+    public List<ActivityOrder> queryOrderList(String activityCode,
+            List<String> statusList) {
+        ActivityOrder condition = new ActivityOrder();
+        condition.setActivityCode(activityCode);
+        condition.setStatusList(statusList);
+        return activityOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public void beginOrder(ActivityOrder activityOrder) {
+        activityOrder.setStatus(EActivityOrderStatus.BEGIN.getCode());
+        activityOrderDAO.finishOrder(activityOrder);
     }
 
 }

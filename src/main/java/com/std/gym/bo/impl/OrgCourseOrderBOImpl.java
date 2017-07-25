@@ -11,7 +11,7 @@ import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.dao.IOrgCourseOrderDAO;
 import com.std.gym.domain.OrgCourseOrder;
-import com.std.gym.enums.EActivityOrderStatus;
+import com.std.gym.enums.EOrgCourseOrderStatus;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -87,7 +87,7 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
     @Override
     public void paySuccess(OrgCourseOrder order, String payCode, Long amount,
             Long penalty, String payType) {
-        order.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
+        order.setStatus(EOrgCourseOrderStatus.PAYSUCCESS.getCode());
         order.setPayType(payType);
         order.setPayCode(payCode);
         order.setPayAmount(amount);
@@ -98,7 +98,7 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
 
     @Override
     public void userCancel(OrgCourseOrder order, String applyUser) {
-        order.setStatus(EActivityOrderStatus.USER_CANCEL.getCode());
+        order.setStatus(EOrgCourseOrderStatus.USER_CANCEL.getCode());
         order.setApplyUser(applyUser);
         order.setApplyDatetime(new Date());
         orgCourseOrderDAO.userCancel(order);
@@ -106,7 +106,7 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
 
     @Override
     public void platCancel(OrgCourseOrder order, String updater, String remark) {
-        order.setStatus(EActivityOrderStatus.PLAT_CANCEL.getCode());
+        order.setStatus(EOrgCourseOrderStatus.PLAT_CANCEL.getCode());
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);
@@ -116,7 +116,7 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
     @Override
     public void applyRefund(OrgCourseOrder order, String applyUser,
             String applyNote) {
-        order.setStatus(EActivityOrderStatus.USER_CANCEL.getCode());
+        order.setStatus(EOrgCourseOrderStatus.USER_CANCEL.getCode());
         order.setApplyUser(applyUser);
         order.setApplyDatetime(new Date());
         order.setApplyNote(applyNote);
@@ -125,7 +125,7 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
 
     @Override
     public void approveRefund(OrgCourseOrder order,
-            EActivityOrderStatus status, String updater, String remark) {
+            EOrgCourseOrderStatus status, String updater, String remark) {
         order.setStatus(status.getCode());
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
@@ -135,13 +135,28 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
 
     @Override
     public void finishOrder(OrgCourseOrder order) {
-        order.setStatus(EActivityOrderStatus.END.getCode());
+        order.setStatus(EOrgCourseOrderStatus.END.getCode());
+        orgCourseOrderDAO.finishOrder(order);
+    }
+
+    @Override
+    public List<OrgCourseOrder> queryOrgCourseOrderList(String orgCourseCode,
+            List<String> statusList) {
+        OrgCourseOrder condition = new OrgCourseOrder();
+        condition.setOrgCourseCode(orgCourseCode);
+        condition.setStatusList(statusList);
+        return orgCourseOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public void beginOrgCourseOrder(OrgCourseOrder order) {
+        order.setStatus(EOrgCourseOrderStatus.BEGIN.getCode());
         orgCourseOrderDAO.finishOrder(order);
     }
 
     @Override
     public void toComment(OrgCourseOrder order) {
-        order.setStatus(EActivityOrderStatus.TO_COMMENT.getCode());
+        order.setStatus(EOrgCourseOrderStatus.TO_COMMENT.getCode());
         orgCourseOrderDAO.finishOrder(order);
     }
 

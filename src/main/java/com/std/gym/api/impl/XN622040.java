@@ -35,8 +35,8 @@ public class XN622040 extends AProcessor {
         condition.setActivityTitle(req.getActivityTitle());
         condition.setCreateBeginDatetime(DateUtil.strToDate(
             req.getApplyBeginDatetime(), DateUtil.DATA_TIME_PATTERN_1));
-        condition.setCreateBeginDatetime(DateUtil.strToDate(
-            req.getApplyBeginDatetime(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setCreateEndDatetime(DateUtil.strToDate(
+            req.getApplyEndDatetime(), DateUtil.DATA_TIME_PATTERN_1));
         condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());
         String orderColumn = req.getOrderColumn();

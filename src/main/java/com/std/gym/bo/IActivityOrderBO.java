@@ -70,7 +70,9 @@ public interface IActivityOrderBO extends IPaginableBO<ActivityOrder> {
 
     public void finishOrder(ActivityOrder order);
 
-    public List<ActivityOrder> queryOrderList(String userId,
-            String productCode, List<String> statusList);
+    public List<ActivityOrder> queryOrderList(String activityCode,
+            List<String> statusList);
+
+    public void beginOrder(ActivityOrder activityOrder);
 
 }

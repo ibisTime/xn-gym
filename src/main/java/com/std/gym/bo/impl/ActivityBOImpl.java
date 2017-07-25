@@ -110,7 +110,7 @@ public class ActivityBOImpl extends PaginableBOImpl<Activity> implements
 
     @Override
     public void stopActivity(Activity activity, String updater, String remark) {
-        activity.setStatus(EActivityStatus.END.getCode());
+        activity.setStatus(EActivityStatus.STOP.getCode());
         activity.setUpdater(updater);
         activity.setUpdateDatetime(new Date());
         activity.setRemark(remark);
@@ -124,9 +124,21 @@ public class ActivityBOImpl extends PaginableBOImpl<Activity> implements
     }
 
     @Override
-    public void auto(Activity activity) {
+    public void beginActivity(Activity activity, String updater, String remark) {
+        activity.setStatus(EActivityStatus.BEGIN.getCode());
+        activity.setUpdater(updater);
+        activity.setUpdateDatetime(new Date());
+        activity.setRemark(remark);
+        activityDAO.downActivity(activity);
+    }
+
+    @Override
+    public void endActivity(Activity activity, String updater, String remark) {
         activity.setStatus(EActivityStatus.END.getCode());
-        activityDAO.auto(activity);
+        activity.setUpdater(updater);
+        activity.setUpdateDatetime(new Date());
+        activity.setRemark(remark);
+        activityDAO.downActivity(activity);
     }
 
 }

@@ -68,33 +68,35 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
     @Override
     public void editOrgCourse(XN622052Req req) {
         OrgCourse data = orgCourseBO.getOrgCourse(req.getCode());
-        if (!EActivityStatus.DRAFT.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "该状态下不能修改");
+        if (EActivityStatus.DRAFT.getCode().equals(data.getStatus())
+                || EActivityStatus.OFFLINE.getCode().equals(data.getStatus())) {
+            Integer totalNum = StringValidater.toInteger(req.getTotalNum());
+            Integer number = data.getTotalNum() - data.getRemainNum();
+            if (totalNum < number) {
+                throw new BizException("xn0000", "当前报名人数以超过修改总人数");
+            }
+            Integer remainNum = totalNum - number;
+            data.setCoachUser(req.getCoachUser());
+            data.setName(req.getName());
+            data.setSkStartDatetime(DateUtil.strToDate(
+                req.getSkStartDatetime(), DateUtil.DATA_TIME_PATTERN_1));
+            data.setSkEndDatetime(DateUtil.strToDate(req.getSkEndDatetime(),
+                DateUtil.DATA_TIME_PATTERN_1));
+            data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
+            data.setRemainNum(remainNum);
+            data.setAddress(req.getAddress());
+            data.setContact(req.getContact());
+            data.setPic(req.getPic());
+            data.setAdvPic(req.getAdvPic());
+            data.setPrice(StringValidater.toLong(req.getPrice()));
+            data.setDescription(req.getDescription());
+            data.setUpdater(req.getUpdater());
+            data.setUpdateDatetime(new Date());
+            data.setRemark(req.getRemark());
+            orgCourseBO.refreshOrgCourse(data);
+            return;
         }
-        Integer totalNum = StringValidater.toInteger(req.getTotalNum());
-        Integer number = data.getTotalNum() - data.getRemainNum();
-        if (totalNum < number) {
-            throw new BizException("xn0000", "当前报名人数以超过修改总人数");
-        }
-        Integer remainNum = totalNum - number;
-        data.setCoachUser(req.getCoachUser());
-        data.setName(req.getName());
-        data.setSkStartDatetime(DateUtil.strToDate(req.getSkStartDatetime(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        data.setSkEndDatetime(DateUtil.strToDate(req.getSkEndDatetime(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
-        data.setRemainNum(remainNum);
-        data.setAddress(req.getAddress());
-        data.setContact(req.getContact());
-        data.setPic(req.getPic());
-        data.setAdvPic(req.getAdvPic());
-        data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setDescription(req.getDescription());
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(new Date());
-        data.setRemark(req.getRemark());
-        orgCourseBO.refreshOrgCourse(data);
+        throw new BizException("xn0000", "该状态下不能修改");
     }
 
     @Override

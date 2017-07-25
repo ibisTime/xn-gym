@@ -112,6 +112,24 @@ public interface IActivityBO extends IPaginableBO<Activity> {
      */
     public List<Activity> queryActivityList(Activity data);
 
-    public void auto(Activity activity);
+    /**
+     * 开始活动
+     * @param activity
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月25日 下午2:06:29 asus
+     * @history:
+     */
+    public void beginActivity(Activity activity, String updater, String remark);
+
+    /**
+     * 结束活动
+     * @param activity
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月25日 下午2:06:42 asus
+     * @history:
+     */
+    public void endActivity(Activity activity, String updater, String remark);
 
 }

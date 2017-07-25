@@ -35,6 +35,26 @@ public interface IOrgCourseOrderAO {
 
     public OrgCourseOrder getOrgCourseOrder(String code);
 
+    /**
+     * 团课开始
+     * @param code
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月25日 下午2:01:59 asus
+     * @history:
+     */
+    public void beginOrgCourse(String code, String updater, String remark);
+
+    /**
+     * 团课结束
+     * @param code
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月25日 下午2:01:59 asus
+     * @history:
+     */
+    public void endOrgCourse(String code, String updater, String remark);
+
     public void changeOrder();
 
 }

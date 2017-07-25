@@ -97,4 +97,23 @@ public interface IActivityOrderAO {
     public void approveRefund(String orderCode, String result, String updater,
             String remark);
 
+    /**
+     * 活动开始
+     * @param code
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月25日 下午2:01:59 asus
+     * @history:
+     */
+    public void beginActivity(String code, String updater, String remark);
+
+    /**
+     * 活动结束
+     * @param code
+     * @param updater
+     * @param remark 
+     * @create: 2017年7月25日 下午2:01:59 asus
+     * @history:
+     */
+    public void endActivity(String code, String updater, String remark);
 }

@@ -12,19 +12,19 @@ public class XN622095Req extends APageReq {
      */
     private static final long serialVersionUID = -8526218853712044125L;
 
-    // 用户编号
+    // 用户编号（选填）
     private String userId;;
 
-    // 星级
+    // 星级（选填）
     private String star;
 
-    // 标签
+    // 标签（选填）
     private String label;
 
-    // 状态
+    // 状态（选填）
     private String status;
 
-    // 审核人
+    // 审核人（选填）
     private String approver;
 
     public String getUserId() {
@@ -66,4 +66,5 @@ public class XN622095Req extends APageReq {
     public void setApprover(String approver) {
         this.approver = approver;
     }
+
 }

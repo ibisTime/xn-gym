@@ -33,11 +33,11 @@ import com.std.gym.domain.PerCourseOrder;
 import com.std.gym.domain.SYSConfig;
 import com.std.gym.domain.User;
 import com.std.gym.dto.req.XN622200Req;
-import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECommentStatus;
 import com.std.gym.enums.ECurrency;
+import com.std.gym.enums.EOrgCourseOrderStatus;
 import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.enums.EReaction;
@@ -199,7 +199,7 @@ public class CommentAOImpl implements ICommentAO {
             List<XN622200Req> itemScoreList, String status, String commer) {
         OrgCourseOrder orgCourseOrder = orgCourseOrderBO
             .getOrgCourseOrder(orderCode);
-        if (!EActivityOrderStatus.TO_COMMENT.getCode().equals(
+        if (!EOrgCourseOrderStatus.TO_COMMENT.getCode().equals(
             orgCourseOrder.getStatus())) {
             throw new BizException("xn0000", "该团课订单还不能评论");
         }

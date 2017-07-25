@@ -41,9 +41,6 @@
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
-			<if test="skCycle != null and skCycle != '' ">
-				AND tpc.sk_cycle = #{skCycle}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_coach" parameterType="coach" resultMap="coach_DB_Result">
@@ -102,8 +99,8 @@
 		,t.remark
 		FROM
 		tgym_coach t RIGHT JOIN (SELECT * FROM tgym_coach tc ,(SELECT DISTINCT(tpc.coach_code) AS ocode
-		FROM tgym_per_course tpc <include refid="where_condition" />)  tp
-		WHERE tc.user_id=tp.ocode) tt ON t.code=tt.code
+		FROM tgym_per_course tpc where tpc.sk_cycle = #{skCycle})  tp
+		WHERE tc.code=tp.ocode) tt ON t.code=tt.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

@@ -30,4 +30,7 @@ public interface IOrgCourseBO extends IPaginableBO<OrgCourse> {
 
     public void addSumCom(OrgCourse orgCourse);
 
+    public void beginOrgCourse(OrgCourse orgCourse, String updater,
+            String remark);
+
 }
