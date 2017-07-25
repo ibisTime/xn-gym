@@ -1,5 +1,6 @@
 package com.std.gym.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.std.gym.ao.IPerCourseOrderAO;
 import com.std.gym.bo.IAccountBO;
+import com.std.gym.bo.IActivityOrderBO;
 import com.std.gym.bo.ICoachBO;
+import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.ISYSConfigBO;
@@ -26,8 +29,11 @@ import com.std.gym.domain.PerCourseOrder;
 import com.std.gym.domain.SYSConfig;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
+import com.std.gym.dto.res.XN622920Res;
+import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.ECurrency;
+import com.std.gym.enums.EOrgCourseOrderStatus;
 import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.enums.EPrefixCode;
@@ -45,6 +51,12 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
     @Autowired
     private IPerCourseBO perCourseBO;
+
+    @Autowired
+    private IActivityOrderBO activityOrderBO;
+
+    @Autowired
+    private IOrgCourseOrderBO orgCourseOrderBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -358,5 +370,36 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 order.getCode());
         }
         logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
+    }
+
+    @Override
+    public XN622920Res totalUnfinish(String applyUser) {
+        XN622920Res res = new XN622920Res();
+        List<String> statusList = new ArrayList<String>();
+        // 统计活动未完成的订单
+        statusList.add(EActivityOrderStatus.PAYSUCCESS.getCode());
+        statusList.add(EActivityOrderStatus.APPLY_REFUND.getCode());
+        statusList.add(EActivityOrderStatus.REFUND_NO.getCode());
+        statusList.add(EActivityOrderStatus.BEGIN.getCode());
+        Long actUnfinishCount = activityOrderBO.getUnfinishCount(statusList);
+        // 统计团课未完成的订单
+        statusList.removeAll(statusList);
+        statusList.add(EOrgCourseOrderStatus.PAYSUCCESS.getCode());
+        statusList.add(EOrgCourseOrderStatus.APPLY_REFUND.getCode());
+        statusList.add(EOrgCourseOrderStatus.REFUND_NO.getCode());
+        statusList.add(EOrgCourseOrderStatus.BEGIN.getCode());
+        statusList.add(EOrgCourseOrderStatus.TO_COMMENT.getCode());
+        Long orgUnfinishCount = orgCourseOrderBO.getUnfinishCount(statusList);
+        // 统计私课未完成的订单
+        statusList.removeAll(statusList);
+        statusList.add(EPerCourseOrderStatus.PAYSUCCESS.getCode());
+        statusList.add(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
+        statusList.add(EPerCourseOrderStatus.HAVE_CLASS.getCode());
+        statusList.add(EPerCourseOrderStatus.CLASS_OVER.getCode());
+        Long perUnfinishCount = perCourseOrderBO.getUnfinishCount(statusList);
+        res.setActivityCount(actUnfinishCount);
+        res.setOrgCourseCount(orgUnfinishCount);
+        res.setPerCourseCount(perUnfinishCount);
+        return res;
     }
 }

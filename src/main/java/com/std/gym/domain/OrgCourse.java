@@ -35,7 +35,16 @@ public class OrgCourse extends ABaseDO {
     // 剩余人数
     private Integer remainNum;
 
-    // 地址
+    // 省
+    private String province;
+
+    // 市区
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 具体地址
     private String address;
 
     // 联系电话
@@ -277,6 +286,30 @@ public class OrgCourse extends ABaseDO {
 
     public void setClassDatetime(Date classDatetime) {
         this.classDatetime = classDatetime;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
 }

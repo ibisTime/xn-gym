@@ -25,6 +25,15 @@ public class XN622052Req {
     // 总人数
     private String totalNum;
 
+    // 省
+    private String province;
+
+    // 市区
+    private String city;
+
+    // 区(县)
+    private String area;
+
     // 地址
     private String address;
 
@@ -159,5 +168,29 @@ public class XN622052Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

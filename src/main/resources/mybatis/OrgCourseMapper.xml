@@ -8,18 +8,25 @@
 		<result column="name" property="name" />
 		<result column="sk_start_datetime" property="skStartDatetime" />
 		<result column="sk_end_datetime" property="skEndDatetime" />
+		
 		<result column="total_num" property="totalNum" />
 		<result column="remain_num" property="remainNum" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		
 		<result column="address" property="address" />
 		<result column="contact" property="contact" />
 		<result column="pic" property="pic" />
 		<result column="adv_pic" property="advPic" />
 		<result column="description" property="description" />
+		
 		<result column="price" property="price" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="sum_com" property="sumCom" />
 		<result column="status" property="status" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -69,6 +76,10 @@
 		,t.total_num
 		,t.remain_num
 		,t.address
+		
+		,t.province
+		,t.city
+		,t.area
 		,t.contact
 		
 		,t.pic
@@ -112,6 +123,10 @@
 		,total_num
 		,remain_num
 		,address
+		
+		,province
+		,city
+		,area
 		,contact
 		
 		,pic
@@ -135,6 +150,10 @@
 		,#{totalNum}
 		,#{remainNum}
 		,#{address}
+		
+		,#{province}
+		,#{city}
+		,#{area}
 		,#{contact}
 		
 		,#{pic}
@@ -160,6 +179,10 @@
 		
 		,total_num = #{totalNum}
 		,remain_num = #{remainNum}
+		,province = #{province}
+		,city = #{city}
+		
+		,area = #{area}
 		,address = #{address}
 		,contact = #{contact}
 		,pic = #{pic}

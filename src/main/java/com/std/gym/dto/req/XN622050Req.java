@@ -22,7 +22,16 @@ public class XN622050Req {
     // 总人数
     private String totalNum;
 
-    // 地址
+    // 省
+    private String province;
+
+    // 市区
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 具体地址
     private String address;
 
     // 联系方式
@@ -148,5 +157,29 @@ public class XN622050Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

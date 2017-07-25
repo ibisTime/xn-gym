@@ -50,6 +50,9 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
             DateUtil.DATA_TIME_PATTERN_1));
         data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
         data.setRemainNum(StringValidater.toInteger(req.getTotalNum()));
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
         data.setAddress(req.getAddress());
         data.setContact(req.getContact());
         data.setPic(req.getPic());
@@ -84,6 +87,9 @@ public class OrgCourseAOImpl implements IOrgCourseAO {
                 DateUtil.DATA_TIME_PATTERN_1));
             data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
             data.setRemainNum(remainNum);
+            data.setProvince(req.getProvince());
+            data.setCity(req.getCity());
+            data.setArea(req.getArea());
             data.setAddress(req.getAddress());
             data.setContact(req.getContact());
             data.setPic(req.getPic());

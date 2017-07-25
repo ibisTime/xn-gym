@@ -330,6 +330,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         if (!EOrgCourseStatus.BEGIN.getCode().equals(orgCourse.getStatus())) {
             throw new BizException("xn0000", "课程开始上课,不能下课");
         }
+        orgCourseBO.endOrgCourse(orgCourse, updater, remark);
 
         List<String> statusList = new ArrayList<String>();
         statusList.add(EActivityOrderStatus.BEGIN.getCode());

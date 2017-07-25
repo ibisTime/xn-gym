@@ -39,4 +39,6 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
     public Long getTotalCount(String perCourseCode, Date appointment,
             String skStartDatetime, String skEndDatetime);
 
+    public Long getUnfinishCount(List<String> statusList);
+
 }

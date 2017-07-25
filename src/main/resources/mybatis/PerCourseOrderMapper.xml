@@ -72,6 +72,12 @@
 			<if test="skEndDatetime != null and skEndDatetime != '' ">
 				<![CDATA[AND t.sk_end_datetime >= #{skEndDatetime}]]>
 			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
 	<select id="select_perCourseOrder" parameterType="perCourseOrder" resultMap="perCourseOrder_DB_Result">

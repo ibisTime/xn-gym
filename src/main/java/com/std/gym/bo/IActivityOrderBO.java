@@ -75,4 +75,6 @@ public interface IActivityOrderBO extends IPaginableBO<ActivityOrder> {
 
     public void beginOrder(ActivityOrder activityOrder);
 
+    public Long getUnfinishCount(List<String> statusList);
+
 }

@@ -122,4 +122,13 @@ public class OrgCourseBOImpl extends PaginableBOImpl<OrgCourse> implements
         orgCourseDAO.stopSign(orgCourse);
     }
 
+    @Override
+    public void endOrgCourse(OrgCourse orgCourse, String updater, String remark) {
+        orgCourse.setStatus(EOrgCourseStatus.END.getCode());
+        orgCourse.setUpdater(updater);
+        orgCourse.setUpdateDatetime(new Date());
+        orgCourse.setRemark(remark);
+        orgCourseDAO.stopSign(orgCourse);
+    }
+
 }

@@ -152,4 +152,11 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
         condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
         return perCourseOrderDAO.selectTotalCount(condition);
     }
+
+    @Override
+    public Long getUnfinishCount(List<String> statusList) {
+        PerCourseOrder condition = new PerCourseOrder();
+        condition.setStatusList(statusList);
+        return perCourseOrderDAO.selectTotalCount(condition);
+    }
 }

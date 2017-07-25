@@ -1,6 +1,7 @@
 package com.std.gym.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.gym.dao.base.ABaseDO;
 
@@ -107,6 +108,9 @@ public class PerCourseOrder extends ABaseDO {
 
     // 用户名称
     private Coach coach;
+
+    // 状态List
+    private List<String> statusList;
 
     public void setCode(String code) {
         this.code = code;
@@ -354,6 +358,14 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setPenalty(Long penalty) {
         this.penalty = penalty;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

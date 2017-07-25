@@ -33,4 +33,6 @@ public interface IOrgCourseBO extends IPaginableBO<OrgCourse> {
     public void beginOrgCourse(OrgCourse orgCourse, String updater,
             String remark);
 
+    public void endOrgCourse(OrgCourse orgCourse, String updater, String remark);
+
 }

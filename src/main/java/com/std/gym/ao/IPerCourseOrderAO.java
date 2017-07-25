@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.PerCourseOrder;
+import com.std.gym.dto.res.XN622920Res;
 
 @Component
 public interface IPerCourseOrderAO {
@@ -38,4 +39,5 @@ public interface IPerCourseOrderAO {
 
     public void changeOrder();
 
+    public XN622920Res totalUnfinish(String applyUser);
 }
