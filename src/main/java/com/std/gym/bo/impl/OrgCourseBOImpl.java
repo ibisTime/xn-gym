@@ -102,7 +102,7 @@ public class OrgCourseBOImpl extends PaginableBOImpl<OrgCourse> implements
 
     @Override
     public void addSignNum(OrgCourse orgCourse, Integer quantity) {
-        orgCourse.setRemainNum(orgCourse.getRemainNum() - quantity);
+        orgCourse.setRemainNum(quantity);
         orgCourseDAO.addSignNum(orgCourse);
     }
 

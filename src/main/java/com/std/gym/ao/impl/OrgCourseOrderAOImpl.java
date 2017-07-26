@@ -177,7 +177,8 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             if (orgCourse.getRemainNum() - order.getQuantity() == 0) {
                 orgCourse.setStatus(EOrgCourseStatus.STOP.getCode());
             }
-            orgCourseBO.addSignNum(orgCourse, order.getQuantity());
+            orgCourseBO.addSignNum(orgCourse,
+                orgCourse.getRemainNum() - order.getQuantity());
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -204,6 +205,13 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                 EBizType.AJ_TKGMTK, EBizType.AJ_TKGMTK.getValue(),
                 EBizType.AJ_TKGMTK.getValue(), order.getCode());
             orgCourseOrderBO.platCancel(order, updater, remark);
+            // 取消订单人数加回,判断修改状态
+            OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
+                .getOrgCourseCode());
+            orgCourse.setStatus(EOrgCourseStatus.ONLINE.getCode());
+            orgCourseBO.addSignNum(orgCourse,
+                orgCourse.getRemainNum() + order.getQuantity());
+
             smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的活动订单"
                     + "[编号为:" + order.getCode() + "],由于" + remark
                     + "原因,已被私教取消。详情请到“我的”里面查看。引起的不便,请见谅。");
@@ -245,6 +253,12 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                 order.getApplyUser(), ECurrency.CNY, amount,
                 EBizType.AJ_TKGMTK, EBizType.AJ_TKGMTK.getValue(),
                 EBizType.AJ_TKGMTK.getValue(), order.getCode());
+            // 审批通过,取消订单人数加回,判断修改状态
+            OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
+                .getOrgCourseCode());
+            orgCourse.setStatus(EOrgCourseStatus.ONLINE.getCode());
+            orgCourseBO.addSignNum(orgCourse,
+                orgCourse.getRemainNum() + order.getQuantity());
         }
         orgCourseOrderBO.approveRefund(order, status, updater, remark);
     }

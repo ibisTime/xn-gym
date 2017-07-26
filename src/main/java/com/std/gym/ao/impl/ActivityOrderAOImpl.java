@@ -158,6 +158,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
         order.setActivityBeginDatetime(activity.getStartDatetime());
         order.setActivityEndDatetime(activity.getEndDatetime());
         order.setPic(activity.getPic());
+        order.setHoldPlace(activity.getHoldPlace());
+        order.setContact(activity.getContact());
         User user = userBO.getRemoteUser(order.getApplyUser());
         order.setNickname(user.getNickname());
         return order;
@@ -289,7 +291,9 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 EBizType.AJ_HDGMTK, EBizType.AJ_HDGMTK.getValue(),
                 EBizType.AJ_HDGMTK.getValue(), order.getCode());
             activityOrderBO.platCancel(order, updater, remark);
+            // 取消订单人数加回,判断修改状态
             Activity activity = activityBO.getActivity(order.getActivityCode());
+            activity.setStatus(EActivityStatus.ONLINE.getCode());
             activityBO.addSignNum(activity,
                 activity.getRemainNum() - order.getQuantity());
             smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的活动订单"
@@ -321,16 +325,19 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             order.getStatus())) {
             throw new BizException("xn000000", "该状态下不能进行退款审核");
         }
-        EActivityOrderStatus status = null;
-        if (EBoolean.NO.getCode().equals(result)) {
-            status = EActivityOrderStatus.REFUND_NO;
-        } else if (EBoolean.YES.getCode().equals(result)) {
+        EActivityOrderStatus status = EActivityOrderStatus.REFUND_NO;
+        if (EBoolean.YES.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_YES;
             Long amount = order.getAmount() - order.getPenalty();
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
                 order.getApplyUser(), ECurrency.CNY, amount,
                 EBizType.AJ_HDGMTK, EBizType.AJ_HDGMTK.getValue(),
                 EBizType.AJ_HDGMTK.getValue(), order.getCode());
+            // 审批通过,取消订单人数加回,判断修改状态
+            Activity activity = activityBO.getActivity(order.getActivityCode());
+            activity.setStatus(EActivityStatus.ONLINE.getCode());
+            activityBO.addSignNum(activity,
+                activity.getRemainNum() - order.getQuantity());
         }
         activityOrderBO.approveRefund(order, status, updater, remark);
     }

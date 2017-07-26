@@ -100,6 +100,12 @@ public class ActivityOrder extends ABaseDO {
     // 活动图片
     private String pic;
 
+    // 举办地
+    private String holdPlace;
+
+    // 联系方式
+    private String contact;
+
     // 用户名
     private String nickname;
 
@@ -336,6 +342,22 @@ public class ActivityOrder extends ABaseDO {
 
     public void setPenalty(Long penalty) {
         this.penalty = penalty;
+    }
+
+    public String getHoldPlace() {
+        return holdPlace;
+    }
+
+    public void setHoldPlace(String holdPlace) {
+        this.holdPlace = holdPlace;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
 }
