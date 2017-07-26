@@ -38,7 +38,7 @@
 http://121.43.101.148:3602/xn-gym/api
 
 
-cd /home/wwwroot/gym/tomcat_std_account/webapps
+  cd /home/wwwroot/gym/tomcat_std_account/webapps
   cp ./std-account/WEB-INF/classes/application.properties .
   cp ./std-account/WEB-INF/classes/config.properties .
   

@@ -130,7 +130,7 @@ public class CommentAOImpl implements ICommentAO {
             // 记录得分项目,及得分
             ItemScore itemScore = new ItemScore();
             itemScore.setScore(StringValidater.toInteger(req.getScore()));
-            itemScore.setName(sysConfig.getNote());
+            itemScore.setName(sysConfig.getRemark());
             itemScore.setCommentCode(code);
             itemScoreBO.saveItemScore(itemScore);
             double num = StringValidater.toInteger(req.getScore())
@@ -217,7 +217,7 @@ public class CommentAOImpl implements ICommentAO {
             // 记录得分项目,及得分
             ItemScore itemScore = new ItemScore();
             itemScore.setScore(StringValidater.toInteger(req.getScore()));
-            itemScore.setName(sysConfig.getNote());
+            itemScore.setName(sysConfig.getRemark());
             itemScore.setCommentCode(code);
             itemScoreBO.saveItemScore(itemScore);
             double num = StringValidater.toInteger(req.getScore())

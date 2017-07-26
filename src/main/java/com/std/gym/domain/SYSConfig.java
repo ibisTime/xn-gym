@@ -35,9 +35,6 @@ public class SYSConfig extends ABaseDO {
     // value值
     private String cvalue;
 
-    // 参数说明(预留字段)
-    private String note;
-
     // 最近更新人
     private String updater;
 
@@ -96,14 +93,6 @@ public class SYSConfig extends ABaseDO {
 
     public void setCvalue(String cvalue) {
         this.cvalue = cvalue;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public String getUpdater() {

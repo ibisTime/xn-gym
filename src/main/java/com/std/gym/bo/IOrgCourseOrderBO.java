@@ -44,6 +44,6 @@ public interface IOrgCourseOrderBO extends IPaginableBO<OrgCourseOrder> {
 
     public void beginOrgCourseOrder(OrgCourseOrder orgCourseOrder);
 
-    public Long getUnfinishCount(List<String> statusList);
+    public Long getUnfinishCount(String applyUser, List<String> statusList);
 
 }

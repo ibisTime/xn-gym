@@ -161,8 +161,9 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
     }
 
     @Override
-    public Long getUnfinishCount(List<String> statusList) {
+    public Long getUnfinishCount(String applyUser, List<String> statusList) {
         OrgCourseOrder condition = new OrgCourseOrder();
+        condition.setApplyUser(applyUser);
         condition.setStatusList(statusList);
         return orgCourseOrderDAO.selectTotalCount(condition);
     }

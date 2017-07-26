@@ -154,8 +154,9 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     }
 
     @Override
-    public Long getUnfinishCount(List<String> statusList) {
+    public Long getUnfinishCount(String applyUser, List<String> statusList) {
         PerCourseOrder condition = new PerCourseOrder();
+        condition.setApplyUser(applyUser);
         condition.setStatusList(statusList);
         return perCourseOrderDAO.selectTotalCount(condition);
     }

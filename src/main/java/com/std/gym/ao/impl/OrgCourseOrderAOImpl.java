@@ -381,10 +381,13 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                 ESystemCode.SYSTEM_CODE.getCode());
             Long coachAmount = AmountUtil.mul(1L, order.getAmount()
                     * StringValidater.toDouble(sysConfigCoach.getCvalue()));
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-                orgCourse.getCoachUser(), ECurrency.CNY, coachAmount,
-                EBizType.TTJFC, EBizType.TTJFC.getValue(),
-                EBizType.TTJFC.getValue(), order.getCode());
+            if (coachAmount != 0L) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), orgCourse.getCoachUser(),
+                    ECurrency.CNY, coachAmount, EBizType.TTJFC,
+                    EBizType.TTJFC.getValue(), EBizType.TTJFC.getValue(),
+                    order.getCode());
+            }
         }
     }
 

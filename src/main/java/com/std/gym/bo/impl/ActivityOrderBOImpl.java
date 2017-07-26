@@ -164,8 +164,9 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     }
 
     @Override
-    public Long getUnfinishCount(List<String> statusList) {
+    public Long getUnfinishCount(String applyUser, List<String> statusList) {
         ActivityOrder condition = new ActivityOrder();
+        condition.setApplyUser(applyUser);
         condition.setStatusList(statusList);
         return activityOrderDAO.selectTotalCount(condition);
     }

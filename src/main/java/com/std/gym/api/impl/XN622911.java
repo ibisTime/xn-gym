@@ -28,7 +28,6 @@ public class XN622911 extends AProcessor {
         SYSConfig data = new SYSConfig();
         data.setId(req.getId());
         data.setCvalue(req.getCvalue());
-        data.setNote(req.getNote());
         data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
         sysConfigAO.editSYSConfig(data);

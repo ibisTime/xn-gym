@@ -84,6 +84,7 @@ public class CoachAOImpl implements ICoachAO {
             throw new BizException("xn0000", "性别不可修改");
         }
         data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
         data.setAge(StringValidater.toInteger(req.getAge()));
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setLabel(req.getLabel());

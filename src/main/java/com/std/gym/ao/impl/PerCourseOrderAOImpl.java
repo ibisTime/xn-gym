@@ -234,8 +234,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                     order.getStatus())) {
             if (EPerCourseOrderStatus.PAYSUCCESS.getCode().equals(
                 order.getStatus())) {
+                String appoint = DateUtil.dateToStr(order.getAppointDatetime(),
+                    DateUtil.FRONT_DATE_FORMAT_STRING);
                 Date appointDatetime = DateUtil.strToDate(
-                    order.getAppointDatetime() + order.getSkDatetime(),
+                    appoint + " " + order.getSkDatetime(),
                     DateUtil.DATA_TIME_PATTERN_1);
                 if (!DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1))
                     .before(appointDatetime)) {
@@ -381,7 +383,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         statusList.add(EActivityOrderStatus.APPLY_REFUND.getCode());
         statusList.add(EActivityOrderStatus.REFUND_NO.getCode());
         statusList.add(EActivityOrderStatus.BEGIN.getCode());
-        Long actUnfinishCount = activityOrderBO.getUnfinishCount(statusList);
+        Long actUnfinishCount = activityOrderBO.getUnfinishCount(applyUser,
+            statusList);
         // 统计团课未完成的订单
         statusList.removeAll(statusList);
         statusList.add(EOrgCourseOrderStatus.PAYSUCCESS.getCode());
@@ -389,14 +392,16 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         statusList.add(EOrgCourseOrderStatus.REFUND_NO.getCode());
         statusList.add(EOrgCourseOrderStatus.BEGIN.getCode());
         statusList.add(EOrgCourseOrderStatus.TO_COMMENT.getCode());
-        Long orgUnfinishCount = orgCourseOrderBO.getUnfinishCount(statusList);
+        Long orgUnfinishCount = orgCourseOrderBO.getUnfinishCount(applyUser,
+            statusList);
         // 统计私课未完成的订单
         statusList.removeAll(statusList);
         statusList.add(EPerCourseOrderStatus.PAYSUCCESS.getCode());
         statusList.add(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
         statusList.add(EPerCourseOrderStatus.HAVE_CLASS.getCode());
         statusList.add(EPerCourseOrderStatus.CLASS_OVER.getCode());
-        Long perUnfinishCount = perCourseOrderBO.getUnfinishCount(statusList);
+        Long perUnfinishCount = perCourseOrderBO.getUnfinishCount(applyUser,
+            statusList);
         res.setActivityCount(actUnfinishCount);
         res.setOrgCourseCount(orgUnfinishCount);
         res.setPerCourseCount(perUnfinishCount);
