@@ -116,7 +116,7 @@ public class OrgCourseOrderBOImpl extends PaginableBOImpl<OrgCourseOrder>
     @Override
     public void applyRefund(OrgCourseOrder order, String applyUser,
             String applyNote) {
-        order.setStatus(EOrgCourseOrderStatus.USER_CANCEL.getCode());
+        order.setStatus(EOrgCourseOrderStatus.APPLY_REFUND.getCode());
         order.setApplyUser(applyUser);
         order.setApplyDatetime(new Date());
         order.setApplyNote(applyNote);

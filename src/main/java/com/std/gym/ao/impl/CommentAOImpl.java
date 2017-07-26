@@ -137,7 +137,6 @@ public class CommentAOImpl implements ICommentAO {
                     * StringValidater.toDouble(sysConfig.getCvalue());
             totalScore = totalScore + num;
         }
-        totalScore = totalScore / itemScoreList.size();
 
         // 评论组装参数
         data.setCode(code);
@@ -224,7 +223,6 @@ public class CommentAOImpl implements ICommentAO {
                     * StringValidater.toDouble(sysConfig.getCvalue());
             totalScore = totalScore + num;
         }
-        totalScore = totalScore / itemScoreList.size();
 
         data.setCode(code);
         data.setScore(totalScore.intValue());

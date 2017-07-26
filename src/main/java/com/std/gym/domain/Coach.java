@@ -69,6 +69,9 @@ public class Coach extends ABaseDO {
     // 上课周期
     private String skCycle;
 
+    // 手机号
+    private String mobile;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -211,6 +214,14 @@ public class Coach extends ABaseDO {
 
     public void setSumCom(Integer sumCom) {
         this.sumCom = sumCom;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

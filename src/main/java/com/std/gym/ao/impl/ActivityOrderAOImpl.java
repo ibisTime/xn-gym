@@ -376,23 +376,19 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     private void changePaySuccessOrder(List<ActivityOrder> orderList) {
         if (orderList != null && orderList.size() > 0) {
             for (ActivityOrder order : orderList) {
-                Activity activity = activityBO.getActivity(order
-                    .getActivityCode());
-                if (activity.getEndDatetime().before(new Date())) {
-                    activityOrderBO.finishOrder(order);
-                    // 订单完成送积分
-                    SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                        EBizType.HDGMSJF.getCode(),
-                        ESystemCode.SYSTEM_CODE.getCode(),
-                        ESystemCode.SYSTEM_CODE.getCode());
-                    Long amount = AmountUtil.mul(1000L,
-                        Double.valueOf(sysConfig.getCvalue()));
-                    accountBO.doTransferAmountRemote(
-                        ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                        ECurrency.JF, amount, EBizType.HDGMSJF,
-                        EBizType.HDGMSJF.getValue(),
-                        EBizType.HDGMSJF.getValue(), order.getCode());
-                }
+                activityOrderBO.finishOrder(order);
+                // 订单完成送积分
+                SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                    EBizType.HDGMSJF.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long amount = AmountUtil.mul(1000L,
+                    Double.valueOf(sysConfig.getCvalue()));
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.JF, amount, EBizType.HDGMSJF,
+                    EBizType.HDGMSJF.getValue(), EBizType.HDGMSJF.getValue(),
+                    order.getCode());
             }
         }
 

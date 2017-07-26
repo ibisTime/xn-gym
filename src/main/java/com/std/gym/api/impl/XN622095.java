@@ -31,6 +31,7 @@ public class XN622095 extends AProcessor {
         condition.setLabel(req.getLabel());
         condition.setStatus(req.getStatus());
         condition.setApprover(req.getApprover());
+        condition.setMobile(req.getMobile());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ICoachAO.DEFAULT_ORDER_COLUMN;

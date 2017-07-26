@@ -41,6 +41,9 @@
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
+			<if test="mobile != null and mobile != '' ">
+				AND tu.mobile = #{mobile}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_coach" parameterType="coach" resultMap="coach_DB_Result">
@@ -62,8 +65,9 @@
 		,t.approver
 		,t.approve_datetime
 		,t.remark
+		,tu.mobile
 		FROM
-		tgym_coach t
+		tgym_coach t left join ${userDB}.tstd_user tu on t.user_id=tu.user_id  
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -74,7 +78,7 @@
 
 	<select id="select_coach_count" parameterType="coach"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tgym_coach t
+		SELECT count(1) FROM tgym_coach t left join ${userDB}.tstd_user tu on t.user_id=tu.user_id  
 		<include refid="where_condition" />
 	</select>
 
@@ -164,6 +168,7 @@
 		,adv_pic = #{advPic}
 		,description = #{description}
 		,label = #{label}
+		,status = #{status}
 		WHERE code = #{code}
 	</update>
 

@@ -24,6 +24,9 @@ public class XN622095Req extends APageReq {
     // 状态（选填）
     private String status;
 
+    // 状态（选填）
+    private String mobile;
+
     // 审核人（选填）
     private String approver;
 
@@ -65,6 +68,14 @@ public class XN622095Req extends APageReq {
 
     public void setApprover(String approver) {
         this.approver = approver;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

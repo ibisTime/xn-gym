@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.std.gym.common.PropertiesUtil;
 import com.std.gym.dao.ICoachDAO;
 import com.std.gym.dao.base.support.AMybatisTemplate;
 import com.std.gym.domain.Coach;
@@ -23,24 +24,28 @@ public class CoachDAOImpl extends AMybatisTemplate implements ICoachDAO {
 
     @Override
     public Coach select(Coach condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_coach"), condition,
             Coach.class);
     }
 
     @Override
     public Long selectTotalCount(Coach condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(NAMESPACE.concat("select_coach_count"),
             condition);
     }
 
     @Override
     public List<Coach> selectList(Coach condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_coach"), condition,
             Coach.class);
     }
 
     @Override
     public List<Coach> selectList(Coach condition, int start, int count) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_coach"), start, count,
             condition, Coach.class);
     }
