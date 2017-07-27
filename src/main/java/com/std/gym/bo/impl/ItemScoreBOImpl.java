@@ -80,4 +80,11 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
         }
         return data;
     }
+
+    @Override
+    public List<ItemScore> queryItemScoreList(String commentCode) {
+        ItemScore condition = new ItemScore();
+        condition.setCommentCode(commentCode);
+        return itemScoreDAO.selectList(condition);
+    }
 }

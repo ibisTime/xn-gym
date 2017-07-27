@@ -16,6 +16,7 @@ import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.ISYSConfigBO;
+import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.AmountUtil;
@@ -69,6 +70,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
     @Autowired
     private ICoachBO coachBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
 
     @Override
     public String commitOrder(String applyUser, String address, String mobile,
@@ -239,8 +243,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 Date appointDatetime = DateUtil.strToDate(
                     appoint + " " + order.getSkDatetime(),
                     DateUtil.DATA_TIME_PATTERN_1);
-                if (!DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1))
-                    .before(appointDatetime)) {
+                if (DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1))
+                    .after(appointDatetime)) {
                     throw new BizException("xn0000", "临近上课时间不到两小时,不能取消订单");
                 }
                 // 违约后用户能得到的钱
@@ -288,6 +292,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
                 EBizType.AJ_SKGMTK.getValue(), order.getCode());
         }
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的私教订单"
+                + "[编号为:" + order.getCode() + "],由于" + remark
+                + "原因,已被教练取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         perCourseOrderBO.platCancel(order, updater, remark);
     }
 
@@ -333,7 +340,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     @Override
     public void changeOrder() {
         changeNoPayOrder();
-        changePaySuccessOrder();
+        // changePaySuccessOrder();
     }
 
     private void changeNoPayOrder() {

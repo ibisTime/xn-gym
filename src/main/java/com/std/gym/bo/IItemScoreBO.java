@@ -19,4 +19,6 @@ public interface IItemScoreBO extends IPaginableBO<ItemScore> {
 
     public ItemScore getItemScore(String code);
 
+    public List<ItemScore> queryItemScoreList(String commentCode);
+
 }

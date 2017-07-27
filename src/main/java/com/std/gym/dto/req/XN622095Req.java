@@ -24,6 +24,9 @@ public class XN622095Req extends APageReq {
     // 状态（选填）
     private String status;
 
+    // UI位置（选填）
+    private String location;
+
     // 状态（选填）
     private String mobile;
 
@@ -76,6 +79,14 @@ public class XN622095Req extends APageReq {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
 }

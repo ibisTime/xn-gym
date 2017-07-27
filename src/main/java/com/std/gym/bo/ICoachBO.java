@@ -32,4 +32,6 @@ public interface ICoachBO extends IPaginableBO<Coach> {
 
     public void updateStar(Coach coach, Integer star, Integer starNum);
 
+    public void refreshCoach(Coach coach, String location, String orderNo);
+
 }

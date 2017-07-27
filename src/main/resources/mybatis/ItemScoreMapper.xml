@@ -13,6 +13,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="commentCode != null and commentCode != '' ">
+				AND t.comment_code = #{commentCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_itemScore" parameterType="itemScore" resultMap="itemScore_DB_Result">

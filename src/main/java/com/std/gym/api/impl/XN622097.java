@@ -30,6 +30,7 @@ public class XN622097 extends AProcessor {
         condition.setStar(StringValidater.toInteger(req.getStar()));
         condition.setLabel(req.getLabel());
         condition.setStatus(req.getStatus());
+        condition.setLocation(req.getLocation());
         condition.setApprover(req.getApprover());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

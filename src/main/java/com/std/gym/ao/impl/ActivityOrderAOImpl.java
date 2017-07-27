@@ -123,6 +123,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             order.setActivityBeginDatetime(activity.getStartDatetime());
             order.setActivityEndDatetime(activity.getEndDatetime());
             order.setPic(activity.getPic());
+            order.setHoldPlace(activity.getHoldPlace());
+            order.setContact(activity.getContact());
             User user = userBO.getRemoteUser(order.getApplyUser());
             order.setNickname(user.getNickname());
         }
@@ -142,6 +144,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             order.setActivityBeginDatetime(activity.getStartDatetime());
             order.setActivityEndDatetime(activity.getEndDatetime());
             order.setPic(activity.getPic());
+            order.setHoldPlace(activity.getHoldPlace());
+            order.setContact(activity.getContact());
             User user = userBO.getRemoteUser(order.getApplyUser());
             order.setNickname(user.getNickname());
         }
@@ -337,8 +341,12 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             Activity activity = activityBO.getActivity(order.getActivityCode());
             activity.setStatus(EActivityStatus.ONLINE.getCode());
             activityBO.addSignNum(activity,
-                activity.getRemainNum() - order.getQuantity());
+                activity.getRemainNum() + order.getQuantity());
         }
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的活动订单"
+                + "[编号为:" + order.getCode() + "],由于" + order.getApplyNote()
+                + "原因申请退款,经平台取消审核,现已" + status.getValue()
+                + "。详情请到“我的”里面查看。引起的不便,请见谅。");
         activityOrderBO.approveRefund(order, status, updater, remark);
     }
 

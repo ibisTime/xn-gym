@@ -29,6 +29,7 @@ public class XN622093 extends AProcessor {
         condition.setStar(StringValidater.toInteger(req.getStar()));
         condition.setStatus(req.getStatus());
         condition.setSkCycle(req.getSkCycle());
+        condition.setLocation(req.getLocation());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ICoachAO.DEFAULT_ORDER_COLUMN;

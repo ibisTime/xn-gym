@@ -24,6 +24,9 @@ public class XN622093Req extends APageReq {
     // 状态
     private String status;
 
+    // UI位置
+    private String location;
+
     // 审核人
     private String approver;
 
@@ -76,5 +79,13 @@ public class XN622093Req extends APageReq {
 
     public void setSkCycle(String skCycle) {
         this.skCycle = skCycle;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

@@ -16,6 +16,8 @@
 		<result column="star_num" property="starNum" />
 		<result column="label" property="label" />
 		<result column="sum_com" property="sumCom" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
@@ -41,8 +43,18 @@
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND tu.mobile = #{mobile}
+			</if>
+		</trim>
+	</sql>
+	<sql id="where_tcp_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="skCycle != null and skCycle != '' ">
+				AND tpc.sk_cycle = #{skCycle}
 			</if>
 		</trim>
 	</sql>
@@ -61,6 +73,8 @@
 		,t.star_num
 		,t.label
 		,t.sum_com
+		,t.location
+		,t.order_no
 		,t.status
 		,t.approver
 		,t.approve_datetime
@@ -97,14 +111,16 @@
 		,t.star_num
 		,t.label
 		,t.sum_com
+		,t.location
+		,t.order_no
 		,t.status
 		,t.approver
 		,t.approve_datetime
 		,t.remark
 		FROM
 		tgym_coach t RIGHT JOIN (SELECT * FROM tgym_coach tc ,(SELECT DISTINCT(tpc.coach_code) AS ocode
-		FROM tgym_per_course tpc where tpc.sk_cycle = #{skCycle})  tp
-		WHERE tc.code=tp.ocode) tt ON t.code=tt.code
+		FROM tgym_per_course tpc <include refid="where_tcp_condition" />)  tp
+		where tc.code=tp.ocode) tt ON t.code=tt.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -113,13 +129,6 @@
 		</trim>
 	</select>
 
-	<select id="select_coach_sx_count" parameterType="coach"
-		resultType="java.lang.Long">
-		SELECT COUNT(1) FROM  tgym_coach t RIGHT JOIN (SELECT * FROM tgym_coach tc
-		,(SELECT DISTINCT(tpc.coach_code) AS ocode FROM tgym_per_course tpc <include refid="where_condition" />)  tp
-		WHERE tc.code=tp.ocode) tt ON t.code=tt.code
-		<include refid="where_condition" />
-	</select>
 
 	<insert id="insert_coach" parameterType="coach">
 		INSERT INTO
@@ -137,6 +146,8 @@
 		,star_num
 		,label
 		,sum_com
+		,location
+		,order_no
 		,status
 		)
 		VALUES(
@@ -153,6 +164,8 @@
 		,#{starNum}
 		,#{label}
 		,#{sumCom}
+		,#{location}
+		,#{orderNo}
 		,#{status}
 		)
 	</insert>
@@ -188,6 +201,14 @@
 		star=#{star}
 		,star_num=#{starNum}
 		,sum_com=#{sumCom}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_location" parameterType="coach">
+		UPDATE tgym_coach
+		SET
+		location=#{location}
+		,order_no=#{orderNo}
 		WHERE code = #{code}
 	</update>
 </mapper>

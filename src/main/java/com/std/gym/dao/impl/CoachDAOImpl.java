@@ -82,4 +82,9 @@ public class CoachDAOImpl extends AMybatisTemplate implements ICoachDAO {
     public int updateStar(Coach data) {
         return super.update(NAMESPACE.concat("update_star"), data);
     }
+
+    @Override
+    public int updateLocation(Coach data) {
+        return super.update(NAMESPACE.concat("update_location"), data);
+    }
 }

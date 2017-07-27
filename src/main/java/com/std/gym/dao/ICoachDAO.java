@@ -19,4 +19,6 @@ public interface ICoachDAO extends IBaseDAO<Coach> {
     List<Coach> queryFrontCoachList(Coach condition, int start, int count);
 
     int updateStar(Coach coach);
+
+    int updateLocation(Coach coach);
 }

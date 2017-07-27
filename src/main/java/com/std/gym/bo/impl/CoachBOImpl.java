@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.base.PaginableBOImpl;
+import com.std.gym.core.StringValidater;
 import com.std.gym.dao.ICoachDAO;
 import com.std.gym.domain.Coach;
 import com.std.gym.enums.ECoachStatus;
@@ -110,5 +111,12 @@ public class CoachBOImpl extends PaginableBOImpl<Coach> implements ICoachBO {
         coach.setStarNum(starNum);
         coach.setSumCom(coach.getSumCom() + 1);
         coachDAO.updateStar(coach);
+    }
+
+    @Override
+    public void refreshCoach(Coach coach, String location, String orderNo) {
+        coach.setLocation(location);
+        coach.setOrderNo(StringValidater.toInteger(orderNo));
+        coachDAO.updateLocation(coach);
     }
 }

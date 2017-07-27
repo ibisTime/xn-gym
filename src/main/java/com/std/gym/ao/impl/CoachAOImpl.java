@@ -60,6 +60,8 @@ public class CoachAOImpl implements ICoachAO {
         data.setAge(StringValidater.toInteger(req.getAge()));
         data.setStar(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setStarNum(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setLocation(EBoolean.NO.getCode());
+        data.setOrderNo(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setStatus(ECoachStatus.TO_APPROVE.getCode());
         data.setLabel(req.getLabel());
@@ -159,5 +161,14 @@ public class CoachAOImpl implements ICoachAO {
         res.setPerCourseList(perCourseList);
         res.setCommentList(commentList);
         return res;
+    }
+
+    @Override
+    public void editLocation(String code, String location, String orderNo) {
+        Coach coach = coachBO.getCoach(code);
+        if (!ECoachStatus.APPROVE_YES.getCode().equals(coach.getStatus())) {
+            throw new BizException("xn0000", "该私教还未通过审核,不能设置位置");
+        }
+        coachBO.refreshCoach(coach, location, orderNo);
     }
 }

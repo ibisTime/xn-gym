@@ -24,6 +24,9 @@ public class XN622097Req extends APageReq {
     // 状态
     private String status;
 
+    // UI位置（选填）
+    private String location;
+
     // 审核人
     private String approver;
 
@@ -65,5 +68,13 @@ public class XN622097Req extends APageReq {
 
     public void setApprover(String approver) {
         this.approver = approver;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

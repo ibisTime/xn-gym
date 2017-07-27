@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -191,6 +192,17 @@ public class CommentAOImpl implements ICommentAO {
             perCourseOrder.getApplyUser(), ECurrency.JF, amount,
             EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
             EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
+
+        // 给私教加钱
+        SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
+            ESysConfigCkey.SJFC.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+            ESystemCode.SYSTEM_CODE.getCode());
+        Long coachAmount = AmountUtil.mul(1L, perCourseOrder.getAmount()
+                * StringValidater.toDouble(coachSysConfig.getCvalue()));
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+            perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
+            EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
+            EBizType.AJ_SKGM.getValue(), perCourseOrder.getCode());
         return code;
     }
 
@@ -247,6 +259,36 @@ public class CommentAOImpl implements ICommentAO {
             orgCourseOrder.getApplyUser(), ECurrency.JF, amount,
             EBizType.KCGMSJF, EBizType.KCGMSJF.getValue(),
             EBizType.KCGMSJF.getValue(), orgCourseOrder.getCode());
+
+        User user = userBO.getRemoteUser(orgCourseOrder.getApplyUser());
+        if (StringUtils.isNotBlank(user.getUserReferee())) {
+            SYSConfig userRefereeSysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.HKFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long userRefereeAmount = AmountUtil.mul(
+                1L,
+                orgCourseOrder.getAmount()
+                        * StringValidater.toDouble(userRefereeSysConfig
+                            .getCvalue()));
+            // 给推荐人加钱
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                user.getUserReferee(), ECurrency.CNY, userRefereeAmount,
+                EBizType.TJ, EBizType.TJ.getValue(), EBizType.TJ.getValue(),
+                orgCourseOrder.getCode());
+        }
+        // 给团课上课教练加钱
+        SYSConfig sysConfigCoach = sysConfigBO.getConfigValue(
+            ESysConfigCkey.TTJFC.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+            ESystemCode.SYSTEM_CODE.getCode());
+        Long coachAmount = AmountUtil.mul(1L, orgCourseOrder.getAmount()
+                * StringValidater.toDouble(sysConfigCoach.getCvalue()));
+        if (coachAmount > 0) {
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                orgCourse.getCoachUser(), ECurrency.CNY, coachAmount,
+                EBizType.TTJFC, EBizType.TTJFC.getValue(),
+                EBizType.TTJFC.getValue(), orgCourseOrder.getCode());
+        }
         return code;
     }
 
@@ -309,6 +351,9 @@ public class CommentAOImpl implements ICommentAO {
             Coach coach = coachBO.getCoach(comment.getCoachCode());
             comment.setCoachRealName(coach.getRealName());
         }
+        List<ItemScore> itemScoreList = itemScoreBO.queryItemScoreList(comment
+            .getCode());
+        comment.setItemScoreList(itemScoreList);
         comment.setCommerRealName(user.getNickname());
         comment.setPhoto(user.getPhoto());
     }

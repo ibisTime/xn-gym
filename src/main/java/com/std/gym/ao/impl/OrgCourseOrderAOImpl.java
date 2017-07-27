@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -212,9 +213,9 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             orgCourseBO.addSignNum(orgCourse,
                 orgCourse.getRemainNum() + order.getQuantity());
 
-            smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的活动订单"
+            smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的课程订单"
                     + "[编号为:" + order.getCode() + "],由于" + remark
-                    + "原因,已被私教取消。详情请到“我的”里面查看。引起的不便,请见谅。");
+                    + "原因,已被平台取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         } else {
             throw new BizException("xn0000", "该状态下不能取消订单");
         }
@@ -260,6 +261,10 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             orgCourseBO.addSignNum(orgCourse,
                 orgCourse.getRemainNum() + order.getQuantity());
         }
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的课程订单"
+                + "[编号为:" + order.getCode() + "],由于" + order.getApplyNote()
+                + "原因申请退款,经平台取消审核,现已" + status.getValue()
+                + "。详情请到“我的”里面查看。引起的不便,请见谅。");
         orgCourseOrderBO.approveRefund(order, status, updater, remark);
     }
 
@@ -361,7 +366,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
                 .getOrgCourseCode());
             User user = userBO.getRemoteUser(order.getApplyUser());
-            if (user.getUserReferee() != null) {
+            if (StringUtils.isNotBlank(user.getUserReferee())) {
                 SYSConfig sysConfig = sysConfigBO.getConfigValue(
                     ESysConfigCkey.HKFC.getCode(),
                     ESystemCode.SYSTEM_CODE.getCode(),
@@ -381,7 +386,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                 ESystemCode.SYSTEM_CODE.getCode());
             Long coachAmount = AmountUtil.mul(1L, order.getAmount()
                     * StringValidater.toDouble(sysConfigCoach.getCvalue()));
-            if (coachAmount != 0L) {
+            if (coachAmount > 0) {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), orgCourse.getCoachUser(),
                     ECurrency.CNY, coachAmount, EBizType.TTJFC,

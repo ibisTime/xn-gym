@@ -11,7 +11,7 @@ import com.std.gym.exception.ParaException;
 import com.std.gym.spring.SpringContextHolder;
 
 /**
- * 团课截止报名
+ * 团课结束
  * @author: asus 
  * @since: 2017年7月17日 下午7:01:18 
  * @history:

@@ -50,6 +50,12 @@ public class Coach extends ABaseDO {
     // 标签
     private String label;
 
+    // UI位置
+    private String location;
+
+    // UI顺序
+    private Integer orderNo;
+
     // 状态
     private String status;
 
@@ -222,6 +228,22 @@ public class Coach extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
     }
 
 }
