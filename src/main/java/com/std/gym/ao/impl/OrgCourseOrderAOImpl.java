@@ -358,7 +358,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         for (OrgCourseOrder order : orgCourseOrderList) {
             orgCourseOrderBO.toComment(order);
         }
-        this.changePaySuccessOrder(orgCourseOrderList);
+        // this.changePaySuccessOrder(orgCourseOrderList);
     }
 
     private void changePaySuccessOrder(List<OrgCourseOrder> orgCourseOrderList) {

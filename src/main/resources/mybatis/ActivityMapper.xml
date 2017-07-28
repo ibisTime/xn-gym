@@ -191,7 +191,8 @@
 	
 	<update id="update_sign" parameterType="activity">
 		UPDATE tgym_activity SET
-		remain_num = #{remainNum}
+		status=#{status}
+		,remain_num = #{remainNum}
 		WHERE code = #{code}
 	</update>
 	
