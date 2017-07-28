@@ -311,10 +311,15 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
     @Override
     public void applyRefund(String orderCode, String applyUser, String applyNote) {
         ActivityOrder order = activityOrderBO.getActivityOrder(orderCode);
+        Activity activity = activityBO.getActivity(order.getActivityCode());
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "您还没有支付,不能申请退款");
         } else if (EActivityOrderStatus.PAYSUCCESS.getCode().equals(
             order.getStatus())) {
+            if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 2 + 1)).after(
+                activity.getStartDatetime())) {
+                throw new BizException("xn0000", "离活动开始不到两小时,不能申请退款");
+            }
             activityOrderBO.applyRefund(order, applyUser, applyNote);
         } else {
             throw new BizException("xn000000", "该状态下不能申请退款");

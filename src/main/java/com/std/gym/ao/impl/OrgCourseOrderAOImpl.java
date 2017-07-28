@@ -231,9 +231,9 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         }
         OrgCourse orgCourse = orgCourseBO
             .getOrgCourse(order.getOrgCourseCode());
-        if (!DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1)).before(
+        if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 2 + 1)).after(
             orgCourse.getSkStartDatetime())) {
-            throw new BizException("xn0000", "临近上课时间不到两小时,不能取消订单");
+            throw new BizException("xn0000", "临近上课时间不到两小时,不能申请退款");
         }
         orgCourseOrderBO.applyRefund(order, applyUser, applyNote);
     }
@@ -242,28 +242,44 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
     public void approveRefund(String orderCode, String result, String updater,
             String remark) {
         OrgCourseOrder order = orgCourseOrderBO.getOrgCourseOrder(orderCode);
+        OrgCourse orgCourse = orgCourseBO
+            .getOrgCourse(order.getOrgCourseCode());
         if (!EActivityOrderStatus.APPLY_REFUND.getCode().equals(
             order.getStatus())) {
             throw new BizException("xn0000", "该状态下不能审批退款申请");
         }
         EOrgCourseOrderStatus status = EOrgCourseOrderStatus.REFUND_NO;
         if (EBoolean.YES.getCode().equals(result)) {
+            // 退款给用户
             status = EOrgCourseOrderStatus.REFUND_YES;
             Long amount = order.getAmount() - order.getPenalty();
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
                 order.getApplyUser(), ECurrency.CNY, amount,
                 EBizType.AJ_TKGMTK, EBizType.AJ_TKGMTK.getValue(),
                 EBizType.AJ_TKGMTK.getValue(), order.getCode());
+
+            // 给团课上课教练加钱
+            SYSConfig sysConfigCoach = sysConfigBO.getConfigValue(
+                ESysConfigCkey.TTJFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long coachAmount = AmountUtil.mul(1L, order.getPenalty()
+                    * StringValidater.toDouble(sysConfigCoach.getCvalue()));
+            if (coachAmount > 0) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), orgCourse.getCoachUser(),
+                    ECurrency.CNY, coachAmount, EBizType.TTJFC,
+                    EBizType.TTJFC.getValue(), EBizType.TTJFC.getValue(),
+                    order.getCode());
+            }
             // 审批通过,取消订单人数加回,判断修改状态
-            OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
-                .getOrgCourseCode());
             orgCourse.setStatus(EOrgCourseStatus.ONLINE.getCode());
             orgCourseBO.addSignNum(orgCourse,
                 orgCourse.getRemainNum() + order.getQuantity());
         }
         smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的课程订单"
-                + "[编号为:" + order.getCode() + "],由于" + order.getApplyNote()
-                + "原因申请退款,经平台取消审核,现已" + status.getValue()
+                + "[编号为:" + order.getCode() + "],您于" + order.getApplyDatetime()
+                + "申请退款,经平台审核,现已" + status.getValue()
                 + "。详情请到“我的”里面查看。引起的不便,请见谅。");
         orgCourseOrderBO.approveRefund(order, status, updater, remark);
     }

@@ -7,6 +7,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.gym.ao.ICommentAO;
 import com.std.gym.bo.IAccountBO;
@@ -85,6 +86,7 @@ public class CommentAOImpl implements ICommentAO {
     private IAccountBO accountBO;
 
     @Override
+    @Transactional
     public String comment(String content, List<XN622200Req> itemScoreList,
             String commer, String orderCode) {
         userBO.getRemoteUser(commer);
@@ -116,7 +118,6 @@ public class CommentAOImpl implements ICommentAO {
             throw new BizException("xn0000", "该私课订单还不能评论");
         }
 
-        perCourseOrderBO.finishOrder(perCourseOrder);
         PerCourse perCourse = perCourseBO.getPerCourse(productCode);
 
         Comment data = new Comment();
@@ -181,7 +182,7 @@ public class CommentAOImpl implements ICommentAO {
             star = coach.getStar();
         }
         coachBO.updateStar(coach, star, starNum);
-
+        perCourseOrderBO.finishOrder(perCourseOrder);
         // 私课评论加积分
         SYSConfig sysConfig = sysConfigBO.getConfigValue(
             EBizType.SKGMSJF.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
@@ -203,6 +204,9 @@ public class CommentAOImpl implements ICommentAO {
             perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
             EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
             EBizType.AJ_SKGM.getValue(), perCourseOrder.getCode());
+        if (ECommentStatus.FILTERED.getCode().equals(status)) {
+            code = code + ";filter";
+        }
         return code;
     }
 
@@ -214,7 +218,6 @@ public class CommentAOImpl implements ICommentAO {
             orgCourseOrder.getStatus())) {
             throw new BizException("xn0000", "该团课订单还不能评论");
         }
-        orgCourseOrderBO.finishOrder(orgCourseOrder);
         String productCode = orgCourseOrder.getOrgCourseCode();
 
         Comment data = new Comment();
@@ -247,6 +250,7 @@ public class CommentAOImpl implements ICommentAO {
 
         OrgCourse orgCourse = orgCourseBO.getOrgCourse(productCode);
         orgCourseBO.addSumCom(orgCourse);
+        orgCourseOrderBO.finishOrder(orgCourseOrder);
 
         // 给用户加积分
         SYSConfig sysConfig = sysConfigBO.getConfigValue(
@@ -289,6 +293,11 @@ public class CommentAOImpl implements ICommentAO {
                 EBizType.TTJFC, EBizType.TTJFC.getValue(),
                 EBizType.TTJFC.getValue(), orgCourseOrder.getCode());
         }
+
+        if (ECommentStatus.FILTERED.getCode().equals(status)) {
+            code = code + ";filter";
+        }
+
         return code;
     }
 

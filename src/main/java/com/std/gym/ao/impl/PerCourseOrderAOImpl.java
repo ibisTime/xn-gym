@@ -243,9 +243,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 Date appointDatetime = DateUtil.strToDate(
                     appoint + " " + order.getSkDatetime(),
                     DateUtil.DATA_TIME_PATTERN_1);
-                if (DateUtil.getRelativeDate(new Date(), -(60 * 60 * 2 + 1))
+                if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 2 + 1))
                     .after(appointDatetime)) {
-                    throw new BizException("xn0000", "临近上课时间不到两小时,不能取消订单");
+                    throw new BizException("xn0000", "临近上课时间不到两小时,不能申请退款");
                 }
                 // 违约后用户能得到的钱
                 Long amount = order.getAmount() - order.getPenalty();
