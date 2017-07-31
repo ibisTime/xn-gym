@@ -95,10 +95,9 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
 
     @Override
     public void paySuccess(ActivityOrder order, String payCode, Long amount,
-            Long penalty, String payType) {
+            String payType) {
         order.setStatus(EActivityOrderStatus.PAYSUCCESS.getCode());
         order.setPayType(payType);
-        order.setPenalty(penalty);
         order.setPayCode(payCode);
         order.setPayAmount(amount);
         order.setPayDatetime(new Date());
@@ -123,9 +122,10 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     }
 
     @Override
-    public void applyRefund(ActivityOrder order, String applyUser,
-            String applyNote) {
+    public void applyRefund(ActivityOrder order, Long penalty,
+            String applyUser, String applyNote) {
         order.setStatus(EActivityOrderStatus.APPLY_REFUND.getCode());
+        order.setPenalty(penalty);
         order.setApplyUser(applyUser);
         order.setApplyDatetime(new Date());
         order.setApplyNote(applyNote);
@@ -133,9 +133,10 @@ public class ActivityOrderBOImpl extends PaginableBOImpl<ActivityOrder>
     }
 
     @Override
-    public void approveRefund(ActivityOrder order, EActivityOrderStatus status,
-            String updater, String remark) {
+    public void approveRefund(ActivityOrder order, Long penalty,
+            EActivityOrderStatus status, String updater, String remark) {
         order.setStatus(status.getCode());
+        order.setPenalty(penalty);
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);

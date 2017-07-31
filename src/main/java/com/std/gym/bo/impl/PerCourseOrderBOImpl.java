@@ -77,11 +77,10 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
 
     @Override
     public void paySuccess(PerCourseOrder order, String payCode, Long amount,
-            Long penalty, String payType) {
+            String payType) {
         order.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
         order.setPayType(payType);
         order.setPayAmount(amount);
-        order.setPenalty(penalty);
         order.setPayCode(payCode);
         order.setPayDatetime(new Date());
         perCourseOrderDAO.paySuccess(order);
@@ -118,8 +117,10 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     }
 
     @Override
-    public void userCancel(PerCourseOrder order, String updater, String remark) {
+    public void userCancel(PerCourseOrder order, Long penalty, String updater,
+            String remark) {
         order.setStatus(EPerCourseOrderStatus.USER_CANCEL.getCode());
+        order.setPenalty(penalty);
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);

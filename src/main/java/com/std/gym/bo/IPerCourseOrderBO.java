@@ -21,7 +21,7 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
     public PerCourseOrder getOrderPayGroup(String payGroup);
 
     public void paySuccess(PerCourseOrder order, String payCode, Long amount,
-            Long penalty, String payType);
+            String payType);
 
     public void receiverOrder(PerCourseOrder order, String updater,
             String remark);
@@ -30,7 +30,8 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
 
     public void classOver(PerCourseOrder order, String updater, String remark);
 
-    public void userCancel(PerCourseOrder order, String updater, String remark);
+    public void userCancel(PerCourseOrder order, Long penalty, String updater,
+            String remark);
 
     public void platCancel(PerCourseOrder order, String updater, String remark);
 

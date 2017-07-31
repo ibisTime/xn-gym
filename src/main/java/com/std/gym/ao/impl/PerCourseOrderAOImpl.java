@@ -85,13 +85,19 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         Integer skDays = 0;// 距离下次上课天数
         Integer skCycle = perCourse.getSkCycle();
         if (skCycle < weekDay) {// 下周预约
-            skDays = 7 - (weekDay - skCycle);
-        } else if (skCycle > weekDay) {// 本周预约
             skDays = weekDay - skCycle;
+        } else if (skCycle > weekDay) {// 本周预约
+            skDays = skCycle - weekDay;
         }
         Date appointment = DateUtil.getRelativeDate(DateUtil.getTodayStart(),
             24 * 3600 * skDays);
-
+        Date appointDatetime = DateUtil.strToDate(
+            DateUtil.dateToStr(appointment, DateUtil.FRONT_DATE_FORMAT_STRING)
+                    + " " + perCourse.getSkStartDatetime(),
+            DateUtil.DATA_TIME_PATTERN_1);
+        if (appointDatetime.before(new Date())) {
+            appointment = DateUtil.getRelativeDate(appointment, 24 * 3600 * 7);
+        }
         Long skCount = perCourseOrderBO.getTotalCount(perCourseCode,
             appointment, perCourse.getSkStartDatetime(),
             perCourse.getSkEndDatetime());
@@ -186,15 +192,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn000000", "未找到对应活动订单");
         }
         if (EPerCourseOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            // 计算违约金额
-            SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
-                ESystemCode.SYSTEM_CODE.getCode());
-            Long penalty = AmountUtil.mul(1L,
-                amount * StringValidater.toDouble(sysConfig.getCvalue()));
             // 支付成功
-            perCourseOrderBO.paySuccess(order, payCode, amount, penalty,
-                payType);
+            perCourseOrderBO.paySuccess(order, payCode, amount, payType);
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -233,6 +232,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     @Override
     public void userCancel(String orderCode, String updater, String remark) {
         PerCourseOrder order = perCourseOrderBO.getPerCourseOrder(orderCode);
+        Long penalty = 0L;
         if (EPerCourseOrderStatus.NOTPAY.getCode().equals(order.getStatus())
                 || EPerCourseOrderStatus.PAYSUCCESS.getCode().equals(
                     order.getStatus())) {
@@ -247,8 +247,15 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                     .after(appointDatetime)) {
                     throw new BizException("xn0000", "临近上课时间不到两小时,不能申请退款");
                 }
+                // 计算违约金额
+                SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.WY.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                penalty = AmountUtil.mul(1L, order.getAmount()
+                        * StringValidater.toDouble(sysConfigWY.getCvalue()));
                 // 违约后用户能得到的钱
-                Long amount = order.getAmount() - order.getPenalty();
+                Long amount = order.getAmount() - penalty;
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
                     ECurrency.CNY, amount, EBizType.AJ_SKGMTK,
@@ -268,7 +275,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                     EBizType.TTJFC.getValue(), EBizType.TTJFC.getValue(),
                     order.getCode());
             }
-            perCourseOrderBO.userCancel(order, updater, remark);
+            perCourseOrderBO.userCancel(order, penalty, updater, remark);
             return;
         }
         throw new BizException("xn0000", "该私课订单状态下，不能取消");

@@ -56,17 +56,17 @@ public interface IActivityOrderBO extends IPaginableBO<ActivityOrder> {
     public void payGroup(ActivityOrder order, String payGroup);
 
     public void paySuccess(ActivityOrder order, String payCode, Long amount,
-            Long penalty, String payType);
+            String payType);
 
     public void userCancel(ActivityOrder order, String updater);
 
     public void platCancel(ActivityOrder order, String updater, String remark);
 
-    public void applyRefund(ActivityOrder order, String applyUser,
-            String applyNote);
+    public void applyRefund(ActivityOrder order, Long penalty,
+            String applyUser, String applyNote);
 
-    public void approveRefund(ActivityOrder order, EActivityOrderStatus status,
-            String updater, String remark);
+    public void approveRefund(ActivityOrder order, Long penalty,
+            EActivityOrderStatus status, String updater, String remark);
 
     public void finishOrder(ActivityOrder order);
 

@@ -72,7 +72,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             String applyUser, String mobile, String applyNote) {
         OrgCourse orgCourse = orgCourseBO.getOrgCourse(orgCourseCode);
         userBO.getRemoteUser(applyUser);
-        this.checkActivity(orgCourse, quantity);
+        this.checkOrgCourse(orgCourse, quantity);
         OrgCourseOrder data = new OrgCourseOrder();
         String code = OrderNoGenerater.generate(EPrefixCode.ORGCOURSEORDER
             .getCode());
@@ -91,7 +91,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
         return code;
     }
 
-    private void checkActivity(OrgCourse orgCourse, Integer quantity) {
+    private void checkOrgCourse(OrgCourse orgCourse, Integer quantity) {
         if (EOrgCourseStatus.DRAFT.getCode().equals(orgCourse.getStatus())
                 || EOrgCourseStatus.OFFLINE.getCode().equals(
                     orgCourse.getStatus())
@@ -114,7 +114,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
 
         OrgCourse orgCourse = orgCourseBO
             .getOrgCourse(order.getOrgCourseCode());
-        this.checkActivity(orgCourse, order.getQuantity());
+        this.checkOrgCourse(orgCourse, order.getQuantity());
 
         // 获取用户信息
         String userId = order.getApplyUser();
@@ -164,15 +164,8 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             throw new BizException("xn000000", "未找到对应活动订单");
         }
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            // 计算违约金额
-            SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
-                ESystemCode.SYSTEM_CODE.getCode());
-            Long penalty = AmountUtil.mul(1L,
-                amount * StringValidater.toDouble(sysConfig.getCvalue()));
             // 支付成功
-            orgCourseOrderBO.paySuccess(order, payCode, amount, penalty,
-                payType);
+            orgCourseOrderBO.paySuccess(order, payCode, amount, payType);
             OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
                 .getOrgCourseCode());
             if (orgCourse.getRemainNum() - order.getQuantity() == 0) {
@@ -214,8 +207,8 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                 orgCourse.getRemainNum() + order.getQuantity());
 
             smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的课程订单"
-                    + "[编号为:" + order.getCode() + "],由于" + remark
-                    + "原因,已被平台取消。详情请到“我的”里面查看。引起的不便,请见谅。");
+                    + "[编号为:" + order.getCode()
+                    + "],已被平台取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         } else {
             throw new BizException("xn0000", "该状态下不能取消订单");
         }
@@ -235,7 +228,16 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             orgCourse.getSkStartDatetime())) {
             throw new BizException("xn0000", "临近上课时间不到两小时,不能申请退款");
         }
-        orgCourseOrderBO.applyRefund(order, applyUser, applyNote);
+        // 计算违约金额
+        SYSConfig sysConfig = sysConfigBO.getConfigValue(
+            ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+            ESystemCode.SYSTEM_CODE.getCode());
+        Long penalty = AmountUtil
+            .mul(
+                1L,
+                order.getAmount()
+                        * StringValidater.toDouble(sysConfig.getCvalue()));
+        orgCourseOrderBO.applyRefund(order, penalty, applyUser, applyNote);
     }
 
     @Override
@@ -249,10 +251,12 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             throw new BizException("xn0000", "该状态下不能审批退款申请");
         }
         EOrgCourseOrderStatus status = EOrgCourseOrderStatus.REFUND_NO;
+        Long penalty = 0L;
         if (EBoolean.YES.getCode().equals(result)) {
             // 退款给用户
             status = EOrgCourseOrderStatus.REFUND_YES;
             Long amount = order.getAmount() - order.getPenalty();
+            penalty = order.getPenalty();
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
                 order.getApplyUser(), ECurrency.CNY, amount,
                 EBizType.AJ_TKGMTK, EBizType.AJ_TKGMTK.getValue(),
@@ -281,7 +285,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
                 + "[编号为:" + order.getCode() + "],您于" + order.getApplyDatetime()
                 + "申请退款,经平台审核,现已" + status.getValue()
                 + "。详情请到“我的”里面查看。引起的不便,请见谅。");
-        orgCourseOrderBO.approveRefund(order, status, updater, remark);
+        orgCourseOrderBO.approveRefund(order, penalty, status, updater, remark);
     }
 
     @Override

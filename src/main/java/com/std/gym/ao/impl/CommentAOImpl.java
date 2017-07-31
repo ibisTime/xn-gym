@@ -193,7 +193,23 @@ public class CommentAOImpl implements ICommentAO {
             perCourseOrder.getApplyUser(), ECurrency.JF, amount,
             EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
             EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
-
+        User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
+        if (StringUtils.isNotBlank(user.getUserReferee())) {
+            SYSConfig userRefereeSysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.HKFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long userRefereeAmount = AmountUtil.mul(
+                1L,
+                perCourseOrder.getAmount()
+                        * StringValidater.toDouble(userRefereeSysConfig
+                            .getCvalue()));
+            // 给推荐人加钱
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                user.getUserReferee(), ECurrency.CNY, userRefereeAmount,
+                EBizType.TJ, EBizType.TJ.getValue(), EBizType.TJ.getValue(),
+                perCourseOrder.getCode());
+        }
         // 给私教加钱
         SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
             ESysConfigCkey.SJFC.getCode(), ESystemCode.SYSTEM_CODE.getCode(),

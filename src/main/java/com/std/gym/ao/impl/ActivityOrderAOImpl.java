@@ -256,13 +256,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             payType = EPayType.WEIXIN.getCode();
         }
         if (EActivityOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
-            SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
-                ESystemCode.SYSTEM_CODE.getCode());
-            Long penalty = AmountUtil.mul(1L,
-                amount * StringValidater.toDouble(sysConfig.getCvalue()));
-            activityOrderBO
-                .paySuccess(order, payCode, amount, penalty, payType);
+            activityOrderBO.paySuccess(order, payCode, amount, payType);
             Activity activity = activityBO.getActivity(order.getActivityCode());
             if (activity.getRemainNum() - order.getQuantity() == 0) {
                 activity.setStatus(EActivityStatus.STOP.getCode());
@@ -301,8 +295,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             activityBO.addSignNum(activity,
                 activity.getRemainNum() - order.getQuantity());
             smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的活动订单"
-                    + "[编号为:" + order.getCode() + "],由于" + remark
-                    + "原因,已被平台取消。详情请到“我的”里面查看。引起的不便,请见谅。");
+                    + "[编号为:" + order.getCode()
+                    + "],已被平台取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         } else {
             throw new BizException("xn000000", "该状态下不能取消订单");
         }
@@ -320,7 +314,12 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 activity.getStartDatetime())) {
                 throw new BizException("xn0000", "离活动开始不到两小时,不能申请退款");
             }
-            activityOrderBO.applyRefund(order, applyUser, applyNote);
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penalty = AmountUtil.mul(1L, order.getAmount()
+                    * StringValidater.toDouble(sysConfig.getCvalue()));
+            activityOrderBO.applyRefund(order, penalty, applyUser, applyNote);
         } else {
             throw new BizException("xn000000", "该状态下不能申请退款");
         }
@@ -335,9 +334,11 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             throw new BizException("xn000000", "该状态下不能进行退款审核");
         }
         EActivityOrderStatus status = EActivityOrderStatus.REFUND_NO;
+        Long penalty = 0L;
         if (EBoolean.YES.getCode().equals(result)) {
             status = EActivityOrderStatus.REFUND_YES;
             Long amount = order.getAmount() - order.getPenalty();
+            penalty = order.getPenalty();
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
                 order.getApplyUser(), ECurrency.CNY, amount,
                 EBizType.AJ_HDGMTK, EBizType.AJ_HDGMTK.getValue(),
@@ -349,10 +350,10 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 activity.getRemainNum() + order.getQuantity());
         }
         smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的活动订单"
-                + "[编号为:" + order.getCode() + "],由于" + order.getApplyNote()
-                + "原因申请退款,经平台取消审核,现已" + status.getValue()
+                + "[编号为:" + order.getCode() + "],于" + order.getApplyDatetime()
+                + "申请退款,经平台审核,现已" + status.getValue()
                 + "。详情请到“我的”里面查看。引起的不便,请见谅。");
-        activityOrderBO.approveRefund(order, status, updater, remark);
+        activityOrderBO.approveRefund(order, penalty, status, updater, remark);
     }
 
     @Override

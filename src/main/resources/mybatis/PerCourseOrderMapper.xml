@@ -178,7 +178,6 @@
 		status = #{status}
 		,pay_type = #{payType}
 		,pay_amount = #{payAmount}
-		,penalty = #{penalty}
 		,pay_code = #{payCode}
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
@@ -188,6 +187,7 @@
 		UPDATE tgym_per_course_order
 		SET
 		status = #{status}
+		,penalty = #{penalty}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
