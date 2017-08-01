@@ -104,4 +104,6 @@ public interface IActivityAO {
      */
     public Activity getActivity(String code);
 
+    public void changeActivity();
+
 }

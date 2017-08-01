@@ -18,6 +18,7 @@
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
        <property name="triggers">  
            <list>
+           	  <ref bean="activityTrigger"/> 
               <ref bean="activityOrderTrigger"/>  
               <ref bean="orgCourseOrderTrigger"/> 
               <ref bean="perCourseOrderTrigger"/> 
@@ -25,6 +26,16 @@
        </property>  
        <property name="autoStartup" value="true"/>  
     </bean> 
+	<bean id="activityTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="changeActivityStatus"/>  
+       <property name="cronExpression" value="0 0/2 * * * ?"/> 
+	</bean>
+	
+	<bean id="changeActivityStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	   <property name="targetObject" ref="activityAOImpl"/>  
+	   <property name="targetMethod" value="changeActivity"/>  
+	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean>
 	
 	<bean id="activityOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="changeActivityOrderStatus"/>  

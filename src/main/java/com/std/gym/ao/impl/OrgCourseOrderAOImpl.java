@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -377,42 +376,6 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             .queryOrgCourseOrderList(orgCourseCode, statusList);
         for (OrgCourseOrder order : orgCourseOrderList) {
             orgCourseOrderBO.toComment(order);
-        }
-        // this.changePaySuccessOrder(orgCourseOrderList);
-    }
-
-    private void changePaySuccessOrder(List<OrgCourseOrder> orgCourseOrderList) {
-        for (OrgCourseOrder order : orgCourseOrderList) {
-            OrgCourse orgCourse = orgCourseBO.getOrgCourse(order
-                .getOrgCourseCode());
-            User user = userBO.getRemoteUser(order.getApplyUser());
-            if (StringUtils.isNotBlank(user.getUserReferee())) {
-                SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                    ESysConfigCkey.HKFC.getCode(),
-                    ESystemCode.SYSTEM_CODE.getCode(),
-                    ESystemCode.SYSTEM_CODE.getCode());
-                Long amount = AmountUtil.mul(1L, order.getAmount()
-                        * StringValidater.toDouble(sysConfig.getCvalue()));
-                // 给推荐人加钱
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_ZWZJ.getCode(), user.getUserReferee(),
-                    ECurrency.CNY, amount, EBizType.TJ, EBizType.TJ.getValue(),
-                    EBizType.TJ.getValue(), order.getCode());
-            }
-            // 给团课上课教练加钱
-            SYSConfig sysConfigCoach = sysConfigBO.getConfigValue(
-                ESysConfigCkey.TTJFC.getCode(),
-                ESystemCode.SYSTEM_CODE.getCode(),
-                ESystemCode.SYSTEM_CODE.getCode());
-            Long coachAmount = AmountUtil.mul(1L, order.getAmount()
-                    * StringValidater.toDouble(sysConfigCoach.getCvalue()));
-            if (coachAmount > 0) {
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_ZWZJ.getCode(), orgCourse.getCoachUser(),
-                    ECurrency.CNY, coachAmount, EBizType.TTJFC,
-                    EBizType.TTJFC.getValue(), EBizType.TTJFC.getValue(),
-                    order.getCode());
-            }
         }
     }
 

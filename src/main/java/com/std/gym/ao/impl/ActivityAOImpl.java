@@ -3,6 +3,7 @@ package com.std.gym.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,4 +161,19 @@ public class ActivityAOImpl implements IActivityAO {
         return activityBO.getActivity(code);
     }
 
+    @Override
+    public void changeActivity() {
+        logger.info("***************开始扫描待活动，过期取消***************");
+        Activity condition = new Activity();
+        condition.setStatus(EActivityStatus.ONLINE.getCode());
+        List<Activity> activityList = activityBO.queryActivityList(condition);
+        if (CollectionUtils.isNotEmpty(activityList)) {
+            for (Activity activity : activityList) {
+                if (activity.getStartDatetime().before(new Date())) {
+                    activityBO.stopActivity(activity, "开始时间系统截止", "开始时间系统截止");
+                }
+            }
+        }
+        logger.info("***************开始扫描待活动，过期取消***************");
+    }
 }

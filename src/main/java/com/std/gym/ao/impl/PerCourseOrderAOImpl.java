@@ -267,8 +267,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                     ESysConfigCkey.SJFC.getCode(),
                     ESystemCode.SYSTEM_CODE.getCode(),
                     ESystemCode.SYSTEM_CODE.getCode());
-                Long coachAmount = AmountUtil.mul(1L, order.getPenalty()
-                        * StringValidater.toDouble(sysConfig.getCvalue()));
+                Long coachAmount = AmountUtil.mul(1L,
+                    penalty * StringValidater.toDouble(sysConfig.getCvalue()));
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
                     ECurrency.CNY, coachAmount, EBizType.TTJFC,
@@ -300,8 +300,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 EBizType.AJ_SKGMTK.getValue(), order.getCode());
         }
         smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的私教订单"
-                + "[编号为:" + order.getCode() + "],由于" + remark
-                + "原因,已被教练取消。详情请到“我的”里面查看。引起的不便,请见谅。");
+                + "[编号为:" + order.getCode()
+                + "],已被教练取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         perCourseOrderBO.platCancel(order, updater, remark);
     }
 
@@ -347,7 +347,6 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     @Override
     public void changeOrder() {
         changeNoPayOrder();
-        // changePaySuccessOrder();
     }
 
     private void changeNoPayOrder() {
@@ -362,30 +361,6 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             perCourseOrderBO.platCancel(perCourseOrder, "系统取消", "超时支付,系统自动取消");
         }
         logger.info("***************结束扫描待订单，未支付的3天后取消***************");
-    }
-
-    private void changePaySuccessOrder() {
-        logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
-        PerCourseOrder condition = new PerCourseOrder();
-        condition.setStatus(EPerCourseOrderStatus.CLASS_OVER.getCode());
-        condition.setSkEndDatetime(DateUtil.getRelativeDate(new Date(),
-            -(60 * 60 * 24 * 7 + 1)));
-        List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
-            .queryPerCourseOrderList(condition);
-        for (PerCourseOrder order : perCourseOrderList) {
-            SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                ESysConfigCkey.SJFC.getCode(),
-                ESystemCode.SYSTEM_CODE.getCode(),
-                ESystemCode.SYSTEM_CODE.getCode());
-            Long amount = AmountUtil.mul(1L, order.getAmount()
-                    * StringValidater.toDouble(sysConfig.getCvalue()));
-            // 给私教加钱
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-                order.getToUser(), ECurrency.CNY, amount, EBizType.AJ_SKGM,
-                EBizType.AJ_SKGM.getValue(), EBizType.AJ_SKGM.getValue(),
-                order.getCode());
-        }
-        logger.info("***************开始扫描待订单,已支付的在上课结束后7天打款***************");
     }
 
     @Override
