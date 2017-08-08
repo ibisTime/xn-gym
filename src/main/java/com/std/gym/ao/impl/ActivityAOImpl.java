@@ -162,7 +162,7 @@ public class ActivityAOImpl implements IActivityAO {
     }
 
     @Override
-    public void changeActivity() {
+    public synchronized void changeActivity() {
         logger.info("***************开始扫描待活动，过期取消***************");
         Activity condition = new Activity();
         condition.setStatus(EActivityStatus.ONLINE.getCode());

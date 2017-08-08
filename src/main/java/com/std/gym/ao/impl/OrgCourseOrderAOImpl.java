@@ -280,10 +280,15 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             orgCourseBO.addSignNum(orgCourse,
                 orgCourse.getRemainNum() + order.getQuantity());
         }
-        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的课程订单"
-                + "[编号为:" + order.getCode() + "],您于" + order.getApplyDatetime()
-                + "申请退款,经平台审核,现已" + status.getValue()
-                + "。详情请到“我的”里面查看。引起的不便,请见谅。");
+        smsOutBO.sentContent(
+            order.getApplyUser(),
+            "尊敬的用户,您在平台上购买的课程订单"
+                    + "[编号为:"
+                    + order.getCode()
+                    + "],您于"
+                    + DateUtil.dateToStr(order.getApplyDatetime(),
+                        DateUtil.DATA_TIME_PATTERN_1) + "申请退款,经平台审核,现已"
+                    + status.getValue() + "。详情请到“我的”里面查看。引起的不便,请见谅。");
         orgCourseOrderBO.approveRefund(order, penalty, status, updater, remark);
     }
 
