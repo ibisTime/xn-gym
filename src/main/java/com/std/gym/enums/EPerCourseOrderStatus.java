@@ -10,9 +10,10 @@ import java.util.Map;
  * @history:
  */
 public enum EPerCourseOrderStatus {
-    NOTPAY("0", "待付款"), PAYSUCCESS("1", "付款成功"), RECEIVER_ORDER("2", "已接单"), HAVE_CLASS(
-            "3", "已上课"), TO_FILL_FORM("4", "待填表"), CLASS_OVER("5", "已下课"), USER_CANCEL(
-            "6", "用户取消"), PLAT_CANCEL("7", "平台取消"), FINISH("8", "已完成");
+    NOTPAY("0", "待付款"), PAYSUCCESS("1", "已支付待接单"), RECEIVER_ORDER("2", "已接单待上课"), HAVE_CLASS(
+            "3", "已上课待填表"), TO_FILL_FORM("4", "已填表待下课"), CLASS_OVER("5",
+            "已下课待评价"), USER_CANCEL("6", "用户取消"), PLAT_CANCEL("7", "B端取消"), FINISH(
+            "8", "已完成");
     public static Map<String, EPerCourseOrderStatus> getEOrderStatusResultMap() {
         Map<String, EPerCourseOrderStatus> map = new HashMap<String, EPerCourseOrderStatus>();
         for (EPerCourseOrderStatus status : EPerCourseOrderStatus.values()) {

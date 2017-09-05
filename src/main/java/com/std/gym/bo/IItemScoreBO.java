@@ -7,9 +7,7 @@ import com.std.gym.domain.ItemScore;
 
 public interface IItemScoreBO extends IPaginableBO<ItemScore> {
 
-    public boolean isItemScoreExist(String code);
-
-    public String saveItemScore(ItemScore data);
+    public void saveItemScore(ItemScore data);
 
     public int removeItemScore(String code);
 

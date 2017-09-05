@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.Coach;
-import com.std.gym.enums.ECoachStatus;
 
 public interface ICoachBO extends IPaginableBO<Coach> {
 
@@ -16,7 +15,7 @@ public interface ICoachBO extends IPaginableBO<Coach> {
 
     public void refreshCoach(Coach data);
 
-    public void approveCoach(Coach data, ECoachStatus status, String approver,
+    public void approveCoach(Coach data, String status, String approver,
             String remark);
 
     public List<Coach> queryCoachList(Coach condition);

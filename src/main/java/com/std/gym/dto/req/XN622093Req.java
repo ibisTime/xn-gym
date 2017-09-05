@@ -12,6 +12,9 @@ public class XN622093Req extends APageReq {
      */
     private static final long serialVersionUID = -3807779672274861782L;
 
+    // 类型(必填)
+    private String type;
+
     // 私教用户
     private String userId;
 
@@ -87,5 +90,13 @@ public class XN622093Req extends APageReq {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

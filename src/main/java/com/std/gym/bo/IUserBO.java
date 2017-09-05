@@ -66,4 +66,7 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public void upgradeLevel(String userId, String level);
 
+    public void doStatusUser(String userId, String toStatus, String updater,
+            String remark);
+
 }

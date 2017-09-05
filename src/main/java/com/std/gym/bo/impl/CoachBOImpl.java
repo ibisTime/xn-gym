@@ -12,7 +12,6 @@ import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.core.StringValidater;
 import com.std.gym.dao.ICoachDAO;
 import com.std.gym.domain.Coach;
-import com.std.gym.enums.ECoachStatus;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -53,9 +52,9 @@ public class CoachBOImpl extends PaginableBOImpl<Coach> implements ICoachBO {
     }
 
     @Override
-    public void approveCoach(Coach data, ECoachStatus status, String approver,
+    public void approveCoach(Coach data, String status, String approver,
             String remark) {
-        data.setStatus(status.getCode());
+        data.setStatus(status);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setRemark(remark);

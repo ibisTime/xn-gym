@@ -10,7 +10,8 @@ import java.util.Map;
  * @history:
  */
 public enum ECoachStatus {
-    TO_APPROVE("0", "待审批"), APPROVE_YES("1", "审批通过"), APPROVE_NO("2", "审批不通过");
+    TO_APPROVE("0", "待审批"), APPROVE_YES("1", "审批通过"), APPROVE_NO("2", "审批不通过"), Ren_Locked(
+            "3", "人工锁定"), ;
 
     public static Map<String, ECoachStatus> getDictTypeMap() {
         Map<String, ECoachStatus> map = new HashMap<String, ECoachStatus>();

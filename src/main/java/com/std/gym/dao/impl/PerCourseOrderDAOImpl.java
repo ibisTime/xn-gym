@@ -68,6 +68,16 @@ public class PerCourseOrderDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
+    public int userCancelOrder(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_userCancelOrder"), data);
+    }
+
+    @Override
+    public int platCancelOrder(PerCourseOrder data) {
+        return super.update(NAMESPACE.concat("update_platCancelOrder"), data);
+    }
+
+    @Override
     public int classBegin(PerCourseOrder data) {
         return super.update(NAMESPACE.concat("update_skClassDatetime"), data);
     }

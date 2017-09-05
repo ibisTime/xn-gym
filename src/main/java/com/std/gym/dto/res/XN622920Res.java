@@ -16,6 +16,9 @@ public class XN622920Res {
     // 私课订单数量
     private Long perCourseCount;
 
+    // 达人订单数量
+    private Long drCourseCount;
+
     public Long getActivityCount() {
         return activityCount;
     }
@@ -38,5 +41,13 @@ public class XN622920Res {
 
     public void setPerCourseCount(Long perCourseCount) {
         this.perCourseCount = perCourseCount;
+    }
+
+    public Long getDrCourseCount() {
+        return drCourseCount;
+    }
+
+    public void setDrCourseCount(Long drCourseCount) {
+        this.drCourseCount = drCourseCount;
     }
 }

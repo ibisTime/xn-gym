@@ -379,6 +379,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         perCourseOrder.setRealName(user.getNickname());
         Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
         perCourseOrder.setCoach(coach);
+        List<SizeData> sizeDataList = sizeDataBO.querySizeDataList(code);
+        perCourseOrder.setSizeDataList(sizeDataList);
         return perCourseOrder;
     }
 
@@ -421,17 +423,23 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         statusList.add(EOrgCourseOrderStatus.TO_COMMENT.getCode());
         Long orgUnfinishCount = orgCourseOrderBO.getUnfinishCount(applyUser,
             statusList);
-        // 统计私课未完成的订单
+        // 统计达人未完成的订单
         statusList.removeAll(statusList);
         statusList.add(EPerCourseOrderStatus.PAYSUCCESS.getCode());
         statusList.add(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
         statusList.add(EPerCourseOrderStatus.HAVE_CLASS.getCode());
         statusList.add(EPerCourseOrderStatus.CLASS_OVER.getCode());
-        Long perUnfinishCount = perCourseOrderBO.getUnfinishCount(applyUser,
-            statusList);
+        Long drUnfinishCount = perCourseOrderBO.getUnfinishCount(
+            EBoolean.YES.getCode(), applyUser, statusList);
+        // 统计私课未完成的订单
+        statusList.add(EPerCourseOrderStatus.TO_FILL_FORM.getCode());
+        Long perUnfinishCount = perCourseOrderBO.getUnfinishCount(
+            EBoolean.NO.getCode(), applyUser, statusList);
+
         res.setActivityCount(actUnfinishCount);
         res.setOrgCourseCount(orgUnfinishCount);
         res.setPerCourseCount(perUnfinishCount);
+        res.setDrCourseCount(drUnfinishCount);
         return res;
     }
 

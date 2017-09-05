@@ -51,6 +51,9 @@ public class PerCourseOrder extends ABaseDO {
     // 订单金额
     private Long amount;
 
+    // 取消前状态
+    private String preStatus;
+
     // 状态
     private String status;
 
@@ -114,6 +117,9 @@ public class PerCourseOrder extends ABaseDO {
 
     // 状态List
     private List<String> statusList;
+
+    // 体测数据
+    private List<SizeData> sizeDataList;
 
     public void setCode(String code) {
         this.code = code;
@@ -377,6 +383,22 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<SizeData> getSizeDataList() {
+        return sizeDataList;
+    }
+
+    public void setSizeDataList(List<SizeData> sizeDataList) {
+        this.sizeDataList = sizeDataList;
+    }
+
+    public String getPreStatus() {
+        return preStatus;
+    }
+
+    public void setPreStatus(String preStatus) {
+        this.preStatus = preStatus;
     }
 
 }

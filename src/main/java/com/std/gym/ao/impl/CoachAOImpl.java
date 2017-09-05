@@ -110,11 +110,11 @@ public class CoachAOImpl implements ICoachAO {
         if (!ECoachStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该信息已审批过,无需再次审批");
         }
-        ECoachStatus status = null;
+        String status = null;
         if (EBoolean.NO.getCode().equals(result)) {
-            status = ECoachStatus.APPROVE_NO;
+            status = ECoachStatus.APPROVE_NO.getCode();
         } else if (EBoolean.YES.getCode().equals(result)) {
-            status = ECoachStatus.APPROVE_YES;
+            status = ECoachStatus.APPROVE_YES.getCode();
         }
         coachBO.approveCoach(data, status, approver, remark);
     }

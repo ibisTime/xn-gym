@@ -13,7 +13,7 @@ public class ItemScore extends ABaseDO {
     private static final long serialVersionUID = 1L;
 
     // 编号
-    private String code;
+    private String id;
 
     // 好评项目名称
     private String name;
@@ -23,14 +23,6 @@ public class ItemScore extends ABaseDO {
 
     // 评论编号
     private String commentCode;
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -54,6 +46,14 @@ public class ItemScore extends ABaseDO {
 
     public String getCommentCode() {
         return commentCode;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

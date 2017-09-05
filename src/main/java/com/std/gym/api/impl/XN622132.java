@@ -31,6 +31,7 @@ public class XN622132 extends AProcessor {
         condition.setApplyUser(req.getApplyUser());
         condition.setToUser(req.getToUser());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IOrgCourseOrderAO.DEFAULT_ORDER_COLUMN;

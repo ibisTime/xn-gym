@@ -7,6 +7,7 @@ import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.domain.User;
 import com.std.gym.dto.req.XN001302Req;
 import com.std.gym.dto.req.XN001400Req;
+import com.std.gym.dto.req.XN805052Req;
 import com.std.gym.dto.req.XN805300Req;
 import com.std.gym.dto.req.XN805301Req;
 import com.std.gym.dto.req.XN805302Req;
@@ -104,6 +105,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         req.setUserId(userId);
         req.setLevel(level);
         BizConnecter.getBizData("001302", JsonUtils.object2Json(req),
+            Object.class);
+    }
+
+    @Override
+    public void doStatusUser(String userId, String toStatus, String updater,
+            String remark) {
+        XN805052Req req = new XN805052Req();
+        req.setUserId(userId);
+        req.setToStatus(toStatus);
+        req.setUpdater(updater);
+        req.setRemark(remark);
+        BizConnecter.getBizData("805052", JsonUtils.object2Json(req),
             Object.class);
     }
 

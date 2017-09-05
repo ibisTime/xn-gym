@@ -81,6 +81,12 @@ public class Coach extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 用户状态
+    private String uStatus;
+
+    // 登录名
+    private String loginName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -255,6 +261,22 @@ public class Coach extends ABaseDO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getuStatus() {
+        return uStatus;
+    }
+
+    public void setuStatus(String uStatus) {
+        this.uStatus = uStatus;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
 }

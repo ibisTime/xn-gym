@@ -34,6 +34,7 @@ public class XN622130 extends AProcessor {
         condition.setToUser(req.getToUser());
         condition.setPerCourseCode(req.getPerCourseCode());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         condition.setUpdater(req.getUpdater());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

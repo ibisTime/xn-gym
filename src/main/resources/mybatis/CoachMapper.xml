@@ -23,6 +23,9 @@
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
+		
+		<result column="uStatus" property="uStatus" />
+		<result column="login_name" property="loginName" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -49,6 +52,9 @@
 			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND tu.mobile = #{mobile}
+			</if>
+			<if test="uStatus != null and uStatus != '' ">
+				AND tu.uStatus = #{uStatus}
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
@@ -85,6 +91,8 @@
 		,t.approve_datetime
 		,t.remark
 		,tu.mobile
+		,tu.status as uStatus
+		,tu.login_name
 		FROM
 		tgym_coach t left join ${userDB}.tstd_user tu on t.user_id=tu.user_id  
 		<include refid="where_condition" />

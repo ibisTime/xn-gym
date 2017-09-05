@@ -4,6 +4,7 @@
 <mapper namespace="com.std.gym.dao.IPerCourseOrderDAO">
 	<resultMap id="perCourseOrder_DB_Result" type="perCourseOrder">
 		<result column="code" property="code" />
+		<result column="type" property="type" />
 		<result column="to_user" property="toUser" />
 		<result column="per_course_code" property="perCourseCode" />
 		<result column="course_name" property="courseName" />
@@ -14,6 +15,7 @@
 		<result column="quantity" property="quantity" />
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
+		<result column="pre_status" property="preStatus" />
 		<result column="status" property="status" />
 		<result column="sk_start_datetime" property="skStartDatetime" />
 		<result column="sk_end_datetime" property="skEndDatetime" />
@@ -35,6 +37,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="appointDatetime != null and appointDatetime != '' ">
 				AND t.appoint_datetime = #{appointDatetime}
@@ -83,6 +88,7 @@
 	<select id="select_perCourseOrder" parameterType="perCourseOrder" resultMap="perCourseOrder_DB_Result">
 		SELECT
 		t.code
+		,t.type
 		,t.to_user
 		,t.per_course_code
 		,t.course_name
@@ -93,6 +99,7 @@
 		,t.quantity
 		,t.price
 		,t.amount
+		,t.pre_status
 		,t.status
 		,t.sk_start_datetime
 		,t.sk_end_datetime
@@ -129,6 +136,7 @@
 		INSERT INTO
 		tgym_per_course_order(
 		code
+		,type
 		,to_user
 		,per_course_code
 		,course_name
@@ -147,6 +155,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{type}
 		,#{toUser}
 		,#{perCourseCode}
 		,#{courseName}
@@ -188,6 +197,29 @@
 		SET
 		status = #{status}
 		,penalty = #{penalty}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_userCancelOrder" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		pre_status = #{preStatus}
+		,status = #{status}
+		,penalty = #{penalty}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_platCancelOrder" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		pre_status = #{preStatus}
+		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

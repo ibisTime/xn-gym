@@ -119,21 +119,23 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     @Override
     public void userCancel(PerCourseOrder order, Long penalty, String updater,
             String remark) {
+        order.setPreStatus(order.getStatus());
         order.setStatus(EPerCourseOrderStatus.USER_CANCEL.getCode());
         order.setPenalty(penalty);
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);
-        perCourseOrderDAO.receiverOrder(order);
+        perCourseOrderDAO.userCancelOrder(order);
     }
 
     @Override
     public void platCancel(PerCourseOrder order, String updater, String remark) {
+        order.setPreStatus(order.getStatus());
         order.setStatus(EPerCourseOrderStatus.PLAT_CANCEL.getCode());
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);
-        perCourseOrderDAO.receiverOrder(order);
+        perCourseOrderDAO.platCancelOrder(order);
     }
 
     @Override
@@ -155,8 +157,10 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     }
 
     @Override
-    public Long getUnfinishCount(String applyUser, List<String> statusList) {
+    public Long getUnfinishCount(String type, String applyUser,
+            List<String> statusList) {
         PerCourseOrder condition = new PerCourseOrder();
+        condition.setType(type);
         condition.setApplyUser(applyUser);
         condition.setStatusList(statusList);
         return perCourseOrderDAO.selectTotalCount(condition);

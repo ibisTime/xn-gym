@@ -1,5 +1,7 @@
 package com.std.gym.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询私课订单
  * @author: asus 
@@ -30,6 +32,9 @@ public class XN622130Req extends APageReq {
 
     // 状态
     private String status;
+
+    // 状态
+    private List<String> statusList;
 
     // 更新人
     private String updater;
@@ -88,5 +93,13 @@ public class XN622130Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 }

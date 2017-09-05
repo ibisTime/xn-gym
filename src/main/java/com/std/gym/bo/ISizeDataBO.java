@@ -11,7 +11,7 @@ public interface ISizeDataBO extends IPaginableBO<SizeData> {
 
     public int removeSizeData(String code);
 
-    public List<SizeData> querySizeDataList(SizeData condition);
+    public List<SizeData> querySizeDataList(String orderCode);
 
     public SizeData getSizeData(String code);
 

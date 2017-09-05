@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.IItemScoreBO;
 import com.std.gym.bo.base.PaginableBOImpl;
-import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.dao.IItemScoreDAO;
 import com.std.gym.domain.ItemScore;
-import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -22,24 +20,8 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     private IItemScoreDAO itemScoreDAO;
 
     @Override
-    public boolean isItemScoreExist(String code) {
-        ItemScore condition = new ItemScore();
-        condition.setCode(code);
-        if (itemScoreDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public String saveItemScore(ItemScore data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EPrefixCode.PRAISEITEM.getCode());
-            data.setCode(code);
-            itemScoreDAO.insert(data);
-        }
-        return code;
+    public void saveItemScore(ItemScore data) {
+        itemScoreDAO.insert(data);
     }
 
     @Override
@@ -47,7 +29,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             ItemScore data = new ItemScore();
-            data.setCode(code);
+            data.setId(code);
             count = itemScoreDAO.delete(data);
         }
         return count;
@@ -56,7 +38,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
     @Override
     public int refreshItemScore(ItemScore data) {
         int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
+        if (StringUtils.isNotBlank(data.getId())) {
             count = itemScoreDAO.update(data);
         }
         return count;
@@ -72,7 +54,7 @@ public class ItemScoreBOImpl extends PaginableBOImpl<ItemScore> implements
         ItemScore data = null;
         if (StringUtils.isNotBlank(code)) {
             ItemScore condition = new ItemScore();
-            condition.setCode(code);
+            condition.setId(code);
             data = itemScoreDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "编号不存在");

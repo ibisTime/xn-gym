@@ -263,7 +263,7 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
 
             // 给团课上课教练加钱
             SYSConfig sysConfigCoach = sysConfigBO.getConfigValue(
-                ESysConfigCkey.TTJFC.getCode(),
+                ESysConfigCkey.WYTTJFC.getCode(),
                 ESystemCode.SYSTEM_CODE.getCode(),
                 ESystemCode.SYSTEM_CODE.getCode());
             Long coachAmount = AmountUtil.mul(1L, order.getPenalty()
@@ -271,8 +271,8 @@ public class OrgCourseOrderAOImpl implements IOrgCourseOrderAO {
             if (coachAmount > 0) {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), orgCourse.getCoachUser(),
-                    ECurrency.CNY, coachAmount, EBizType.TTJFC,
-                    EBizType.TTJFC.getValue(), EBizType.TTJFC.getValue(),
+                    ECurrency.CNY, coachAmount, EBizType.WYTTJFC,
+                    EBizType.WYTTJFC.getValue(), EBizType.WYTTJFC.getValue(),
                     order.getCode());
             }
             // 审批通过,取消订单人数加回,判断修改状态

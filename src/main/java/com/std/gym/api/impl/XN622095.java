@@ -26,6 +26,7 @@ public class XN622095 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Coach condition = new Coach();
+        condition.setType(req.getType());
         condition.setUserId(req.getUserId());
         condition.setStar(StringValidater.toInteger(req.getStar()));
         condition.setLabel(req.getLabel());

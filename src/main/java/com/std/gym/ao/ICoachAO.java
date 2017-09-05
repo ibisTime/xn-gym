@@ -37,4 +37,5 @@ public interface ICoachAO {
     public XN622094Res getFrontCoach(String code);
 
     public void editLocation(String code, String location, String orderNo);
+
 }

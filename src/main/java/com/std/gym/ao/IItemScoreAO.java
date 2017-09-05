@@ -11,11 +11,7 @@ import com.std.gym.domain.ItemScore;
 public interface IItemScoreAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addItemScore(ItemScore data);
-
-    public int dropItemScore(String code);
-
-    public int editItemScore(ItemScore data);
+    public void addItemScore(ItemScore data);
 
     public Paginable<ItemScore> queryItemScorePage(int start, int limit,
             ItemScore condition);

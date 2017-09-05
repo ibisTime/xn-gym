@@ -36,7 +36,9 @@ public class SizeDataBOImpl extends PaginableBOImpl<SizeData> implements
     }
 
     @Override
-    public List<SizeData> querySizeDataList(SizeData condition) {
+    public List<SizeData> querySizeDataList(String orderCode) {
+        SizeData condition = new SizeData();
+        condition.setOrderCode(orderCode);
         return sizeDataDAO.selectList(condition);
     }
 

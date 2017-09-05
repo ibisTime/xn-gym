@@ -39,7 +39,7 @@ public class SizeDataAOImpl implements ISizeDataAO {
 
     @Override
     public List<SizeData> querySizeDataList(SizeData condition) {
-        return sizeDataBO.querySizeDataList(condition);
+        return sizeDataBO.querySizeDataList(null);
     }
 
     @Override
