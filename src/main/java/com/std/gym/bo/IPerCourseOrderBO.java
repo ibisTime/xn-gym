@@ -42,4 +42,6 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
 
     public Long getUnfinishCount(String applyUser, List<String> statusList);
 
+    public void toFullForm(PerCourseOrder order, String updater, String remark);
+
 }

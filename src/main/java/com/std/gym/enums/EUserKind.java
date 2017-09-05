@@ -14,7 +14,7 @@ package com.std.gym.enums;
  * @history:
  */
 public enum EUserKind {
-    F1("f1", "前端个人用户");
+    F1("f1", "前端个人用户/C端用户"), F2("f2", "渠道商/B端用户"), F3("f3", "达人");
 
     EUserKind(String code, String value) {
         this.code = code;

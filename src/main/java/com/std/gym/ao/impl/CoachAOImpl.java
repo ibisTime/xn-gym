@@ -17,12 +17,14 @@ import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Coach;
 import com.std.gym.domain.Comment;
 import com.std.gym.domain.PerCourse;
+import com.std.gym.domain.User;
 import com.std.gym.dto.req.XN622090Req;
 import com.std.gym.dto.req.XN622091Req;
 import com.std.gym.dto.res.XN622094Res;
 import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECoachStatus;
 import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.EUserKind;
 import com.std.gym.exception.BizException;
 
 @Service
@@ -42,7 +44,12 @@ public class CoachAOImpl implements ICoachAO {
 
     @Override
     public String addCoach(XN622090Req req) {
-        userBO.getRemoteUser(req.getUserId());
+        User user = userBO.getRemoteUser(req.getUserId());
+        String type = EBoolean.NO.getCode();
+        if (user.getKind() != null
+                && user.getKind().equals(EUserKind.F3.getCode())) {
+            type = EBoolean.YES.getCode();
+        }
         Coach condition = new Coach();
         condition.setUserId(req.getUserId());
         Long num = coachBO.getTotalCount(condition);
@@ -52,6 +59,7 @@ public class CoachAOImpl implements ICoachAO {
         Coach data = new Coach();
         String code = OrderNoGenerater.generate(EPrefixCode.COACH.getCode());
         data.setCode(code);
+        data.setType(type);
         data.setUserId(req.getUserId());
         data.setRealName(req.getRealName());
         data.setPic(req.getPic());

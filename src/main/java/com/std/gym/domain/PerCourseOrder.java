@@ -18,7 +18,10 @@ public class PerCourseOrder extends ABaseDO {
     // 编号
     private String code;
 
-    // 归属私教
+    // 类型（0、私教订单。1、达人订单）
+    private String type;
+
+    // 归属人
     private String toUser;
 
     // 私课编号
@@ -366,6 +369,14 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

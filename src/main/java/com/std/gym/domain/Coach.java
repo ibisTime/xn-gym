@@ -17,6 +17,9 @@ public class Coach extends ABaseDO {
     // 编号
     private String code;
 
+    // 类型（0 教练，1达人）
+    private String type;
+
     // 教练编号
     private String userId;
 
@@ -244,6 +247,14 @@ public class Coach extends ABaseDO {
 
     public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

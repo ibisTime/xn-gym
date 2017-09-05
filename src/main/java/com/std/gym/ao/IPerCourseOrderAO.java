@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.PerCourseOrder;
+import com.std.gym.domain.SizeData;
 import com.std.gym.dto.res.XN622920Res;
 
 @Component
@@ -23,6 +24,9 @@ public interface IPerCourseOrderAO {
     public void receiverOrder(String orderCode, String updater, String remark);
 
     public void classBegin(String orderCode, String updater, String remark);
+
+    public void toFullForm(String orderCode, List<SizeData> sizeDataList,
+            String updater, String remark);
 
     public void classOver(String orderCode, String updater, String remark);
 

@@ -43,6 +43,9 @@
 	<bean id="perCourseOrderBO" class="com.std.gym.bo.impl.PerCourseOrderBOImpl">
 		<property name="paginableDAO" ref="perCourseOrderDAOImpl" />
 	</bean>
+	<bean id="sizeDataBO" class="com.std.gym.bo.impl.SizeDataBOImpl">
+		<property name="paginableDAO" ref="sizeDataDAOImpl" />
+	</bean>
 	
 	<bean id="itemScoreBO" class="com.std.gym.bo.impl.ItemScoreBOImpl">
 		<property name="paginableDAO" ref="itemScoreDAOImpl" />

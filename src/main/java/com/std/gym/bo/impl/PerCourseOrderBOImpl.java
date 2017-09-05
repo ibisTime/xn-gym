@@ -161,4 +161,13 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
         condition.setStatusList(statusList);
         return perCourseOrderDAO.selectTotalCount(condition);
     }
+
+    @Override
+    public void toFullForm(PerCourseOrder order, String updater, String remark) {
+        order.setStatus(EPerCourseOrderStatus.TO_FILL_FORM.getCode());
+        order.setUpdater(updater);
+        order.setUpdateDatetime(new Date());
+        order.setRemark(remark);
+        perCourseOrderDAO.receiverOrder(order);
+    }
 }

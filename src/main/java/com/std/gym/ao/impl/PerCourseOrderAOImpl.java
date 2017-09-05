@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.gym.ao.IPerCourseOrderAO;
 import com.std.gym.bo.IAccountBO;
@@ -16,6 +17,7 @@ import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.ISYSConfigBO;
+import com.std.gym.bo.ISizeDataBO;
 import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
@@ -28,11 +30,13 @@ import com.std.gym.domain.Coach;
 import com.std.gym.domain.PerCourse;
 import com.std.gym.domain.PerCourseOrder;
 import com.std.gym.domain.SYSConfig;
+import com.std.gym.domain.SizeData;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.dto.res.XN622920Res;
 import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EBizType;
+import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECurrency;
 import com.std.gym.enums.EOrgCourseOrderStatus;
 import com.std.gym.enums.EPayType;
@@ -74,6 +78,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     @Autowired
     private ISmsOutBO smsOutBO;
 
+    @Autowired
+    private ISizeDataBO sizeDataBO;
+
     @Override
     public String commitOrder(String applyUser, String address, String mobile,
             String perCourseCode, Integer quantity, String applyNote) {
@@ -109,6 +116,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         String code = OrderNoGenerater.generate(EPrefixCode.PERCOURSEORDER
             .getCode());
         order.setCode(code);
+        order.setType(coach.getType());
         order.setPerCourseCode(perCourseCode);
         order.setAppointDatetime(appointment);
         order.setSkDatetime(perCourse.getSkStartDatetime());
@@ -220,11 +228,35 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     }
 
     @Override
-    public void classOver(String orderCode, String updater, String remark) {
+    @Transactional
+    public void toFullForm(String orderCode, List<SizeData> sizeDataList,
+            String updater, String remark) {
         PerCourseOrder order = perCourseOrderBO.getPerCourseOrder(orderCode);
         if (!EPerCourseOrderStatus.HAVE_CLASS.getCode().equals(
             order.getStatus())) {
-            throw new BizException("xn0000", "该私课订单还未上课，不能下课");
+            throw new BizException("xn0000", "该订单还未上课，不能填表");
+        }
+        for (SizeData sizeData : sizeDataList) {
+            sizeData.setUserId(order.getApplyUser());
+            sizeData.setOrderCode(orderCode);
+            sizeDataBO.saveSizeData(sizeData);
+        }
+        perCourseOrderBO.toFullForm(order, updater, remark);
+    }
+
+    @Override
+    public void classOver(String orderCode, String updater, String remark) {
+        PerCourseOrder order = perCourseOrderBO.getPerCourseOrder(orderCode);
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            if (!EPerCourseOrderStatus.TO_FILL_FORM.getCode().equals(
+                order.getStatus())) {
+                throw new BizException("xn0000", "该订单还未填表，不能下课");
+            }
+        } else if (EBoolean.YES.getCode().equals(order.getType())) {
+            if (!EPerCourseOrderStatus.HAVE_CLASS.getCode().equals(
+                order.getStatus())) {
+                throw new BizException("xn0000", "该订单还未上课，不能下课");
+            }
         }
         perCourseOrderBO.classOver(order, updater, remark);
     }
@@ -235,9 +267,13 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         Long penalty = 0L;
         if (EPerCourseOrderStatus.NOTPAY.getCode().equals(order.getStatus())
                 || EPerCourseOrderStatus.PAYSUCCESS.getCode().equals(
+                    order.getStatus())
+                || EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
                     order.getStatus())) {
             if (EPerCourseOrderStatus.PAYSUCCESS.getCode().equals(
-                order.getStatus())) {
+                order.getStatus())
+                    || EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
+                        order.getStatus())) {
                 String appoint = DateUtil.dateToStr(order.getAppointDatetime(),
                     DateUtil.FRONT_DATE_FORMAT_STRING);
                 Date appointDatetime = DateUtil.strToDate(
@@ -264,15 +300,15 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
                 // 私教获得多少钱
                 SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                    ESysConfigCkey.SJFC.getCode(),
+                    ESysConfigCkey.WYSJFC.getCode(),
                     ESystemCode.SYSTEM_CODE.getCode(),
                     ESystemCode.SYSTEM_CODE.getCode());
                 Long coachAmount = AmountUtil.mul(1L,
                     penalty * StringValidater.toDouble(sysConfig.getCvalue()));
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
-                    ECurrency.CNY, coachAmount, EBizType.TTJFC,
-                    EBizType.TTJFC.getValue(), EBizType.TTJFC.getValue(),
+                    ECurrency.CNY, coachAmount, EBizType.WYSJFC,
+                    EBizType.WYSJFC.getValue(), EBizType.WYSJFC.getValue(),
                     order.getCode());
             }
             perCourseOrderBO.userCancel(order, penalty, updater, remark);
@@ -289,6 +325,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 || EPerCourseOrderStatus.PLAT_CANCEL.getCode().equals(
                     order.getStatus())
                 || EPerCourseOrderStatus.FINISH.getCode().equals(
+                    order.getStatus())
+                || EPerCourseOrderStatus.CLASS_OVER.getCode().equals(
                     order.getStatus())) {
             throw new BizException("xn0000", "该私课订单状态下，不能取消");
         }
@@ -396,4 +434,5 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         res.setPerCourseCount(perUnfinishCount);
         return res;
     }
+
 }

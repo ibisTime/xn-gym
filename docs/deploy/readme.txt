@@ -14,20 +14,20 @@
   cd /Users/myb858/Documents/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp9/wtpwebapps
   
 2，打包
-  scp -P22 ./xn-forum.war root@121.43.101.148:/home
+  scp -P22 ./xn-forum.war root@121.43.101.148:/mnt
   T6dh%$%$ss1
   
 3，部署
   ssh root@121.43.101.148 -p 22
   
   T6dh%$%$ss1
-  cd /home/wwwroot/gym/tomcat_gym_biz/webapps
+  cd /mnt/www/gym/tomcat_gym_biz/webapps
   cp ./xn-gym/WEB-INF/classes/application.properties .
   cp ./xn-gym/WEB-INF/classes/config.properties .
   
   rm -rf xn-gym.war
   rm -rf xn-gym
-  mv /home/xn-gym.war .
+  mv /mnt/xn-gym.war .
   
   mv -f application.properties ./xn-gym/WEB-INF/classes/
   mv -f config.properties ./xn-gym/WEB-INF/classes/
@@ -38,13 +38,13 @@
 http://121.43.101.148:3602/xn-gym/api
 
 
-  cd /home/wwwroot/gym/tomcat_std_account/webapps
+  cd /mnt/www/gym/tomcat_std_account/webapps
   cp ./std-account/WEB-INF/classes/application.properties .
   cp ./std-account/WEB-INF/classes/config.properties .
   
   rm -rf std-account.war
   rm -rf std-account
-  mv /home/std-account.war .
+  mv /mnt/std-account.war .
   
   mv -f application.properties ./std-account/WEB-INF/classes/
   mv -f config.properties ./std-account/WEB-INF/classes/
@@ -53,13 +53,13 @@ http://121.43.101.148:3602/xn-gym/api
   ../bin/startup.sh
 -----------------------------------------------------------------
 
-  cd /home/wwwroot/gym/tomcat_std_user/webapps
+  cd /mnt/www/gym/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
   cp ./std-user/WEB-INF/classes/config.properties .
   
   rm -rf std-user.war
   rm -rf std-user
-  mv /home/std-user.war .
+  mv /mnt/std-user.war .
   
   mv -f application.properties ./std-user/WEB-INF/classes/
   mv -f config.properties ./std-user/WEB-INF/classes/

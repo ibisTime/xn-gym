@@ -4,6 +4,7 @@
 <mapper namespace="com.std.gym.dao.ICoachDAO">
 	<resultMap id="coach_DB_Result" type="coach">
 		<result column="code" property="code" />
+		<result column="type" property="type" />
 		<result column="user_id" property="userId" />
 		<result column="real_name" property="realName" />
 		<result column="pic" property="pic" />
@@ -49,6 +50,9 @@
 			<if test="mobile != null and mobile != '' ">
 				AND tu.mobile = #{mobile}
 			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
 		</trim>
 	</sql>
 	<sql id="where_tcp_condition">
@@ -61,6 +65,7 @@
 	<select id="select_coach" parameterType="coach" resultMap="coach_DB_Result">
 		SELECT
 		t.code
+		,t.type
 		,t.user_id
 		,t.real_name
 		,t.pic
@@ -99,6 +104,7 @@
 	<select id="select_coach_sx" parameterType="coach" resultMap="coach_DB_Result">
 		SELECT 
 		t.code
+		,t.type
 		,t.user_id
 		,t.real_name
 		,t.pic
@@ -134,6 +140,7 @@
 		INSERT INTO
 		tgym_coach(
 		code
+		,type
 		,user_id
 		,real_name
 		,pic
@@ -152,6 +159,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{type}
 		,#{userId}
 		,#{realName}
 		,#{pic}
