@@ -176,20 +176,41 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         if (rmbAccount.getAmount() < order.getAmount()) {
             throw new BizException("xn000000", "余额不足");
         }
+        EBizType bizType = null;
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            bizType = EBizType.AJ_SKGM;
+        } else if (EBoolean.YES.getCode().equals(order.getType())) {
+            bizType = EBizType.AJ_DRGM;
+        } else {
+            throw new BizException("xn0000", "未知订单类型");
+        }
         accountBO.doTransferAmountRemote(order.getApplyUser(),
             ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, order.getAmount(),
-            EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
-            EBizType.AJ_SKGM.getValue(), order.getCode());
+            bizType, bizType.getValue(), bizType.getValue(), order.getCode());
         paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
+        String content = "达人";
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            content = "教练";
+        }
+        smsOutBO.sentContent(order.getToUser(), "尊敬的" + content
+                + ",您在平台上发布的课程已被" + user.getNickname()
+                + "购买]。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
         return new BooleanRes(true);
     }
 
     public Object toPayWEIXIH5(PerCourseOrder order, User user,
             String payGroup, PerCourse perCourse) {
+        EBizType bizType = null;
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            bizType = EBizType.AJ_SKGM;
+        } else if (EBoolean.YES.getCode().equals(order.getType())) {
+            bizType = EBizType.AJ_DRGM;
+        } else {
+            throw new BizException("xn0000", "未知订单类型");
+        }
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), ESysUser.SYS_USER_ZWZJ.getCode(), payGroup,
-            order.getCode(), EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
-            order.getAmount());
+            order.getCode(), bizType, bizType.getValue(), order.getAmount());
     }
 
     @Override
@@ -200,8 +221,18 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn000000", "未找到对应活动订单");
         }
         if (EPerCourseOrderStatus.NOTPAY.getCode().equals(order.getStatus())) {
+            // 获取用户信息
+            String userId = order.getApplyUser();
+            User user = userBO.getRemoteUser(userId);
             // 支付成功
             perCourseOrderBO.paySuccess(order, payCode, amount, payType);
+            String content = "达人";
+            if (EBoolean.NO.getCode().equals(order.getType())) {
+                content = "教练";
+            }
+            smsOutBO.sentContent(order.getToUser(), "尊敬的" + content
+                    + ",您在平台上发布的课程已被" + user.getNickname()
+                    + "购买]。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -215,6 +246,12 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn0000", "该私课订单不处于已支付状态，不能接单");
         }
         perCourseOrderBO.receiverOrder(order, updater, remark);
+        String content = "达人";
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            content = "教练";
+        }
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的订单" + "[编号为:"
+                + order.getCode() + "]," + content + "已接单。详情请到“我的”里面查看。");
     }
 
     @Override
@@ -225,6 +262,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn0000", "该私课订单不处于已接单状态，不能上课");
         }
         perCourseOrderBO.classBegin(order, updater, remark);
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的订单" + "[编号为:"
+                + order.getCode() + "],已经开始上课了。详情请到“我的”里面查看。");
     }
 
     @Override
@@ -259,6 +298,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             }
         }
         perCourseOrderBO.classOver(order, updater, remark);
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的订单" + "[编号为:"
+                + order.getCode() + "],已经下课了。请您对此次订单进行评价,谢谢。");
     }
 
     @Override
@@ -283,6 +324,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                     .after(appointDatetime)) {
                     throw new BizException("xn0000", "临近上课时间不到两小时,不能申请退款");
                 }
+
                 // 计算违约金额
                 SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
                     ESysConfigCkey.WY.getCode(),
@@ -292,24 +334,49 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                         * StringValidater.toDouble(sysConfigWY.getCvalue()));
                 // 违约后用户能得到的钱
                 Long amount = order.getAmount() - penalty;
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
-                    ECurrency.CNY, amount, EBizType.AJ_SKGMTK,
-                    EBizType.AJ_SKGMTK.getValue(),
-                    EBizType.AJ_SKGMTK.getValue(), order.getCode());
+                // 类型（0、私教订单。1、达人订单）
+                if (EBoolean.NO.getCode().equals(order.getType())) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                        ECurrency.CNY, amount, EBizType.AJ_SKGMTK,
+                        EBizType.AJ_SKGMTK.getValue(),
+                        EBizType.AJ_SKGMTK.getValue(), order.getCode());
+                    // 私教获得多少钱
+                    SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                        ESysConfigCkey.WYSJFC.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode());
+                    Long coachAmount = AmountUtil.mul(1L, penalty
+                            * StringValidater.toDouble(sysConfig.getCvalue()));
+                    if (coachAmount > 0) {
+                        accountBO.doTransferAmountRemote(
+                            ESysUser.SYS_USER_ZWZJ.getCode(),
+                            order.getToUser(), ECurrency.CNY, coachAmount,
+                            EBizType.WYSJFC, EBizType.WYSJFC.getValue(),
+                            EBizType.WYSJFC.getValue(), order.getCode());
+                    }
+                } else if (EBoolean.YES.getCode().equals(order.getType())) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                        ECurrency.CNY, amount, EBizType.AJ_DRGMTK,
+                        EBizType.AJ_DRGMTK.getValue(),
+                        EBizType.AJ_DRGMTK.getValue(), order.getCode());
+                    // 达人获得多少钱
+                    SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                        ESysConfigCkey.WYDRFC.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode(),
+                        ESystemCode.SYSTEM_CODE.getCode());
+                    Long coachAmount = AmountUtil.mul(1L, penalty
+                            * StringValidater.toDouble(sysConfig.getCvalue()));
+                    if (coachAmount > 0) {
+                        accountBO.doTransferAmountRemote(
+                            ESysUser.SYS_USER_ZWZJ.getCode(),
+                            order.getToUser(), ECurrency.CNY, coachAmount,
+                            EBizType.WYDRFC, EBizType.WYDRFC.getValue(),
+                            EBizType.WYDRFC.getValue(), order.getCode());
+                    }
+                }
 
-                // 私教获得多少钱
-                SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                    ESysConfigCkey.WYSJFC.getCode(),
-                    ESystemCode.SYSTEM_CODE.getCode(),
-                    ESystemCode.SYSTEM_CODE.getCode());
-                Long coachAmount = AmountUtil.mul(1L,
-                    penalty * StringValidater.toDouble(sysConfig.getCvalue()));
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
-                    ECurrency.CNY, coachAmount, EBizType.WYSJFC,
-                    EBizType.WYSJFC.getValue(), EBizType.WYSJFC.getValue(),
-                    order.getCode());
             }
             perCourseOrderBO.userCancel(order, penalty, updater, remark);
             return;
@@ -324,22 +391,27 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             order.getStatus())
                 || EPerCourseOrderStatus.PLAT_CANCEL.getCode().equals(
                     order.getStatus())
-                || EPerCourseOrderStatus.FINISH.getCode().equals(
-                    order.getStatus())
                 || EPerCourseOrderStatus.CLASS_OVER.getCode().equals(
+                    order.getStatus())
+                || EPerCourseOrderStatus.TO_FILL_FORM.getCode().equals(
+                    order.getStatus())
+                || EPerCourseOrderStatus.FINISH.getCode().equals(
                     order.getStatus())) {
             throw new BizException("xn0000", "该私课订单状态下，不能取消");
         }
         if (EPerCourseOrderStatus.PAYSUCCESS.getCode()
-            .equals(order.getStatus())) {
+            .equals(order.getStatus())
+                || EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
+                    order.getStatus())
+                || EPerCourseOrderStatus.HAVE_CLASS.getCode().equals(
+                    order.getStatus())) {
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
                 order.getApplyUser(), ECurrency.CNY, order.getAmount(),
                 EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
                 EBizType.AJ_SKGMTK.getValue(), order.getCode());
         }
-        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的私教订单"
-                + "[编号为:" + order.getCode()
-                + "],已被教练取消。详情请到“我的”里面查看。引起的不便,请见谅。");
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的订单" + "[编号为:"
+                + order.getCode() + "],已被教练取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         perCourseOrderBO.platCancel(order, updater, remark);
     }
 
@@ -399,6 +471,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder perCourseOrder : perCourseOrderList) {
             perCourseOrderBO.platCancel(perCourseOrder, "系统取消", "超时支付,系统自动取消");
+            smsOutBO.sentContent(perCourseOrder.getApplyUser(),
+                "尊敬的用户,您在平台上购买的订单" + "[编号为:" + perCourseOrder.getCode()
+                        + "],3天未支付,系统已自动取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         }
         logger.info("***************结束扫描待订单，未支付的3天后取消***************");
     }

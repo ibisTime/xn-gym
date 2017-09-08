@@ -1,7 +1,9 @@
 package com.std.gym.bo.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -69,5 +71,17 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
         SYSConfig condition = new SYSConfig();
         condition.setType(type);
         return sysConfigDAO.selectList(condition);
+    }
+
+    @Override
+    public Map<String, String> querySYSConfigMap(String type) {
+        Map<String, String> map = new HashMap<String, String>();
+        SYSConfig condition = new SYSConfig();
+        condition.setType(type);
+        List<SYSConfig> list = sysConfigDAO.selectList(condition);
+        for (SYSConfig sysConfig : list) {
+            map.put(sysConfig.getCkey(), sysConfig.getCvalue());
+        }
+        return map;
     }
 }

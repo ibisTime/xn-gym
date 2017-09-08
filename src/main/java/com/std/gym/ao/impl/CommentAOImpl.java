@@ -20,6 +20,7 @@ import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.ISYSConfigBO;
+import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.AmountUtil;
@@ -48,6 +49,7 @@ import com.std.gym.enums.ESysConfigType;
 import com.std.gym.enums.ESysUser;
 import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
+import com.std.gym.util.CalculationUtil;
 
 @Service
 public class CommentAOImpl implements ICommentAO {
@@ -84,6 +86,9 @@ public class CommentAOImpl implements ICommentAO {
 
     @Autowired
     private IAccountBO accountBO;
+
+    @Autowired
+    ISmsOutBO smsOutBO;
 
     @Override
     @Transactional
@@ -153,46 +158,119 @@ public class CommentAOImpl implements ICommentAO {
 
         Coach coach = coachBO.getCoach(perCourse.getCoachCode());
         int starNum = coach.getStarNum() + data.getScore();// 星级数量
-        List<SYSConfig> sysConfigList = sysConfigBO
-            .querySYSConfigList(ESysConfigType.LEVER_RULE.getCode());
+
         int star = coach.getStar(); // 教练等级
-        for (SYSConfig sysConfig : sysConfigList) {
-            if (starNum > StringValidater.toInteger(sysConfig.getCvalue())) {
-                if (ESysConfigCkey.LXJL.getCode().equals(sysConfig.getCkey())) {
-                    star = 0;
-                } else if (ESysConfigCkey.YXJL.getCode().equals(
-                    sysConfig.getCkey())) {
-                    star = 1;
-                } else if (ESysConfigCkey.EXJL.getCode().equals(
-                    sysConfig.getCkey())) {
-                    star = 2;
-                } else if (ESysConfigCkey.SAXJL.getCode().equals(
-                    sysConfig.getCkey())) {
-                    star = 3;
-                } else if (ESysConfigCkey.SXJL.getCode().equals(
-                    sysConfig.getCkey())) {
-                    star = 4;
-                } else if (ESysConfigCkey.WXJL.getCode().equals(
-                    sysConfig.getCkey())) {
-                    star = 5;
+        if (EBoolean.NO.getCode().equals(perCourseOrder.getType())) {
+            List<SYSConfig> sysConfigList = sysConfigBO
+                .querySYSConfigList(ESysConfigType.LEVER_RULE.getCode());
+            for (SYSConfig sysConfig : sysConfigList) {
+                if (starNum > StringValidater.toInteger(sysConfig.getCvalue())) {
+                    if (ESysConfigCkey.LXJL.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 0;
+                    } else if (ESysConfigCkey.YXJL.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 1;
+                    } else if (ESysConfigCkey.EXJL.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 2;
+                    } else if (ESysConfigCkey.SAXJL.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 3;
+                    } else if (ESysConfigCkey.SXJL.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 4;
+                    } else if (ESysConfigCkey.WXJL.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 5;
+                    }
                 }
             }
+            // 私课评论加积分
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                EBizType.SKGMSJF.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(sysConfig.getCvalue()));
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                perCourseOrder.getApplyUser(), ECurrency.JF, amount,
+                EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
+                EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
+
+            // 给私教加钱
+            SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.SJFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long coachAmount = AmountUtil.mul(1L, perCourseOrder.getAmount()
+                    * StringValidater.toDouble(coachSysConfig.getCvalue()));
+            if (coachAmount > 0) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(),
+                    perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
+                    EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
+                    EBizType.AJ_SKGM.getValue(), perCourseOrder.getCode());
+                smsOutBO.sentContent(perCourseOrder.getToUser(), "尊敬的教练,订单：["
+                        + perCourseOrder.getCode() + "]已成功评价，收到分成"
+                        + CalculationUtil.divi(coachAmount) + "元，登录网站可查看详情。");
+            }
+        } else if (EBoolean.YES.getCode().equals(perCourseOrder.getType())) {
+            List<SYSConfig> sysConfigList = sysConfigBO
+                .querySYSConfigList(ESysConfigType.DR_LEVER_RULE.getCode());
+            for (SYSConfig sysConfig : sysConfigList) {
+                if (starNum > StringValidater.toInteger(sysConfig.getCvalue())) {
+                    if (ESysConfigCkey.LXDR.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 0;
+                    } else if (ESysConfigCkey.YXDR.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 1;
+                    } else if (ESysConfigCkey.EXDR.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 2;
+                    } else if (ESysConfigCkey.SAXDR.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 3;
+                    } else if (ESysConfigCkey.SXDR.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 4;
+                    } else if (ESysConfigCkey.WXDR.getCode().equals(
+                        sysConfig.getCkey())) {
+                        star = 5;
+                    }
+                }
+            }
+
+            // 达人课程评论加积分
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                EBizType.DRGMSJF.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(sysConfig.getCvalue()));
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                perCourseOrder.getApplyUser(), ECurrency.JF, amount,
+                EBizType.DRGMSJF, EBizType.DRGMSJF.getValue(),
+                EBizType.DRGMSJF.getValue(), perCourseOrder.getCode());
+
+            // 给私教加钱
+            SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.DRFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long coachAmount = AmountUtil.mul(1L, perCourseOrder.getAmount()
+                    * StringValidater.toDouble(coachSysConfig.getCvalue()));
+            if (coachAmount > 0) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(),
+                    perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
+                    EBizType.AJ_DRGM, EBizType.AJ_DRGM.getValue(),
+                    EBizType.AJ_DRGM.getValue(), perCourseOrder.getCode());
+                smsOutBO.sentContent(perCourseOrder.getToUser(), "尊敬的达人,订单：["
+                        + perCourseOrder.getCode() + "]已成功评价，收到分成"
+                        + CalculationUtil.divi(coachAmount) + "元，登录网站可查看详情。");
+            }
         }
-        if (star < coach.getStar()) {
-            star = coach.getStar();
-        }
-        coachBO.updateStar(coach, star, starNum);
-        perCourseOrderBO.finishOrder(perCourseOrder);
-        // 私课评论加积分
-        SYSConfig sysConfig = sysConfigBO.getConfigValue(
-            EBizType.SKGMSJF.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
-            ESystemCode.SYSTEM_CODE.getCode());
-        Long amount = AmountUtil.mul(1000L,
-            Double.valueOf(sysConfig.getCvalue()));
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-            perCourseOrder.getApplyUser(), ECurrency.JF, amount,
-            EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
-            EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
+
         User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
         if (StringUtils.isNotBlank(user.getUserReferee())) {
             SYSConfig userRefereeSysConfig = sysConfigBO.getConfigValue(
@@ -210,16 +288,11 @@ public class CommentAOImpl implements ICommentAO {
                 EBizType.TJ, EBizType.TJ.getValue(), EBizType.TJ.getValue(),
                 perCourseOrder.getCode());
         }
-        // 给私教加钱
-        SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
-            ESysConfigCkey.SJFC.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
-            ESystemCode.SYSTEM_CODE.getCode());
-        Long coachAmount = AmountUtil.mul(1L, perCourseOrder.getAmount()
-                * StringValidater.toDouble(coachSysConfig.getCvalue()));
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-            perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
-            EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
-            EBizType.AJ_SKGM.getValue(), perCourseOrder.getCode());
+        if (star < coach.getStar()) {
+            star = coach.getStar();
+        }
+        coachBO.updateStar(coach, star, starNum);
+        perCourseOrderBO.finishOrder(perCourseOrder);
         if (ECommentStatus.FILTERED.getCode().equals(status)) {
             code = code + ";filter";
         }
@@ -375,6 +448,7 @@ public class CommentAOImpl implements ICommentAO {
             .startsWith(EPrefixCode.PERCOURSE.getCode())) {
             Coach coach = coachBO.getCoach(comment.getCoachCode());
             comment.setCoachRealName(coach.getRealName());
+            comment.setType(coach.getType());
         }
         List<ItemScore> itemScoreList = itemScoreBO.queryItemScoreList(comment
             .getCode());

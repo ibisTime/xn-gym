@@ -10,7 +10,8 @@ import java.util.Map;
  * @history:
  */
 public enum ESysConfigType {
-    INTEGRATE("1", "积分规则"), ITEM_SCORE("2", "评论项目"), LEVER_RULE("3", "等级规则");
+    INTEGRATE("1", "积分规则"), ITEM_SCORE("2", "评论项目"), LEVER_RULE("3", "教练等级规则"), DR_LEVER_RULE(
+            "5", "达人等级规则"), VOTE_RULE("6", "投票规则");
 
     public static Map<String, ESysConfigType> getDictTypeMap() {
         Map<String, ESysConfigType> map = new HashMap<String, ESysConfigType>();

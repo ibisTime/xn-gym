@@ -28,6 +28,7 @@ public class XN622020 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Activity condition = new Activity();
+        condition.setType(req.getType());
         condition.setLocation(req.getLocation());
         condition.setTitle(req.getTitle());
         condition.setHoldPlace(req.getHoldPlace());

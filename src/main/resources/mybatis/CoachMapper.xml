@@ -10,7 +10,9 @@
 		<result column="pic" property="pic" />
 		<result column="gender" property="gender" />
 		<result column="age" property="age" />
+		<result column="pdf" property="pdf" />
 		<result column="duration" property="duration" />
+		<result column="address" property="address" />
 		<result column="adv_pic" property="advPic" />
 		<result column="description" property="description" />
 		<result column="star" property="star" />
@@ -51,7 +53,7 @@
 				AND t.location = #{location}
 			</if>
 			<if test="mobile != null and mobile != '' ">
-				AND tu.mobile = #{mobile}
+				AND tu.mobile like "%"#{mobile}"%"
 			</if>
 			<if test="uStatus != null and uStatus != '' ">
 				AND tu.uStatus = #{uStatus}
@@ -77,7 +79,9 @@
 		,t.pic
 		,t.gender
 		,t.age
+		,t.pdf
 		,t.duration
+		,t.address
 		,t.adv_pic
 		,t.description
 		,t.star
@@ -118,7 +122,9 @@
 		,t.pic
 		,t.gender
 		,t.age
+		,t.pdf
 		,t.duration
+		,t.address
 		,t.adv_pic
 		,t.description
 		,t.star
@@ -154,7 +160,9 @@
 		,pic
 		,gender
 		,age
+		,pdf
 		,duration
+		,address
 		,adv_pic
 		,description
 		,star
@@ -173,7 +181,9 @@
 		,#{pic}
 		,#{gender}
 		,#{age}
+		,#{pdf}
 		,#{duration}
+		,#{address}
 		,#{advPic}
 		,#{description}
 		,#{star}
@@ -193,7 +203,9 @@
 		,pic = #{pic}
 		,gender = #{gender}
 		,age = #{age}
+		,pdf = #{pdf}
 		,duration = #{duration}
+		,address = #{address}
 		,adv_pic = #{advPic}
 		,description = #{description}
 		,label = #{label}

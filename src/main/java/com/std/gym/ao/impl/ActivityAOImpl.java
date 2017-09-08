@@ -18,7 +18,10 @@ import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Activity;
 import com.std.gym.dto.req.XN622010Req;
 import com.std.gym.dto.req.XN622012Req;
+import com.std.gym.dto.req.XN622023Req;
+import com.std.gym.dto.req.XN622024Req;
 import com.std.gym.enums.EActivityStatus;
+import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.exception.BizException;
 
@@ -43,6 +46,7 @@ public class ActivityAOImpl implements IActivityAO {
         Activity data = new Activity();
         String code = OrderNoGenerater.generate(EPrefixCode.ACTIVITY.getCode());
         data.setCode(code);
+        data.setType(EBoolean.YES.getCode());
         data.setTitle(req.getTitle());
         data.setPic(req.getPic());
         data.setAdvPic(req.getAdvPic());
@@ -165,6 +169,7 @@ public class ActivityAOImpl implements IActivityAO {
     public synchronized void changeActivity() {
         logger.info("***************开始扫描待活动，过期取消***************");
         Activity condition = new Activity();
+        condition.setType(EBoolean.YES.getCode());
         condition.setStatus(EActivityStatus.ONLINE.getCode());
         List<Activity> activityList = activityBO.queryActivityList(condition);
         if (CollectionUtils.isNotEmpty(activityList)) {
@@ -175,5 +180,54 @@ public class ActivityAOImpl implements IActivityAO {
             }
         }
         logger.info("***************开始扫描待活动，过期取消***************");
+    }
+
+    @Override
+    public String addVote(XN622023Req req) {
+        Activity data = new Activity();
+        String code = OrderNoGenerater.generate(EPrefixCode.ACTIVITY.getCode());
+        data.setType(EBoolean.NO.getCode());
+        data.setCode(code);
+        data.setTitle(req.getTitle());
+        data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setDescription(req.getDescription());
+        data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
+            DateUtil.DATA_TIME_PATTERN_2));
+        data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
+            DateUtil.DATA_TIME_PATTERN_2));
+        data.setTotalNum(0);
+        data.setRemainNum(0);
+        data.setStatus(EActivityStatus.DRAFT.getCode());
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+        activityBO.saveActivity(data);
+        return code;
+    }
+
+    @Override
+    public void modifyVote(XN622024Req req) {
+        Activity data = activityBO.getActivity(req.getCode());
+        if (EActivityStatus.STOP.getCode().equals(data.getStatus())
+                || EActivityStatus.ONLINE.getCode().equals(data.getStatus())
+                || EActivityStatus.OFFLINE.getCode().equals(data.getStatus())) {
+            throw new BizException("xn0000", "该活动已上线/结束,不可编辑");
+        }
+        data.setType(EBoolean.NO.getCode());
+        data.setTitle(req.getTitle());
+        data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setDescription(req.getDescription());
+        data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
+            DateUtil.DATA_TIME_PATTERN_2));
+        data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
+            DateUtil.DATA_TIME_PATTERN_2));
+        data.setTotalNum(0);
+        data.setRemainNum(0);
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+        activityBO.modifyActivity(data);
     }
 }

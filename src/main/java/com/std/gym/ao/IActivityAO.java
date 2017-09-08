@@ -6,6 +6,8 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.Activity;
 import com.std.gym.dto.req.XN622010Req;
 import com.std.gym.dto.req.XN622012Req;
+import com.std.gym.dto.req.XN622023Req;
+import com.std.gym.dto.req.XN622024Req;
 
 /**
  * 活动
@@ -105,5 +107,9 @@ public interface IActivityAO {
     public Activity getActivity(String code);
 
     public void changeActivity();
+
+    public String addVote(XN622023Req req);
+
+    public void modifyVote(XN622024Req req);
 
 }

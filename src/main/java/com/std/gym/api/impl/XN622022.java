@@ -27,6 +27,7 @@ public class XN622022 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Activity condition = new Activity();
+        condition.setType(req.getType());
         condition.setLocation(req.getLocation());
         condition.setHoldPlace(req.getHoldPlace());
         condition.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),

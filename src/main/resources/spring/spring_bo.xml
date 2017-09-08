@@ -18,7 +18,13 @@
 		<property name="paginableDAO" ref="activityOrderDAOImpl"/>
     </bean>	
 	
-	
+	<bean id="attendBO" class="com.std.gym.bo.impl.AttendBOImpl">
+		<property name="paginableDAO" ref="attendDAOImpl"/>
+	</bean>	
+	<bean id="voteBO" class="com.std.gym.bo.impl.VoteBOImpl">
+		<property name="paginableDAO" ref="voteDAOImpl"/>
+    </bean>	
+    
 	<bean id="coachBO" class="com.std.gym.bo.impl.CoachBOImpl">
 		<property name="paginableDAO" ref="coachDAOImpl" />
 	</bean>

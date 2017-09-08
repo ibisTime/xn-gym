@@ -13,6 +13,8 @@ public class XN622020Req extends APageReq {
      */
     private static final long serialVersionUID = -436697341747998231L;
 
+    private String type;
+
     // UI位置
     private String location;
 
@@ -88,6 +90,14 @@ public class XN622020Req extends APageReq {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

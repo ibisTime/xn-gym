@@ -5,12 +5,15 @@ import org.springframework.stereotype.Component;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.domain.User;
+import com.std.gym.dto.req.XN001000Req;
+import com.std.gym.dto.req.XN001300Req;
 import com.std.gym.dto.req.XN001302Req;
 import com.std.gym.dto.req.XN001400Req;
-import com.std.gym.dto.req.XN805052Req;
 import com.std.gym.dto.req.XN805300Req;
 import com.std.gym.dto.req.XN805301Req;
 import com.std.gym.dto.req.XN805302Req;
+import com.std.gym.dto.res.XN001000Res;
+import com.std.gym.dto.res.XN001350Res;
 import com.std.gym.dto.res.XN001400Res;
 import com.std.gym.exception.BizException;
 import com.std.gym.http.BizConnecter;
@@ -109,15 +112,37 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void doStatusUser(String userId, String toStatus, String updater,
-            String remark) {
-        XN805052Req req = new XN805052Req();
-        req.setUserId(userId);
-        req.setToStatus(toStatus);
+    public String doAddUser(String mobile, String realName, String userReferee,
+            String updater, String kind, String isRegHx, String systemCode) {
+        XN001300Req req = new XN001300Req();
+        req.setMobile(mobile);
+        req.setRealName(realName);
+        req.setUserReferee(userReferee);
         req.setUpdater(updater);
-        req.setRemark(remark);
-        BizConnecter.getBizData("805052", JsonUtils.object2Json(req),
-            Object.class);
+        req.setKind(kind);
+        req.setIsRegHx(isRegHx);
+        req.setSystemCode(systemCode);
+        XN001350Res res = BizConnecter.getBizData("805042",
+            JsonUtils.object2Json(req), XN001350Res.class);
+        if (res == null) {
+            throw new BizException("XN000000", "编号不存在");
+        }
+        return res.getUserId();
     }
 
+    @Override
+    public String doLogin(String loginName, String loginPwd, String kind,
+            String systemCode) {
+        XN001000Req req = new XN001000Req();
+        req.setLoginName(loginName);
+        req.setLoginPwd(loginPwd);
+        req.setKind(kind);
+        req.setSystemCode(systemCode);
+        XN001000Res res = BizConnecter.getBizData("001000",
+            JsonUtils.object2Json(req), XN001000Res.class);
+        if (res == null) {
+            throw new BizException("XN000000", "用户不存在");
+        }
+        return res.getUserId();
+    }
 }

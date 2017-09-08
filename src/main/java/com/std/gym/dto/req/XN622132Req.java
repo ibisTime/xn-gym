@@ -15,6 +15,9 @@ public class XN622132Req extends APageReq {
      */
     private static final long serialVersionUID = 2065073473356586943L;
 
+    // 类型
+    private String type;
+
     // 下单人
     private String applyUser;
 
@@ -57,6 +60,14 @@ public class XN622132Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.gym.dao.IVoteDAO">
+	<resultMap id="vote_DB_Result" type="vote">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="to_user" property="toUser" />
+		<result column="vote_type" property="voteType" />
+		<result column="vote_datetime" property="voteDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser}
+			</if>
+			<if test="voteType != null and voteType != '' ">
+				AND t.vote_type = #{voteType}
+			</if>
+			<if test="createVoteDatetime != null and createVoteDatetime != '' ">
+				<![CDATA[AND t.vote_datetime >= #{createVoteDatetime}]]>
+			</if>
+			<if test="endVoteDatetime != null and endVoteDatetime != '' ">
+				<![CDATA[AND t.vote_datetime <= #{endVoteDatetime}]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_vote" parameterType="vote" resultMap="vote_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.to_user
+		,t.vote_type
+		,t.vote_datetime
+		FROM
+		tgym_vote t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_vote_count" parameterType="vote"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tgym_vote t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_vote" parameterType="vote">
+		INSERT INTO
+		tgym_vote(
+		code
+		,user_id
+		,to_user
+		,vote_type
+		,vote_datetime
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{toUser}
+		,#{voteType}
+		,#{voteDatetime}
+		)
+	</insert>
+
+	<update id="update_vote" parameterType="vote">
+		UPDATE tgym_vote
+		SET
+		user_id = #{userId}
+		,to_user = #{toUser}
+		,vote_type = #{voteType}
+		,vote_datetime = #{voteDatetime}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

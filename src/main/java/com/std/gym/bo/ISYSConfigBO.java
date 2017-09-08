@@ -9,6 +9,7 @@
 package com.std.gym.bo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.std.gym.bo.base.IPaginableBO;
 import com.std.gym.domain.SYSConfig;
@@ -36,4 +37,6 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
             String systemCode);
 
     public List<SYSConfig> querySYSConfigList(String type);
+
+    Map<String, String> querySYSConfigMap(String type);
 }

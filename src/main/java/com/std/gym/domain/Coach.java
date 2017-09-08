@@ -29,6 +29,12 @@ public class Coach extends ABaseDO {
     // 缩略图
     private String pic;
 
+    // 身份证/教练证
+    private String pdf;
+
+    // 地址
+    private String address;
+
     // 性别
     private String gender;
 
@@ -277,6 +283,22 @@ public class Coach extends ABaseDO {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }

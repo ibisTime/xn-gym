@@ -1,11 +1,16 @@
 package com.std.gym.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.gym.ao.ICoachAO;
+import com.std.gym.bo.IActivityBO;
+import com.std.gym.bo.IAttendBO;
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.ICommentBO;
 import com.std.gym.bo.IPerCourseBO;
@@ -14,16 +19,21 @@ import com.std.gym.bo.base.Page;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
+import com.std.gym.domain.Activity;
+import com.std.gym.domain.Attend;
 import com.std.gym.domain.Coach;
 import com.std.gym.domain.Comment;
 import com.std.gym.domain.PerCourse;
 import com.std.gym.domain.User;
 import com.std.gym.dto.req.XN622090Req;
 import com.std.gym.dto.req.XN622091Req;
+import com.std.gym.dto.req.XN622221Req;
 import com.std.gym.dto.res.XN622094Res;
+import com.std.gym.enums.EActivityStatus;
 import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.ECoachStatus;
 import com.std.gym.enums.EPrefixCode;
+import com.std.gym.enums.ESystemCode;
 import com.std.gym.enums.EUserKind;
 import com.std.gym.exception.BizException;
 
@@ -35,6 +45,12 @@ public class CoachAOImpl implements ICoachAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private IActivityBO activityBO;
+
+    @Autowired
+    private IAttendBO attendBO;
 
     @Autowired
     private IPerCourseBO perCourseBO;
@@ -63,9 +79,11 @@ public class CoachAOImpl implements ICoachAO {
         data.setUserId(req.getUserId());
         data.setRealName(req.getRealName());
         data.setPic(req.getPic());
+        data.setPdf(req.getPdf());
         data.setAdvPic(req.getAdvPic());
         data.setGender(req.getGender());
         data.setAge(StringValidater.toInteger(req.getAge()));
+        data.setAddress(req.getAddress());
         data.setStar(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setStarNum(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setLocation(EBoolean.NO.getCode());
@@ -86,6 +104,7 @@ public class CoachAOImpl implements ICoachAO {
             data.setStatus(ECoachStatus.TO_APPROVE.getCode());
             data.setRealName(req.getRealName());
             data.setGender(req.getGender());
+            data.setPdf(req.getPdf());
         }
         if (!data.getRealName().equals(req.getRealName())) {
             throw new BizException("xn0000", "姓名不可修改");
@@ -93,9 +112,13 @@ public class CoachAOImpl implements ICoachAO {
         if (!data.getGender().equals(req.getGender())) {
             throw new BizException("xn0000", "性别不可修改");
         }
+        if (!data.getPdf().equals(req.getPdf())) {
+            throw new BizException("xn0000", "证件不可修改");
+        }
         data.setPic(req.getPic());
         data.setAdvPic(req.getAdvPic());
         data.setAge(StringValidater.toInteger(req.getAge()));
+        data.setAddress(req.getAddress());
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setLabel(req.getLabel());
         data.setDescription(req.getDescription());
@@ -178,5 +201,51 @@ public class CoachAOImpl implements ICoachAO {
             throw new BizException("xn0000", "该私教还未通过审核,不能设置位置");
         }
         coachBO.refreshCoach(coach, location, orderNo);
+    }
+
+    @Override
+    @Transactional
+    public String registerCoach(XN622221Req req) {
+        String userId = userBO.doAddUser(req.getMobile(), req.getRealName(),
+            req.getUserReferee(), "updater", req.getKind(), "0",
+            ESystemCode.SYSTEM_CODE.getCode());
+        String type = EBoolean.NO.getCode();
+        if (EUserKind.F3.getCode().equals(req.getKind())) {
+            type = EBoolean.YES.getCode();
+        }
+        Coach data = new Coach();
+        String code = OrderNoGenerater.generate(EPrefixCode.COACH.getCode());
+        data.setCode(code);
+        data.setType(type);
+        data.setUserId(userId);
+        data.setRealName(req.getRealName());
+        data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setGender(req.getGender());
+        data.setAge(StringValidater.toInteger(req.getAge()));
+        data.setStar(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setStarNum(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setLocation(EBoolean.NO.getCode());
+        data.setOrderNo(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setDuration(StringValidater.toInteger(req.getDuration()));
+        data.setStatus(ECoachStatus.TO_APPROVE.getCode());
+        data.setLabel(req.getLabel());
+        data.setDescription(req.getDescription());
+        data.setSumCom(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setAddress(req.getAddress());
+        coachBO.saveCoach(data);
+        Activity activity = activityBO.getActivity(req.getActivityCode());
+        if (activity.getEndDatetime().before(new Date())
+                || !EActivityStatus.ONLINE.getCode().equals(
+                    activity.getStatus())) {
+            throw new BizException("xn0000", "活动已经结束");
+        }
+        List<Attend> attendList = attendBO.queryAttendList(userId,
+            req.getActivityCode());
+        if (CollectionUtils.isNotEmpty(attendList)) {
+            throw new BizException("xn0000", "您已经报名参加了");
+        }
+        attendBO.saveAttend(data, activity);
+        return code;
     }
 }

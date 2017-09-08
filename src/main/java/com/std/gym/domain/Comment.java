@@ -64,6 +64,9 @@ public class Comment extends ABaseDO {
     // 头像
     private String photo;
 
+    // 类型
+    private String type;
+
     // 得分项目
     private List<ItemScore> itemScoreList;
 
@@ -201,6 +204,14 @@ public class Comment extends ABaseDO {
 
     public void setItemScoreList(List<ItemScore> itemScoreList) {
         this.itemScoreList = itemScoreList;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

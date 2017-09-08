@@ -16,6 +16,12 @@ public class XN622091Req {
     // 缩略图
     private String pic;
 
+    // 身份证/教练照
+    private String pdf;
+
+    // 地址
+    private String address;
+
     // 性别（1 男，0 女）
     private String gender;
 
@@ -104,5 +110,21 @@ public class XN622091Req {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

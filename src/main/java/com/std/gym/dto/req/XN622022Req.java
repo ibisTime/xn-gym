@@ -12,6 +12,8 @@ public class XN622022Req extends APageReq {
      */
     private static final long serialVersionUID = 5248677471226619781L;
 
+    private String type;
+
     // UI位置
     private String location;
 
@@ -76,5 +78,13 @@ public class XN622022Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

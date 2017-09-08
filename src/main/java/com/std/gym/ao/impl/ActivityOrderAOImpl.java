@@ -293,7 +293,7 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
             Activity activity = activityBO.getActivity(order.getActivityCode());
             activity.setStatus(EActivityStatus.ONLINE.getCode());
             activityBO.addSignNum(activity,
-                activity.getRemainNum() - order.getQuantity());
+                activity.getRemainNum() + order.getQuantity());
             smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的活动订单"
                     + "[编号为:" + order.getCode()
                     + "],已被平台取消。详情请到“我的”里面查看。引起的不便,请见谅。");

@@ -63,7 +63,7 @@
 				AND t.apply_user = #{applyUser}
 			</if>
 			<if test="mobile != null and mobile != '' ">
-				AND t.mobile = #{mobile}
+				AND t.mobile like "%"#{mobile}"%"
 			</if>
 			<if test="courseName != null and courseName != '' ">
 				AND t.course_name = #{courseName}

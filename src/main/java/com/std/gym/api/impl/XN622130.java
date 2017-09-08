@@ -28,6 +28,7 @@ public class XN622130 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         PerCourseOrder condition = new PerCourseOrder();
+        condition.setType(req.getType());
         condition.setApplyUser(req.getApplyUser());
         condition.setCourseName(req.getCourseName());
         condition.setMobile(req.getMobile());

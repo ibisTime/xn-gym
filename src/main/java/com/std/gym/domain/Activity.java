@@ -19,6 +19,9 @@ public class Activity extends ABaseDO {
     // 编号
     private String code;
 
+    // 类型
+    private String type;
+
     // 标题
     private String title;
 
@@ -223,6 +226,14 @@ public class Activity extends ABaseDO {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

@@ -8,6 +8,7 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.Coach;
 import com.std.gym.dto.req.XN622090Req;
 import com.std.gym.dto.req.XN622091Req;
+import com.std.gym.dto.req.XN622221Req;
 import com.std.gym.dto.res.XN622094Res;
 
 @Component
@@ -38,4 +39,5 @@ public interface ICoachAO {
 
     public void editLocation(String code, String location, String orderNo);
 
+    public String registerCoach(XN622221Req req);
 }

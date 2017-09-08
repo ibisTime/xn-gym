@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cdkj.gym.dao.ISizeDataDAO">
+<mapper namespace="com.std.gym.dao.ISizeDataDAO">
 	<resultMap id="sizeData_DB_Result" type="sizeData">
 		<result column="id" property="id" />
 		<result column="user_id" property="userId" />
-		<result column="key" property="key" />
-		<result column="value" property="value" />
+		<result column="ckey" property="ckey" />
+		<result column="cvalue" property="cvalue" />
 		<result column="order_code" property="orderCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -26,11 +26,11 @@
 		SELECT
 		t.id
 		,t.user_id
-		,t.key
-		,t.value
+		,t.ckey
+		,t.cvalue
 		,t.order_code
 		FROM
-		tdzt_size_data t
+		tgym_size_data t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -41,39 +41,39 @@
 
 	<select id="select_sizeData_count" parameterType="sizeData"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tdzt_size_data t
+		SELECT count(1) FROM tgym_size_data t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_sizeData" parameterType="sizeData">
 		INSERT INTO
-		tdzt_size_data(
+		tgym_size_data(
 		user_id
-		,key
-		,value
+		,ckey
+		,cvalue
 		,order_code
 		)
 		VALUES(
 		#{userId}
-		,#{key}
-		,#{value}
+		,#{ckey}
+		,#{cvalue}
 		,#{orderCode}
 		)
 	</insert>
 
 	<update id="update_sizeData" parameterType="sizeData">
-		UPDATE tdzt_size_data
+		UPDATE tgym_size_data
 		SET
 		user_id = #{userId}
-		,key = #{key}
-		,value = #{value}
+		,ckey = #{ckey}
+		,cvalue = #{cvalue}
 		,order_code = #{orderCode}
 		WHERE id = #{id}
 	</update>
 	
 	<delete id="delete_sizeData" parameterType="sizeData">
 		DELETE FROM
-		tdzt_size_data
+		tgym_size_data
 		WHERE
 		order_code = #{orderCode}
 	</delete>

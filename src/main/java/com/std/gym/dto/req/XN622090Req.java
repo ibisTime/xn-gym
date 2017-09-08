@@ -13,8 +13,14 @@ public class XN622090Req {
     // 真实姓名
     private String realName;
 
+    // 身份证/教练照
+    private String pdf;
+
     // 缩略图
     private String pic;
+
+    // 地址
+    private String address;
 
     // 性别（1 男，0 女）
     private String gender;
@@ -104,5 +110,21 @@ public class XN622090Req {
 
     public void setPic(String pic) {
         this.pic = pic;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

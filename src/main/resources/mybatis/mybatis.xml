@@ -17,6 +17,8 @@
 		<typeAlias alias="sysDict" type="com.std.gym.domain.SYSDict" />
 		<typeAlias alias="sysConfig" type="com.std.gym.domain.SYSConfig" />
 		<typeAlias alias="sizeData" type="com.std.gym.domain.SizeData" />
+	    <typeAlias alias="attend" type="com.std.gym.domain.Attend" />
+	    <typeAlias alias="vote" type="com.std.gym.domain.Vote" />
 	    
 	</typeAliases>
 </configuration>	

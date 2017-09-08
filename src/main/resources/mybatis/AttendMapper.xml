@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.gym.dao.IAttendDAO">
+	<resultMap id="attend_DB_Result" type="attend">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="user_id" property="userId" />
+		<result column="coach_code" property="coachCode" />
+		<result column="activity_code" property="activityCode" />
+		<result column="jion_datetime" property="jionDatetime" />
+		<result column="start_datetime" property="startDatetime" />
+		<result column="end_datetime" property="endDatetime" />
+		<result column="total_num" property="totalNum" />
+		<result column="real_name" property="realName" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="realName != null and realName != '' ">
+				AND tc.real_name like "%"#{realName}"%"
+			</if>
+			<if test="coachStatus != null and coachStatus != '' ">
+				AND tc.status = #{coachStatus}
+			</if>
+			<if test="activityCode != null and activityCode != '' ">
+				AND t.activity_code = #{activityCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_attend" parameterType="attend" resultMap="attend_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.user_id
+		,t.coach_code
+		,t.activity_code
+		,t.jion_datetime
+		,t.start_datetime
+		,t.end_datetime
+		,t.total_num
+		,tc.real_name
+		FROM
+		tgym_attend t left join tgym_coach tc on t.coach_code=tc.code
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_attend_count" parameterType="attend"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tgym_attend t left join tgym_coach tc on t.coach_code=tc.code
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_attend" parameterType="attend">
+		INSERT INTO
+		tgym_attend(
+		code
+		,type
+		,user_id
+		,coach_code
+		,activity_code
+		,jion_datetime
+		,start_datetime
+		,end_datetime
+		,total_num
+		)
+		VALUES(
+		#{code}
+		,#{type}
+		,#{userId}
+		,#{coachCode}
+		,#{activityCode}
+		,#{jionDatetime}
+		,#{startDatetime}
+		,#{endDatetime}
+		,#{totalNum}
+		)
+	</insert>
+
+	<update id="update_attend" parameterType="attend">
+		UPDATE tgym_attend
+		SET
+		total_num = total_num+1
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

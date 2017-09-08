@@ -4,6 +4,7 @@
 <mapper namespace="com.std.gym.dao.IActivityDAO">
 	<resultMap id="activity_DB_Result" type="activity">
 		<result column="code" property="code" />
+		<result column="type" property="type" />
 		<result column="title" property="title" />
 		<result column="pic" property="pic" />
 		<result column="adv_pic" property="advPic" />
@@ -52,11 +53,15 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_activity" parameterType="activity" resultMap="activity_DB_Result">
 		SELECT
 		t.code
+		,t.type
 		,t.title
 		,t.pic
 		,t.adv_pic
@@ -96,6 +101,7 @@
 	<insert id="insert_activity" parameterType="activity">
 		INSERT INTO tgym_activity(
 		code
+		,type
 		,title
 		,pic
 		,adv_pic
@@ -118,6 +124,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{type}
 		,#{title}
 		,#{pic}
 		,#{advPic}
@@ -147,7 +154,8 @@
 	
 	<update id="update_activity" parameterType="activity">
 		UPDATE tgym_activity SET
-		title = #{title}
+		type = #{type}
+		,title = #{title}
 		,pic = #{pic}
 		,adv_pic = #{advPic}
 		,slogan = #{slogan}

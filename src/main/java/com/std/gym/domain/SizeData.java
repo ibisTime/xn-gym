@@ -19,10 +19,10 @@ public class SizeData extends ABaseDO {
     private String userId;
 
     // 类型
-    private String key;
+    private String ckey;
 
     // 类型值
-    private String value;
+    private String cvalue;
 
     // 订单编号
     private String orderCode;
@@ -43,28 +43,28 @@ public class SizeData extends ABaseDO {
         return userId;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
     }
 
     public String getOrderCode() {
         return orderCode;
+    }
+
+    public String getCkey() {
+        return ckey;
+    }
+
+    public void setCkey(String ckey) {
+        this.ckey = ckey;
+    }
+
+    public String getCvalue() {
+        return cvalue;
+    }
+
+    public void setCvalue(String cvalue) {
+        this.cvalue = cvalue;
     }
 
 }
