@@ -28,8 +28,11 @@ public class XN622230 extends AProcessor {
         Attend condition = new Attend();
         condition.setCode(req.getCode());
         condition.setCoachStatus(req.getCoachStatus());
+        condition.setActivityStatus(req.getActivityStatus());
         condition.setCoachCode(req.getCoachCode());
+        condition.setActivityCode(req.getActivityCode());
         condition.setType(req.getType());
+        condition.setTitle(req.getTitle());
         condition.setRealName(req.getRealName());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

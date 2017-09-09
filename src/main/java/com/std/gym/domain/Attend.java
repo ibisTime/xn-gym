@@ -29,6 +29,9 @@ public class Attend extends ABaseDO {
     // 活动编号
     private String activityCode;
 
+    // 编号
+    private Integer orderNo;
+
     // 参加时间
     private Date jionDatetime;
 
@@ -53,6 +56,9 @@ public class Attend extends ABaseDO {
 
     // 教练状态
     private String coachStatus;
+
+    // 活动状态
+    private String activityStatus;
 
     // 是否投票
     private String isVote;
@@ -167,6 +173,22 @@ public class Attend extends ABaseDO {
 
     public void setCoachStatus(String coachStatus) {
         this.coachStatus = coachStatus;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(String activityStatus) {
+        this.activityStatus = activityStatus;
     }
 
 }

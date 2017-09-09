@@ -30,6 +30,14 @@ public class XN622230Req extends APageReq {
     // 教练状态
     private String coachStatus;
 
+    // 活动状态
+    private String activityStatus;
+
+    // 活动编号
+    private String activityCode;
+
+    private String title;
+
     public String getCoachCode() {
         return coachCode;
     }
@@ -76,5 +84,29 @@ public class XN622230Req extends APageReq {
 
     public void setCoachStatus(String coachStatus) {
         this.coachStatus = coachStatus;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(String activityStatus) {
+        this.activityStatus = activityStatus;
+    }
+
+    public String getActivityCode() {
+        return activityCode;
+    }
+
+    public void setActivityCode(String activityCode) {
+        this.activityCode = activityCode;
     }
 }

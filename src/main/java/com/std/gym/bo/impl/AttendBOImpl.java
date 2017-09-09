@@ -24,7 +24,7 @@ public class AttendBOImpl extends PaginableBOImpl<Attend> implements IAttendBO {
     private IAttendDAO attendDAO;
 
     @Override
-    public String saveAttend(Coach coach, Activity activity) {
+    public String saveAttend(Coach coach, Activity activity, Integer number) {
         Attend data = new Attend();
         String code = OrderNoGenerater.generate(EPrefixCode.ATTEND.getCode());
         data.setCode(code);
@@ -33,6 +33,7 @@ public class AttendBOImpl extends PaginableBOImpl<Attend> implements IAttendBO {
         data.setCoachCode(coach.getCode());
         data.setActivityCode(activity.getCode());
         data.setJionDatetime(new Date());
+        data.setOrderNo(number + 1);
         data.setStartDatetime(activity.getStartDatetime());
         data.setEndDatetime(activity.getEndDatetime());
         data.setTotalNum(0);
@@ -70,5 +71,23 @@ public class AttendBOImpl extends PaginableBOImpl<Attend> implements IAttendBO {
         condition.setUserId(userId);
         condition.setActivityCode(activityCode);
         return attendDAO.selectList(condition);
+    }
+
+    @Override
+    public Long getTotalCount(String type, String activityCode) {
+        Attend condition = new Attend();
+        condition.setType(type);
+        condition.setActivityCode(activityCode);
+        return attendDAO.selectTotalCount(condition);
+    }
+
+    @Override
+    public void refreshAttend(String activityCode, Date startDatetime,
+            Date endDatetime) {
+        Attend data = new Attend();
+        data.setActivityCode(activityCode);
+        data.setStartDatetime(startDatetime);
+        data.setEndDatetime(endDatetime);
+        attendDAO.updateDatetime(data);
     }
 }

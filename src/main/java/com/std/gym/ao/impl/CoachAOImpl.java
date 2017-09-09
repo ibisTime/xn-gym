@@ -14,6 +14,7 @@ import com.std.gym.bo.IAttendBO;
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.ICommentBO;
 import com.std.gym.bo.IPerCourseBO;
+import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Page;
 import com.std.gym.bo.base.Paginable;
@@ -57,6 +58,9 @@ public class CoachAOImpl implements ICoachAO {
 
     @Autowired
     private ICommentBO commentBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
 
     @Override
     public String addCoach(XN622090Req req) {
@@ -112,7 +116,7 @@ public class CoachAOImpl implements ICoachAO {
         if (!data.getGender().equals(req.getGender())) {
             throw new BizException("xn0000", "性别不可修改");
         }
-        if (!data.getPdf().equals(req.getPdf())) {
+        if (null != req.getPdf() && !data.getPdf().equals(req.getPdf())) {
             throw new BizException("xn0000", "证件不可修改");
         }
         data.setPic(req.getPic());
@@ -133,13 +137,21 @@ public class CoachAOImpl implements ICoachAO {
         if (!ECoachStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该信息已审批过,无需再次审批");
         }
-        String status = null;
+        ECoachStatus status = null;
         if (EBoolean.NO.getCode().equals(result)) {
-            status = ECoachStatus.APPROVE_NO.getCode();
+            status = ECoachStatus.APPROVE_NO;
         } else if (EBoolean.YES.getCode().equals(result)) {
-            status = ECoachStatus.APPROVE_YES.getCode();
+            status = ECoachStatus.APPROVE_YES;
         }
-        coachBO.approveCoach(data, status, approver, remark);
+        String type = null;
+        if (EBoolean.NO.getCode().equals(data.getType())) {
+            type = "教练";
+        } else if (EBoolean.YES.getCode().equals(data.getType())) {
+            type = "达人";
+        }
+        smsOutBO.sentContent(data.getUserId(), "尊敬的用户,您提交的" + type + "申请"
+                + status.getValue() + ",详情请登录网站进行查看。");
+        coachBO.approveCoach(data, status.getCode(), approver, remark);
     }
 
     @Override
@@ -226,6 +238,7 @@ public class CoachAOImpl implements ICoachAO {
         data.setStar(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setStarNum(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setLocation(EBoolean.NO.getCode());
+        data.setPdf(req.getPdf());
         data.setOrderNo(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setStatus(ECoachStatus.TO_APPROVE.getCode());
@@ -245,7 +258,9 @@ public class CoachAOImpl implements ICoachAO {
         if (CollectionUtils.isNotEmpty(attendList)) {
             throw new BizException("xn0000", "您已经报名参加了");
         }
-        attendBO.saveAttend(data, activity);
+        Long count = attendBO.getTotalCount(type, req.getActivityCode());
+        Integer number = count.intValue();
+        attendBO.saveAttend(data, activity, number);
         return code;
     }
 }

@@ -8,4 +8,6 @@ public interface IAttendDAO extends IBaseDAO<Attend> {
     String NAMESPACE = IAttendDAO.class.getName().concat(".");
 
     int update(Attend data);
+
+    int updateDatetime(Attend data);
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.std.gym.ao.IActivityAO;
 import com.std.gym.bo.IActivityBO;
 import com.std.gym.bo.IActivityOrderBO;
+import com.std.gym.bo.IAttendBO;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
@@ -37,6 +38,9 @@ public class ActivityAOImpl implements IActivityAO {
 
     @Autowired
     IActivityBO activityBO;
+
+    @Autowired
+    IAttendBO attendBO;
 
     @Autowired
     IActivityOrderBO activityOrderBO;
@@ -120,7 +124,7 @@ public class ActivityAOImpl implements IActivityAO {
             throw new BizException("xn0000", "该活动已经上线,无需重复上线");
         }
         if (activity.getStartDatetime().before(new Date())) {
-            throw new BizException("xn0000", "该活动已经结束,不可上线");
+            throw new BizException("xn0000", "该活动开始时间早于现在时间,不可上线");
         }
         activityBO.putOn(activity, location, orderNo, updater, remark);
     }
@@ -190,7 +194,6 @@ public class ActivityAOImpl implements IActivityAO {
         data.setCode(code);
         data.setTitle(req.getTitle());
         data.setPic(req.getPic());
-        data.setAdvPic(req.getAdvPic());
         data.setDescription(req.getDescription());
         data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
             DateUtil.DATA_TIME_PATTERN_2));
@@ -210,24 +213,25 @@ public class ActivityAOImpl implements IActivityAO {
     public void modifyVote(XN622024Req req) {
         Activity data = activityBO.getActivity(req.getCode());
         if (EActivityStatus.STOP.getCode().equals(data.getStatus())
-                || EActivityStatus.ONLINE.getCode().equals(data.getStatus())
-                || EActivityStatus.OFFLINE.getCode().equals(data.getStatus())) {
+                || EActivityStatus.ONLINE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该活动已上线/结束,不可编辑");
         }
+        Date startDatetime = DateUtil.strToDate(req.getStartDatetime(),
+            DateUtil.DATA_TIME_PATTERN_2);
+        Date endDatetime = DateUtil.strToDate(req.getEndDatetime(),
+            DateUtil.DATA_TIME_PATTERN_2);
         data.setType(EBoolean.NO.getCode());
         data.setTitle(req.getTitle());
         data.setPic(req.getPic());
-        data.setAdvPic(req.getAdvPic());
         data.setDescription(req.getDescription());
-        data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
-            DateUtil.DATA_TIME_PATTERN_2));
-        data.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
-            DateUtil.DATA_TIME_PATTERN_2));
+        data.setStartDatetime(startDatetime);
+        data.setEndDatetime(endDatetime);
         data.setTotalNum(0);
         data.setRemainNum(0);
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
         activityBO.modifyActivity(data);
+        attendBO.refreshAttend(req.getCode(), startDatetime, endDatetime);
     }
 }

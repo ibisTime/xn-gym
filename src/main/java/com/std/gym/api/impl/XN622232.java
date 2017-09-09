@@ -26,8 +26,11 @@ public class XN622232 extends AProcessor {
     public Object doBusiness() throws BizException {
         Attend condition = new Attend();
         condition.setCode(req.getCode());
+        condition.setActivityStatus(req.getActivityStatus());
+        condition.setTitle(req.getTitle());
         condition.setCoachCode(req.getCoachCode());
         condition.setCoachStatus(req.getCoachStatus());
+        condition.setActivityCode(req.getActivityCode());
         condition.setType(req.getType());
         condition.setRealName(req.getRealName());
         String orderColumn = req.getOrderColumn();

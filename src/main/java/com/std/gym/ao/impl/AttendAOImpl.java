@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,9 @@ public class AttendAOImpl implements IAttendAO {
         if (CollectionUtils.isNotEmpty(attendList)) {
             throw new BizException("xn0000", "您已经报名参加了");
         }
-        return attendBO.saveAttend(coach, activity);
+        Long count = attendBO.getTotalCount(coach.getType(), activityCode);
+        Integer number = count.intValue();
+        return attendBO.saveAttend(coach, activity, number);
     }
 
     @Override
@@ -91,11 +94,13 @@ public class AttendAOImpl implements IAttendAO {
         attend.setTitle(activity.getTitle());
         Coach coach = coachBO.getCoach(attend.getCoachCode());
         attend.setCoach(coach);
-        Long count = voteBO.getTotalCount(attend.getType(), userId,
-            attend.getUserId());
         attend.setIsVote(EBoolean.NO.getCode());
-        if (count > 0) {
-            attend.setIsVote(EBoolean.YES.getCode());
+        if (StringUtils.isNotBlank(userId)) {
+            Long count = voteBO.getTotalCount(attend.getType(), userId,
+                attend.getUserId());
+            if (count > 0) {
+                attend.setIsVote(EBoolean.YES.getCode());
+            }
         }
     }
 

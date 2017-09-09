@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="type" property="type" />
 		<result column="user_id" property="userId" />
+		<result column="order_no" property="orderNo" />
 		<result column="coach_code" property="coachCode" />
 		<result column="activity_code" property="activityCode" />
 		<result column="jion_datetime" property="jionDatetime" />
@@ -13,34 +14,42 @@
 		<result column="end_datetime" property="endDatetime" />
 		<result column="total_num" property="totalNum" />
 		<result column="real_name" property="realName" />
+		<result column="activity_status" property="activityStatus" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
-				AND t.code = #{code}
+				AND tm.code = #{code}
 			</if>
 			<if test="type != null and type != '' ">
-				AND t.type = #{type}
+				AND tm.type = #{type}
 			</if>
 			<if test="userId != null and userId != '' ">
-				AND t.user_id = #{userId}
+				AND tm.user_id = #{userId}
 			</if>
 			<if test="realName != null and realName != '' ">
-				AND tc.real_name like "%"#{realName}"%"
+				AND tm.real_name like "%"#{realName}"%"
 			</if>
 			<if test="coachStatus != null and coachStatus != '' ">
-				AND tc.status = #{coachStatus}
+				AND tm.status = #{coachStatus}
 			</if>
 			<if test="activityCode != null and activityCode != '' ">
-				AND t.activity_code = #{activityCode}
+				AND tm.activity_code = #{activityCode}
+			</if>
+			<if test="title != null and title != '' ">
+				AND ta.title like "%"#{title}"%"
+			</if>
+			<if test="activityStatus != null and activityStatus != '' ">
+				AND ta.status = #{activityStatus}
 			</if>
 		</trim>
 	</sql>
 	<select id="select_attend" parameterType="attend" resultMap="attend_DB_Result">
-		SELECT
+		SELECT tm.*,ta.title,ta.status as activity_status FROM (SELECT
 		t.code
 		,t.type
 		,t.user_id
+		,t.order_no
 		,t.coach_code
 		,t.activity_code
 		,t.jion_datetime
@@ -48,19 +57,36 @@
 		,t.end_datetime
 		,t.total_num
 		,tc.real_name
+		,tc.status
 		FROM
-		tgym_attend t left join tgym_coach tc on t.coach_code=tc.code
+		tgym_attend t LEFT JOIN tgym_coach tc ON t.coach_code=tc.code) tm LEFT JOIN tgym_activity ta ON 
+		ta.code=tm.activity_code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
-				t.${order}
+				tm.${order}
 			</if>
 		</trim>
 	</select>
 
 	<select id="select_attend_count" parameterType="attend"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tgym_attend t left join tgym_coach tc on t.coach_code=tc.code
+		SELECT count(1) FROM (SELECT
+		t.code
+		,t.type
+		,t.user_id
+		,t.order_no
+		,t.coach_code
+		,t.activity_code
+		,t.jion_datetime
+		,t.start_datetime
+		,t.end_datetime
+		,t.total_num
+		,tc.real_name
+		,tc.status
+		FROM
+		tgym_attend t LEFT JOIN tgym_coach tc ON t.coach_code=tc.code) tm LEFT JOIN tgym_activity ta ON 
+		ta.code=tm.activity_code
 		<include refid="where_condition" />
 	</select>
 
@@ -70,6 +96,7 @@
 		code
 		,type
 		,user_id
+		,order_no
 		,coach_code
 		,activity_code
 		,jion_datetime
@@ -81,6 +108,7 @@
 		#{code}
 		,#{type}
 		,#{userId}
+		,#{orderNo}
 		,#{coachCode}
 		,#{activityCode}
 		,#{jionDatetime}
@@ -97,5 +125,12 @@
 		WHERE code = #{code}
 	</update>
 
+	<update id="update_attend_datetime" parameterType="attend">
+		UPDATE tgym_attend
+		SET
+		start_datetime = #{startDatetime}
+		,end_datetime = #{endDatetime}
+		WHERE activity_code = #{activityCode}
+	</update>
 
 </mapper>

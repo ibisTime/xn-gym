@@ -44,7 +44,7 @@ public class APIServlet extends HttpServlet {
         logger.info("Successful Deployment");
         PrintWriter writer = response.getWriter();
         writer.append("Version:1.0.1 \n");
-        writer.append("Description:2nd \n");
+        writer.append("Description:3_1rd \n");
         writer.flush();
     }
 

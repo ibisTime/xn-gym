@@ -50,4 +50,9 @@ public class AttendDAOImpl extends AMybatisTemplate implements IAttendDAO {
         return super.update(NAMESPACE.concat("update_attend"), data);
     }
 
+    @Override
+    public int updateDatetime(Attend data) {
+        return super.update(NAMESPACE.concat("update_attend_datetime"), data);
+    }
+
 }
