@@ -90,8 +90,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         req.setBizNote(bizNote);
         req.setAmount(String.valueOf(amount));
         req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
-        System.out.println(fromUserId + "" + fromOpenId + "" + toUserId + ""
-                + amount + "" + bizType + "" + bizNote + "" + payGroup);
         XN002501Res res = BizConnecter.getBizData("002501",
             JsonUtil.Object2Json(req), XN002501Res.class);
         return res;

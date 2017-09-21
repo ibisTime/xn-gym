@@ -70,6 +70,13 @@ public class CallbackConroller {
                         EPayType.WEIXIN.getCode());
                     logger.info("**** 自玩自健私课购买支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
+                } else if (EBizType.AJ_DRGM.getCode().equals(bizType)) {
+                    logger.info("**** 自玩自健达人课程购买支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    perCourseOrderAO.paySuccess(payGroup, payCode, amount,
+                        EPayType.WEIXIN.getCode());
+                    logger.info("**** 自玩自健达人课程购买支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {
                 logger.error("支付回调异常payGroup <" + payGroup + "> payCode <"
