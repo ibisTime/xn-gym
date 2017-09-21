@@ -7,10 +7,14 @@
 		<result column="sk_cycle" property="skCycle" />
 		<result column="sk_start_datetime" property="skStartDatetime" />
 		<result column="sk_end_datetime" property="skEndDatetime" />
+		<result column="total_num" property="totalNum" />
+		
+		<result column="address" property="address" />
 		<result column="pic" property="pic" />
 		<result column="adv_pic" property="advPic" />
 		<result column="description" property="description" />
 		<result column="price" property="price" />
+		
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
@@ -30,6 +34,9 @@
 			<if test="coachCode != null and coachCode != '' ">
 				AND t.coach_code = #{coachCode}
 			</if>
+			<if test="address != null and address != '' ">
+				AND t.address like "%"#{address}"%"
+			</if>
 			<if test="skCycle != null and skCycle != '' ">
 				AND t.sk_cycle = #{skCycle}
 			</if>
@@ -41,10 +48,14 @@
 		,t.sk_cycle
 		,t.sk_start_datetime
 		,t.sk_end_datetime
+		,t.total_num
+		
+		,t.address
 		,t.pic
 		,t.adv_pic
 		,t.description
 		,t.price
+		
 		,t.location
 		,t.order_no
 		,t.status
@@ -72,6 +83,9 @@
 		,sk_cycle
 		,sk_start_datetime
 		,sk_end_datetime
+		,total_num
+		
+		,address
 		,pic
 		,adv_pic
 		,description
@@ -86,6 +100,9 @@
 		,#{skCycle}
 		,#{skStartDatetime}
 		,#{skEndDatetime}
+		,#{totalNum}
+		
+		,#{address}
 		,#{pic}
 		,#{advPic}
 		,#{description}
@@ -103,11 +120,15 @@
 		sk_cycle = #{skCycle}
 		,sk_start_datetime = #{skStartDatetime}
 		,sk_end_datetime = #{skEndDatetime}
+		,total_num = #{totalNum}
+		,address = #{address}
+		
 		,pic = #{pic}
 		,adv_pic = #{advPic}
 		,description = #{description}
 		,price = #{price}
 		,location = #{location}
+		
 		,order_no = #{orderNo}
 		,status = #{status}
 		,coach_code = #{coachCode}

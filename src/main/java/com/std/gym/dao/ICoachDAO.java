@@ -21,4 +21,8 @@ public interface ICoachDAO extends IBaseDAO<Coach> {
     int updateStar(Coach coach);
 
     int updateLocation(Coach coach);
+
+    int putOff(Coach coach);
+
+    int teachNum(Coach data);
 }

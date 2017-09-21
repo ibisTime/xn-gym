@@ -32,9 +32,6 @@ public class Coach extends ABaseDO {
     // 身份证/教练证
     private String pdf;
 
-    // 地址
-    private String address;
-
     // 性别
     private String gender;
 
@@ -58,6 +55,21 @@ public class Coach extends ABaseDO {
 
     // 标签
     private String label;
+
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区
+    private String area;
+
+    // 地址
+    private String address;
+
+    // 授课数量
+    private Integer teachNum;
 
     // UI位置
     private String location;
@@ -299,6 +311,38 @@ public class Coach extends ABaseDO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getTeachNum() {
+        return teachNum;
+    }
+
+    public void setTeachNum(Integer teachNum) {
+        this.teachNum = teachNum;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
 }

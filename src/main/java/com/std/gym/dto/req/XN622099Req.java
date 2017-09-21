@@ -1,7 +1,7 @@
 package com.std.gym.dto.req;
 
 /**
- * 
+ * 上架
  * @author: asus 
  * @since: 2017年7月18日 下午1:56:38 
  * @history:
@@ -15,6 +15,9 @@ public class XN622099Req {
 
     // UI顺序
     private String orderNo;
+
+    // 备注
+    private String remark;
 
     public String getCode() {
         return code;
@@ -38,6 +41,14 @@ public class XN622099Req {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

@@ -8,24 +8,32 @@
 		<result column="user_id" property="userId" />
 		<result column="real_name" property="realName" />
 		<result column="pic" property="pic" />
+		
+		<result column="pdf" property="pdf" />
 		<result column="gender" property="gender" />
 		<result column="age" property="age" />
-		<result column="pdf" property="pdf" />
 		<result column="duration" property="duration" />
-		<result column="address" property="address" />
 		<result column="adv_pic" property="advPic" />
+		
 		<result column="description" property="description" />
 		<result column="star" property="star" />
 		<result column="star_num" property="starNum" />
 		<result column="label" property="label" />
-		<result column="sum_com" property="sumCom" />
+		<result column="province" property="province" />
+		
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="address" property="address" />
+		<result column="teach_num" property="teachNum" />
 		<result column="location" property="location" />
+		
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
+		<result column="sum_com" property="sumCom" />
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
-		<result column="remark" property="remark" />
 		
+		<result column="remark" property="remark" />
 		<result column="uStatus" property="uStatus" />
 		<result column="login_name" property="loginName" />
 	</resultMap>
@@ -42,6 +50,15 @@
 			</if>
 			<if test="label != null and label != '' ">
 				AND t.label like "%"#{label}#"%"
+			</if>
+			<if test="province != null and province != '' ">
+				AND t.province like "%"#{province}#"%"
+			</if>
+			<if test="city != null and city != '' ">
+				AND t.city like "%"#{city}#"%"
+			</if>
+			<if test="area != null and area != '' ">
+				AND t.area like "%"#{area}#"%"
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -78,22 +95,31 @@
 		,t.real_name
 		,t.pic
 		,t.gender
+		
 		,t.age
 		,t.pdf
 		,t.duration
+		,t.province
+		,t.city
+		
+		,t.area
 		,t.address
 		,t.adv_pic
 		,t.description
 		,t.star
+		
+		,t.teach_num
 		,t.star_num
 		,t.label
 		,t.sum_com
 		,t.location
+		
 		,t.order_no
 		,t.status
 		,t.approver
 		,t.approve_datetime
 		,t.remark
+		
 		,tu.mobile
 		,tu.status as uStatus
 		,tu.login_name
@@ -120,22 +146,31 @@
 		,t.user_id
 		,t.real_name
 		,t.pic
+		
 		,t.gender
 		,t.age
 		,t.pdf
 		,t.duration
+		,t.province
+		
+		,t.city
+		,t.area
 		,t.address
 		,t.adv_pic
 		,t.description
+		
+		,t.teach_num
 		,t.star
 		,t.star_num
 		,t.label
 		,t.sum_com
+		
 		,t.location
 		,t.order_no
 		,t.status
 		,t.approver
 		,t.approve_datetime
+		
 		,t.remark
 		FROM
 		tgym_coach t RIGHT JOIN (SELECT * FROM tgym_coach tc ,(SELECT DISTINCT(tpc.coach_code) AS ocode
@@ -158,18 +193,26 @@
 		,user_id
 		,real_name
 		,pic
+		
 		,gender
 		,age
 		,pdf
 		,duration
+		,province
+		
+		,city
+		,area
 		,address
 		,adv_pic
 		,description
+		
 		,star
 		,star_num
 		,label
 		,sum_com
 		,location
+		
+		,teach_num
 		,order_no
 		,status
 		)
@@ -179,18 +222,26 @@
 		,#{userId}
 		,#{realName}
 		,#{pic}
+		
 		,#{gender}
 		,#{age}
 		,#{pdf}
 		,#{duration}
+		,#{province}
+		
+		,#{city}
+		,#{area}
 		,#{address}
 		,#{advPic}
 		,#{description}
+		
 		,#{star}
 		,#{starNum}
 		,#{label}
 		,#{sumCom}
 		,#{location}
+		
+		,#{teachNum}
 		,#{orderNo}
 		,#{status}
 		)
@@ -204,8 +255,13 @@
 		,gender = #{gender}
 		,age = #{age}
 		,pdf = #{pdf}
+		
 		,duration = #{duration}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
 		,address = #{address}
+		
 		,adv_pic = #{advPic}
 		,description = #{description}
 		,label = #{label}
@@ -235,8 +291,23 @@
 	<update id="update_location" parameterType="coach">
 		UPDATE tgym_coach
 		SET
-		location=#{location}
+		status=#{status}
+		,location=#{location}
 		,order_no=#{orderNo}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOff" parameterType="coach">
+		UPDATE tgym_coach
+		SET
+		status=#{status}
+		WHERE code = #{code}
+	</update>
+	<update id="update_teachNum" parameterType="coach">
+		UPDATE tgym_coach
+		SET
+		teach_num=#{teachNum}
 		WHERE code = #{code}
 	</update>
 </mapper>

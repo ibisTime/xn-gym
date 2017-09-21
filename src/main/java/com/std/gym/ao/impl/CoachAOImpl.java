@@ -104,7 +104,8 @@ public class CoachAOImpl implements ICoachAO {
     @Override
     public void editCoach(XN622091Req req) {
         Coach data = coachBO.getCoach(req.getCode());
-        if (!ECoachStatus.APPROVE_YES.getCode().equals(data.getStatus())) {
+        if (ECoachStatus.APPROVE_NO.getCode().equals(data.getStatus())
+                || ECoachStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             data.setStatus(ECoachStatus.TO_APPROVE.getCode());
             data.setRealName(req.getRealName());
             data.setGender(req.getGender());
@@ -207,12 +208,13 @@ public class CoachAOImpl implements ICoachAO {
     }
 
     @Override
-    public void editLocation(String code, String location, String orderNo) {
+    public void putOn(String code, String location, String orderNo,
+            String remark) {
         Coach coach = coachBO.getCoach(code);
         if (!ECoachStatus.APPROVE_YES.getCode().equals(coach.getStatus())) {
-            throw new BizException("xn0000", "该私教还未通过审核,不能设置位置");
+            throw new BizException("xn0000", "该私教还未通过审核,不能上架");
         }
-        coachBO.refreshCoach(coach, location, orderNo);
+        coachBO.refreshCoach(coach, location, orderNo, remark);
     }
 
     @Override
@@ -262,5 +264,14 @@ public class CoachAOImpl implements ICoachAO {
         Integer number = count.intValue();
         attendBO.saveAttend(data, activity, number);
         return code;
+    }
+
+    @Override
+    public void putOff(String code) {
+        Coach coach = coachBO.getCoach(code);
+        if (!ECoachStatus.PUTON.getCode().equals(coach.getStatus())) {
+            throw new BizException("xn0000", "该私教还未上架,不能下架");
+        }
+        coachBO.putOff(coach);
     }
 }

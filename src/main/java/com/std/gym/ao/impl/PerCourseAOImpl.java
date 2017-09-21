@@ -36,6 +36,8 @@ public class PerCourseAOImpl implements IPerCourseAO {
         data.setSkCycle(StringValidater.toInteger(req.getSkCycle()));
         data.setSkStartDatetime(req.getSkStartDatetime());
         data.setSkEndDatetime(req.getSkEndDatetime());
+        data.setAddress(req.getAddress());
+        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
         data.setPic(req.getPic());
         data.setAdvPic(req.getAdvPic());
         data.setDescription(req.getDescription());
@@ -51,6 +53,8 @@ public class PerCourseAOImpl implements IPerCourseAO {
         data.setSkCycle(StringValidater.toInteger(req.getSkCycle()));
         data.setSkStartDatetime(req.getSkStartDatetime());
         data.setSkEndDatetime(req.getSkEndDatetime());
+        data.setAddress(req.getAddress());
+        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
         data.setPic(req.getPic());
         data.setAdvPic(req.getAdvPic());
         data.setDescription(req.getDescription());

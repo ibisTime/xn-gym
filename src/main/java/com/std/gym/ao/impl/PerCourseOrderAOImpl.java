@@ -91,6 +91,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             DateUtil.FRONT_DATE_FORMAT_STRING));
         Integer skDays = 0;// 距离下次上课天数
         Integer skCycle = perCourse.getSkCycle();
+        // 判断上课人数与订单人数
+        if (quantity > perCourse.getTotalNum()) {
+            throw new BizException("xn0000", "预订人数不能多于课程限制人数");
+        }
         if (skCycle < weekDay) {// 下周预约
             skDays = weekDay - skCycle;
         } else if (skCycle > weekDay) {// 本周预约
@@ -112,6 +116,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn0000", "该课程已被预订");
         }
         Coach coach = coachBO.getCoach(perCourse.getCoachCode());
+        if (EBoolean.YES.getCode().equals(coach.getType())) {
+            address = perCourse.getAddress();
+        }
         PerCourseOrder order = new PerCourseOrder();
         String code = OrderNoGenerater.generate(EPrefixCode.PERCOURSEORDER
             .getCode());
@@ -194,7 +201,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         }
         smsOutBO.sentContent(order.getToUser(), "尊敬的" + content
                 + ",您在平台上发布的课程已被" + user.getNickname()
-                + "购买]。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
+                + "购买。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
         return new BooleanRes(true);
     }
 
@@ -232,7 +239,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             }
             smsOutBO.sentContent(order.getToUser(), "尊敬的" + content
                     + ",您在平台上发布的课程已被" + user.getNickname()
-                    + "购买]。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
+                    + "购买。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -250,7 +257,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         if (EBoolean.NO.getCode().equals(order.getType())) {
             content = "教练";
         }
-        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的订单" + "[编号为:"
+        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的订单[编号为:"
                 + order.getCode() + "]," + content + "已接单。详情请到“我的”里面查看。");
     }
 

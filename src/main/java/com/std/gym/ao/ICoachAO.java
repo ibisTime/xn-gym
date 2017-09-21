@@ -37,7 +37,10 @@ public interface ICoachAO {
 
     public XN622094Res getFrontCoach(String code);
 
-    public void editLocation(String code, String location, String orderNo);
+    public void putOn(String code, String location, String orderNo,
+            String remark);
+
+    public void putOff(String code);
 
     public String registerCoach(XN622221Req req);
 }

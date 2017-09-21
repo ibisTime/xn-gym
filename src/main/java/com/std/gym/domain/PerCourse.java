@@ -26,6 +26,12 @@ public class PerCourse extends ABaseDO {
     // 下课时间(止)
     private String skEndDatetime;
 
+    // 上课地址
+    private String address;
+
+    // 上课人数
+    private Integer totalNum;
+
     // 缩略图
     private String pic;
 
@@ -156,6 +162,22 @@ public class PerCourse extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(Integer totalNum) {
+        this.totalNum = totalNum;
     }
 
 }

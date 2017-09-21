@@ -19,6 +19,12 @@ public class XN622100Req {
     // 下课时间
     private String skEndDatetime;
 
+    // 上课地址
+    private String address;
+
+    // 上课人数
+    private String totalNum;
+
     // 缩略图
     private String pic;
 
@@ -104,5 +110,21 @@ public class XN622100Req {
 
     public void setCoachCode(String coachCode) {
         this.coachCode = coachCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(String totalNum) {
+        this.totalNum = totalNum;
     }
 }
