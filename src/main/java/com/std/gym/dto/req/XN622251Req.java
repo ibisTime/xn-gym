@@ -1,23 +1,26 @@
 package com.std.gym.dto.req;
 
 /**
- * 私教申请
+ * 修改私教信息
  * @author: asus 
- * @since: 2017年7月18日 上午11:12:21 
+ * @since: 2017年7月18日 下午12:31:26 
  * @history:
  */
-public class XN622090Req {
-    // 用户Id
-    private String userId;
+public class XN622251Req {
+    // 编号
+    private String code;
+
+    // 类型
+    private String type;
 
     // 真实姓名
     private String realName;
 
-    // 身份证/教练照
-    private String pdf;
-
     // 缩略图
     private String pic;
+
+    // 身份证/教练照
+    private String pdf;
 
     // 省
     private String province;
@@ -49,12 +52,28 @@ public class XN622090Req {
     // 图文描述
     private String description;
 
-    public String getUserId() {
-        return userId;
+    public String getCode() {
+        return code;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     public String getGender() {
@@ -105,22 +124,6 @@ public class XN622090Req {
         this.description = description;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
     public String getPdf() {
         return pdf;
     }
@@ -159,5 +162,13 @@ public class XN622090Req {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -11,6 +11,7 @@ import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.dao.IPerCourseOrderDAO;
 import com.std.gym.domain.PerCourseOrder;
+import com.std.gym.enums.EBoolean;
 import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.exception.BizException;
 
@@ -173,5 +174,12 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);
         perCourseOrderDAO.receiverOrder(order);
+    }
+
+    @Override
+    public void updateIsSend(PerCourseOrder order) {
+        order.setIsSend(EBoolean.YES.getCode());
+        perCourseOrderDAO.updateIsSend(order);
+
     }
 }

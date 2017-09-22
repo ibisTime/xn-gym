@@ -23,4 +23,6 @@ public interface IPerCourseOrderDAO extends IBaseDAO<PerCourseOrder> {
     int platCancelOrder(PerCourseOrder data);
 
     int userCancelOrder(PerCourseOrder data);
+
+    int updateIsSend(PerCourseOrder order);
 }

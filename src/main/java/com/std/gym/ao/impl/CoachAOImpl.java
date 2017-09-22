@@ -2,6 +2,7 @@ package com.std.gym.ao.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import com.std.gym.domain.User;
 import com.std.gym.dto.req.XN622090Req;
 import com.std.gym.dto.req.XN622091Req;
 import com.std.gym.dto.req.XN622221Req;
+import com.std.gym.dto.req.XN622251Req;
 import com.std.gym.dto.res.XN622094Res;
 import com.std.gym.enums.EActivityStatus;
 import com.std.gym.enums.EBoolean;
@@ -87,9 +89,13 @@ public class CoachAOImpl implements ICoachAO {
         data.setAdvPic(req.getAdvPic());
         data.setGender(req.getGender());
         data.setAge(StringValidater.toInteger(req.getAge()));
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
         data.setAddress(req.getAddress());
         data.setStar(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setStarNum(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setTeachNum(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setLocation(EBoolean.NO.getCode());
         data.setOrderNo(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setDuration(StringValidater.toInteger(req.getDuration()));
@@ -123,11 +129,13 @@ public class CoachAOImpl implements ICoachAO {
         data.setPic(req.getPic());
         data.setAdvPic(req.getAdvPic());
         data.setAge(StringValidater.toInteger(req.getAge()));
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
         data.setAddress(req.getAddress());
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setLabel(req.getLabel());
         data.setDescription(req.getDescription());
-
         coachBO.refreshCoach(data);
     }
 
@@ -211,8 +219,13 @@ public class CoachAOImpl implements ICoachAO {
     public void putOn(String code, String location, String orderNo,
             String remark) {
         Coach coach = coachBO.getCoach(code);
-        if (!ECoachStatus.APPROVE_YES.getCode().equals(coach.getStatus())) {
-            throw new BizException("xn0000", "该私教还未通过审核,不能上架");
+        Map<String, ECoachStatus> status = ECoachStatus.getDictTypeMap();
+        if (ECoachStatus.APPROVE_NO.getCode().equals(coach.getStatus())
+                || ECoachStatus.TO_APPROVE.getCode().equals(coach.getStatus())
+                || ECoachStatus.PUTON.getCode().equals(coach.getStatus())) {
+            ECoachStatus statusValue = status.get(coach.getStatus());
+            throw new BizException("xn0000", "该私教" + statusValue.getValue()
+                    + ",不能上架");
         }
         coachBO.refreshCoach(coach, location, orderNo, remark);
     }
@@ -273,5 +286,25 @@ public class CoachAOImpl implements ICoachAO {
             throw new BizException("xn0000", "该私教还未上架,不能下架");
         }
         coachBO.putOff(coach);
+    }
+
+    @Override
+    public void editCoachOss(XN622251Req req) {
+        Coach data = coachBO.getCoach(req.getCode());
+        data.setType(req.getType());
+        data.setRealName(req.getRealName());
+        data.setGender(req.getGender());
+        data.setPdf(req.getPdf());
+        data.setPic(req.getPic());
+        data.setAdvPic(req.getAdvPic());
+        data.setAge(StringValidater.toInteger(req.getAge()));
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        data.setAddress(req.getAddress());
+        data.setDuration(StringValidater.toInteger(req.getDuration()));
+        data.setLabel(req.getLabel());
+        data.setDescription(req.getDescription());
+        coachBO.refreshCoach(data);
     }
 }

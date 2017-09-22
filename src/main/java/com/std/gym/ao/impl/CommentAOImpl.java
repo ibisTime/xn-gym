@@ -112,6 +112,11 @@ public class CommentAOImpl implements ICommentAO {
         return code;
     }
 
+    public static void main(String[] args) {
+        Double o = 1.8D;
+        System.out.println(o.intValue());
+    }
+
     private String finishPerCourseOrder(String orderCode, String content,
             List<XN622200Req> itemScoreList, String status, String commer) {
         PerCourseOrder perCourseOrder = perCourseOrderBO
@@ -204,7 +209,7 @@ public class CommentAOImpl implements ICommentAO {
                 ESystemCode.SYSTEM_CODE.getCode());
             Long coachAmount = AmountUtil.mul(1L, perCourseOrder.getAmount()
                     * StringValidater.toDouble(coachSysConfig.getCvalue()));
-            if (coachAmount > 0) {
+            if (coachAmount >= 10) {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(),
                     perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
@@ -259,7 +264,7 @@ public class CommentAOImpl implements ICommentAO {
                 ESystemCode.SYSTEM_CODE.getCode());
             Long coachAmount = AmountUtil.mul(1L, perCourseOrder.getAmount()
                     * StringValidater.toDouble(coachSysConfig.getCvalue()));
-            if (coachAmount > 0) {
+            if (coachAmount >= 10) {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(),
                     perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
@@ -283,10 +288,13 @@ public class CommentAOImpl implements ICommentAO {
                         * StringValidater.toDouble(userRefereeSysConfig
                             .getCvalue()));
             // 给推荐人加钱
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-                user.getUserReferee(), ECurrency.CNY, userRefereeAmount,
-                EBizType.TJ, EBizType.TJ.getValue(), EBizType.TJ.getValue(),
-                perCourseOrder.getCode());
+            if (userRefereeAmount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), user.getUserReferee(),
+                    ECurrency.CNY, userRefereeAmount, EBizType.TJ,
+                    EBizType.TJ.getValue(), EBizType.TJ.getValue(),
+                    perCourseOrder.getCode());
+            }
         }
         if (star < coach.getStar()) {
             star = coach.getStar();

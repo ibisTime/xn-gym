@@ -91,4 +91,9 @@ public class PerCourseOrderDAOImpl extends AMybatisTemplate implements
     public int finishOrder(PerCourseOrder data) {
         return super.update(NAMESPACE.concat("update_finishOver"), data);
     }
+
+    @Override
+    public int updateIsSend(PerCourseOrder order) {
+        return super.update(NAMESPACE.concat("update_isSend"), order);
+    }
 }

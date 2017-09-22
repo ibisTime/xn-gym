@@ -275,6 +275,6 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(getDayofweek("2017-7-18"));
+        System.out.println(getRelativeDate(new Date(), -(60 * 60 * 2 + 1)));
     }
 }

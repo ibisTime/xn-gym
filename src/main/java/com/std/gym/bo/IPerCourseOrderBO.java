@@ -45,4 +45,6 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
 
     public void toFullForm(PerCourseOrder order, String updater, String remark);
 
+    public void updateIsSend(PerCourseOrder perCourseOrder);
+
 }

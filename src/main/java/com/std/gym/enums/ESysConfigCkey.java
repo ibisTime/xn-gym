@@ -19,8 +19,12 @@ public enum ESysConfigCkey {
     HKFC("HKFC", "推荐分成"), SJFC("SJFC", "私教分成"), WY("WY", "违约扣除比例"), DRFC(
             "DRFC", "达人分成"),
 
-    TTJFC("TTJFC", "团课教练分成"), WYSJFC("WYSJFC", "用户违约私教获得分成比例"), WYTTJFC(
-            "WYTTJFC", "用户违约团课教练分成"), WYDRFC("WYDRFC", "用户违约达人获得分成比例"), ;
+    TTJFC("TTJFC", "团课教练分成"), LHKFC("LHKFC", "部分违约用户分成"), WYSJFC("WYSJFC",
+            "用户违约私教获得分成比例"), WYTTJFC("WYTTJFC", "用户违约团课教练分成"), WYDRFC("WYDRFC",
+            "用户违约达人获得分成比例"),
+
+    QWY("QWY", "全部违约扣除比例"), QSJFC("QSJFC", "全部违约私教分成"), QTKFC("QTKFC",
+            "全部违约团课分成"), QDRFC("", "全部违约达人分成"), QHKFC("QHKFC", "全部违约获客分成");
 
     public static Map<String, ESysConfigCkey> getDictTypeMap() {
         Map<String, ESysConfigCkey> map = new HashMap<String, ESysConfigCkey>();

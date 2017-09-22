@@ -44,6 +44,15 @@
 			<if test="appointDatetime != null and appointDatetime != '' ">
 				AND t.appoint_datetime = #{appointDatetime}
 			</if>
+			<if test="isSend != null and isSend != '' ">
+				AND t.is_send = #{isSend}
+			</if>
+			<if test="appointBeginDatetime != null and appointBeginDatetime != '' ">
+				<![CDATA[AND t.appoint_datetime >= #{appointBeginDatetime}]]>
+			</if>	
+			<if test="appointEndDatetime != null and appointEndDatetime != '' ">
+				<![CDATA[AND t.appoint_datetime <= #{appointEndDatetime}]]>
+			</if>	
 			<if test="skDatetime != null and skDatetime != '' ">
 				AND t.sk_datetime = #{skDatetime}
 			</if>
@@ -116,6 +125,7 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.is_send
 		FROM
 		tgym_per_course_order t
 		<include refid="where_condition" />
@@ -152,6 +162,7 @@
 		,mobile
 		,apply_datetime
 		,apply_note
+		,is_send
 		)
 		VALUES(
 		#{code}
@@ -171,6 +182,7 @@
 		,#{mobile}
 		,#{applyDatetime}
 		,#{applyNote}
+		,#{isSend}
 		)
 	</insert>
 
@@ -252,6 +264,13 @@
 		UPDATE tgym_per_course_order
 		SET
 		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_isSend" parameterType="perCourseOrder">
+		UPDATE tgym_per_course_order
+		SET
+		is_send = #{isSend}
 		WHERE code = #{code}
 	</update>
 	

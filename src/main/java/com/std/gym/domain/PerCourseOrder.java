@@ -102,12 +102,21 @@ public class PerCourseOrder extends ABaseDO {
     // 备注
     private String remark;
 
+    // 是否已发短信
+    private String isSend;
+
     // ***********db***********
     // 下单时间（起）
     private Date applyBeginDatetime;
 
     // 下单时间（止）
     private Date applyEndDatetime;
+
+    // 预约时间（起）
+    private Date appointBeginDatetime;
+
+    // 预约时间（止）
+    private Date appointEndDatetime;
 
     // 用户名称
     private String realName;
@@ -399,6 +408,30 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setPreStatus(String preStatus) {
         this.preStatus = preStatus;
+    }
+
+    public Date getAppointBeginDatetime() {
+        return appointBeginDatetime;
+    }
+
+    public void setAppointBeginDatetime(Date appointBeginDatetime) {
+        this.appointBeginDatetime = appointBeginDatetime;
+    }
+
+    public Date getAppointEndDatetime() {
+        return appointEndDatetime;
+    }
+
+    public void setAppointEndDatetime(Date appointEndDatetime) {
+        this.appointEndDatetime = appointEndDatetime;
+    }
+
+    public String getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(String isSend) {
+        this.isSend = isSend;
     }
 
 }
