@@ -112,11 +112,6 @@ public class CommentAOImpl implements ICommentAO {
         return code;
     }
 
-    public static void main(String[] args) {
-        Double o = 1.8D;
-        System.out.println(o.intValue());
-    }
-
     private String finishPerCourseOrder(String orderCode, String content,
             List<XN622200Req> itemScoreList, String status, String commer) {
         PerCourseOrder perCourseOrder = perCourseOrderBO
@@ -197,11 +192,13 @@ public class CommentAOImpl implements ICommentAO {
                 ESystemCode.SYSTEM_CODE.getCode());
             Long amount = AmountUtil.mul(1000L,
                 Double.valueOf(sysConfig.getCvalue()));
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-                perCourseOrder.getApplyUser(), ECurrency.JF, amount,
-                EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
-                EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
-
+            if (amount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(),
+                    perCourseOrder.getApplyUser(), ECurrency.JF, amount,
+                    EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
+                    EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
+            }
             // 给私教加钱
             SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
                 ESysConfigCkey.SJFC.getCode(),
@@ -252,11 +249,13 @@ public class CommentAOImpl implements ICommentAO {
                 ESystemCode.SYSTEM_CODE.getCode());
             Long amount = AmountUtil.mul(1000L,
                 Double.valueOf(sysConfig.getCvalue()));
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
-                perCourseOrder.getApplyUser(), ECurrency.JF, amount,
-                EBizType.DRGMSJF, EBizType.DRGMSJF.getValue(),
-                EBizType.DRGMSJF.getValue(), perCourseOrder.getCode());
-
+            if (amount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(),
+                    perCourseOrder.getApplyUser(), ECurrency.JF, amount,
+                    EBizType.DRGMSJF, EBizType.DRGMSJF.getValue(),
+                    EBizType.DRGMSJF.getValue(), perCourseOrder.getCode());
+            }
             // 给私教加钱
             SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
                 ESysConfigCkey.DRFC.getCode(),

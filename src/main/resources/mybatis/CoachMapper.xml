@@ -58,7 +58,7 @@
 				AND t.city like "%"#{city}#"%"
 			</if>
 			<if test="area != null and area != '' ">
-				AND t.area like "%"#{area}#"%"
+				AND t.area in ("%"#{area}"%" or '%全部%')
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
