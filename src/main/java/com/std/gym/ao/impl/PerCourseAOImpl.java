@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.std.gym.ao.IPerCourseAO;
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.IPerCourseBO;
+import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.base.Paginable;
 import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
@@ -25,6 +26,9 @@ public class PerCourseAOImpl implements IPerCourseAO {
 
     @Autowired
     private ICoachBO coachBO;
+
+    @Autowired
+    private IPerCourseOrderBO perCourseOrderBO;
 
     @Override
     public String addPerCourse(XN622100Req req) {
@@ -78,7 +82,9 @@ public class PerCourseAOImpl implements IPerCourseAO {
             condition.setClassDatetime(null);
             condition.setSkCycle(week);
         }
-        return perCourseBO.getPaginable(start, limit, condition);
+        Paginable<PerCourse> page = perCourseBO.getPaginable(start, limit,
+            condition);
+        return page;
     }
 
     @Override

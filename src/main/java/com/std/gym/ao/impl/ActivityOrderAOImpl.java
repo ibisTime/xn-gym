@@ -315,7 +315,8 @@ public class ActivityOrderAOImpl implements IActivityOrderAO {
                 throw new BizException("xn0000", "离活动开始不到两小时,不能申请退款");
             }
             SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                ESysConfigCkey.WY.getCode(), ESystemCode.SYSTEM_CODE.getCode(),
+                ESysConfigCkey.ADWY.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
                 ESystemCode.SYSTEM_CODE.getCode());
             Long penalty = AmountUtil.mul(1L, order.getAmount()
                     * StringValidater.toDouble(sysConfig.getCvalue()));

@@ -110,6 +110,7 @@ public class CoachBOImpl extends PaginableBOImpl<Coach> implements ICoachBO {
         coach.setStar(star);
         coach.setStarNum(starNum);
         coach.setSumCom(coach.getSumCom() + 1);
+        coach.setTeachNum(coach.getTeachNum() + 1);
         coachDAO.updateStar(coach);
     }
 

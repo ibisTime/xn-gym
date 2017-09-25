@@ -210,8 +210,8 @@ public class CommentAOImpl implements ICommentAO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(),
                     perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
-                    EBizType.AJ_SKGM, EBizType.AJ_SKGM.getValue(),
-                    EBizType.AJ_SKGM.getValue(), perCourseOrder.getCode());
+                    EBizType.SKJFC, EBizType.SKJFC.getValue(),
+                    EBizType.SKJFC.getValue(), perCourseOrder.getCode());
                 smsOutBO.sentContent(perCourseOrder.getToUser(), "尊敬的教练,订单：["
                         + perCourseOrder.getCode() + "]已成功评价，收到分成"
                         + CalculationUtil.divi(coachAmount) + "元，登录网站可查看详情。");
@@ -267,8 +267,8 @@ public class CommentAOImpl implements ICommentAO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(),
                     perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
-                    EBizType.AJ_DRGM, EBizType.AJ_DRGM.getValue(),
-                    EBizType.AJ_DRGM.getValue(), perCourseOrder.getCode());
+                    EBizType.DRJFC, EBizType.DRJFC.getValue(),
+                    EBizType.DRJFC.getValue(), perCourseOrder.getCode());
                 smsOutBO.sentContent(perCourseOrder.getToUser(), "尊敬的达人,订单：["
                         + perCourseOrder.getCode() + "]已成功评价，收到分成"
                         + CalculationUtil.divi(coachAmount) + "元，登录网站可查看详情。");

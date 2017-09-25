@@ -117,10 +117,12 @@ public class CoachAOImpl implements ICoachAO {
             data.setGender(req.getGender());
             data.setPdf(req.getPdf());
         }
-        if (!data.getRealName().equals(req.getRealName())) {
+        if (null != req.getRealName()
+                && !data.getRealName().equals(req.getRealName())) {
             throw new BizException("xn0000", "姓名不可修改");
         }
-        if (!data.getGender().equals(req.getGender())) {
+        if (null != req.getGender()
+                && !data.getGender().equals(req.getGender())) {
             throw new BizException("xn0000", "性别不可修改");
         }
         if (null != req.getPdf() && !data.getPdf().equals(req.getPdf())) {

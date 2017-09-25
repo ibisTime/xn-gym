@@ -14,6 +14,8 @@ import com.std.gym.ao.IPerCourseOrderAO;
 import com.std.gym.bo.IAccountBO;
 import com.std.gym.bo.IActivityOrderBO;
 import com.std.gym.bo.ICoachBO;
+import com.std.gym.bo.ICommentBO;
+import com.std.gym.bo.IItemScoreBO;
 import com.std.gym.bo.IOrgCourseOrderBO;
 import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.IPerCourseOrderBO;
@@ -44,6 +46,7 @@ import com.std.gym.enums.EPayType;
 import com.std.gym.enums.EPerCourseOrderStatus;
 import com.std.gym.enums.EPrefixCode;
 import com.std.gym.enums.ESysConfigCkey;
+import com.std.gym.enums.ESysConfigType;
 import com.std.gym.enums.ESysUser;
 import com.std.gym.enums.ESystemCode;
 import com.std.gym.exception.BizException;
@@ -58,6 +61,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
     @Autowired
     private IPerCourseBO perCourseBO;
+
+    @Autowired
+    private ICommentBO commentBO;
 
     @Autowired
     private IActivityOrderBO activityOrderBO;
@@ -82,6 +88,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
 
     @Autowired
     private ISizeDataBO sizeDataBO;
+
+    @Autowired
+    private IItemScoreBO itemScoreBO;
 
     @Override
     public String commitOrder(String applyUser, String address, String mobile,
@@ -614,6 +623,194 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     public void changeOrder() {
         changeNoPayOrder();
         sendSmsOut();
+        commentOrder();
+    }
+
+    private void commentOrder() {
+        logger.info("******************两天未评论,系统自动开始评论************************");
+        PerCourseOrder condition = new PerCourseOrder();
+        condition.setStatus(EPerCourseOrderStatus.CLASS_OVER.getCode());
+        condition.setSkEndDatetime(DateUtil.getRelativeDate(new Date(),
+            (60 * 60 * 2 + 1)));
+        List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
+            .queryPerCourseOrderList(condition);
+        for (PerCourseOrder perCourseOrder : perCourseOrderList) {
+            String productCode = perCourseOrder.getPerCourseCode();
+            if (!EPerCourseOrderStatus.CLASS_OVER.getCode().equals(
+                perCourseOrder.getStatus())) {
+                throw new BizException("xn0000", "该私课订单还不能评论");
+            }
+
+            PerCourse perCourse = perCourseBO.getPerCourse(productCode);
+
+            // 统计分值，修改私教等级以及星数
+            Double totalScore = 0.0;// 分数
+            double num = 0.0;
+            List<SYSConfig> sysConfigList = sysConfigBO.querySYSConfigList("2");// 改动
+            // 记录得分项目,及得分
+            for (SYSConfig sysConfig : sysConfigList) {
+                num = 5 * StringValidater.toDouble(sysConfig.getCvalue());
+            }
+            totalScore = totalScore + num;
+
+            Coach coach = coachBO.getCoach(perCourse.getCoachCode());
+            int starNum = coach.getStarNum() + totalScore.intValue();// 星级数量
+
+            int star = coach.getStar(); // 教练等级
+            if (EBoolean.NO.getCode().equals(perCourseOrder.getType())) {
+                List<SYSConfig> jlSysConfigList = sysConfigBO
+                    .querySYSConfigList(ESysConfigType.LEVER_RULE.getCode());
+                for (SYSConfig sysConfig : jlSysConfigList) {
+                    if (starNum > StringValidater.toInteger(sysConfig
+                        .getCvalue())) {
+                        if (ESysConfigCkey.LXJL.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 0;
+                        } else if (ESysConfigCkey.YXJL.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 1;
+                        } else if (ESysConfigCkey.EXJL.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 2;
+                        } else if (ESysConfigCkey.SAXJL.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 3;
+                        } else if (ESysConfigCkey.SXJL.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 4;
+                        } else if (ESysConfigCkey.WXJL.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 5;
+                        }
+                    }
+                }
+                // 私课评论加积分
+                SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                    EBizType.SKGMSJF.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long amount = AmountUtil.mul(1000L,
+                    Double.valueOf(sysConfig.getCvalue()));
+                if (amount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        perCourseOrder.getApplyUser(), ECurrency.JF, amount,
+                        EBizType.SKGMSJF, EBizType.SKGMSJF.getValue(),
+                        EBizType.SKGMSJF.getValue(), perCourseOrder.getCode());
+                }
+                // 给私教加钱
+                SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.SJFC.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long coachAmount = AmountUtil.mul(
+                    1L,
+                    perCourseOrder.getAmount()
+                            * StringValidater.toDouble(coachSysConfig
+                                .getCvalue()));
+                if (coachAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
+                        EBizType.SKJFC, EBizType.SKJFC.getValue(),
+                        EBizType.SKJFC.getValue(), perCourseOrder.getCode());
+                    smsOutBO.sentContent(perCourseOrder.getToUser(),
+                        "尊敬的教练,订单：[" + perCourseOrder.getCode() + "]已成功评价，收到分成"
+                                + CalculationUtil.divi(coachAmount)
+                                + "元，登录网站可查看详情。");
+                }
+            } else if (EBoolean.YES.getCode().equals(perCourseOrder.getType())) {
+                List<SYSConfig> drSysConfigList = sysConfigBO
+                    .querySYSConfigList(ESysConfigType.DR_LEVER_RULE.getCode());
+                for (SYSConfig sysConfig : drSysConfigList) {
+                    if (starNum > StringValidater.toInteger(sysConfig
+                        .getCvalue())) {
+                        if (ESysConfigCkey.LXDR.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 0;
+                        } else if (ESysConfigCkey.YXDR.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 1;
+                        } else if (ESysConfigCkey.EXDR.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 2;
+                        } else if (ESysConfigCkey.SAXDR.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 3;
+                        } else if (ESysConfigCkey.SXDR.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 4;
+                        } else if (ESysConfigCkey.WXDR.getCode().equals(
+                            sysConfig.getCkey())) {
+                            star = 5;
+                        }
+                    }
+                }
+
+                // 达人课程评论加积分
+                SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                    EBizType.DRGMSJF.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long amount = AmountUtil.mul(1000L,
+                    Double.valueOf(sysConfig.getCvalue()));
+                if (amount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        perCourseOrder.getApplyUser(), ECurrency.JF, amount,
+                        EBizType.DRGMSJF, EBizType.DRGMSJF.getValue(),
+                        EBizType.DRGMSJF.getValue(), perCourseOrder.getCode());
+                }
+                // 给私教加钱
+                SYSConfig coachSysConfig = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.DRFC.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long coachAmount = AmountUtil.mul(
+                    1L,
+                    perCourseOrder.getAmount()
+                            * StringValidater.toDouble(coachSysConfig
+                                .getCvalue()));
+                if (coachAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        perCourseOrder.getToUser(), ECurrency.CNY, coachAmount,
+                        EBizType.DRJFC, EBizType.DRJFC.getValue(),
+                        EBizType.DRJFC.getValue(), perCourseOrder.getCode());
+                    smsOutBO.sentContent(perCourseOrder.getToUser(),
+                        "尊敬的达人,订单：[" + perCourseOrder.getCode() + "]已成功评价，收到分成"
+                                + CalculationUtil.divi(coachAmount)
+                                + "元，登录网站可查看详情。");
+                }
+            }
+
+            User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
+            if (StringUtils.isNotBlank(user.getUserReferee())) {
+                SYSConfig userRefereeSysConfig = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.HKFC.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long userRefereeAmount = AmountUtil.mul(
+                    1L,
+                    perCourseOrder.getAmount()
+                            * StringValidater.toDouble(userRefereeSysConfig
+                                .getCvalue()));
+                // 给推荐人加钱
+                if (userRefereeAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY,
+                        userRefereeAmount, EBizType.TJ, EBizType.TJ.getValue(),
+                        EBizType.TJ.getValue(), perCourseOrder.getCode());
+                }
+            }
+            if (star < coach.getStar()) {
+                star = coach.getStar();
+            }
+            coachBO.updateStar(coach, star, starNum);
+            perCourseOrderBO.finishOrder(perCourseOrder);
+        }
+        logger.info("******************两天未评论,系统自动评论结束************************");
     }
 
     private void sendSmsOut() {

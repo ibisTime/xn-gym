@@ -10,6 +10,8 @@ import java.util.Map;
  * @history:
  */
 public enum ESysConfigCkey {
+    ADWY("ADWY", "活动违约扣除比例"),
+
     LXJL("LXJL", "零星教练"), YXJL("YXJL", "一星教练"), EXJL("EXJL", "二星教练"), SAXJL(
             "SAXJL", "三星教练"), SXJL("SXJL", "四星教练"), WXJL("WXJL", "五星教练"),
 
