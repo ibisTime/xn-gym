@@ -53,6 +53,9 @@
 			<if test="appointEndDatetime != null and appointEndDatetime != '' ">
 				<![CDATA[AND t.appoint_datetime <= #{appointEndDatetime}]]>
 			</if>	
+			<if test="applyBeginDatetime != null and applyBeginDatetime != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyBeginDatetime}]]>
+			</if>	
 			<if test="skDatetime != null and skDatetime != '' ">
 				AND t.sk_datetime = #{skDatetime}
 			</if>
@@ -84,7 +87,7 @@
 				AND t.updater = #{updater}
 			</if>
 			<if test="skEndDatetime != null and skEndDatetime != '' ">
-				<![CDATA[AND t.sk_end_datetime >= #{skEndDatetime}]]>
+				<![CDATA[AND t.sk_end_datetime <= #{skEndDatetime}]]>
 			</if>
 			<if test="statusList != null and statusList != '' ">
 				AND t.status in 

@@ -33,6 +33,12 @@
 			<if test="coachStatus != null and coachStatus != '' ">
 				AND tm.status = #{coachStatus}
 			</if>
+			<if test="coachStatusList != null and coachStatusList != '' ">
+				AND tm.status in 
+                <foreach item="item" index="index" collection="coachStatusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 			<if test="activityCode != null and activityCode != '' ">
 				AND tm.activity_code = #{activityCode}
 			</if>

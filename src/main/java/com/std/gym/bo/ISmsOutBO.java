@@ -9,4 +9,13 @@ public interface ISmsOutBO {
      * @history:
      */
     void sentContent(String userId, String content);
+
+    /**
+     * 发送指定内容短信(系统)
+     * @param mobile
+     * @param content
+     * @create: 2017年2月13日 下午3:03:24 xieyj
+     * @history:
+     */
+    public void sendSmsOut(String mobile, String content);
 }

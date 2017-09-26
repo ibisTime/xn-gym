@@ -107,7 +107,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             throw new BizException("xn0000", "预订人数不能多于课程限制人数");
         }
         if (skCycle < weekDay) {// 下周预约
-            skDays = weekDay - skCycle;
+            skDays = 7 - (weekDay - skCycle);
         } else if (skCycle > weekDay) {// 本周预约
             skDays = skCycle - weekDay;
         }
@@ -285,7 +285,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         Date appointDatetime = DateUtil
             .strToDate(appoint + " " + order.getSkDatetime(),
                 DateUtil.DATA_TIME_PATTERN_1);
-        if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 1 + 1)).after(
+        if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 1 + 1)).before(
             appointDatetime)) {
             throw new BizException("xn0000", "距离上课时间超过一小时,不能上课");
         }
@@ -393,8 +393,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
                     ECurrency.CNY, coachAmount, EBizType.WYSJFC,
-                    EBizType.WYSJFC.getValue(), EBizType.WYSJFC.getValue(),
-                    order.getCode());
+                    "两小时前用户违约,获得分成", "两小时前用户违约,获得分成", order.getCode());
                 smsOutBO.sentContent(order.getToUser(),
                     "尊敬的教练,由于订单：[" + order.getCode() + "]在两小时前已取消，您收到分成"
                             + CalculationUtil.divi(coachAmount)
@@ -419,8 +418,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
                     ECurrency.CNY, coachAmount, EBizType.WYDRFC,
-                    EBizType.WYDRFC.getValue(), EBizType.WYDRFC.getValue(),
-                    order.getCode());
+                    "两小时前用户违约,获得分成", "两小时前用户违约,获得分成", order.getCode());
                 smsOutBO.sentContent(order.getToUser(),
                     "尊敬的达人,由于订单：[" + order.getCode() + "]在两小时前已取消，您收到分成"
                             + CalculationUtil.divi(coachAmount)
@@ -483,8 +481,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
                     ECurrency.CNY, coachAmount, EBizType.WYSJFC,
-                    EBizType.WYSJFC.getValue(), EBizType.WYSJFC.getValue(),
-                    order.getCode());
+                    "两小时内用户违约,获得分成", "两小时内用户违约,获得分成", order.getCode());
                 smsOutBO.sentContent(order.getToUser(),
                     "尊敬的教练,由于订单：[" + order.getCode() + "]在两小时内已取消，您收到分成"
                             + CalculationUtil.divi(coachAmount)
@@ -509,8 +506,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_ZWZJ.getCode(), order.getToUser(),
                     ECurrency.CNY, coachAmount, EBizType.WYDRFC,
-                    EBizType.WYDRFC.getValue(), EBizType.WYDRFC.getValue(),
-                    order.getCode());
+                    "两小时内用户违约,获得分成", "两小时内用户违约,获得分成", order.getCode());
                 smsOutBO.sentContent(order.getToUser(),
                     "尊敬的达人,由于订单：[" + order.getCode() + "]在两小时内已取消，您收到分成"
                             + CalculationUtil.divi(coachAmount)
@@ -585,10 +581,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             limit, condition);
         List<PerCourseOrder> list = page.getList();
         for (PerCourseOrder perCourseOrder : list) {
-            User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
-            perCourseOrder.setRealName(user.getNickname());
-            Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
-            perCourseOrder.setCoach(coach);
+            this.fullPerCourseOrder(perCourseOrder);
         }
         return page;
     }
@@ -598,28 +591,32 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         List<PerCourseOrder> list = perCourseOrderBO
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder perCourseOrder : list) {
-            User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
-            perCourseOrder.setRealName(user.getNickname());
-            Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
-            perCourseOrder.setCoach(coach);
+            this.fullPerCourseOrder(perCourseOrder);
         }
         return list;
+    }
+
+    private void fullPerCourseOrder(PerCourseOrder perCourseOrder) {
+        User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
+        perCourseOrder.setRealName(user.getNickname());
+        perCourseOrder.setPhoto(user.getPhoto());
+        Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
+        perCourseOrder.setCoach(coach);
+        List<SizeData> sizeDataList = sizeDataBO
+            .querySizeDataList(perCourseOrder.getCode());
+        perCourseOrder.setSizeDataList(sizeDataList);
     }
 
     @Override
     public PerCourseOrder getPerCourseOrder(String code) {
         PerCourseOrder perCourseOrder = perCourseOrderBO
             .getPerCourseOrder(code);
-        User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
-        perCourseOrder.setRealName(user.getNickname());
-        Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
-        perCourseOrder.setCoach(coach);
-        List<SizeData> sizeDataList = sizeDataBO.querySizeDataList(code);
-        perCourseOrder.setSizeDataList(sizeDataList);
+        this.fullPerCourseOrder(perCourseOrder);
         return perCourseOrder;
     }
 
     @Override
+    @Transactional
     public void changeOrder() {
         changeNoPayOrder();
         sendSmsOut();
@@ -631,7 +628,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         PerCourseOrder condition = new PerCourseOrder();
         condition.setStatus(EPerCourseOrderStatus.CLASS_OVER.getCode());
         condition.setSkEndDatetime(DateUtil.getRelativeDate(new Date(),
-            (60 * 60 * 2 + 1)));
+            -(60 * 60 * 24 * 2 + 1)));
         List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder perCourseOrder : perCourseOrderList) {
@@ -816,31 +813,33 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     private void sendSmsOut() {
         logger.info("***************开始扫描待订单，两小时内的发送短信***************");
         PerCourseOrder condition = new PerCourseOrder();
-        condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
-        condition.setAppointBeginDatetime(DateUtil.getRelativeDate(new Date(),
-            -(60 * 60 * 2 + 1)));
-        condition.setAppointEndDatetime(new Date());
+        condition.setStatus(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
+        condition.setAppointBeginDatetime(DateUtil.getAnyOneStart(new Date()));
+        condition.setAppointEndDatetime(DateUtil.getAnyOneEnd(new Date()));
         condition.setIsSend(EBoolean.NO.getCode());
         List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder perCourseOrder : perCourseOrderList) {
-            perCourseOrderBO.updateIsSend(perCourseOrder);
             Date appointDatetime = DateUtil.strToDate(
                 DateUtil.dateToStr(perCourseOrder.getAppointDatetime(),
                     DateUtil.FRONT_DATE_FORMAT_STRING)
                         + " "
-                        + perCourseOrder.getSkStartDatetime(),
+                        + perCourseOrder.getSkDatetime(),
                 DateUtil.DATA_TIME_PATTERN_1);
-            smsOutBO.sentContent(perCourseOrder.getApplyUser(),
-                "尊敬的用户,您在平台上购买的订单[编号为:" + perCourseOrder.getCode() + "],于"
-                        + appointDatetime + "开始上课。详情请到“我的”里面查看。引起的不便,请见谅。");
-            String content = "达人";
-            if (EBoolean.NO.getCode().equals(perCourseOrder.getType())) {
-                content = "教练";
+            if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 2 + 1)).after(
+                appointDatetime)) {
+                perCourseOrderBO.updateIsSend(perCourseOrder);
+                smsOutBO.sentContent(perCourseOrder.getMobile(),
+                    "尊敬的用户,您在平台上购买的订单[编号为:" + perCourseOrder.getCode() + "],于"
+                            + appointDatetime + "开始上课。详情请到“我的”里面查看。引起的不便,请见谅。");
+                String content = "达人";
+                if (EBoolean.NO.getCode().equals(perCourseOrder.getType())) {
+                    content = "教练";
+                }
+                smsOutBO.sentContent(perCourseOrder.getToUser(), "尊敬的"
+                        + content + ",您有订单[编号为:" + perCourseOrder.getCode()
+                        + "],于" + appointDatetime + "开始上课。请及时到指定地点上课。");
             }
-            smsOutBO.sentContent(perCourseOrder.getToUser(), "尊敬的" + content
-                    + ",您有订单[编号为:" + perCourseOrder.getCode() + "],于"
-                    + appointDatetime + "开始上课。请及时到指定地点上课。");
         }
         logger.info("***************结束扫描待订单，两小时内的发送短信***************");
     }
@@ -855,9 +854,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder perCourseOrder : perCourseOrderList) {
             perCourseOrderBO.platCancel(perCourseOrder, "系统取消", "超时支付,系统自动取消");
-            smsOutBO.sentContent(perCourseOrder.getApplyUser(),
-                "尊敬的用户,您在平台上购买的订单" + "[编号为:" + perCourseOrder.getCode()
-                        + "],3天未支付,系统已自动取消。详情请到“我的”里面查看。引起的不便,请见谅。");
+            smsOutBO.sendSmsOut(perCourseOrder.getMobile(), "尊敬的用户,您在平台上购买的订单"
+                    + "[编号为:" + perCourseOrder.getCode()
+                    + "],3天未支付,系统已自动取消。详情请到“我的”里面查看。引起的不便,请见谅。");
         }
         logger.info("***************结束扫描待订单，未支付的3天后取消***************");
     }

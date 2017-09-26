@@ -1,5 +1,7 @@
 package com.std.gym.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询参与
  * @author: asus 
@@ -29,6 +31,9 @@ public class XN622230Req extends APageReq {
 
     // 教练状态
     private String coachStatus;
+
+    // 教练状态
+    private List<String> coachStatusList;
 
     // 活动状态
     private String activityStatus;
@@ -108,5 +113,13 @@ public class XN622230Req extends APageReq {
 
     public void setActivityCode(String activityCode) {
         this.activityCode = activityCode;
+    }
+
+    public List<String> getCoachStatusList() {
+        return coachStatusList;
+    }
+
+    public void setCoachStatusList(List<String> coachStatusList) {
+        this.coachStatusList = coachStatusList;
     }
 }

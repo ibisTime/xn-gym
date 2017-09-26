@@ -124,6 +124,9 @@ public class PerCourseOrder extends ABaseDO {
     // 用户名称
     private Coach coach;
 
+    // 用户名称
+    private String photo;
+
     // 状态List
     private List<String> statusList;
 
@@ -432,6 +435,14 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setIsSend(String isSend) {
         this.isSend = isSend;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 }

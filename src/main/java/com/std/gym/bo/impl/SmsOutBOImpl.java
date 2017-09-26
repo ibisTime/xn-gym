@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.dto.req.XN001200Req;
+import com.std.gym.dto.req.XN804080Req;
+import com.std.gym.dto.res.PKCodeRes;
+import com.std.gym.enums.ESystemCode;
 import com.std.gym.http.BizConnecter;
 import com.std.gym.http.JsonUtils;
 
@@ -30,4 +33,20 @@ public class SmsOutBOImpl implements ISmsOutBO {
             logger.error("调用短信发送服务异常, 原因：" + e.getMessage());
         }
     }
+
+    @Override
+    public void sendSmsOut(String mobile, String content) {
+        try {
+            XN804080Req req = new XN804080Req();
+            req.setMobile(mobile);
+            req.setContent(content);
+            req.setType("M");
+            req.setSystemCode(ESystemCode.SYSTEM_CODE.getCode());
+            BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
+                PKCodeRes.class);
+        } catch (Exception e) {
+            logger.error("调用短信发送服务异常");
+        }
+    }
+
 }

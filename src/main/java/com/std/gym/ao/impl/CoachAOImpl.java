@@ -15,10 +15,12 @@ import com.std.gym.bo.IAttendBO;
 import com.std.gym.bo.ICoachBO;
 import com.std.gym.bo.ICommentBO;
 import com.std.gym.bo.IPerCourseBO;
+import com.std.gym.bo.IPerCourseOrderBO;
 import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Page;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Activity;
@@ -57,6 +59,9 @@ public class CoachAOImpl implements ICoachAO {
 
     @Autowired
     private IPerCourseBO perCourseBO;
+
+    @Autowired
+    private IPerCourseOrderBO perCourseOrderBO;
 
     @Autowired
     private ICommentBO commentBO;
@@ -211,10 +216,45 @@ public class CoachAOImpl implements ICoachAO {
         Coach coach = coachBO.getCoach(code);
         List<PerCourse> perCourseList = perCourseBO.queryPerCourseList(code);
         List<Comment> commentList = commentBO.queryCommentList(code, null);
+        this.fullPerCourse(perCourseList);
         res.setCoach(coach);
         res.setPerCourseList(perCourseList);
         res.setCommentList(commentList);
         return res;
+    }
+
+    private void fullPerCourse(List<PerCourse> list) {
+        for (PerCourse perCourse : list) {
+            perCourse.setIsAppoint(EBoolean.NO.getCode());
+            // 计算今天是周几
+            Integer weekDay = DateUtil.getDayofweek(DateUtil.dateToStr(
+                new Date(), DateUtil.FRONT_DATE_FORMAT_STRING));
+            Integer skDays = 0;// 距离下次上课天数
+            Integer skCycle = perCourse.getSkCycle();
+            if (skCycle < weekDay) {// 下周预约
+                skDays = weekDay - skCycle;
+            } else if (skCycle > weekDay) {// 本周预约
+                skDays = skCycle - weekDay;
+            }
+            Date appointment = DateUtil.getRelativeDate(
+                DateUtil.getTodayStart(), 24 * 3600 * skDays);
+            Date appointDatetime = DateUtil.strToDate(
+                DateUtil.dateToStr(appointment,
+                    DateUtil.FRONT_DATE_FORMAT_STRING)
+                        + " "
+                        + perCourse.getSkStartDatetime(),
+                DateUtil.DATA_TIME_PATTERN_1);
+            if (appointDatetime.before(new Date())) {
+                appointment = DateUtil.getRelativeDate(appointment,
+                    24 * 3600 * 7);
+            }
+            Long skCount = perCourseOrderBO.getTotalCount(perCourse.getCode(),
+                appointment, perCourse.getSkStartDatetime(),
+                perCourse.getSkEndDatetime());
+            if (skCount > 0) {
+                perCourse.setIsAppoint(EBoolean.YES.getCode());
+            }
+        }
     }
 
     @Override
@@ -252,16 +292,20 @@ public class CoachAOImpl implements ICoachAO {
         data.setAdvPic(req.getAdvPic());
         data.setGender(req.getGender());
         data.setAge(StringValidater.toInteger(req.getAge()));
-        data.setStar(StringValidater.toInteger(EBoolean.NO.getCode()));
-        data.setStarNum(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setStar(0);
+        data.setStarNum(0);
         data.setLocation(EBoolean.NO.getCode());
         data.setPdf(req.getPdf());
-        data.setOrderNo(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setOrderNo(0);
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setStatus(ECoachStatus.TO_APPROVE.getCode());
         data.setLabel(req.getLabel());
         data.setDescription(req.getDescription());
-        data.setSumCom(StringValidater.toInteger(EBoolean.NO.getCode()));
+        data.setTeachNum(0);
+        data.setSumCom(0);
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
         data.setAddress(req.getAddress());
         coachBO.saveCoach(data);
         Activity activity = activityBO.getActivity(req.getActivityCode());

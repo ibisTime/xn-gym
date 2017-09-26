@@ -60,6 +60,9 @@ public class PerCourse extends ABaseDO {
     // 上课时间
     private Date classDatetime;
 
+    // 是否预订(0 未预定，1，以约定)
+    private String isAppoint;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -178,6 +181,14 @@ public class PerCourse extends ABaseDO {
 
     public void setTotalNum(Integer totalNum) {
         this.totalNum = totalNum;
+    }
+
+    public String getIsAppoint() {
+        return isAppoint;
+    }
+
+    public void setIsAppoint(String isAppoint) {
+        this.isAppoint = isAppoint;
     }
 
 }

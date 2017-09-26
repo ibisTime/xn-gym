@@ -25,7 +25,7 @@ public class XN622221 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN622221Req.class);
         StringValidater.validateBlank(req.getKind(), req.getRealName(),
             req.getMobile(), req.getGender(), req.getAge(), req.getDuration(),
-            req.getActivityCode(), req.getAddress(), req.getAdvPic(),
-            req.getPdf());
+            req.getActivityCode(), req.getProvince(), req.getCity(),
+            req.getAdvPic(), req.getPdf());
     }
 }

@@ -1,6 +1,7 @@
 package com.std.gym.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.gym.dao.base.ABaseDO;
 
@@ -56,6 +57,9 @@ public class Attend extends ABaseDO {
 
     // 教练状态
     private String coachStatus;
+
+    // 教练状态
+    private List<String> coachStatusList;
 
     // 活动状态
     private String activityStatus;
@@ -189,6 +193,14 @@ public class Attend extends ABaseDO {
 
     public void setActivityStatus(String activityStatus) {
         this.activityStatus = activityStatus;
+    }
+
+    public List<String> getCoachStatusList() {
+        return coachStatusList;
+    }
+
+    public void setCoachStatusList(List<String> coachStatusList) {
+        this.coachStatusList = coachStatusList;
     }
 
 }

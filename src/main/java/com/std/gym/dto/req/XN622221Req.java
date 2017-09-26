@@ -10,7 +10,16 @@ public class XN622221Req {
     // 活动编号（必填）
     private String activityCode;
 
-    // 地址（必填）
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区
+    private String area;
+
+    // 地址
     private String address;
 
     // 健身照（必填）
@@ -159,6 +168,30 @@ public class XN622221Req {
 
     public void setUserReferee(String userReferee) {
         this.userReferee = userReferee;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
 }

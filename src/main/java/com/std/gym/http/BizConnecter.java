@@ -22,13 +22,15 @@ import com.std.gym.util.RegexUtils;
  * @history:
  */
 public class BizConnecter {
-	static Logger logger = Logger.getLogger(BizConnecter.class);
-	
+    static Logger logger = Logger.getLogger(BizConnecter.class);
+
     public static final String YES = "0";
 
     public static final String USER_URL = PropertiesUtil.Config.USER_URL;
 
     public static final String ACCOUNT_URL = PropertiesUtil.Config.ACCOUNT_URL;
+
+    public static final String SMS_URL = PropertiesUtil.Config.SMS_URL;
 
     public static final String POST_URL = "...";
 
@@ -52,10 +54,11 @@ public class BizConnecter {
         // 开始解析响应json
         String errorCode = RegexUtils.find(resJson, "errorCode\":\"(.+?)\"", 1);
         String errorInfo = RegexUtils.find(resJson, "errorInfo\":\"(.+?)\"", 1);
-//        System.out.println("request:" + code + " with parameters " + json
-//                + "\nresponse:" + errorCode + "<" + errorInfo + ">.");
-        logger.info("URL:"+ getPostUrl(code) +"\nrequest:" + code + " with parameters " + json
-                + "\nresponse:" + errorCode + "<" + errorInfo + ">.");
+        // System.out.println("request:" + code + " with parameters " + json
+        // + "\nresponse:" + errorCode + "<" + errorInfo + ">.");
+        logger.info("URL:" + getPostUrl(code) + "\nrequest:" + code
+                + " with parameters " + json + "\nresponse:" + errorCode + "<"
+                + errorInfo + ">.");
         if (YES.equalsIgnoreCase(errorCode)) {
             data = RegexUtils.find(resJson, "data\":(.*)\\}", 1);
         } else {
@@ -71,8 +74,10 @@ public class BizConnecter {
             postUrl = USER_URL;
         } else if (code.startsWith("002")) {
             postUrl = ACCOUNT_URL;
+        } else if (code.startsWith("804")) {
+            postUrl = SMS_URL;
         }
-        //System.out.println("访问请求:" + postUrl);
+        // System.out.println("访问请求:" + postUrl);
         return postUrl;
     }
 }

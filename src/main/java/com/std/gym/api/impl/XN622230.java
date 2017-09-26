@@ -28,6 +28,7 @@ public class XN622230 extends AProcessor {
         Attend condition = new Attend();
         condition.setCode(req.getCode());
         condition.setCoachStatus(req.getCoachStatus());
+        condition.setCoachStatusList(req.getCoachStatusList());
         condition.setActivityStatus(req.getActivityStatus());
         condition.setCoachCode(req.getCoachCode());
         condition.setActivityCode(req.getActivityCode());
