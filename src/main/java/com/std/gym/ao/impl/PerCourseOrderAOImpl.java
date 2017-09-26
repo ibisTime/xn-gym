@@ -813,7 +813,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     private void sendSmsOut() {
         logger.info("***************开始扫描待订单，两小时内的发送短信***************");
         PerCourseOrder condition = new PerCourseOrder();
-        condition.setStatus(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
+        statusList.add(EPerCourseOrderStatus.PAYSUCCESS.getCode());
+        condition.setStatusList(statusList);
         condition.setAppointBeginDatetime(DateUtil.getAnyOneStart(new Date()));
         condition.setAppointEndDatetime(DateUtil.getAnyOneEnd(new Date()));
         condition.setIsSend(EBoolean.NO.getCode());
@@ -828,17 +831,19 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 DateUtil.DATA_TIME_PATTERN_1);
             if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 2 + 1)).after(
                 appointDatetime)) {
+                String appoint = DateUtil.dateToStr(appointDatetime,
+                    DateUtil.DATA_TIME_PATTERN_1);
                 perCourseOrderBO.updateIsSend(perCourseOrder);
                 smsOutBO.sentContent(perCourseOrder.getMobile(),
                     "尊敬的用户,您在平台上购买的订单[编号为:" + perCourseOrder.getCode() + "],于"
-                            + appointDatetime + "开始上课。详情请到“我的”里面查看。引起的不便,请见谅。");
+                            + appoint + "开始上课。详情请到“我的”里面查看。引起的不便,请见谅。");
                 String content = "达人";
                 if (EBoolean.NO.getCode().equals(perCourseOrder.getType())) {
                     content = "教练";
                 }
                 smsOutBO.sentContent(perCourseOrder.getToUser(), "尊敬的"
                         + content + ",您有订单[编号为:" + perCourseOrder.getCode()
-                        + "],于" + appointDatetime + "开始上课。请及时到指定地点上课。");
+                        + "],于" + appoint + "开始上课。请及时到指定地点上课。");
             }
         }
         logger.info("***************结束扫描待订单，两小时内的发送短信***************");
@@ -866,6 +871,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         XN622920Res res = new XN622920Res();
         List<String> statusList = new ArrayList<String>();
         // 统计活动未完成的订单
+        statusList.add(EActivityOrderStatus.NOTPAY.getCode());
         statusList.add(EActivityOrderStatus.PAYSUCCESS.getCode());
         statusList.add(EActivityOrderStatus.APPLY_REFUND.getCode());
         statusList.add(EActivityOrderStatus.REFUND_NO.getCode());
@@ -874,6 +880,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             statusList);
         // 统计团课未完成的订单
         statusList.removeAll(statusList);
+        statusList.add(EOrgCourseOrderStatus.NOTPAY.getCode());
         statusList.add(EOrgCourseOrderStatus.PAYSUCCESS.getCode());
         statusList.add(EOrgCourseOrderStatus.APPLY_REFUND.getCode());
         statusList.add(EOrgCourseOrderStatus.REFUND_NO.getCode());
@@ -883,6 +890,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             statusList);
         // 统计达人未完成的订单
         statusList.removeAll(statusList);
+        statusList.add(EPerCourseOrderStatus.NOTPAY.getCode());
         statusList.add(EPerCourseOrderStatus.PAYSUCCESS.getCode());
         statusList.add(EPerCourseOrderStatus.RECEIVER_ORDER.getCode());
         statusList.add(EPerCourseOrderStatus.HAVE_CLASS.getCode());

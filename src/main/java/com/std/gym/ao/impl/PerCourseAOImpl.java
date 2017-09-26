@@ -100,7 +100,7 @@ public class PerCourseAOImpl implements IPerCourseAO {
             Integer skDays = 0;// 距离下次上课天数
             Integer skCycle = perCourse.getSkCycle();
             if (skCycle < weekDay) {// 下周预约
-                skDays = 7 - (weekDay - skCycle);
+                skDays =7-(weekDay - skCycle);
             } else if (skCycle > weekDay) {// 本周预约
                 skDays = skCycle - weekDay;
             }
