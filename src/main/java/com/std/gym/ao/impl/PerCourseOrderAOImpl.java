@@ -780,7 +780,6 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                                 + "元，登录网站可查看详情。");
                 }
             }
-
             User user = userBO.getRemoteUser(perCourseOrder.getApplyUser());
             if (StringUtils.isNotBlank(user.getUserReferee())) {
                 SYSConfig userRefereeSysConfig = sysConfigBO.getConfigValue(
@@ -801,6 +800,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                         EBizType.TJ.getValue(), perCourseOrder.getCode());
                 }
             }
+
             if (star < coach.getStar()) {
                 star = coach.getStar();
             }
