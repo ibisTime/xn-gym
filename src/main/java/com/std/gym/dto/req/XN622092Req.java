@@ -13,6 +13,9 @@ public class XN622092Req {
     // 审批结果（1 通过，0不通过）
     private String result;
 
+    // 信用额
+    private String creditAmount;
+
     // 审批人
     private String approver;
 
@@ -50,4 +53,13 @@ public class XN622092Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getCreditAmount() {
+        return creditAmount;
+    }
+
+    public void setCreditAmount(String creditAmount) {
+        this.creditAmount = creditAmount;
+    }
+
 }

@@ -22,6 +22,7 @@
 		<result column="pay_type" property="payType" />
 		<result column="pay_amount" property="payAmount" />
 		<result column="penalty" property="penalty" />
+		<result column="coach_penalty" property="coachPenalty" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		<result column="pay_datetime" property="payDatetime" />
@@ -118,6 +119,7 @@
 		,t.pay_type
 		,t.pay_amount
 		,t.penalty
+		,t.coach_penalty
 		,t.pay_group
 		,t.pay_code
 		,t.pay_datetime
@@ -235,6 +237,7 @@
 		SET
 		pre_status = #{preStatus}
 		,status = #{status}
+		,coach_penalty=#{coachPenalty}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

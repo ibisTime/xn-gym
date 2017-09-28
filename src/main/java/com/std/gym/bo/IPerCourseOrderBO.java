@@ -33,7 +33,8 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
     public void userCancel(PerCourseOrder order, Long penalty, String updater,
             String remark);
 
-    public void platCancel(PerCourseOrder order, String updater, String remark);
+    public void platCancel(PerCourseOrder order, Long coachPenalty,
+            String updater, String remark);
 
     public void finishOrder(PerCourseOrder perCourseOrder);
 

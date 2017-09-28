@@ -86,6 +86,9 @@ public class Coach extends ABaseDO {
     // 审核人
     private String approver;
 
+    // 信用额
+    private Long creditAmount;
+
     // 审核时间
     private Date approveDatetime;
 
@@ -343,6 +346,14 @@ public class Coach extends ABaseDO {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public Long getCreditAmount() {
+        return creditAmount;
+    }
+
+    public void setCreditAmount(Long creditAmount) {
+        this.creditAmount = creditAmount;
     }
 
 }

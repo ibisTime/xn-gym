@@ -81,6 +81,9 @@ public class PerCourseOrder extends ABaseDO {
     // 违约金
     private Long penalty;
 
+    // 违约金
+    private Long coachPenalty;
+
     // 申请人
     private String applyUser;
 
@@ -443,6 +446,14 @@ public class PerCourseOrder extends ABaseDO {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public Long getCoachPenalty() {
+        return coachPenalty;
+    }
+
+    public void setCoachPenalty(Long coachPenalty) {
+        this.coachPenalty = coachPenalty;
     }
 
 }

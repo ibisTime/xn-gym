@@ -102,6 +102,7 @@ public class CoachAOImpl implements ICoachAO {
         data.setStarNum(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setTeachNum(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setLocation(EBoolean.NO.getCode());
+        data.setCreditAmount(0L);
         data.setOrderNo(StringValidater.toInteger(EBoolean.NO.getCode()));
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setStatus(ECoachStatus.TO_APPROVE.getCode());
@@ -147,8 +148,8 @@ public class CoachAOImpl implements ICoachAO {
     }
 
     @Override
-    public void approveCoach(String code, String result, String approver,
-            String remark) {
+    public void approveCoach(String code, String result, String creditAmount,
+            String approver, String remark) {
         Coach data = coachBO.getCoach(code);
         if (!ECoachStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该信息已审批过,无需再次审批");
@@ -159,6 +160,9 @@ public class CoachAOImpl implements ICoachAO {
         } else if (EBoolean.YES.getCode().equals(result)) {
             status = ECoachStatus.APPROVE_YES;
         }
+        if (ECoachStatus.APPROVE_YES.getCode().equals(status.getCode())) {
+            StringValidater.validateBlank(creditAmount);
+        }
         String type = null;
         if (EBoolean.NO.getCode().equals(data.getType())) {
             type = "教练";
@@ -167,7 +171,8 @@ public class CoachAOImpl implements ICoachAO {
         }
         smsOutBO.sentContent(data.getUserId(), "尊敬的用户,您提交的" + type + "申请"
                 + status.getValue() + ",详情请登录网站进行查看。");
-        coachBO.approveCoach(data, status.getCode(), approver, remark);
+        coachBO.approveCoach(data, status.getCode(), creditAmount, approver,
+            remark);
     }
 
     @Override
@@ -348,6 +353,7 @@ public class CoachAOImpl implements ICoachAO {
         data.setCity(req.getCity());
         data.setArea(req.getArea());
         data.setAddress(req.getAddress());
+        data.setCreditAmount(StringValidater.toLong(req.getCreditAmount()));
         data.setDuration(StringValidater.toInteger(req.getDuration()));
         data.setLabel(req.getLabel());
         data.setDescription(req.getDescription());

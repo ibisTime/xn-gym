@@ -15,8 +15,8 @@ public interface ICoachBO extends IPaginableBO<Coach> {
 
     public void refreshCoach(Coach data);
 
-    public void approveCoach(Coach data, String status, String approver,
-            String remark);
+    public void approveCoach(Coach data, String status, String creditAmount,
+            String approver, String remark);
 
     public List<Coach> queryCoachList(Coach condition);
 

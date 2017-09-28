@@ -53,10 +53,11 @@ public class CoachBOImpl extends PaginableBOImpl<Coach> implements ICoachBO {
     }
 
     @Override
-    public void approveCoach(Coach data, String status, String approver,
-            String remark) {
+    public void approveCoach(Coach data, String status, String creditAmount,
+            String approver, String remark) {
         data.setStatus(status);
         data.setApprover(approver);
+        data.setCreditAmount(StringValidater.toLong(creditAmount));
         data.setApproveDatetime(new Date());
         data.setRemark(remark);
         coachDAO.approveCoach(data);

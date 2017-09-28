@@ -22,8 +22,8 @@ public interface ICoachAO {
 
     public void editCoach(XN622091Req req);
 
-    public void approveCoach(String code, String result, String approver,
-            String remark);
+    public void approveCoach(String code, String result, String creditAmount,
+            String approver, String remark);
 
     public Paginable<Coach> queryCoachPage(int start, int limit, Coach condition);
 

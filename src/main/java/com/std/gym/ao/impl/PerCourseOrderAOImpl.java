@@ -37,6 +37,7 @@ import com.std.gym.domain.SizeData;
 import com.std.gym.domain.User;
 import com.std.gym.dto.res.BooleanRes;
 import com.std.gym.dto.res.XN622920Res;
+import com.std.gym.dto.res.XN622921Res;
 import com.std.gym.enums.EActivityOrderStatus;
 import com.std.gym.enums.EBizType;
 import com.std.gym.enums.EBoolean;
@@ -213,7 +214,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         }
         smsOutBO.sentContent(order.getToUser(), "尊敬的" + content
                 + ",您在平台上发布的课程已被" + user.getNickname()
-                + "购买。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
+                + "购买,如15分钟内未处理,系统将自动为您接单。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
         return new BooleanRes(true);
     }
 
@@ -251,7 +252,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             }
             smsOutBO.sentContent(order.getToUser(), "尊敬的" + content
                     + ",您在平台上发布的课程已被" + user.getNickname()
-                    + "购买。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
+                    + "购买,如15分钟内未处理,系统将自动为您接单。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
         } else {
             logger.info("订单号：" + order.getCode() + "，已成功支付,无需重复支付");
         }
@@ -326,7 +327,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             }
         }
         perCourseOrderBO.classOver(order, updater, remark);
-        smsOutBO.sentContent(order.getApplyUser(), "尊敬的用户,您在平台上购买的订单" + "[编号为:"
+        smsOutBO.sendSmsOut(order.getMobile(), "尊敬的用户,您在平台上购买的订单" + "[编号为:"
                 + order.getCode() + "],已经下课了。请您对此次订单进行评价,谢谢。");
     }
 
@@ -539,6 +540,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
     }
 
     @Override
+    @Transactional
     public void platCancel(String orderCode, String updater, String remark) {
         PerCourseOrder order = perCourseOrderBO.getPerCourseOrder(orderCode);
         if (EPerCourseOrderStatus.USER_CANCEL.getCode().equals(
@@ -553,25 +555,371 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                     order.getStatus())) {
             throw new BizException("xn0000", "该私课订单状态下，不能取消");
         }
+        Long penalty = 0L;
         if (EPerCourseOrderStatus.PAYSUCCESS.getCode()
-            .equals(order.getStatus())
-                || EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
-                    order.getStatus())
-                || EPerCourseOrderStatus.HAVE_CLASS.getCode().equals(
-                    order.getStatus())) {
+            .equals(order.getStatus())) {
+            // 支付时取消,直接退款
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
                 order.getApplyUser(), ECurrency.CNY, order.getAmount(),
                 EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
                 EBizType.AJ_SKGMTK.getValue(), order.getCode());
+        } else if (EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
+            order.getStatus())) {
+            String appoint = DateUtil.dateToStr(order.getAppointDatetime(),
+                DateUtil.FRONT_DATE_FORMAT_STRING);
+            Date appointDatetime = DateUtil.strToDate(
+                appoint + " " + order.getSkDatetime(),
+                DateUtil.DATA_TIME_PATTERN_1);
+            // 接单时
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, order.getAmount(),
+                EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
+                EBizType.AJ_SKGMTK.getValue(), order.getCode());
+            if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 2 + 1)).after(
+                appointDatetime)) {
+                penalty = this.allWYB(order);
+            } else {
+                penalty = this.bfWYB(order);
+            }
+        } else if (EPerCourseOrderStatus.HAVE_CLASS.getCode().equals(
+            order.getStatus())) {
+            // 全部退款
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZWZJ.getCode(),
+                order.getApplyUser(), ECurrency.CNY, order.getAmount(),
+                EBizType.AJ_SKGMTK, EBizType.AJ_SKGMTK.getValue(),
+                EBizType.AJ_SKGMTK.getValue(), order.getCode());
+            penalty = this.allWYS(order);
         }
         String content = "达人";
         if (EBoolean.NO.getCode().equals(order.getType())) {
             content = "教练";
         }
-        smsOutBO.sentContent(order.getApplyUser(), "尊敬的" + content
-                + ",您在平台上购买的订单" + "[编号为:" + order.getCode()
+        Account account = accountBO.getRemoteAccount(order.getToUser(),
+            ECurrency.CNY);
+        Coach coach = coachBO.getCoachByUserId(order.getToUser());
+        if (account.getAmount() <= (-coach.getCreditAmount())) {
+            coachBO.putOff(coach);
+        }
+        smsOutBO.sentContent(order.getMobile(), "尊敬的" + content + ",您在平台上购买的订单"
+                + "[编号为:" + order.getCode()
                 + "],已被教练取消。详情请到“我的”里面查看。引起的不便,请见谅。");
-        perCourseOrderBO.platCancel(order, updater, remark);
+        perCourseOrderBO.platCancel(order, penalty, updater, remark);
+    }
+
+    private Long allWYS(PerCourseOrder order) {
+        Long penalty = 0L;
+        // 类型（0、私教订单。1、达人订单）
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            // 计算违约金额
+            SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
+                ESysConfigCkey.SBWY.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            penalty = AmountUtil.mul(order.getAmount(),
+                StringValidater.toDouble(sysConfigWY.getCvalue()));
+            // 平台会收到多少教练违约金
+            if (penalty >= 10) {
+                accountBO.doTransferAmountRemote(order.getToUser(),
+                    ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, penalty,
+                    EBizType.BWYYHFC, "上课后教练违约,扣除违约金额", "上课后教练违约,获得违约金额",
+                    order.getCode());
+            }
+            // 用户除了退款还会获得多少违约金
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.SBWYYHFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penaltyAmount = AmountUtil.mul(penalty,
+                StringValidater.toDouble(sysConfig.getCvalue()));
+            if (penaltyAmount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, penaltyAmount, EBizType.BWYYHFCY,
+                    "上课后教练违约,获得违约分成", "上课后教练违约,获得违约分成", order.getCode());
+            }
+            Long wyAmount = 0L;
+            User user = userBO.getRemoteUser(order.getApplyUser());
+            if (StringUtils.isNotEmpty(user.getUserReferee())) {
+                // 两小时前教练违约,推荐人获得多少钱
+                SYSConfig tj = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.BQ.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                wyAmount = AmountUtil.mul(penalty,
+                    StringValidater.toDouble(tj.getCvalue()));
+                if (wyAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY, wyAmount,
+                        EBizType.TJ, "上课后教练违约,获得推荐分成", "上课后教练违约,获得推荐分成",
+                        order.getCode());
+                    smsOutBO.sentContent(user.getUserReferee(), "尊敬的用户,由于订单：["
+                            + order.getCode() + "]在距离上课后被教练取消，您收到推荐分成"
+                            + CalculationUtil.divi(wyAmount) + "元，登录网站可查看详情。");
+                }
+            }
+        } else if (EBoolean.YES.getCode().equals(order.getType())) {
+            // 计算违约金额
+            SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
+                ESysConfigCkey.SMWY.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            penalty = AmountUtil.mul(order.getAmount(),
+                StringValidater.toDouble(sysConfigWY.getCvalue()));
+            // 平台会收到多少教练违约金
+            if (penalty >= 10) {
+                accountBO.doTransferAmountRemote(order.getToUser(),
+                    ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, penalty,
+                    EBizType.QWYYHFC, "上课后达人违约,扣除违约金额", "上课后达人违约,获得违约金额",
+                    order.getCode());
+            }
+            // 用户除了退款还会获得多少违约金
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.SDWYYHFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penaltyAmount = AmountUtil.mul(penalty,
+                StringValidater.toDouble(sysConfig.getCvalue()));
+            if (penaltyAmount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, penaltyAmount, EBizType.QWYYHFCY,
+                    "上课后达人违约,获得分成", "上课后达人违约,获得分成", order.getCode());
+            }
+            Long wyAmount = 0L;
+            User user = userBO.getRemoteUser(order.getApplyUser());
+            if (StringUtils.isNotEmpty(user.getUserReferee())) {
+                // 两小时前达人违约,推荐人获得多少钱
+                SYSConfig tj = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.MLXSQ.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                wyAmount = AmountUtil.mul(penalty,
+                    StringValidater.toDouble(tj.getCvalue()));
+                if (wyAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY, wyAmount,
+                        EBizType.TJ, "上课后达人违约,获得推荐分成", "上课后达人违约,获得推荐分成",
+                        order.getCode());
+                    smsOutBO.sentContent(user.getUserReferee(), "尊敬的用户,由于订单：["
+                            + order.getCode() + "]在上课后被达人取消，您收到推荐分成"
+                            + CalculationUtil.divi(wyAmount) + "元，登录网站可查看详情。");
+                }
+            }
+        }
+        return penalty;
+    }
+
+    // 教练两小时前违约
+    private Long bfWYB(PerCourseOrder order) {
+        Long penalty = 0L;
+        // 类型（0、私教订单。1、达人订单）
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            // 计算违约金额
+            SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
+                ESysConfigCkey.BWY.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            penalty = AmountUtil.mul(order.getAmount(),
+                StringValidater.toDouble(sysConfigWY.getCvalue()));
+            // 平台会收到多少教练违约金
+            if (penalty >= 10) {
+                accountBO.doTransferAmountRemote(order.getToUser(),
+                    ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, penalty,
+                    EBizType.BWYYHFC, "两小时前教练违约,扣除违约金额", "两小时前教练违约,获得违约金额",
+                    order.getCode());
+            }
+            // 用户除了退款还会获得多少违约金
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.BWYYHFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penaltyAmount = AmountUtil.mul(penalty,
+                StringValidater.toDouble(sysConfig.getCvalue()));
+            if (penaltyAmount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, penaltyAmount, EBizType.BWYYHFCY,
+                    "两小时前教练违约,用户获得违约分成", "两小时前教练违约,用户获得违约分成", order.getCode());
+            }
+            Long wyAmount = 0L;
+            User user = userBO.getRemoteUser(order.getApplyUser());
+            if (StringUtils.isNotEmpty(user.getUserReferee())) {
+                // 两小时前教练违约,推荐人获得多少钱
+                SYSConfig tj = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.BLXSQ.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                wyAmount = AmountUtil.mul(penalty,
+                    StringValidater.toDouble(tj.getCvalue()));
+                if (wyAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY, wyAmount,
+                        EBizType.TJ, "两小时前教练违约,获得推荐分成", "两小时前教练违约,获得推荐分成",
+                        order.getCode());
+                    smsOutBO.sentContent(user.getUserReferee(), "尊敬的用户,由于订单：["
+                            + order.getCode() + "]在距离上课两小时前已取消，您收到推荐分成"
+                            + CalculationUtil.divi(wyAmount) + "元，登录网站可查看详情。");
+                }
+            }
+        } else if (EBoolean.YES.getCode().equals(order.getType())) {
+            // 计算违约金额
+            SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
+                ESysConfigCkey.MWY.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            penalty = AmountUtil.mul(order.getAmount(),
+                StringValidater.toDouble(sysConfigWY.getCvalue()));
+            // 平台会收到多少教练违约金
+            if (penalty >= 10) {
+                accountBO.doTransferAmountRemote(order.getToUser(),
+                    ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, penalty,
+                    EBizType.QWYYHFC, "两小时前达人违约,扣除违约金额", "两小时前达人违约,获得违约金额",
+                    order.getCode());
+            }
+            // 用户除了退款还会获得多少违约金
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.MWYYHFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long penaltyAmount = AmountUtil.mul(penalty,
+                StringValidater.toDouble(sysConfig.getCvalue()));
+            if (penaltyAmount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, penaltyAmount, EBizType.QWYYHFCY,
+                    "两小时前达人违约,获得分成", "两小时前达人违约,获得分成", order.getCode());
+            }
+            Long wyAmount = 0L;
+            User user = userBO.getRemoteUser(order.getApplyUser());
+            if (StringUtils.isNotEmpty(user.getUserReferee())) {
+                // 两小时前达人违约,推荐人获得多少钱
+                SYSConfig tj = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.MLXSQ.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                wyAmount = AmountUtil.mul(penalty,
+                    StringValidater.toDouble(tj.getCvalue()));
+                if (wyAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY, wyAmount,
+                        EBizType.TJ, "两小时前达人违约,获得推荐分成", "两小时前达人违约,获得推荐分成",
+                        order.getCode());
+                    smsOutBO.sentContent(user.getUserReferee(), "尊敬的用户,由于订单：["
+                            + order.getCode() + "]在上课两小时前已取消，您收到推荐分成"
+                            + CalculationUtil.divi(wyAmount) + "元，登录网站可查看详情。");
+                }
+            }
+        }
+        return penalty;
+    }
+
+    // 教练两小时后违约
+    private Long allWYB(PerCourseOrder order) {
+        Long penalty = 0L;
+        // 类型（0、私教订单。1、达人订单）
+        if (EBoolean.NO.getCode().equals(order.getType())) {
+            // 计算违约金额
+            SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
+                ESysConfigCkey.QBWY.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            penalty = AmountUtil.mul(order.getAmount(),
+                StringValidater.toDouble(sysConfigWY.getCvalue()));
+            // 平台会收到多少教练违约金
+            if (penalty >= 10) {
+                accountBO.doTransferAmountRemote(order.getToUser(),
+                    ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, penalty,
+                    EBizType.BWYYHFC, "两小时内教练违约,扣除违约金额", "两小时内教练违约,获得违约金额",
+                    order.getCode());
+            }
+            // 私教违约,用户获得多少钱
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.QBWYYHFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long coachAmount = AmountUtil.mul(penalty,
+                StringValidater.toDouble(sysConfig.getCvalue()));
+            if (coachAmount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, coachAmount, EBizType.BWYYHFCY,
+                    "两小时内教练违约,获得违约金", "两小时内教练违约,获得违约金", order.getCode());
+            }
+            User user = userBO.getRemoteUser(order.getApplyUser());
+            if (StringUtils.isNotEmpty(user.getUserReferee())) {
+                // 推荐人获得多少钱
+                SYSConfig tj = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.BLXSN.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long tjAmount = AmountUtil.mul(penalty,
+                    StringValidater.toDouble(tj.getCvalue()));
+                if (tjAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY, tjAmount,
+                        EBizType.TJ, "两小时内教练违约,获得推荐分成", "两小时内教练违约,获得推荐分成",
+                        order.getCode());
+                    smsOutBO.sentContent(user.getUserReferee(), "尊敬的用户,由于订单：["
+                            + order.getCode() + "]在两小时内被教练，您收到推荐分成"
+                            + CalculationUtil.divi(tjAmount) + "元，登录网站可查看详情。");
+                }
+            }
+        } else if (EBoolean.YES.getCode().equals(order.getType())) {
+            // 计算违约金额
+            SYSConfig sysConfigWY = sysConfigBO.getConfigValue(
+                ESysConfigCkey.QMWY.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            penalty = AmountUtil.mul(order.getAmount(),
+                StringValidater.toDouble(sysConfigWY.getCvalue()));
+            // 平台会收到多少教练违约金
+            if (penalty >= 10) {
+                accountBO.doTransferAmountRemote(order.getToUser(),
+                    ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, penalty,
+                    EBizType.QWYYHFC, "两小时内达人违约,扣除违约金额", "两小时内达人违约,获得违约金额",
+                    order.getCode());
+            }
+            // 达人违约,用户获得多少钱
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                ESysConfigCkey.QDWYYHFC.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode(),
+                ESystemCode.SYSTEM_CODE.getCode());
+            Long coachAmount = AmountUtil.mul(penalty,
+                StringValidater.toDouble(sysConfig.getCvalue()));
+            if (coachAmount >= 10) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_ZWZJ.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, coachAmount, EBizType.QWYYHFCY,
+                    "两小时内达人违约,获得分成", "两小时内达人违约,获得分成", order.getCode());
+            }
+
+            User user = userBO.getRemoteUser(order.getApplyUser());
+            if (StringUtils.isNotEmpty(user.getUserReferee())) {
+                // 推荐人获得多少钱
+                SYSConfig tj = sysConfigBO.getConfigValue(
+                    ESysConfigCkey.MLXSN.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode(),
+                    ESystemCode.SYSTEM_CODE.getCode());
+                Long tjAmount = AmountUtil.mul(penalty,
+                    StringValidater.toDouble(tj.getCvalue()));
+                if (tjAmount >= 10) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZWZJ.getCode(),
+                        user.getUserReferee(), ECurrency.CNY, tjAmount,
+                        EBizType.TJ, "两小时内达人违约,获得推荐分成", "两小时内达人违约,获得推荐分成",
+                        order.getCode());
+                    smsOutBO.sentContent(user.getUserReferee(), "尊敬的用户,由于订单：["
+                            + order.getCode() + "]在两小时内已取消，您收到推荐分成"
+                            + CalculationUtil.divi(tjAmount) + "元，登录网站可查看详情。");
+                }
+            }
+        }
+        return penalty;
     }
 
     @Override
@@ -621,6 +969,22 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         changeNoPayOrder();
         sendSmsOut();
         commentOrder();
+        receiverOrder();
+    }
+
+    private void receiverOrder() {
+        logger.info("*****************15分钟内未接单,系统开始自动接单**********************");
+        PerCourseOrder condition = new PerCourseOrder();
+        condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());
+        condition.setApplyBeginDatetime(DateUtil.getRelativeDate(new Date(),
+            -(60 * 15 + 1)));
+        List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
+            .queryPerCourseOrderList(condition);
+        for (PerCourseOrder perCourseOrder : perCourseOrderList) {
+            this.receiverOrder(perCourseOrder.getCode(),
+                perCourseOrder.getToUser(), null);
+        }
+        logger.info("*****************15分钟内未接单,系统结束自动接单**********************");
     }
 
     private void commentOrder() {
@@ -858,7 +1222,8 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         List<PerCourseOrder> perCourseOrderList = perCourseOrderBO
             .queryPerCourseOrderList(condition);
         for (PerCourseOrder perCourseOrder : perCourseOrderList) {
-            perCourseOrderBO.platCancel(perCourseOrder, "系统取消", "超时支付,系统自动取消");
+            perCourseOrderBO.platCancel(perCourseOrder, 0l, "系统取消",
+                "超时支付,系统自动取消");
             smsOutBO.sendSmsOut(perCourseOrder.getMobile(), "尊敬的用户,您在平台上购买的订单"
                     + "[编号为:" + perCourseOrder.getCode()
                     + "],3天未支付,系统已自动取消。详情请到“我的”里面查看。引起的不便,请见谅。");
@@ -909,4 +1274,19 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         return res;
     }
 
+    @Override
+    public XN622921Res totalToComment(String applyUser) {
+        XN622921Res res = new XN622921Res();
+        List<String> statusList = new ArrayList<String>();
+        // 统计达人未评论的订单
+        statusList.add(EPerCourseOrderStatus.CLASS_OVER.getCode());
+        Long dToComment = perCourseOrderBO.getUnfinishCount(
+            EBoolean.YES.getCode(), applyUser, statusList);
+        // 统计私课未评论的订单
+        Long bToComment = perCourseOrderBO.getUnfinishCount(
+            EBoolean.NO.getCode(), applyUser, statusList);
+        res.setbToComment(bToComment);
+        res.setdToComment(dToComment);
+        return res;
+    }
 }

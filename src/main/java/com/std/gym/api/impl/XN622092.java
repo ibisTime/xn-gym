@@ -23,8 +23,8 @@ public class XN622092 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        coachAO.approveCoach(req.getCode(), req.getResult(), req.getApprover(),
-            req.getRemark());
+        coachAO.approveCoach(req.getCode(), req.getResult(),
+            req.getCreditAmount(), req.getApprover(), req.getRemark());
         return new BooleanRes(true);
     }
 

@@ -26,7 +26,22 @@ public enum ESysConfigCkey {
             "用户违约达人获得分成比例"),
 
     QWY("QWY", "全部违约扣除比例"), QSJFC("QSJFC", "全部违约私教分成"), QTKFC("QTKFC",
-            "全部违约团课分成"), QDRFC("QDRFC", "全部违约达人分成"), QHKFC("QHKFC", "全部违约获客分成");
+            "全部违约团课分成"), QDRFC("QDRFC", "全部违约达人分成"), QHKFC("QHKFC", "全部违约获客分成"),
+
+    BWY("BWY", "两小时前:教练违约扣除比例"), MWY("MWY", "两小时前:达人违约扣除比例"), BWYYHFC(
+            "BWYYHFC", "两小时前:教练违约,用户获得比例"), MWYYHFC("MWYYHFC",
+            "两小时前:达人违约,用户获得比例"), BLXSQ("BLSXQ", "两小时前教练违约,用户获客分成"), MLXSQ(
+            "MLSXQ", "两小时前达人违约,用户获客分成"),
+
+    QBWY("QBWY", "两小时内教练违约,扣除比例"), QMWY("QMWY", "两小时内达人违约,扣除比例"), QBWYYHFC(
+            "QBWYYHFC", "两小时内教练违约,用户分成比例"), QDWYYHFC("QDWYYHFC",
+            "两小时内达人违约,用户分成比例"), BLXSN("BLSXN", "两小时内教练违约,用户获客分成"), MLXSN(
+            "MLSXN", "两小时内达人违约,用户获客分成"),
+
+    SBWY("SBWY", "上课后教练违约,扣除比例"), SMWY("SMWY", "上课后达人违约,扣除比例"), SBWYYHFC(
+            "SBWYYHFC", "上课后教练违约,用户分成比例"), SDWYYHFC("SDWYYHFC",
+            "上课后达人违约,用户分成比例"), BQ("BQ", "上课后教练违约,用户获客分成"), MQ("MQ",
+            "上课后达人违约,用户获客分成"), ;
 
     public static Map<String, ESysConfigCkey> getDictTypeMap() {
         Map<String, ESysConfigCkey> map = new HashMap<String, ESysConfigCkey>();

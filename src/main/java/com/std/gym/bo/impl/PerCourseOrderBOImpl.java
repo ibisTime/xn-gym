@@ -130,8 +130,10 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     }
 
     @Override
-    public void platCancel(PerCourseOrder order, String updater, String remark) {
+    public void platCancel(PerCourseOrder order, Long coachPenalty,
+            String updater, String remark) {
         order.setPreStatus(order.getStatus());
+        order.setCoachPenalty(coachPenalty);
         order.setStatus(EPerCourseOrderStatus.PLAT_CANCEL.getCode());
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());

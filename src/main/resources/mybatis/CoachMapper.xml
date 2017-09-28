@@ -31,8 +31,9 @@
 		<result column="status" property="status" />
 		<result column="sum_com" property="sumCom" />
 		<result column="approver" property="approver" />
-		<result column="approve_datetime" property="approveDatetime" />
+		<result column="credit_amount" property="creditAmount" />
 		
+		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
 		<result column="uStatus" property="uStatus" />
 		<result column="login_name" property="loginName" />
@@ -117,6 +118,7 @@
 		,t.order_no
 		,t.status
 		,t.approver
+		,t.credit_amount
 		,t.approve_datetime
 		,t.remark
 		
@@ -171,6 +173,7 @@
 		,t.approver
 		,t.approve_datetime
 		
+		,t.credit_amount
 		,t.remark
 		FROM
 		tgym_coach t RIGHT JOIN (SELECT * FROM tgym_coach tc ,(SELECT DISTINCT(tpc.coach_code) AS ocode
@@ -266,6 +269,7 @@
 		,description = #{description}
 		,label = #{label}
 		,status = #{status}
+		,credit_amount=#{creditAmount}
 		WHERE code = #{code}
 	</update>
 
@@ -274,6 +278,7 @@
 		SET
 		status=#{status}
 		,approver=#{approver}
+		,credit_amount=#{creditAmount}
 		,approve_datetime=#{approveDatetime}
 		,remark=#{remark}
 		WHERE code = #{code}

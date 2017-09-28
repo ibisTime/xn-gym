@@ -28,7 +28,10 @@ public enum EBizType {
             "DRJFC", "达人教练分成"),
 
     WYSJFC("WYSJFC", "用户违约私教获得分成"), WYTTJFC("WYTTJFC", "用户违约团课教练获得分成"), WYDRFC(
-            "WYDRFC", "用户违约达人获得分成"), ;
+            "WYDRFC", "用户违约达人获得分成"),
+
+    BWYYHFC("BWYYHFC", "私教违约获得分成"), QWYYHFC("QWYYHFC", "达人违约获得分成"), BWYYHFCY(
+            "BWYYHFCY", "私教违约用户获得分成"), QWYYHFCY("QWYYHFCY", "达人违约用户获得分成");
 
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();

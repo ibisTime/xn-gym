@@ -19,6 +19,9 @@ public class XN622251Req {
     // 缩略图
     private String pic;
 
+    // 信用额
+    private String creditAmount;
+
     // 身份证/教练照
     private String pdf;
 
@@ -170,5 +173,13 @@ public class XN622251Req {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getCreditAmount() {
+        return creditAmount;
+    }
+
+    public void setCreditAmount(String creditAmount) {
+        this.creditAmount = creditAmount;
     }
 }

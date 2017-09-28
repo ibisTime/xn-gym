@@ -8,6 +8,7 @@ import com.std.gym.bo.base.Paginable;
 import com.std.gym.domain.PerCourseOrder;
 import com.std.gym.domain.SizeData;
 import com.std.gym.dto.res.XN622920Res;
+import com.std.gym.dto.res.XN622921Res;
 
 @Component
 public interface IPerCourseOrderAO {
@@ -44,4 +45,6 @@ public interface IPerCourseOrderAO {
     public void changeOrder();
 
     public XN622920Res totalUnfinish(String applyUser);
+
+    public XN622921Res totalToComment(String userId);
 }
