@@ -7,13 +7,13 @@ package com.std.gym.dto.req;
  * @history:
  */
 public class XN622125Req {
-    // 订单编号
+    // 订单编号(必填)
     private String orderCode;
 
-    // 更新人
+    // 更新人(必填)
     private String updater;
 
-    // 备注
+    // 备注(选填)
     private String remark;
 
     public String getOrderCode() {

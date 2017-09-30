@@ -31,7 +31,6 @@ import com.std.gym.domain.Comment;
 import com.std.gym.domain.ItemScore;
 import com.std.gym.domain.OrgCourse;
 import com.std.gym.domain.OrgCourseOrder;
-import com.std.gym.domain.PerCourse;
 import com.std.gym.domain.PerCourseOrder;
 import com.std.gym.domain.SYSConfig;
 import com.std.gym.domain.User;
@@ -122,9 +121,7 @@ public class CommentAOImpl implements ICommentAO {
             perCourseOrder.getStatus())) {
             throw new BizException("xn0000", "该私课订单还不能评论");
         }
-
-        PerCourse perCourse = perCourseBO.getPerCourse(productCode);
-
+        Coach coach = coachBO.getCoachByUserId(perCourseOrder.getToUser());
         Comment data = new Comment();
         String code = OrderNoGenerater.generate(EPrefixCode.COMMENT.getCode());
 
@@ -147,7 +144,7 @@ public class CommentAOImpl implements ICommentAO {
 
         // 评论组装参数
         data.setCode(code);
-        data.setCoachCode(perCourse.getCoachCode());
+        data.setCoachCode(coach.getCode());
         data.setScore(totalScore.intValue());
         data.setContent(content);
         data.setCommer(commer);
@@ -156,7 +153,6 @@ public class CommentAOImpl implements ICommentAO {
         data.setStatus(status);
         commentBO.saveComment(data);
 
-        Coach coach = coachBO.getCoach(perCourse.getCoachCode());
         int starNum = coach.getStarNum() + data.getScore();// 星级数量
 
         int star = coach.getStar(); // 教练等级

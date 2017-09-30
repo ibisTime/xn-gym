@@ -30,11 +30,14 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
 
     public void classOver(PerCourseOrder order, String updater, String remark);
 
-    public void userCancel(PerCourseOrder order, Long penalty, String updater,
+    public void userCancelPay(PerCourseOrder order, String updater,
             String remark);
 
-    public void platCancel(PerCourseOrder order, Long coachPenalty,
-            String updater, String remark);
+    public void userCancelNoPay(PerCourseOrder order, String updater,
+            String remark);
+
+    public void platCancelPenalty(PerCourseOrder order, String updater,
+            String remark);
 
     public void finishOrder(PerCourseOrder perCourseOrder);
 
@@ -48,4 +51,10 @@ public interface IPerCourseOrderBO extends IPaginableBO<PerCourseOrder> {
 
     public void updateIsSend(PerCourseOrder perCourseOrder);
 
+    public void platTK(PerCourseOrder perCourseOrder);
+
+    public void platCancel(PerCourseOrder order, String updater, String remark);
+
+    public void platCancelHaveClass(PerCourseOrder order, String updater,
+            String remark);
 }

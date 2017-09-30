@@ -47,4 +47,10 @@ public interface IPerCourseOrderAO {
     public XN622920Res totalUnfinish(String applyUser);
 
     public XN622921Res totalToComment(String userId);
+
+    void receiverOrder();
+
+    void commentOrder();
+
+    void sendSmsOut();
 }

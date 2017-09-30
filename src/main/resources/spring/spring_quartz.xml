@@ -22,6 +22,9 @@
               <ref bean="activityOrderTrigger"/>  
               <ref bean="orgCourseOrderTrigger"/> 
               <ref bean="perCourseOrderTrigger"/> 
+              <ref bean="receiverOrderTrigger"/> 
+              <ref bean="commentOrderTrigger"/> 
+              <ref bean="smsOutTrigger"/> 
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -34,7 +37,7 @@
 	<bean id="changeActivityStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	   <property name="targetObject" ref="activityAOImpl"/>  
 	   <property name="targetMethod" value="changeActivity"/>  
-	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	   <property name="concurrent" value="false"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean>
 	
 	<bean id="activityOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
@@ -45,7 +48,7 @@
 	<bean id="changeActivityOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	   <property name="targetObject" ref="activityOrderAOImpl"/>  
 	   <property name="targetMethod" value="changeOrder"/>  
-	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	   <property name="concurrent" value="false"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean>
 	
 	<bean id="orgCourseOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
@@ -56,19 +59,54 @@
 	<bean id="changeOrgCourseOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	   <property name="targetObject" ref="orgCourseOrderAOImpl"/>  
 	   <property name="targetMethod" value="changeOrder"/>  
-	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	   <property name="concurrent" value="false"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean>
 	
 	<bean id="perCourseOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="changePerCourseOrderStatus"/>  
-       <property name="cronExpression" value="0 0/1 * * *  ?"/> <!-- 每分钟触发 -->  
+       <property name="cronExpression" value="0 59 23 * *  ?"/> <!-- 每分钟触发 -->  
 	</bean>
 	
 	<bean id="changePerCourseOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	   <property name="targetObject" ref="perCourseOrderAOImpl"/>  
 	   <property name="targetMethod" value="changeOrder"/>  
-	   <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	   <property name="concurrent" value="false"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean>
 	
+	<!-- commentOrder -->
+	<bean id="commentOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="commentOrderStatus"/>  
+       <property name="cronExpression" value="0 0 23 * *  ?"/> <!-- 23点触发 -->  
+	</bean>
+	
+	<bean id="commentOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	   <property name="targetObject" ref="perCourseOrderAOImpl"/>  
+	   <property name="targetMethod" value="commentOrder"/>  
+	   <property name="concurrent" value="false"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean>
+	
+	<!-- receiverOrder -->
+	<bean id="receiverOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="receiverOrderStatus"/>  
+       <property name="cronExpression" value="0/5 * * * *  ?"/> <!-- 每5分钟触发 -->  
+	</bean>
+	
+	<bean id="receiverOrderStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	   <property name="targetObject" ref="perCourseOrderAOImpl"/>  
+	   <property name="targetMethod" value="receiverOrder"/>  
+	   <property name="concurrent" value="false"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean>
+	
+	<!-- smsOut -->
+	<bean id="smsOutTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="smsOutOrder"/>  
+       <property name="cronExpression" value="0 0 0/2 * *  ?"/> <!-- 每2小时触发 -->  
+	</bean>
+	
+	<bean id="smsOutOrder" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	   <property name="targetObject" ref="perCourseOrderAOImpl"/>  
+	   <property name="targetMethod" value="sendSmsOut"/>  
+	   <property name="concurrent" value="false"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean>
 	
 </beans>
