@@ -71,4 +71,10 @@ public class PerCourseBOImpl extends PaginableBOImpl<PerCourse> implements
         condition.setCoachCode(coachCode);
         return perCourseDAO.selectList(condition);
     }
+
+    @Override
+    public void update(PerCourse data, String status) {
+        data.setStatus(status);
+        perCourseDAO.updateStatus(data);
+    }
 }

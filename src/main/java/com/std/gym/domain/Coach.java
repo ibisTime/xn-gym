@@ -29,6 +29,8 @@ public class Coach extends ABaseDO {
     // 缩略图
     private String pic;
 
+    private String idPhoto;
+
     // 身份证/教练证
     private String pdf;
 
@@ -354,6 +356,14 @@ public class Coach extends ABaseDO {
 
     public void setCreditAmount(Long creditAmount) {
         this.creditAmount = creditAmount;
+    }
+
+    public String getIdPhoto() {
+        return idPhoto;
+    }
+
+    public void setIdPhoto(String idPhoto) {
+        this.idPhoto = idPhoto;
     }
 
 }

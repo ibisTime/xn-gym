@@ -34,10 +34,10 @@ public class PerCourseOrder extends ABaseDO {
     private Date appointDatetime;
 
     // 上课时间
-    private String skDatetime;
+    private Date skDatetime;
 
     // 下课时间
-    private String xkDatetime;
+    private Date xkDatetime;
 
     // 上课地点
     private String address;
@@ -320,19 +320,19 @@ public class PerCourseOrder extends ABaseDO {
         this.appointDatetime = appointDatetime;
     }
 
-    public String getSkDatetime() {
+    public Date getSkDatetime() {
         return skDatetime;
     }
 
-    public void setSkDatetime(String skDatetime) {
+    public void setSkDatetime(Date skDatetime) {
         this.skDatetime = skDatetime;
     }
 
-    public String getXkDatetime() {
+    public Date getXkDatetime() {
         return xkDatetime;
     }
 
-    public void setXkDatetime(String xkDatetime) {
+    public void setXkDatetime(Date xkDatetime) {
         this.xkDatetime = xkDatetime;
     }
 

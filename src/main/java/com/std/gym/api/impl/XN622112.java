@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.std.gym.ao.IPerCourseAO;
 import com.std.gym.api.AProcessor;
-import com.std.gym.common.DateUtil;
 import com.std.gym.common.JsonUtil;
 import com.std.gym.domain.PerCourse;
 import com.std.gym.dto.req.XN622112Req;
@@ -27,8 +26,7 @@ public class XN622112 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         PerCourse condition = new PerCourse();
-        condition.setClassDatetime(DateUtil.strToDate(req.getClassDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setClassDatetime(req.getClassDatetime());
         condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());
         String orderColumn = req.getOrderColumn();

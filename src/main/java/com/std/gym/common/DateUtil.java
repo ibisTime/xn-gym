@@ -36,6 +36,12 @@ public class DateUtil {
         return repayDatetime;
     }
 
+    public static Date getStartDatetime(String inputRepayDate) {
+        Date repayDatetime = DateUtil.strToDate(inputRepayDate
+                + DateUtil.TIME_BEGIN, DateUtil.DATA_TIME_PATTERN_1);
+        return repayDatetime;
+    }
+
     public static Date getRelativeDate(Date startDate, int second) {
         Calendar calendar = Calendar.getInstance();
         try {

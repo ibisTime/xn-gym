@@ -98,32 +98,13 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             String perCourseCode, Integer quantity, String applyNote) {
         PerCourse perCourse = perCourseBO.getPerCourse(perCourseCode);
 
-        // 计算今天是周几
-        Integer weekDay = DateUtil.getDayofweek(DateUtil.dateToStr(new Date(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
-        Integer skDays = 0;// 距离下次上课天数
-        Integer skCycle = perCourse.getSkCycle();
         // 判断上课人数与订单人数
         if (quantity > perCourse.getTotalNum()) {
             throw new BizException("xn0000", "预订人数不能多于课程限制人数");
         }
-        if (skCycle < weekDay) {// 下周预约
-            skDays = 7 - (weekDay - skCycle);
-        } else if (skCycle > weekDay) {// 本周预约
-            skDays = skCycle - weekDay;
-        }
-        Date appointment = DateUtil.getRelativeDate(DateUtil.getTodayStart(),
-            24 * 3600 * skDays);
-        Date appointDatetime = DateUtil.strToDate(
-            DateUtil.dateToStr(appointment, DateUtil.FRONT_DATE_FORMAT_STRING)
-                    + " " + perCourse.getSkStartDatetime(),
-            DateUtil.DATA_TIME_PATTERN_1);
-        if (appointDatetime.before(new Date())) {
-            appointment = DateUtil.getRelativeDate(appointment, 24 * 3600 * 7);
-        }
+
         Long skCount = perCourseOrderBO.getTotalCount(perCourseCode,
-            appointment, perCourse.getSkStartDatetime(),
-            perCourse.getSkEndDatetime());
+            perCourse.getSkStartDatetime(), perCourse.getSkEndDatetime());
         if (skCount > 0) {
             throw new BizException("xn0000", "该课程已被预订");
         }
@@ -137,7 +118,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         order.setCode(code);
         order.setType(coach.getType());
         order.setPerCourseCode(perCourseCode);
-        order.setAppointDatetime(appointment);
+        order.setAppointDatetime(perCourse.getSkStartDatetime());
         order.setSkDatetime(perCourse.getSkStartDatetime());
         order.setXkDatetime(perCourse.getSkEndDatetime());
         order.setAddress(address);
@@ -166,8 +147,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
         PerCourse perCourse = perCourseBO
             .getPerCourse(order.getPerCourseCode());
         Long skCount = perCourseOrderBO.getTotalCount(order.getPerCourseCode(),
-            order.getAppointDatetime(), order.getSkDatetime(),
-            order.getXkDatetime());
+            order.getSkDatetime(), order.getXkDatetime());
         if (skCount > 0) {
             throw new BizException("xn0000", "该课程已被预订");
         }
@@ -208,13 +188,6 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             ESysUser.SYS_USER_ZWZJ.getCode(), ECurrency.CNY, order.getAmount(),
             bizType, bizType.getValue(), bizType.getValue(), order.getCode());
         paySuccess(payGroup, null, order.getAmount(), EPayType.YE.getCode());
-        String title = "达人";
-        if (EBoolean.NO.getCode().equals(order.getType())) {
-            title = "教练";
-        }
-        smsOutBO.sentContent(order.getToUser(), "尊敬的" + title + ",您在平台上发布的课程已被"
-                + user.getNickname()
-                + "购买,如15分钟内未处理,系统将自动为您接单。详情请登陆“自玩自健”里面查看。引起的不便,请见谅。");
         return new BooleanRes(true);
     }
 
@@ -244,6 +217,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             // 获取用户信息
             String userId = order.getApplyUser();
             User user = userBO.getRemoteUser(userId);
+            // 更新课程
+            PerCourse perCourse = perCourseBO.getPerCourse(order
+                .getPerCourseCode());
+            perCourseBO.update(perCourse, EBoolean.YES.getCode());
             // 支付成功
             perCourseOrderBO.paySuccess(order, payCode, amount, payType);
             String title = "达人";
@@ -340,6 +317,10 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
                 || EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
                     order.getStatus())) {// 已支付和已接单的状态下资金划转加状态变化
             perCourseOrderBO.userCancelPay(order, updater, remark);
+            // 更新课程
+            PerCourse perCourse = perCourseBO.getPerCourse(order
+                .getPerCourseCode());
+            perCourseBO.update(perCourse, EBoolean.NO.getCode());
         } else if (EPerCourseOrderStatus.NOTPAY.getCode().equals(
             order.getStatus())) {// 未支付状态下，仅仅变动状态即可。
             perCourseOrderBO.userCancelNoPay(order, updater, remark);
@@ -367,11 +348,19 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             order.getStatus())) {
             perCourseOrderBO.platCancel(order, updater, remark);
             perCourseOrderBO.platTK(order);
+            // 更新课程
+            PerCourse perCourse = perCourseBO.getPerCourse(order
+                .getPerCourseCode());
+            perCourseBO.update(perCourse, EBoolean.NO.getCode());
         } else if (EPerCourseOrderStatus.RECEIVER_ORDER.getCode().equals(
             order.getStatus())) {
             perCourseOrderBO.platCancelPenalty(order, updater, remark);
             // 接单时
             perCourseOrderBO.platTK(order);
+            // 更新课程
+            PerCourse perCourse = perCourseBO.getPerCourse(order
+                .getPerCourseCode());
+            perCourseBO.update(perCourse, EBoolean.NO.getCode());
             Account account = accountBO.getRemoteAccount(order.getToUser(),
                 ECurrency.CNY);
             Coach coach = coachBO.getCoachByUserId(order.getToUser());
@@ -383,6 +372,7 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             // 全部退款
             perCourseOrderBO.platCancelHaveClass(order, updater, remark);
             perCourseOrderBO.platTK(order);
+
             Account account = accountBO.getRemoteAccount(order.getToUser(),
                 ECurrency.CNY);
             Coach coach = coachBO.getCoachByUserId(order.getToUser());

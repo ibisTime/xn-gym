@@ -40,6 +40,12 @@
 			<if test="skCycle != null and skCycle != '' ">
 				AND t.sk_cycle = #{skCycle}
 			</if>
+			<if test="classDatetimeStart != null and classDatetimeStart != '' ">
+				<![CDATA[AND t.sk_start_datetime >= #{classDatetimeStart}]]>
+			</if>	
+			<if test="classDatetimeEnd != null and classDatetimeEnd != '' ">
+				<![CDATA[AND t.sk_start_datetime <= #{classDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_perCourse" parameterType="perCourse" resultMap="perCourse_DB_Result">

@@ -149,11 +149,8 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     public void userCancelPay(PerCourseOrder order, String updater,
             String remark) {
         Map<String, String> map = sysConfigBO.querySYSConfigMap("4");
-        String appoint = DateUtil.dateToStr(order.getAppointDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING);
-        Date appointDatetime = DateUtil
-            .strToDate(appoint + " " + order.getSkDatetime(),
-                DateUtil.DATA_TIME_PATTERN_1);
+
+        Date appointDatetime = order.getSkDatetime();// 预约时间
         Long penalty = this.private1(order, updater, remark, map,
             appointDatetime);
         // 1.用户退款
@@ -313,11 +310,8 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     public void platCancelPenalty(PerCourseOrder order, String updater,
             String remark) {
         Map<String, String> map = sysConfigBO.querySYSConfigMap("4");
-        String appoint = DateUtil.dateToStr(order.getAppointDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING);
-        Date appointDatetime = DateUtil
-            .strToDate(appoint + " " + order.getSkDatetime(),
-                DateUtil.DATA_TIME_PATTERN_1);
+
+        Date appointDatetime = order.getSkDatetime();// 预约时间
         Long penalty = this.private7(order, updater, remark, map,
             appointDatetime);
         // 2.开始分成
@@ -502,11 +496,10 @@ public class PerCourseOrderBOImpl extends PaginableBOImpl<PerCourseOrder>
     }
 
     @Override
-    public Long getTotalCount(String perCourseCode, Date appointment,
-            String skStartDatetime, String skEndDatetime) {
+    public Long getTotalCount(String perCourseCode, Date skStartDatetime,
+            Date skEndDatetime) {
         PerCourseOrder condition = new PerCourseOrder();
         condition.setPerCourseCode(perCourseCode);
-        condition.setAppointDatetime(appointment);
         condition.setSkDatetime(skStartDatetime);
         condition.setXkDatetime(skEndDatetime);
         condition.setStatus(EPerCourseOrderStatus.PAYSUCCESS.getCode());

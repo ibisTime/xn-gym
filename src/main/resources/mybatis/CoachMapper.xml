@@ -10,6 +10,7 @@
 		<result column="pic" property="pic" />
 		
 		<result column="pdf" property="pdf" />
+		<result column="id_photo" property="idPhoto" />
 		<result column="gender" property="gender" />
 		<result column="age" property="age" />
 		<result column="duration" property="duration" />
@@ -95,6 +96,7 @@
 		,t.user_id
 		,t.real_name
 		,t.pic
+		,t.id_photo
 		,t.gender
 		
 		,t.age
@@ -147,6 +149,7 @@
 		,t.type
 		,t.user_id
 		,t.real_name
+		,t.id_photo
 		,t.pic
 		
 		,t.gender
@@ -199,6 +202,7 @@
 		
 		,gender
 		,age
+		,id_photo
 		,pdf
 		,duration
 		,province
@@ -228,6 +232,7 @@
 		
 		,#{gender}
 		,#{age}
+		,#{idPhoto}
 		,#{pdf}
 		,#{duration}
 		,#{province}
@@ -257,6 +262,7 @@
 		,pic = #{pic}
 		,gender = #{gender}
 		,age = #{age}
+		,id_photo=#{idPhoto}
 		,pdf = #{pdf}
 		
 		,duration = #{duration}

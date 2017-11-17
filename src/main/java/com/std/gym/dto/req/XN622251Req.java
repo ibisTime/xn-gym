@@ -22,6 +22,9 @@ public class XN622251Req {
     // 信用额
     private String creditAmount;
 
+    // 身份证(教练特有）
+    private String idPhoto;
+
     // 身份证/教练照
     private String pdf;
 
@@ -181,5 +184,13 @@ public class XN622251Req {
 
     public void setCreditAmount(String creditAmount) {
         this.creditAmount = creditAmount;
+    }
+
+    public String getIdPhoto() {
+        return idPhoto;
+    }
+
+    public void setIdPhoto(String idPhoto) {
+        this.idPhoto = idPhoto;
     }
 }

@@ -21,10 +21,10 @@ public class PerCourse extends ABaseDO {
     private Integer skCycle;
 
     // 上课时间(时)
-    private String skStartDatetime;
+    private Date skStartDatetime;
 
     // 下课时间(止)
-    private String skEndDatetime;
+    private Date skEndDatetime;
 
     // 上课地址
     private String address;
@@ -58,7 +58,13 @@ public class PerCourse extends ABaseDO {
 
     // ************db***********
     // 上课时间
-    private Date classDatetime;
+    private Date classDatetimeStart;
+
+    // 上课时间
+    private Date classDatetimeEnd;
+
+    // 上课时间
+    private String classDatetime;
 
     // 是否预订(0 未预定，1，以约定)
     private String isAppoint;
@@ -79,19 +85,19 @@ public class PerCourse extends ABaseDO {
         return skCycle;
     }
 
-    public void setSkStartDatetime(String skStartDatetime) {
+    public void setSkStartDatetime(Date skStartDatetime) {
         this.skStartDatetime = skStartDatetime;
     }
 
-    public String getSkStartDatetime() {
+    public Date getSkStartDatetime() {
         return skStartDatetime;
     }
 
-    public void setSkEndDatetime(String skEndDatetime) {
+    public void setSkEndDatetime(Date skEndDatetime) {
         this.skEndDatetime = skEndDatetime;
     }
 
-    public String getSkEndDatetime() {
+    public Date getSkEndDatetime() {
         return skEndDatetime;
     }
 
@@ -133,14 +139,6 @@ public class PerCourse extends ABaseDO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Date getClassDatetime() {
-        return classDatetime;
-    }
-
-    public void setClassDatetime(Date classDatetime) {
-        this.classDatetime = classDatetime;
     }
 
     public String getLocation() {
@@ -189,6 +187,30 @@ public class PerCourse extends ABaseDO {
 
     public void setIsAppoint(String isAppoint) {
         this.isAppoint = isAppoint;
+    }
+
+    public Date getClassDatetimeStart() {
+        return classDatetimeStart;
+    }
+
+    public void setClassDatetimeStart(Date classDatetimeStart) {
+        this.classDatetimeStart = classDatetimeStart;
+    }
+
+    public Date getClassDatetimeEnd() {
+        return classDatetimeEnd;
+    }
+
+    public void setClassDatetimeEnd(Date classDatetimeEnd) {
+        this.classDatetimeEnd = classDatetimeEnd;
+    }
+
+    public String getClassDatetime() {
+        return classDatetime;
+    }
+
+    public void setClassDatetime(String classDatetime) {
+        this.classDatetime = classDatetime;
     }
 
 }

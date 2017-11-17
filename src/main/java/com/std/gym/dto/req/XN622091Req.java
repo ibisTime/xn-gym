@@ -16,6 +16,9 @@ public class XN622091Req {
     // 缩略图
     private String pic;
 
+    // 身份证(教练特有）
+    private String idPhoto;
+
     // 身份证/教练照
     private String pdf;
 
@@ -159,5 +162,13 @@ public class XN622091Req {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getIdPhoto() {
+        return idPhoto;
+    }
+
+    public void setIdPhoto(String idPhoto) {
+        this.idPhoto = idPhoto;
     }
 }

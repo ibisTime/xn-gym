@@ -21,4 +21,5 @@ public interface IPerCourseBO extends IPaginableBO<PerCourse> {
 
     public List<PerCourse> queryPerCourseList(String coachCode);
 
+    public void update(PerCourse data, String status);
 }

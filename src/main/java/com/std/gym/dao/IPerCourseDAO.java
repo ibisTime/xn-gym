@@ -7,4 +7,6 @@ public interface IPerCourseDAO extends IBaseDAO<PerCourse> {
     String NAMESPACE = IPerCourseDAO.class.getName().concat(".");
 
     int update(PerCourse data);
+
+    int updateStatus(PerCourse data);
 }

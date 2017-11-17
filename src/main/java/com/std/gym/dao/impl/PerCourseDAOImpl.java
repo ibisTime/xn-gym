@@ -50,4 +50,9 @@ public class PerCourseDAOImpl extends AMybatisTemplate implements IPerCourseDAO 
         return super.update(NAMESPACE.concat("update_perCourse"), data);
     }
 
+    @Override
+    public int updateStatus(PerCourse data) {
+        return super.update(NAMESPACE.concat("update_status"), data);
+    }
+
 }

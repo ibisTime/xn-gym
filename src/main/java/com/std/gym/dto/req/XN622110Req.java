@@ -36,14 +36,6 @@ public class XN622110Req extends APageReq {
         this.name = name;
     }
 
-    public String getClassDatetime() {
-        return classDatetime;
-    }
-
-    public void setClassDatetime(String classDatetime) {
-        this.classDatetime = classDatetime;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -67,4 +59,13 @@ public class XN622110Req extends APageReq {
     public void setCoachCode(String coachCode) {
         this.coachCode = coachCode;
     }
+
+    public String getClassDatetime() {
+        return classDatetime;
+    }
+
+    public void setClassDatetime(String classDatetime) {
+        this.classDatetime = classDatetime;
+    }
+
 }

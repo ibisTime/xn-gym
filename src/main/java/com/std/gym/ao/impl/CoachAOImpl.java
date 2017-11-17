@@ -20,7 +20,6 @@ import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Page;
 import com.std.gym.bo.base.Paginable;
-import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Activity;
@@ -72,9 +71,10 @@ public class CoachAOImpl implements ICoachAO {
     @Override
     public String addCoach(XN622090Req req) {
         User user = userBO.getRemoteUser(req.getUserId());
-        String type = EBoolean.NO.getCode();
+        String type = EBoolean.YES.getCode();
         if (user.getKind() != null
-                && user.getKind().equals(EUserKind.F3.getCode())) {
+                && user.getKind().equals(EUserKind.F2.getCode())) {
+            StringValidater.validateBlank(req.getIdPhoto());
             type = EBoolean.YES.getCode();
         }
         Coach condition = new Coach();
@@ -90,6 +90,7 @@ public class CoachAOImpl implements ICoachAO {
         data.setUserId(req.getUserId());
         data.setRealName(req.getRealName());
         data.setPic(req.getPic());
+        data.setIdPhoto(req.getIdPhoto());
         data.setPdf(req.getPdf());
         data.setAdvPic(req.getAdvPic());
         data.setGender(req.getGender());
@@ -122,6 +123,7 @@ public class CoachAOImpl implements ICoachAO {
             data.setRealName(req.getRealName());
             data.setGender(req.getGender());
             data.setPdf(req.getPdf());
+            data.setIdPhoto(req.getIdPhoto());
         }
         if (null != req.getRealName()
                 && !data.getRealName().equals(req.getRealName())) {
@@ -231,31 +233,8 @@ public class CoachAOImpl implements ICoachAO {
     private void fullPerCourse(List<PerCourse> list) {
         for (PerCourse perCourse : list) {
             perCourse.setIsAppoint(EBoolean.NO.getCode());
-            // 计算今天是周几
-            Integer weekDay = DateUtil.getDayofweek(DateUtil.dateToStr(
-                new Date(), DateUtil.FRONT_DATE_FORMAT_STRING));
-            Integer skDays = 0;// 距离下次上课天数
-            Integer skCycle = perCourse.getSkCycle();
-            if (skCycle < weekDay) {// 下周预约
-                skDays = weekDay - skCycle;
-            } else if (skCycle > weekDay) {// 本周预约
-                skDays = skCycle - weekDay;
-            }
-            Date appointment = DateUtil.getRelativeDate(
-                DateUtil.getTodayStart(), 24 * 3600 * skDays);
-            Date appointDatetime = DateUtil.strToDate(
-                DateUtil.dateToStr(appointment,
-                    DateUtil.FRONT_DATE_FORMAT_STRING)
-                        + " "
-                        + perCourse.getSkStartDatetime(),
-                DateUtil.DATA_TIME_PATTERN_1);
-            if (appointDatetime.before(new Date())) {
-                appointment = DateUtil.getRelativeDate(appointment,
-                    24 * 3600 * 7);
-            }
             Long skCount = perCourseOrderBO.getTotalCount(perCourse.getCode(),
-                appointment, perCourse.getSkStartDatetime(),
-                perCourse.getSkEndDatetime());
+                perCourse.getSkStartDatetime(), perCourse.getSkEndDatetime());
             if (skCount > 0) {
                 perCourse.setIsAppoint(EBoolean.YES.getCode());
             }
@@ -346,6 +325,7 @@ public class CoachAOImpl implements ICoachAO {
         data.setRealName(req.getRealName());
         data.setGender(req.getGender());
         data.setPdf(req.getPdf());
+        data.setIdPhoto(req.getIdPhoto());
         data.setPic(req.getPic());
         data.setAdvPic(req.getAdvPic());
         data.setAge(StringValidater.toInteger(req.getAge()));
