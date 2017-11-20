@@ -31,8 +31,8 @@ public class XN622102 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN622102Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getSkCycle(),
-            req.getSkStartDatetime(), req.getSkEndDatetime());
+        StringValidater.validateBlank(req.getCode(), req.getSkStartDatetime(),
+            req.getSkEndDatetime());
         StringValidater.validateAmount(req.getPrice());
 
     }

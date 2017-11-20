@@ -259,13 +259,9 @@ public class PerCourseOrderAOImpl implements IPerCourseOrderAO {
             order.getStatus())) {
             throw new BizException("xn0000", "该私课订单不处于已接单状态，不能上课");
         }
-        String appoint = DateUtil.dateToStr(order.getAppointDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING);
-        Date appointDatetime = DateUtil
-            .strToDate(appoint + " " + order.getSkDatetime(),
-                DateUtil.DATA_TIME_PATTERN_1);
+
         if (DateUtil.getRelativeDate(new Date(), (60 * 60 * 1 + 1)).before(
-            appointDatetime)) {
+            order.getSkDatetime())) {
             throw new BizException("xn0000", "距离上课时间超过一小时,不能上课");
         }
         perCourseOrderBO.classBegin(order, updater, remark);
