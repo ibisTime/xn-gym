@@ -101,11 +101,23 @@ public class Coach extends ABaseDO {
     // 上课周期
     private String skCycle;
 
+    // 上课时间
+    private Date classDatetimeStart;
+
+    // 上课时间
+    private Date classDatetimeEnd;
+
+    // 上课时间
+    private String classDatetime;
+
     // 手机号
     private String mobile;
 
     // 用户状态
     private String uStatus;
+
+    // 课程状态
+    private String pStatus;
 
     // 登录名
     private String loginName;
@@ -364,6 +376,38 @@ public class Coach extends ABaseDO {
 
     public void setIdPhoto(String idPhoto) {
         this.idPhoto = idPhoto;
+    }
+
+    public Date getClassDatetimeStart() {
+        return classDatetimeStart;
+    }
+
+    public void setClassDatetimeStart(Date classDatetimeStart) {
+        this.classDatetimeStart = classDatetimeStart;
+    }
+
+    public Date getClassDatetimeEnd() {
+        return classDatetimeEnd;
+    }
+
+    public void setClassDatetimeEnd(Date classDatetimeEnd) {
+        this.classDatetimeEnd = classDatetimeEnd;
+    }
+
+    public String getClassDatetime() {
+        return classDatetime;
+    }
+
+    public void setClassDatetime(String classDatetime) {
+        this.classDatetime = classDatetime;
+    }
+
+    public String getpStatus() {
+        return pStatus;
+    }
+
+    public void setpStatus(String pStatus) {
+        this.pStatus = pStatus;
     }
 
 }

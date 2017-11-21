@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import com.std.gym.bo.ISmsOutBO;
 import com.std.gym.bo.IUserBO;
 import com.std.gym.bo.base.Page;
 import com.std.gym.bo.base.Paginable;
+import com.std.gym.common.DateUtil;
 import com.std.gym.core.OrderNoGenerater;
 import com.std.gym.core.StringValidater;
 import com.std.gym.domain.Activity;
@@ -75,7 +77,7 @@ public class CoachAOImpl implements ICoachAO {
         if (user.getKind() != null
                 && user.getKind().equals(EUserKind.F2.getCode())) {
             StringValidater.validateBlank(req.getIdPhoto());
-            type = EBoolean.YES.getCode();
+            type = EBoolean.NO.getCode();
         }
         Coach condition = new Coach();
         condition.setUserId(req.getUserId());
@@ -194,6 +196,13 @@ public class CoachAOImpl implements ICoachAO {
     public Paginable<Coach> queryFrontCoachPage(int start, int limit,
             Coach condition) {
         Paginable<Coach> page = null;
+        if (StringUtils.isNotBlank(condition.getClassDatetime())) {
+            condition.setClassDatetimeStart(DateUtil.getStartDatetime(condition
+                .getClassDatetime()));
+            condition.setClassDatetimeEnd(DateUtil.getEndDatetime(condition
+                .getClassDatetime()));
+        }
+        condition.setpStatus(EBoolean.NO.getCode());
         List<Coach> list = coachBO.queryFrontCoachList(condition);
         page = new Page<Coach>(start, limit, list.size());
         List<Coach> dataList = coachBO.queryFrontCoachList(condition,

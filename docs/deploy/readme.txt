@@ -14,13 +14,16 @@
   cd /Users/myb858/Documents/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp9/wtpwebapps
   
 2，打包
-  scp -P22 ./xn-gym.war root@121.43.101.148:/mnt
+scp -P22 ./xn-gym.war root@47.96.161.183:/mnt/www/gym/package/v1.1.0/2nd
+cdxt123456Q
+
+scp -P22 ./xn-gym.war root@121.43.101.148:/mnt
 cdkj123456Q
   
 3，部署
   ssh root@121.43.101.148 -p 22
-  
-cdkj123456Q
+  cdkj123456Q
+
   cd /mnt/www/gym/tomcat_gym_biz/webapps
   cp ./xn-gym/WEB-INF/classes/application.properties .
   cp ./xn-gym/WEB-INF/classes/config.properties .

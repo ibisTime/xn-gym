@@ -36,6 +36,9 @@ public class XN622093Req extends APageReq {
     // 上课周期
     private String skCycle;
 
+    // 上课时间
+    private String classDatetime;
+
     public String getUserId() {
         return userId;
     }
@@ -98,5 +101,13 @@ public class XN622093Req extends APageReq {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getClassDatetime() {
+        return classDatetime;
+    }
+
+    public void setClassDatetime(String classDatetime) {
+        this.classDatetime = classDatetime;
     }
 }

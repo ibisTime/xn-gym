@@ -10,6 +10,7 @@ import com.std.gym.bo.IPerCourseBO;
 import com.std.gym.bo.base.PaginableBOImpl;
 import com.std.gym.dao.IPerCourseDAO;
 import com.std.gym.domain.PerCourse;
+import com.std.gym.enums.EBoolean;
 import com.std.gym.exception.BizException;
 
 @Component
@@ -69,6 +70,7 @@ public class PerCourseBOImpl extends PaginableBOImpl<PerCourse> implements
     public List<PerCourse> queryPerCourseList(String coachCode) {
         PerCourse condition = new PerCourse();
         condition.setCoachCode(coachCode);
+        condition.setStatus(EBoolean.NO.getCode());
         return perCourseDAO.selectList(condition);
     }
 

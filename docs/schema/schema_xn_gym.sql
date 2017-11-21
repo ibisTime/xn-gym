@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `tgym_activity`;
 CREATE TABLE `tgym_activity` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(32) DEFAULT NULL COMMENT '活动类型（0，投票活动，1，付费活动）',
   `title` varchar(32) DEFAULT NULL COMMENT '标题',
   `pic` text COMMENT '缩略图',
   `adv_pic` text COMMENT '广告图',
@@ -47,12 +48,30 @@ CREATE TABLE `tgym_activity_order` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `tgym_attend`;
+CREATE TABLE `tgym_attend` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '参与类型',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `order_no` int(11) DEFAULT NULL COMMENT '序号',
+  `coach_code` varchar(32) DEFAULT NULL COMMENT '教练编号',
+  `activity_code` varchar(32) DEFAULT NULL COMMENT '活动编号',
+  `jion_datetime` datetime DEFAULT NULL COMMENT '加入时间',
+  `start_datetime` datetime DEFAULT NULL COMMENT '开始时间',
+  `end_datetime` datetime DEFAULT NULL COMMENT '结束时间',
+  `total_num` int(11) DEFAULT NULL COMMENT '总数量',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `tgym_coach`;
 CREATE TABLE `tgym_coach` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(32) DEFAULT NULL COMMENT '类型（0教练，1达人）',
   `user_id` varchar(32) DEFAULT NULL COMMENT '教练编号',
   `real_name` varchar(32) DEFAULT NULL COMMENT '真实姓名',
   `pic` text COMMENT '缩略图',
+  `pdf` text COMMENT '身份证/教练证',
+  `id_photo` text COMMENT '身份证---后期升级时添加',
   `gender` varchar(4) DEFAULT NULL COMMENT '性别',
   `age` varchar(32) DEFAULT NULL COMMENT '年龄',
   `duration` int(11) DEFAULT NULL COMMENT '工作年限',
@@ -60,11 +79,17 @@ CREATE TABLE `tgym_coach` (
   `star_num` int(11) DEFAULT NULL COMMENT '星数',
   `label` varchar(32) DEFAULT NULL COMMENT '标签',
   `adv_pic` text COMMENT '广告图',
+  `province` varchar(32) DEFAULT NULL COMMENT '省',
+  `city` varchar(32) DEFAULT NULL COMMENT '市',
+  `area` varchar(32) DEFAULT NULL COMMENT '区',
+  `teach_num` int(11) DEFAULT NULL COMMENT '授课量',
+  `address` text COMMENT '地址',
   `sum_com` int(11) DEFAULT NULL COMMENT '评论数',
   `description` text COMMENT '图文描述',
   `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `order_no` int(11) DEFAULT NULL COMMENT 'UI顺序',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `credit_amount` bigint(11) DEFAULT NULL COMMENT '保证金',
   `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `remark` text,
@@ -159,6 +184,8 @@ CREATE TABLE `tgym_per_course` (
   `sk_cycle` int(11) DEFAULT NULL COMMENT '上课周期',
   `sk_start_datetime` varchar(32) DEFAULT NULL COMMENT '上课开始时间',
   `sk_end_datetime` varchar(32) DEFAULT NULL COMMENT '上课结束时间',
+  `address` varchar(255) DEFAULT NULL COMMENT '地址',
+  `total_num` int(11) DEFAULT NULL COMMENT '授课人数',
   `pic` text COMMENT '缩略图',
   `adv_pic` text COMMENT '广告图',
   `description` text COMMENT '图文描述',
@@ -174,6 +201,7 @@ CREATE TABLE `tgym_per_course` (
 DROP TABLE IF EXISTS `tgym_per_course_order`;
 CREATE TABLE `tgym_per_course_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(32) DEFAULT NULL COMMENT 'l订单类型（0教练，1达人）',
   `to_user` varchar(32) DEFAULT NULL COMMENT '私教编号',
   `per_course_code` varchar(32) DEFAULT NULL COMMENT '私课编号',
   `course_name` varchar(32) DEFAULT NULL COMMENT '私课名称',
@@ -185,6 +213,7 @@ CREATE TABLE `tgym_per_course_order` (
   `price` bigint(11) DEFAULT NULL COMMENT '单价',
   `amount` bigint(11) DEFAULT NULL COMMENT '总金额',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `pre_status` varchar(32) DEFAULT NULL COMMENT '取消前订单',
   `sk_start_datetime` datetime DEFAULT NULL COMMENT '上课时间',
   `sk_end_datetime` datetime DEFAULT NULL COMMENT '下课时间',
   `pay_type` varchar(32) DEFAULT NULL COMMENT '支付方式',
@@ -192,6 +221,7 @@ CREATE TABLE `tgym_per_course_order` (
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `pay_amount` bigint(11) DEFAULT NULL COMMENT '支付金额',
   `penalty` bigint(11) DEFAULT NULL COMMENT '违约金额',
+  `coach_penalty` bigint(11) DEFAULT NULL COMMENT '私教/达人违约',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
@@ -200,15 +230,36 @@ CREATE TABLE `tgym_per_course_order` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` text COMMENT '备注',
+  `is_send` varchar(32) DEFAULT NULL COMMENT '是否发送（0否，1是）',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tgym_praise_item`;
 CREATE TABLE `tgym_praise_item` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
+  `id` int(32) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `name` varchar(32) DEFAULT NULL COMMENT '项目名称',
   `score` int(11) DEFAULT NULL COMMENT '得分',
   `comment_code` varchar(32) DEFAULT NULL COMMENT '评论编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tgym_size_data`;
+CREATE TABLE `tgym_size_data` (
+  `id` int(32) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `ckey` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'key',
+  `cvalue` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'value',
+  `user_id` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户编号',
+  `order_code` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '订单编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `tgym_vote`;
+CREATE TABLE `tgym_vote` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `to_user` varchar(32) DEFAULT NULL COMMENT '被投人',
+  `vote_type` varchar(32) DEFAULT NULL COMMENT '投票类型',
+  `vote_datetime` datetime DEFAULT NULL COMMENT '投票时间',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

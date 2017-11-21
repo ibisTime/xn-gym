@@ -28,6 +28,7 @@ public class XN622093 extends AProcessor {
         Coach condition = new Coach();
         condition.setType(req.getType());
         condition.setStar(StringValidater.toInteger(req.getStar()));
+        condition.setClassDatetime(req.getClassDatetime());
         condition.setStatus(req.getStatus());
         condition.setSkCycle(req.getSkCycle());
         condition.setLocation(req.getLocation());

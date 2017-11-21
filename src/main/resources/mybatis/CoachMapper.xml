@@ -84,8 +84,14 @@
 	</sql>
 	<sql id="where_tcp_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="skCycle != null and skCycle != '' ">
-				AND tpc.sk_cycle = #{skCycle}
+			<if test="classDatetimeStart != null and classDatetimeStart != '' ">
+				<![CDATA[AND tpc.sk_start_datetime >= #{classDatetimeStart}]]>
+			</if>	
+			<if test="classDatetimeEnd != null and classDatetimeEnd != '' ">
+				<![CDATA[AND tpc.sk_start_datetime <= #{classDatetimeEnd}]]>
+			</if>
+			<if test="pStatus != null and pStatus != '' ">
+				AND tpc.status = #{pStatus}
 			</if>
 		</trim>
 	</sql>
